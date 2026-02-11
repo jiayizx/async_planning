@@ -1,9 +1,11 @@
 import concurrent.futures
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, List, T, Union
+from typing import Any, Callable, Dict, List, TypeVar, Union
 
 from pydantic import BaseModel
 from tqdm import tqdm
+
+T = TypeVar("T")
 
 
 class BaseLLM(ABC):
@@ -22,53 +24,56 @@ class BaseLLM(ABC):
         self.strict_json = strict_json
 
     @abstractmethod
-    def _chat(self, message: List[Dict[str, str]]) -> str:
-        """Send a single message to the model and get the response."""
+    def _chat(self, messages: List[Dict[str, str]]) -> str:
+        """Send a single conversation to the model and return the response string."""
 
     @abstractmethod
-    def _chat_with_format(self, message: List[Dict[str, str]], schema: BaseModel) -> str:
-        """Send a single message to the model and get the response in JSON format."""
+    def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
+        """Send a single conversation and return a JSON-formatted response string."""
 
     def _complete(self, prompt: str) -> str:
-        """Send a completion prompt to the model and get the response."""
-        # Default implementation - subclasses can override
+        """Send a completion prompt to the model. Subclasses can override."""
+        raise NotImplementedError("This model does not support completion prompts.")
 
-    def chat(
-        self, messages: List[Union[List[Dict[str, str]], str]], schema: BaseModel = None
+    # ── public API ──────────────────────────────────────────────────────
+
+    def chat(self, messages: List[Dict[str, str]], schema: BaseModel = None) -> str:
+        """Send a single conversation and return a single response string."""
+        if self.strict_json:
+            if schema is None:
+                raise ValueError("Schema is required for strict JSON mode.")
+            return self._chat_with_format(messages, schema)
+        return self._chat(messages)
+
+    def batch_chat(
+        self,
+        messages_list: List[List[Dict[str, str]]],
+        schema: BaseModel = None,
+        desc: str = "Processing messages",
     ) -> List[str]:
-        # Handle mixed list of chat messages and completion prompts
-        results = []
+        """Send multiple conversations in parallel and return responses in order."""
 
-        def _func(message: List[Dict[str, str]]) -> str:
-            if isinstance(message, str):
-                return self._complete(message)
-            else:
-                if not self.strict_json:
-                    return self._chat(message)
-                else:
-                    if schema is None:
-                        raise ValueError("Schema is required for strict JSON mode.")
-                    return self._chat_with_format(message, schema)
+        def _func(messages: List[Dict[str, str]]) -> str:
+            return self.chat(messages, schema=schema)
 
-        return self._parallel_execute(_func, messages)
+        return self._parallel_execute(_func, messages_list, desc=desc)
+
+    # ── internals ───────────────────────────────────────────────────────
 
     def _parallel_execute(
-        self, func: Callable[[List[Dict[str, str]]], T], messages_list: List[List[Dict[str, str]]]
+        self, func: Callable[[List[Dict[str, str]]], T], messages_list: List[List[Dict[str, str]]], desc: str = "Processing messages"
     ) -> List[T]:
-        """Execute function in parallel while maintaining order of responses."""
+        """Execute *func* over *messages_list* in parallel, preserving order."""
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.num_workers) as executor:
-            # Submit all tasks and keep track of their order
             future_to_index = {
-                executor.submit(func, messages): i for i, messages in enumerate(messages_list)
+                executor.submit(func, msgs): i for i, msgs in enumerate(messages_list)
             }
 
-            # Initialize results list with None
-            results = [None] * len(messages_list)
+            results: List[T | None] = [None] * len(messages_list)
 
-            # As futures complete, put them in the correct position with tqdm progress
             with tqdm(
                 total=len(messages_list),
-                desc="Processing messages",
+                desc=desc,
                 unit="msg",
                 bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]",
             ) as pbar:

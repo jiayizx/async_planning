@@ -20,14 +20,6 @@ UNIT_SECONDS = {
     "secs": 1,
 }
 
-def parse_gold_seconds(answer: Any) -> int:
-    if isinstance(answer, timedelta):
-        return int(answer.total_seconds())
-    if isinstance(answer, str):
-        s = eval(answer)
-        return int(s[0].total_seconds())
-    raise ValueError(f"Unrecognized answer format: {answer}")
-
 
 def parse_duration_text(text: str) -> Optional[int]:
     if not text:
@@ -53,10 +45,52 @@ def parse_prediction_seconds(text: str) -> Optional[int]:
     match = re.search(r"<answer>(.*?)</answer>", text, re.DOTALL | re.IGNORECASE)
     if match:
         text = match.group(1).strip()
-    parsed = parse_duration_text(text)
+    parsed = parse_duration_text(text.lower())
     return parsed
 
 
 
 def exact_match(pred_seconds: Optional[int], gold_seconds: int) -> bool:
     return pred_seconds == gold_seconds
+
+
+answer = """
+I need to find the shortest time to complete all steps while respecting the ordering constraints.
+
+Let me first list the constraints:
+- Step 1 → Step 5
+- Step 2 → Step 3
+- Step 3 → Step 4
+- Step 4 → Step 5
+
+And the durations:
+- Step 1: 30 min
+- Step 2: 30 min
+- Step 3: 10 min
+- Step 4: 30 min
+- Step 5: 30 min
+
+Since we have infinite resources, I can work on independent tasks in parallel.
+
+Let me identify the dependency chains:
+- Chain A: Step 1 → Step 5 (30 + 30 = 60 min)
+- Chain B: Step 2 → Step 3 → Step 4 → Step 5 (30 + 10 + 30 + 30 = 100 min)
+
+Step 5 depends on both Step 1 and Step 4, so I need both chains to complete before Step 5 can start.
+
+The critical path is:
+- Start Step 2 and Step 1 in parallel (time 0)
+- Step 2 completes at 30 min
+- Step 3 starts at 30 min, completes at 40 min
+- Step 4 starts at 40 min, completes at 70 min
+- Step 1 completes at 30 min
+- Step 5 can start when both Step 1 (30 min) and Step 4 (70 min) are complete
+- Step 5 starts at 70 min, completes at 100 min
+
+The longest chain is: Step 2 → Step 3 → Step 4 → Step 5 = 30 + 10 + 30 + 30 = 100 minutes
+
+<answer>100 minutes</answer>
+"""
+
+seconds = parse_prediction_seconds(answer)
+print("Seconds: ", seconds)

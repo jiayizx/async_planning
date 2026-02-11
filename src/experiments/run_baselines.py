@@ -1,97 +1,112 @@
 from __future__ import annotations
 
 import argparse
-import asyncio
 import json
 import os
-import pickle
 import random
-import sys
 from pathlib import Path
+
 from datasets import load_dataset
+from tqdm import tqdm
 
-from src.llms import OpenAIClient, OpenAIConfig, claude_from_env, openrouter_from_env, vllm_from_env
-
-
-def build_llm_client(provider: str, model: str) -> OpenAIClient:
-    if provider == "openrouter":
-        return openrouter_from_env(model)
-    if provider == "vllm":
-        return vllm_from_env(model)
-    if provider == "claude":
-        return claude_from_env(model)
-    if provider == "openai":
-        api_key = os.environ["OPENAI_API_KEY"]
-        base_url = os.getenv("OPENAI_BASE_URL")
-        return OpenAIClient(OpenAIConfig(model=model, api_key=api_key, base_url=base_url))
-    raise ValueError(f"Unknown llm provider: {provider}")
+from src.evaluation.metrics import (
+    exact_match,
+    parse_gold_seconds,
+    parse_prediction_seconds,
+)
+from src.llms import get_model
+from src.llms.base import BaseLLM
+from src.llms.prompts import get_prompts
 
 
-async def run_task(plag, benchmark_dic: dict, args: argparse.Namespace) -> dict:
-    if args.task == "vary_shot_cot":
-        response_dic = {}
-        for cot in [True, False]:
-            for nshot in [True, False]:
-                response_dic[f"cot_{cot}_nshot_{nshot}"] = await plag.prompt_model_nshot_cot(
-                    model_name=args.model_name,
-                    benchmark_dic=benchmark_dic,
-                    nshot_idx=benchmark_dic["nshot_instructions"]["idxs"],
-                    nshot_template_dic=benchmark_dic["nshot_instructions"],
-                    best_prompt=args.best_prompt_template,
-                    cot=cot,
-                    nshot=nshot,
-                    model=None,
-                    tokenizer=None,
-                    client=None,
-                    batch=args.batch,
-                )
-        res_dic = {}
-        eval_idxs = [
-            i for i in range(len(benchmark_dic["titles"]))
-            if i not in benchmark_dic["nshot_instructions"]["idxs"]
+def build_llm_client(model_name: str, temperature: float, max_tokens: int, num_workers: int = 1) -> BaseLLM:
+    return get_model(model_name=model_name, config={"temperature": temperature, "max_tokens": max_tokens}, num_workers=num_workers)
+
+
+def clean_question(question: str) -> str:
+    """Remove any embedded CoT / answer-format instructions from the raw question."""
+    unwanted = [
+        "Let's think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>).",
+        "Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
+        "Let's think step by step.",
+        "Think step by step.",
+    ]
+    for phrase in unwanted:
+        question = question.replace(phrase, "")
+    return question.strip()
+
+
+def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dict:
+
+    system_prompt = get_prompts(system_prompt=True, question="", CoT=args.cot, icl_examples=args.icl_examples, dataset=args.benchmark_name)
+
+    # ── 1. Build all messages & metadata upfront ──────────────────────
+    all_messages = []
+    metadata = []  # parallel list: gold info per example
+
+    for idx, example in enumerate(tqdm(eval_dataset, desc="Collecting baseline prompts")):
+        question = clean_question(example["question"])
+        gold_seconds = parse_gold_seconds(example["answer"])
+
+        user_prompt = get_prompts(
+            system_prompt=False, question=question, CoT=args.cot,
+            icl_examples=args.icl_examples, dataset=args.benchmark_name,
+        )
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
         ]
-        for key, val in response_dic.items():
-            res_dic[key] = plag.calc_acc(
-                responses=val,
-                sampled_idxs=eval_idxs,
-                gold_timedelta=[benchmark_dic["task_time"][i] for i in eval_idxs],
-            )
-        res_dic["responses"] = response_dic
-        return res_dic
+        all_messages.append(messages)
+        metadata.append({
+            "idx": idx,
+            "question": example["question"],
+            "gold_answer": example["answer"],
+            "gold_seconds": gold_seconds,
+            "user_prompt": user_prompt,
+        })
 
-    if args.task == "vary_prompt_template":
-        response_dic = await plag.prompt_model_for_all_templates(
-            model_name=args.model_name,
-            benchmark_dic=benchmark_dic,
-            client=None,
-            model=None,
-            tokenizer=None,
-            batch=args.batch,
-        )
-        res_dic = plag.eval_different_templates(response_dic=response_dic, benchmark_dic=benchmark_dic)
-        res_dic["responses"] = response_dic
-        return res_dic
+        if idx == 10:
+            break
 
-    if args.task == "vary_economic_prompt":
-        response_dic = await plag.prompt_model_for_combined_templates(
-            model_name=args.model_name,
-            best_prompt=args.best_prompt_template,
-            benchmark_dic=benchmark_dic,
-            client=None,
-            model=None,
-            tokenizer=None,
-            batch=args.batch,
-        )
-        sampled_idxs = random.sample(range(len(benchmark_dic["titles"])), 100)
-        res_dic = plag.calc_acc(
-            responses=response_dic,
-            sampled_idxs=sampled_idxs,
-            gold_timedelta=[benchmark_dic["task_time"][i] for i in sampled_idxs],
-        )
-        res_dic["responses"] = response_dic
-        return res_dic
+    # ── 2. Batch call LLM in parallel (num_workers threads) ──────────
+    responses = llm_client.batch_chat(all_messages, desc="Baselines")
 
-    raise ValueError(f"Invalid baseline task: {args.task}")
+    # ── 3. Collect results ────────────────────────────────────────────
+    records = []
+    for meta, response in zip(metadata, responses):
+        pred_seconds = parse_prediction_seconds(response or "")
+        records.append({
+            "question": meta["question"],
+            "gold_answer": meta["gold_answer"],
+            "pred_answer": response,
+            "gold_seconds": meta["gold_seconds"],
+            "pred_seconds": pred_seconds,
+            "correct": exact_match(pred_seconds, meta["gold_seconds"]),
+            "user_prompt": meta["user_prompt"],
+        })
+
+    # ── 4. Save ───────────────────────────────────────────────────────
+    save_path = Path(args.save_path)
+    with (save_path / "full_results.jsonl").open("w", encoding="utf-8") as f:
+        for record in records:
+            f.write(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
+
+    correct = sum(1 for r in records if r["correct"])
+    accuracy = correct / len(records) if records else 0.0
+    metrics = {
+        "benchmark": args.benchmark_name,
+        "model_name": args.model_name,
+        "icl_examples": args.icl_examples,
+        "cot": args.cot,
+        "accuracy": accuracy,
+        "num_correct": correct,
+        "num_data_points": len(records),
+    }
+    with (save_path / "summary_results.json").open("w", encoding="utf-8") as f:
+        json.dump(metrics, f, indent=2)
+
+    return records, metrics
 
 
 def parse_args() -> argparse.Namespace:
@@ -99,29 +114,32 @@ def parse_args() -> argparse.Namespace:
         description="Baselines: Prompting-based LLM-as-a-planner with ICL and CoT."
     )
     parser.add_argument("--model-name", default="claude-4.5-haiku", required=True) # claude, vllm, openrouter
+    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--benchmark-name", required=True) # Name of the benchmark data
     parser.add_argument("--save-path", required=True) # Path to save the results
 
     # Task-specific arguments
     parser.add_argument("--icl-examples", type=int, default=0)
-    parser.add_argument("--cot", type=str, default="false")
-    parser.add_argument("--batch", type=int, default=30)
+    parser.add_argument("--cot", type=lambda v: v.lower() in ("true", "1", "yes"), default=False)
+    parser.add_argument("--batch", type=int, default=16)
+
+    print(parser.parse_args())
+
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
 
-    dataset = None
+    eval_dataset = None
     if args.benchmark_name == "asynchow":
-        dataset = load_dataset("fangru-lin/asynchow", split="test")
+        eval_dataset = load_dataset("fangrulin/asynchow", split="test")
     
-    if os.path.exists(args.save_path):
-        raise FileExistsError(f"Save path already exists: {args.save_path}")
     os.makedirs(args.save_path, exist_ok=True)
 
-    llm_client = build_llm_client(args.model_name)
-    result = asyncio.run(run_task(llm_client, dataset, args))
+    llm_client = build_llm_client(args.model_name, args.temperature, args.max_tokens, num_workers=args.batch)
+    run_task(llm_client, eval_dataset, args)
 
 
 if __name__ == "__main__":

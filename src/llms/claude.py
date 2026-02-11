@@ -30,10 +30,23 @@ class ClaudeLLM(BaseLLM):
 
 
     def _chat(self, messages: List[Dict[str, str]]) -> str:
+        # Anthropic requires system prompt as a separate parameter
+        system_text = None
+        filtered = []
+        for m in messages:
+            if m["role"] == "system":
+                system_text = m["content"]
+            else:
+                filtered.append(m)
+
+        kwargs = {**self.config}
+        if system_text:
+            kwargs["system"] = system_text
+
         response = self.client.messages.create(
             model=self.model_name,
-            messages=messages,
-            **self.config,
+            messages=filtered,
+            **kwargs,
         )
         content = response.content
         if isinstance(content, list):

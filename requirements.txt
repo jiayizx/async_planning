@@ -1,3 +1,5 @@
-datasets>=2.14.0
-openai>=1.30.0
-tqdm>=4.66.0
+datasets
+pydantic
+tqdm
+anthropic
+openai
