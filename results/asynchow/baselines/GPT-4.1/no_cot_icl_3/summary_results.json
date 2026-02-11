@@ -3,7 +3,7 @@
   "model_name": "GPT-4.1",
   "icl_examples": 3,
   "cot": false,
-  "accuracy": 0.07920792079207921,
-  "num_correct": 8,
+  "accuracy": 0.06930693069306931,
+  "num_correct": 7,
   "num_data_points": 101
 }

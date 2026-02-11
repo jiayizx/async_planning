@@ -21,23 +21,10 @@ from src.llms.prompts import (
     build_icl_prefix, 
     SYSTEM_PROMPT_TEMPLATE,
 )
-
-
-def build_llm_client(model_name: str, temperature: float, max_tokens: int, num_workers: int = 1) -> BaseLLM:
-    return get_model(model_name=model_name, config={"temperature": temperature, "max_tokens": max_tokens}, num_workers=num_workers)
-
-
-def clean_question(question: str) -> str:
-    """Remove any embedded CoT / answer-format instructions from the raw question."""
-    unwanted = [
-        "Let's think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>).",
-        "Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
-        "Let's think step by step.",
-        "Think step by step.",
-    ]
-    for phrase in unwanted:
-        question = question.replace(phrase, "")
-    return question.strip()
+from src.experiments.utils import (
+    build_llm_client, 
+    clean_question,
+)
 
 
 def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dict:

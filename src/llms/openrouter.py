@@ -17,8 +17,8 @@ OPENROUTER_MODELS_MAPPING = {
     "gemini-2.5-pro": "google/gemini-2.5-pro",
 
     # OpenAI models
-    "gpt-4.1-mini": "openai/gpt-4.1-mini",
-    "gpt-4.1": "openai/gpt-4.1",
+    # "gpt-4.1-mini": "openai/gpt-4.1-mini",
+    # "gpt-4.1": "openai/gpt-4.1",
 
     # meta-llama models
     "llama-3.1-70b-instruct": "meta-llama/llama-3.1-70b-instruct",

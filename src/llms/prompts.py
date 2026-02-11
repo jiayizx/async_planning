@@ -5,12 +5,16 @@ from src.evaluation.metrics import (
     parse_gold_seconds,
     parse_prediction_seconds,
 )
+from src.experiments.utils import (
+    build_llm_client, 
+    clean_question,
+)
 
 SYSTEM_PROMPT_TEMPLATE = """You are a helpful plan organizer."""
 
 
 def _format_example_no_cot(example: dict, example_idx: int) -> str:
-    question = example["question"] + "\n" + "Do NOT explain your reasoning. Output ONLY your final answer inside <answer></answer> tags (e.g. <answer>1 min</answer>)."
+    question = clean_question(example["question"]) + "\n" + "Do NOT explain your reasoning. Output ONLY your final answer inside <answer></answer> tags (e.g. <answer>1 min</answer>)."
     golden_answer = parse_gold_seconds(example['answer'])
     return f"<Example_{example_idx}>\n{question}\n<answer>{golden_answer} seconds</answer>\n</Example_{example_idx}>"
 
@@ -22,7 +26,7 @@ def _build_cot_examples(examples: list) -> list[str]:
     questions = []
     all_messages = []
     for example in examples:
-        q = example['question'] + "\n" + "Let's think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>).\n"
+        q = clean_question(example['question']) + "\n" + "Let's think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>).\n"
         questions.append(q)
         all_messages.append([
             {"role": "system", "content": SYSTEM_PROMPT_TEMPLATE},
