@@ -3,12 +3,34 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-python -m src.experiments.run_baselines \
-    --model-name claude-4.5-haiku \
-    --temperature 0.0 \
-    --max-tokens 4096 \
-    --benchmark-name asynchow \
-    --save-path results/asynchow/baselines/claude-4.5-haiku/ \
-    --icl-examples 0 \
-    --cot false \
-    --batch 16
+TEMPERATURE=0.0
+MAX_TOKENS=2048
+BATCH=16
+
+for MODEL_NAME in "GPT-4.1"; do
+    for ICL_EXAMPLES in 0 3; do
+        for COT in true false; do
+            python -m src.experiments.run_baselines \
+                --model-name $MODEL_NAME \
+                --temperature $TEMPERATURE \
+                --max-tokens $MAX_TOKENS \
+                --benchmark-name asynchow \
+                --save-path results/asynchow/baselines/$MODEL_NAME/ \
+                --icl-examples $ICL_EXAMPLES \
+                --cot $COT \
+                --batch $BATCH
+        done
+    done
+done
+
+
+# MODEL_NAME="GPT-4.1"
+# python -m src.experiments.run_baselines \
+#     --model-name $MODEL_NAME \
+#     --temperature $TEMPERATURE \
+#     --max-tokens $MAX_TOKENS \
+#     --benchmark-name asynchow \
+#     --save-path results/asynchow/baselines/$MODEL_NAME/ \
+#     --icl-examples 3 \
+#     --cot true \
+#     --batch $BATCH

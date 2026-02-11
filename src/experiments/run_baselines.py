@@ -16,7 +16,11 @@ from src.evaluation.metrics import (
 )
 from src.llms import get_model
 from src.llms.base import BaseLLM
-from src.llms.prompts import get_prompts
+from src.llms.prompts import (
+    get_prompts, 
+    build_icl_prefix, 
+    SYSTEM_PROMPT_TEMPLATE,
+)
 
 
 def build_llm_client(model_name: str, temperature: float, max_tokens: int, num_workers: int = 1) -> BaseLLM:
@@ -38,7 +42,12 @@ def clean_question(question: str) -> str:
 
 def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dict:
 
-    system_prompt = get_prompts(system_prompt=True, question="", CoT=args.cot, icl_examples=args.icl_examples, dataset=args.benchmark_name)
+    system_prompt = SYSTEM_PROMPT_TEMPLATE
+
+    # ── 0. Build ICL prefix once (CoT examples generated in parallel) ─
+    icl_prefix = build_icl_prefix(
+        CoT=args.cot, icl_examples=args.icl_examples, dataset=args.benchmark_name,
+    )
 
     # ── 1. Build all messages & metadata upfront ──────────────────────
     all_messages = []
@@ -49,8 +58,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
         gold_seconds = parse_gold_seconds(example["answer"])
 
         user_prompt = get_prompts(
-            system_prompt=False, question=question, CoT=args.cot,
-            icl_examples=args.icl_examples, dataset=args.benchmark_name,
+            question=question, CoT=args.cot, icl_prefix=icl_prefix,
         )
 
         messages = [
@@ -66,11 +74,11 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
             "user_prompt": user_prompt,
         })
 
-        if idx == 10:
+        if idx == 100:
             break
 
     # ── 2. Batch call LLM in parallel (num_workers threads) ──────────
-    responses = llm_client.batch_chat(all_messages, desc="Baselines")
+    responses = llm_client.batch_chat(all_messages, desc="Running baselines")
 
     # ── 3. Collect results ────────────────────────────────────────────
     records = []
@@ -135,6 +143,13 @@ def main() -> None:
     eval_dataset = None
     if args.benchmark_name == "asynchow":
         eval_dataset = load_dataset("fangrulin/asynchow", split="test")
+
+    if args.cot:
+        args.save_path = args.save_path + "cot"
+    else:
+        args.save_path = args.save_path + "no_cot"
+    if args.icl_examples > 0:
+        args.save_path = args.save_path + f"_icl_{args.icl_examples}"
     
     os.makedirs(args.save_path, exist_ok=True)
 

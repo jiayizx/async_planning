@@ -23,7 +23,7 @@ env/
 Thumbs.db
 
 # Results
-results/
+# results/
 
 # Test files
 test.py
