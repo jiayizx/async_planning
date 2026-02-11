@@ -1,0 +1,3 @@
+[submodule "baselines/graph-llm-asynchow-plan"]
+	path = baselines/graph-llm-asynchow-plan
+	url = https://github.com/fangru-lin/graph-llm-asynchow-plan
