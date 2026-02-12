@@ -1,0 +1,9 @@
+{
+  "task": "explicit_graph",
+  "model_name": "openai/gpt-4.1",
+  "graph_type": "edge_list",
+  "ordering_template": "[preceding step] must precede [following step].",
+  "accuracy": 0.92,
+  "num_correct": 92,
+  "num_data_points": 100
+}

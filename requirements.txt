@@ -3,3 +3,5 @@ pydantic
 tqdm
 anthropic
 openai
+torch
+transformers

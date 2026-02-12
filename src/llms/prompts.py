@@ -1,6 +1,6 @@
 import datasets
 from src.llms import get_model
-from src.evaluation.metrics import (
+from src.evaluation.accuracy_metrics import (
     exact_match,
     parse_gold_seconds,
     parse_prediction_seconds,
