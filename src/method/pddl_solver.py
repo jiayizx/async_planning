@@ -1,0 +1,174 @@
+"""PDDL 2.1 temporal-planning solver via solver.planning.domains API.
+
+Submits domain + problem PDDL to the OPTIC planner hosted at
+solver.planning.domains:5001 and polls for the result.
+"""
+from __future__ import annotations
+
+import concurrent.futures
+import re
+import time
+import json
+from dataclasses import dataclass, field
+from typing import Optional
+
+import requests
+from tqdm import tqdm
+
+
+OPTIC_API_URL = "https://solver.planning.domains:5001"
+
+@dataclass
+class SolverResult:
+    makespan_seconds: float = 0.0
+    plan: list[tuple[float, str, float]] = field(default_factory=list)  # (start, action, dur)
+    raw_output: str = ""
+    error: str = ""
+
+
+def solve(
+    domain_pddl: str,
+    problem_pddl: str,
+    poll_interval: float = 1.0,
+) -> Optional[SolverResult]:
+    """Run OPTIC via the solver.planning.domains async API.
+
+    Returns None if the API is unreachable, times out, or returns no plan.
+    """
+
+    req_body = {
+        "domain": domain_pddl,
+        "problem": problem_pddl,
+    }
+
+    # Step 1: Submit the job
+    resp = requests.post(f"{OPTIC_API_URL}/package/optic/solve", json=req_body)
+    resp.raise_for_status()
+    job = resp.json()
+    # print(f"Job response: {json.dumps(job, indent=2)}")
+
+    # Direct result (no polling needed)
+    if "result" not in job:
+        raw = _extract_output(job)
+        result = _parse_plan(raw) if raw else None
+        if result is None:
+            return SolverResult(makespan_seconds=0, raw_output=raw, error=_extract_error(job))
+        return result
+
+    # Step 2: Poll for the result
+    result_path = job["result"]
+
+    while True:
+        try:
+            celery_result = requests.post(f"{OPTIC_API_URL}{result_path}")
+            data = celery_result.json()
+        except requests.RequestException as e:
+            return SolverResult(makespan_seconds=0, error=f"Polling failed: {e}")
+
+        if data.get("status", "") != "PENDING":
+            raw = _extract_output(data)
+            result = _parse_plan(raw) if raw else None
+            if result is None:
+                return SolverResult(makespan_seconds=0, raw_output=raw, error=_extract_error(data))
+            return result
+
+        time.sleep(poll_interval)
+
+
+def _extract_error(data: dict) -> str:
+    """Extract error message from the API response dict.
+
+    Checks result.stderr first, then result.output.plan for diagnostics.
+    """
+    result = data.get("result", data)
+    if not isinstance(result, dict):
+        return "No plan found in solver output"
+
+    stderr = result.get("stderr", "")
+    plan_log = ""
+    output = result.get("output", "")
+    if isinstance(output, dict):
+        plan_log = output.get("plan", "")
+
+    # Combine stderr + plan log and return the first meaningful chunk
+    combined = (stderr + "\n" + plan_log).strip()
+    if not combined:
+        return "Empty solver output"
+    return combined
+
+
+def _extract_output(data: dict) -> str:
+    """Extract raw planner output from various API response shapes."""
+    result = data.get("result", data)
+    if isinstance(result, dict):
+        output = result.get("output", "")
+        if isinstance(output, dict):
+            return output.get("plan", "") or str(output)
+        if isinstance(output, str):
+            return output
+        return result.get("stdout", "") or result.get("plan", "") or str(result)
+    return str(data)
+
+
+def _parse_plan(output: str) -> Optional[SolverResult]:
+    """Parse the LAST plan block from OPTIC output.
+
+    OPTIC may print multiple plan blocks (one per search phase).
+    We take only the final one (after the last '; Cost:' or
+    ';;;; Solution Found' marker).
+    """
+    # Find the last "Solution Found" or "; Cost:" line and parse from there
+    last_section = output
+    for marker in [";;;; Solution Found", "; Cost:"]:
+        idx = output.rfind(marker)
+        if idx != -1:
+            last_section = output[idx:]
+            break
+
+    action_re = re.compile(r"(\d+\.?\d*)\s*:\s*\(([^)]+)\)\s*\[(\d+\.?\d*)\]")
+    plan: list[tuple[float, str, float]] = []
+    for m in action_re.finditer(last_section):
+        plan.append((float(m.group(1)), m.group(2), float(m.group(3))))
+
+    if not plan:
+        return None
+
+    makespan = max(start + dur for start, _, dur in plan)
+    return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
+
+
+def batch_solve(
+    problems: list[tuple[str, str]],
+    num_workers: int = 8,
+    poll_interval: float = 1.0,
+    desc: str = "Solving PDDL",
+) -> list[SolverResult]:
+    """Solve multiple (domain, problem) pairs in parallel.
+
+    Args:
+        problems: List of (domain_pddl, problem_pddl) tuples.
+        num_workers: Max concurrent solver requests.
+        poll_interval: Polling interval passed to each ``solve`` call.
+        desc: Progress bar description.
+
+    Returns:
+        List of SolverResult in the same order as *problems*.
+    """
+    results: list[SolverResult] = [SolverResult(error="not started")] * len(problems)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
+        future_to_idx = {
+            executor.submit(solve, domain, problem, poll_interval): i
+            for i, (domain, problem) in enumerate(problems)
+        }
+
+        with tqdm(total=len(problems), desc=desc, unit="prob") as pbar:
+            for future in concurrent.futures.as_completed(future_to_idx):
+                idx = future_to_idx[future]
+                try:
+                    results[idx] = future.result()
+                except Exception as e:
+                    results[idx] = SolverResult(error=str(e))
+                pbar.update(1)
+
+    return results

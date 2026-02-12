@@ -1,8 +1,8 @@
 from src.llms.base import BaseLLM
 from src.llms import get_model
 
-def build_llm_client(model_name: str, temperature: float, max_tokens: int, num_workers: int = 1) -> BaseLLM:
-    return get_model(model_name=model_name, config={"temperature": temperature, "max_tokens": max_tokens}, num_workers=num_workers)
+def build_llm_client(model_name: str, temperature: float, max_tokens: int, num_workers: int = 1, strict_json: bool = False) -> BaseLLM:
+    return get_model(model_name=model_name, config={"temperature": temperature, "max_tokens": max_tokens}, num_workers=num_workers, strict_json=strict_json)
 
 
 def clean_question(question: str) -> str:

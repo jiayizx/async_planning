@@ -57,7 +57,37 @@ class ClaudeLLM(BaseLLM):
 
 
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
-        pass
+        # Anthropic requires system prompt as a separate parameter
+        system_text = None
+        filtered = []
+        for m in messages:
+            if m["role"] == "system":
+                system_text = m["content"]
+            else:
+                filtered.append(m)
+
+        kwargs = {**self.config}
+        if system_text:
+            kwargs["system"] = system_text
+
+        # Append JSON schema instruction to the last user message
+        schema_json = json.dumps(schema.model_json_schema(), indent=2)
+        filtered[-1] = {
+            **filtered[-1],
+            "content": filtered[-1]["content"] + f"\n\nRespond with valid JSON matching this schema:\n{schema_json}",
+        }
+
+        response = self.client.messages.create(
+            model=self.model_name,
+            messages=filtered,
+            **kwargs,
+        )
+        content = response.content
+        if isinstance(content, list):
+            return "".join(
+                block.text for block in content if getattr(block, "text", None) is not None
+            )
+        return content
 
     # def _parse_response_with_schema(self, response: str) -> List[Dict[str, Any]]:
     #     """Parse the response based on the provided schema."""

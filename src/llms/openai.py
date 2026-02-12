@@ -58,7 +58,13 @@ class OpenAILLM(BaseLLM):
 
 
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
-        pass
+        completion = self.client.beta.chat.completions.parse(
+            model=self.model_name,
+            messages=messages,
+            response_format=schema,
+            **self.config,
+        )
+        return completion.choices[0].message.content
 
     # def _parse_response_with_schema(self, response: str) -> List[Dict[str, Any]]:
     #     """Parse the response based on the provided schema."""
