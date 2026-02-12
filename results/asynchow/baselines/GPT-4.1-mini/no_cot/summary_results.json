@@ -1,9 +1,0 @@
-{
-  "benchmark": "asynchow",
-  "model_name": "GPT-4.1-mini",
-  "icl_examples": 0,
-  "cot": false,
-  "accuracy": 0.1188118811881188,
-  "num_correct": 12,
-  "num_data_points": 101
-}

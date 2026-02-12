@@ -1,9 +1,0 @@
-{
-  "task": "bag",
-  "model_name": "openai/gpt-4.1-mini",
-  "graph_type": "edge_list",
-  "ordering_template": "[preceding step] must precede [following step].",
-  "accuracy": 0.91,
-  "num_correct": 91,
-  "num_data_points": 100
-}
