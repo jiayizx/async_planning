@@ -6,3 +6,5 @@ openai
 torch
 transformers
 planutils
+python-dotenv
+google-genai

@@ -31,3 +31,6 @@ test.py
 
 # Environment variables
 .env
+
+# Results
+results/

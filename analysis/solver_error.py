@@ -126,7 +126,7 @@ def analyze_condition_syntax(domain_pddl: str) -> dict:
 
 
 def main():
-    results_path = Path("results/asynchow/formalizer/openai_gpt-4.1-mini/full_results.jsonl")
+    results_path = Path("results/asynchow/formalizer/openai_gpt-4.1-mini_0shot/full_results.jsonl")
     
     if not results_path.exists():
         print(f"Results file not found: {results_path}")

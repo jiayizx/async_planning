@@ -1,7 +1,9 @@
 import json
 import os
+import time
 from typing import Any, Dict, List
 
+import anthropic
 from anthropic import Anthropic
 from pydantic import BaseModel
 
@@ -43,17 +45,25 @@ class ClaudeLLM(BaseLLM):
         if system_text:
             kwargs["system"] = system_text
 
-        response = self.client.messages.create(
-            model=self.model_name,
-            messages=filtered,
-            **kwargs,
-        )
-        content = response.content
-        if isinstance(content, list):
-            return "".join(
-                block.text for block in content if getattr(block, "text", None) is not None
-            )
-        return content
+        wait = 5
+        for attempt in range(6):
+            try:
+                response = self.client.messages.create(
+                    model=self.model_name,
+                    messages=filtered,
+                    **kwargs,
+                )
+                content = response.content
+                if isinstance(content, list):
+                    return "".join(
+                        block.text for block in content if getattr(block, "text", None) is not None
+                    )
+                return content
+            except anthropic.RateLimitError:
+                if attempt == 5:
+                    raise
+                time.sleep(wait)
+                wait *= 2
 
 
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
@@ -77,17 +87,25 @@ class ClaudeLLM(BaseLLM):
             "content": filtered[-1]["content"] + f"\n\nRespond with valid JSON matching this schema:\n{schema_json}",
         }
 
-        response = self.client.messages.create(
-            model=self.model_name,
-            messages=filtered,
-            **kwargs,
-        )
-        content = response.content
-        if isinstance(content, list):
-            return "".join(
-                block.text for block in content if getattr(block, "text", None) is not None
-            )
-        return content
+        wait = 5
+        for attempt in range(6):
+            try:
+                response = self.client.messages.create(
+                    model=self.model_name,
+                    messages=filtered,
+                    **kwargs,
+                )
+                content = response.content
+                if isinstance(content, list):
+                    return "".join(
+                        block.text for block in content if getattr(block, "text", None) is not None
+                    )
+                return content
+            except anthropic.RateLimitError:
+                if attempt == 5:
+                    raise
+                time.sleep(wait)
+                wait *= 2
 
     # def _parse_response_with_schema(self, response: str) -> List[Dict[str, Any]]:
     #     """Parse the response based on the provided schema."""

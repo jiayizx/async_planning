@@ -7,6 +7,7 @@ from .claude import ClaudeLLM
 from .openrouter import OpenRouterLLM
 from .vllm import VLLMOpenAI
 from .openai import OpenAILLM
+from .gemini import GeminiLLM
 # from .litellm import LiteLLM
 
 __all__ = ["get_model"]
@@ -16,6 +17,7 @@ LLM_REGISTRY: Dict[str, Type[BaseLLM]] = {
     "openai": OpenAILLM,
     "openrouter": OpenRouterLLM,
     "vllm": VLLMOpenAI,
+    "gemini": GeminiLLM,
     # "litellm": LiteLLM,
 }
 
@@ -35,6 +37,8 @@ def get_model(
             model_class = LLM_REGISTRY["claude"]
     elif "openai" in model_name:
         model_class = LLM_REGISTRY["openai"]
+    elif "gemini" in model_name:
+        model_class = LLM_REGISTRY["gemini"]
     else:
         model_class = LLM_REGISTRY["vllm" if use_vllm else "openrouter"]
 

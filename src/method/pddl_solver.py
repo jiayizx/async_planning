@@ -26,26 +26,59 @@ class SolverResult:
     error: str = ""
 
 
+def _is_retryable_error(error: str) -> bool:
+    """Return True for transient server-side errors worth retrying."""
+    return (
+        "FATAL" in error
+        or "container" in error
+        or error == "Empty solver output"
+    )
+
+
 def solve(
     domain_pddl: str,
     problem_pddl: str,
     poll_interval: float = 1.0,
+    timeout: Optional[float] = None,
+    max_retries: int = 0,
 ) -> Optional[SolverResult]:
     """Run OPTIC via the solver.planning.domains async API.
 
     Returns None if the API is unreachable, times out, or returns no plan.
     """
+    last_result: Optional[SolverResult] = None
+    for attempt in range(max_retries + 1):
+        if attempt > 0:
+            time.sleep(5 * attempt)
+        last_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout)
+        if last_result.error and _is_retryable_error(last_result.error):
+            continue
+        return last_result
+    return last_result
 
+
+def _solve_once(
+    domain_pddl: str,
+    problem_pddl: str,
+    poll_interval: float,
+    timeout: Optional[float],
+) -> SolverResult:
     req_body = {
         "domain": domain_pddl,
         "problem": problem_pddl,
     }
 
-    # Step 1: Submit the job
-    resp = requests.post(f"{OPTIC_API_URL}/package/optic/solve", json=req_body)
-    resp.raise_for_status()
+    # Step 1: Submit the job (retry on network errors)
+    for attempt in range(4):
+        try:
+            resp = requests.post(f"{OPTIC_API_URL}/package/optic/solve", json=req_body, timeout=60)
+            resp.raise_for_status()
+            break
+        except requests.RequestException as e:
+            if attempt == 3:
+                return SolverResult(makespan_seconds=0, error=f"Submit failed: {e}")
+            time.sleep(5 * (attempt + 1))
     job = resp.json()
-    # print(f"Job response: {json.dumps(job, indent=2)}")
 
     # Direct result (no polling needed)
     if "result" not in job:
@@ -57,13 +90,18 @@ def solve(
 
     # Step 2: Poll for the result
     result_path = job["result"]
+    deadline = (time.monotonic() + timeout) if timeout is not None else None
 
     while True:
+        if deadline is not None and time.monotonic() > deadline:
+            return SolverResult(makespan_seconds=0, error=f"Solver timed out after {timeout}s")
+
         try:
-            celery_result = requests.post(f"{OPTIC_API_URL}{result_path}")
+            celery_result = requests.post(f"{OPTIC_API_URL}{result_path}", timeout=60)
             data = celery_result.json()
-        except requests.RequestException as e:
-            return SolverResult(makespan_seconds=0, error=f"Polling failed: {e}")
+        except requests.RequestException:
+            time.sleep(poll_interval)
+            continue
 
         if data.get("status", "") != "PENDING":
             raw = _extract_output(data)
@@ -141,6 +179,8 @@ def batch_solve(
     problems: list[tuple[str, str]],
     num_workers: int = 8,
     poll_interval: float = 1.0,
+    timeout: Optional[float] = None,
+    max_retries: int = 0,
     desc: str = "Solving PDDL",
 ) -> list[SolverResult]:
     """Solve multiple (domain, problem) pairs in parallel.
@@ -149,6 +189,8 @@ def batch_solve(
         problems: List of (domain_pddl, problem_pddl) tuples.
         num_workers: Max concurrent solver requests.
         poll_interval: Polling interval passed to each ``solve`` call.
+        timeout: Max seconds to wait for a single solve job before giving up.
+        max_retries: Max retries for transient server errors (container failures, empty output).
         desc: Progress bar description.
 
     Returns:
@@ -158,7 +200,7 @@ def batch_solve(
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_idx = {
-            executor.submit(solve, domain, problem, poll_interval): i
+            executor.submit(solve, domain, problem, poll_interval, timeout, max_retries): i
             for i, (domain, problem) in enumerate(problems)
         }
 

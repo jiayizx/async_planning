@@ -3,9 +3,10 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-TEMPERATURE=0.0
-MAX_TOKENS=2048
-BATCH=16
+TEMPERATURE="${TEMPERATURE:-0.0}"
+MAX_TOKENS="${MAX_TOKENS:-2048}"
+BATCH="${BATCH:-16}"
+NUM_WORKERS="${NUM_WORKERS:-4}"
 
 # for MODEL_NAME in "GPT-4.1"; do
 #     for ICL_EXAMPLES in 0 3; do
@@ -24,7 +25,7 @@ BATCH=16
 # done
 
 
-MODEL_NAME="GPT-4.1"
+MODEL_NAME="${MODEL_NAME:-deepseek-r1}"
 python -m src.experiments.run_baselines \
     --model-name $MODEL_NAME \
     --temperature $TEMPERATURE \
@@ -32,5 +33,6 @@ python -m src.experiments.run_baselines \
     --benchmark-name asynchow \
     --save-path results/asynchow/baselines/$MODEL_NAME/ \
     --icl-examples 3 \
-    --cot false \
-    --batch $BATCH
+    --cot true \
+    --batch $BATCH \
+    --num-workers $NUM_WORKERS

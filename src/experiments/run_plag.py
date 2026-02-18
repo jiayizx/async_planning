@@ -18,6 +18,9 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from src.llms.base import BaseLLM
 from src.experiments.utils import build_llm_client
 from src.llms.prompts import SYSTEM_PROMPT_TEMPLATE

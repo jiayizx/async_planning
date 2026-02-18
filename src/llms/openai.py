@@ -1,7 +1,9 @@
 import json
 import os
+import time
 from typing import Any, Dict, List
 
+import openai
 from openai import OpenAI
 from pydantic import BaseModel
 
@@ -44,27 +46,38 @@ class OpenAILLM(BaseLLM):
 
 
     def _chat(self, messages: List[Dict[str, str]]) -> str:
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=messages,
-            **self.config,
-        )
-        response = response.choices[0].message.content
-        # if response:
-        #     response = response.replace("\n", "")
-        #     if response.startswith('"') and response.endswith('"'):
-        #         response = response[1:-1]
-        return response
+        wait = 5
+        for attempt in range(6):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    **self.config,
+                )
+                return response.choices[0].message.content
+            except openai.RateLimitError:
+                if attempt == 5:
+                    raise
+                time.sleep(wait)
+                wait *= 2
 
 
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
-        completion = self.client.beta.chat.completions.parse(
-            model=self.model_name,
-            messages=messages,
-            response_format=schema,
-            **self.config,
-        )
-        return completion.choices[0].message.content
+        wait = 5
+        for attempt in range(6):
+            try:
+                completion = self.client.beta.chat.completions.parse(
+                    model=self.model_name,
+                    messages=messages,
+                    response_format=schema,
+                    **self.config,
+                )
+                return completion.choices[0].message.content
+            except openai.RateLimitError:
+                if attempt == 5:
+                    raise
+                time.sleep(wait)
+                wait *= 2
 
     # def _parse_response_with_schema(self, response: str) -> List[Dict[str, Any]]:
     #     """Parse the response based on the provided schema."""

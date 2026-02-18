@@ -9,7 +9,10 @@ from pathlib import Path
 from datasets import load_dataset
 from tqdm import tqdm
 
-from src.evaluation.metrics import (
+from dotenv import load_dotenv
+load_dotenv()
+
+from src.evaluation.accuracy_metrics import (
     exact_match,
     parse_gold_seconds,
     parse_prediction_seconds,
@@ -118,6 +121,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--icl-examples", type=int, default=0)
     parser.add_argument("--cot", type=lambda v: v.lower() in ("true", "1", "yes"), default=False)
     parser.add_argument("--batch", type=int, default=16)
+    parser.add_argument("--num-workers", type=int, default=4)
 
     print(parser.parse_args())
 
@@ -140,7 +144,7 @@ def main() -> None:
     
     os.makedirs(args.save_path, exist_ok=True)
 
-    llm_client = build_llm_client(args.model_name, args.temperature, args.max_tokens, num_workers=args.batch)
+    llm_client = build_llm_client(args.model_name, args.temperature, args.max_tokens, num_workers=args.num_workers)
     run_task(llm_client, eval_dataset, args)
 
 

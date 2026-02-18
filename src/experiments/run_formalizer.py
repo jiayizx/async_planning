@@ -16,6 +16,9 @@ from pathlib import Path
 from datasets import load_dataset
 from tqdm import tqdm
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from src.evaluation.accuracy_metrics import (
     exact_match,
     parse_gold_seconds,
@@ -24,6 +27,7 @@ from src.experiments.utils import build_llm_client, clean_question
 from src.llms.base import BaseLLM
 from src.method.nl_to_pddl import (
     build_pddl_messages,
+    build_retry_messages,
     parse_pddl_response,
     PDDLResponse,
 )
@@ -52,86 +56,109 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
         if idx + 1 >= args.max_examples:
             break
 
-    # ── 2. Batch LLM translation (NL → PDDL 2.1) ────────────────────
-    all_messages = [build_pddl_messages(q) for q in questions]
-    raw_responses = llm_client.batch_chat(
-        all_messages, schema=PDDLResponse, desc="LLM translation (NL→PDDL)",
+    n = len(questions)
+
+    # Per-example mutable state (updated in-place across retries)
+    domains: list[str | None] = [None] * n
+    problems: list[str | None] = [None] * n
+    solver_results: list[SolverResult | None] = [None] * n
+    raw_responses: list[str | None] = [None] * n
+    errors: list[str] = ["not started"] * n
+
+    def _attempt(index_msg_pairs: list[tuple[int, list]], desc: str) -> None:
+        """Run one batch of LLM calls + solving; update state in-place."""
+        indices = [i for i, _ in index_msg_pairs]
+        msgs = [m for _, m in index_msg_pairs]
+
+        responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
+        pairs = [parse_pddl_response(r) for r in responses]
+
+        for i, resp in zip(indices, responses):
+            raw_responses[i] = resp
+
+        solvable = [(i, pair) for i, pair in zip(indices, pairs) if pair is not None]
+
+        for i, pair in zip(indices, pairs):
+            if pair is None:
+                errors[i] = "PDDL parse failed"
+
+        if solvable:
+            solve_outputs = batch_solve(
+                [(d, p) for _, (d, p) in solvable],
+                num_workers=args.batch,
+                max_retries=args.solver_retries,
+                desc="Solving PDDL",
+            )
+            for (i, (d, p)), sr in zip(solvable, solve_outputs):
+                domains[i] = d
+                problems[i] = p
+                solver_results[i] = sr
+                errors[i] = sr.error  # "" on success
+
+    # ── 2. Initial pass ───────────────────────────────────────────────
+    _attempt(
+        [(i, build_pddl_messages(q, num_shots=args.num_shots)) for i, q in enumerate(questions)],
+        desc="LLM translation (NL→PDDL)",
     )
 
-    # ── 3. Parse LLM responses into PDDL pairs ────────────────────────
+    # ── 3. LLM retry loop ─────────────────────────────────────────────
+    for retry in range(args.llm_retries):
+        failed = [i for i in range(n) if errors[i]]
+        if not failed:
+            break
+        print(f"\nRetry {retry + 1}/{args.llm_retries}: retrying {len(failed)} failed examples")
+        _attempt(
+            [
+                (i, build_retry_messages(
+                    questions[i], domains[i], problems[i], errors[i],
+                    num_shots=args.num_shots,
+                ))
+                for i in failed
+            ],
+            desc=f"LLM retry {retry + 1}",
+        )
+
+    # ── 4. Assemble records & save ────────────────────────────────────
     save_path = Path(args.save_path)
     pddl_dir = save_path / "pddl"
     pddl_dir.mkdir(parents=True, exist_ok=True)
     jsonl_path = save_path / "full_results.jsonl"
 
-    # Parse all LLM outputs first; collect (domain, problem) pairs for batch solving
-    pddl_pairs: list[tuple[str, str] | None] = []
-    for raw_resp in raw_responses:
-        pddl_pairs.append(parse_pddl_response(raw_resp))
-
-    # Build list of solvable problems and their original indices
-    solvable_indices: list[int] = []
-    solvable_problems: list[tuple[str, str]] = []
-    for i, pair in enumerate(pddl_pairs):
-        if pair is not None:
-            solvable_indices.append(i)
-            solvable_problems.append(pair)
-
-    # ── 4. Batch solve all valid PDDL problems ──────────────────────
-    solver_results_list: list[SolverResult] = []
-    if solvable_problems:
-        solver_results_list = batch_solve(
-            solvable_problems,
-            num_workers=args.batch,
-            desc="Solving PDDL",
-        )
-
-    # Map solver results back by original index
-    solver_results_map: dict[int, SolverResult] = {}
-    for idx, sr in zip(solvable_indices, solver_results_list):
-        solver_results_map[idx] = sr
-
-    # ── 5. Assemble records & save each example ──────────────────────
     records: list[dict] = []
 
     with jsonl_path.open("w", encoding="utf-8") as jsonl_f:
-        for i, (gold, raw_resp, pair) in enumerate(
-            zip(gold_data, raw_responses, pddl_pairs)
-        ):
-            if pair is None:
-                rec = _failure_record(gold, raw_resp, error="PDDL parse failed")
-            else:
-                domain_pddl, problem_pddl = pair
-                result = solver_results_map[i]
+        for i, gold in enumerate(gold_data):
+            err = errors[i]
+            sr = solver_results[i]
 
-                if result.error:
-                    rec = _failure_record(
-                        gold, raw_resp, error=result.error,
-                        domain=domain_pddl, problem=problem_pddl,
-                    )
-                    rec["raw_solver_output"] = result.raw_output
-                else:
-                    pred_seconds = int(round(result.makespan_seconds))
-                    plan = [(start, action, dur) for start, action, dur in result.plan]
-                    rec = {
-                        "question": gold["question"],
-                        "gold_answer": gold["gold_answer"],
-                        "gold_seconds": gold["gold_seconds"],
-                        "pred_seconds": pred_seconds,
-                        "correct": exact_match(pred_seconds, gold["gold_seconds"]),
-                        "plan": plan,
-                        "raw_solver_output": result.raw_output,
-                        "domain_pddl": domain_pddl,
-                        "problem_pddl": problem_pddl,
-                        "llm_response": raw_resp,
-                    }
+            if err:
+                rec = _failure_record(
+                    gold, raw_responses[i], error=err,
+                    domain=domains[i], problem=problems[i],
+                )
+                if sr is not None:
+                    rec["raw_solver_output"] = sr.raw_output
+            else:
+                pred_seconds = int(round(sr.makespan_seconds))
+                rec = {
+                    "question": gold["question"],
+                    "gold_answer": gold["gold_answer"],
+                    "gold_seconds": gold["gold_seconds"],
+                    "pred_seconds": pred_seconds,
+                    "correct": exact_match(pred_seconds, gold["gold_seconds"]),
+                    "plan": [(start, action, dur) for start, action, dur in sr.plan],
+                    "raw_solver_output": sr.raw_output,
+                    "domain_pddl": domains[i],
+                    "problem_pddl": problems[i],
+                    "llm_response": raw_responses[i],
+                }
 
             records.append(rec)
             _save_example(pddl_dir, i, rec)
             jsonl_f.write(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
             jsonl_f.flush()
 
-    # ── 6. Save summary ──────────────────────────────────────────────
+    # ── 5. Save summary ───────────────────────────────────────────────
     _save_summary(records, args)
     return records
 
@@ -209,6 +236,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save-path", required=True)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--max-examples", type=int, default=100)
+    parser.add_argument("--num-workers", type=int, default=8)
+    parser.add_argument("--num-shots", type=int, default=0, choices=[0, 1, 2, 3])
+    parser.add_argument("--solver-retries", type=int, default=0)
+    parser.add_argument("--llm-retries", type=int, default=0)
 
     return parser.parse_args()
 
@@ -225,7 +256,7 @@ def main() -> None:
 
     llm_client = build_llm_client(
         args.model_name, args.temperature, args.max_tokens,
-        num_workers=args.batch, strict_json=True,
+        num_workers=args.num_workers, strict_json=True,
     )
     run_task(llm_client, eval_dataset, args)
 

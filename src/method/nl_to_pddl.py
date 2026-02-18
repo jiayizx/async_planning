@@ -83,10 +83,377 @@ Here is an asynchronous planning problem.
 """
 
 
+# ── Few-shot examples ────────────────────────────────────────────────────
+
+FEW_SHOT_EXAMPLES = [
+    {
+        "question": "To go to an amusement park, here are the steps and the times needed for each step.\nStep 1. Get some money (30 seconds)\nStep 2. Find a nearby amusement park (5 minutes)\nStep 3. Travel to the park (15 minutes)\nStep 4. Purchase a pass (1 minutes)\nStep 5. Go into the park (1 minutes)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 4.\nStep 2 must precede step 3.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go to an amusement park? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
+        "domain_pddl": """(define (domain amusement_park)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (have_money)
+    (park_found)
+    (at_park)
+    (have_pass)
+    (in_park)
+  )
+
+  (:durative-action get_money
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and
+      (at start (step_pending ?s))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (have_money))
+    )
+  )
+
+  (:durative-action find_park
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and
+      (at start (step_pending ?s))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (park_found))
+    )
+  )
+
+  (:durative-action travel_to_park
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (park_found))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (at_park))
+    )
+  )
+
+  (:durative-action purchase_pass
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (have_money))
+      (at start (at_park))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (have_pass))
+    )
+  )
+
+  (:durative-action enter_park
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (have_pass))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (in_park))
+    )
+  )
+)""",
+        "problem_pddl": """(define (problem go_to_amusement_park)
+  (:domain amusement_park)
+  (:objects
+    step1 step2 step3 step4 step5 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (step_done step4)
+    (step_done step5)
+    (in_park)
+  ))
+)""",
+    },
+    {
+        "question": "To make breakfast in bed for their mom, here are the steps and the times needed for each step.\nStep 1. heat up pan on stove (5 minutes)\nStep 2. crack eggs in a bowl (3 minutes)\nStep 3. whisk eggs to scramble (3 minutes)\nStep 4. pour in whisked eggs (10 seconds)\nStep 5. scramble as cooking (10 minutes)\nStep 6. add butter to pain (10 seconds)\nStep 7. put eggs on plate (10 seconds)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 6.\nStep 2 must precede step 3.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\nStep 5 must precede step 7.\nStep 6 must precede step 4.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make breakfast in bed for their mom? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
+        "domain_pddl": """(define (domain breakfast)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (pan_heated)
+    (eggs_cracked)
+    (eggs_whisked)
+    (eggs_poured)
+    (eggs_cooked)
+    (butter_added)
+    (eggs_plated)
+  )
+
+  (:durative-action heat_pan
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and
+      (at start (step_pending ?s))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (pan_heated))
+    )
+  )
+
+  (:durative-action crack_eggs
+    :parameters (?s - step)
+    :duration (= ?duration 180)
+    :condition (and
+      (at start (step_pending ?s))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (eggs_cracked))
+    )
+  )
+
+  (:durative-action whisk_eggs
+    :parameters (?s - step)
+    :duration (= ?duration 180)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (eggs_cracked))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (eggs_whisked))
+    )
+  )
+
+  (:durative-action add_butter
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (pan_heated))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (butter_added))
+    )
+  )
+
+  (:durative-action pour_eggs
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (eggs_whisked))
+      (at start (butter_added))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (eggs_poured))
+    )
+  )
+
+  (:durative-action scramble_cook
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (eggs_poured))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (eggs_cooked))
+    )
+  )
+
+  (:durative-action plate_eggs
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (eggs_cooked))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (eggs_plated))
+    )
+  )
+)""",
+        "problem_pddl": """(define (problem breakfast-problem)
+  (:domain breakfast)
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+    (step_pending step6)
+    (step_pending step7)
+  )
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (step_done step4)
+    (step_done step5)
+    (step_done step6)
+    (step_done step7)
+    (eggs_plated)
+  ))
+)""",
+    },
+    {
+        "question": "To grill with friends, here are the steps and the times needed for each step.\nStep 1. light the grill (3 minutes)\nStep 2. let the charcoal warm up (20 minutes)\nStep 3. make the hamburger patties (5 minutes)\nStep 4. cook the hamburgers (15 minutes)\nStep 5. put the hamburgers on a bun (5 minutes)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 2 and 3.\nStep 2 must precede step 4.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to grill with friends? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
+        "domain_pddl": """(define (domain grill-with-friends)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (grill_lit)
+    (charcoal_warm)
+    (patties_made)
+    (burgers_cooked)
+    (burgers_on_bun)
+  )
+
+  (:durative-action light_grill
+    :parameters (?s - step)
+    :duration (= ?duration 180)
+    :condition (and
+      (at start (step_pending ?s))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (grill_lit))
+    )
+  )
+
+  (:durative-action warm_charcoal
+    :parameters (?s - step)
+    :duration (= ?duration 1200)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (grill_lit))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (charcoal_warm))
+    )
+  )
+
+  (:durative-action make_patties
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (grill_lit))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (patties_made))
+    )
+  )
+
+  (:durative-action cook_burgers
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (charcoal_warm))
+      (at start (patties_made))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (burgers_cooked))
+    )
+  )
+
+  (:durative-action put_on_bun
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (burgers_cooked))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (burgers_on_bun))
+    )
+  )
+)""",
+        "problem_pddl": """(define (problem grill-with-friends-problem)
+  (:domain grill-with-friends)
+  (:objects
+    step1 step2 step3 step4 step5 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (step_done step4)
+    (step_done step5)
+    (burgers_on_bun)
+  ))
+)""",
+    },
+]
+
+
 # ── Build messages ──────────────────────────────────────────────────────
 
 
 import re
+
+RETRY_USER_TEMPLATE = """\
+The PDDL you generated caused the following error from the OPTIC planner:
+
+{error}
+
+Please fix the issues and return corrected domain and problem PDDL.
+"""
 
 def optimize_question_to_seconds(question: str) -> str:
     """
@@ -116,12 +483,39 @@ def optimize_question_to_seconds(question: str) -> str:
     return new_question
 
 
-def build_pddl_messages(question: str) -> list[dict[str, str]]:
+def build_pddl_messages(question: str, num_shots: int = 0) -> list[dict[str, str]]:
     """Return the chat messages for one NL→PDDL translation call."""
-    return [
-        {"role": "system", "content": PDDL_SYSTEM_PROMPT},
-        {"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))},
-    ]
+    messages = [{"role": "system", "content": PDDL_SYSTEM_PROMPT}]
+
+    for ex in FEW_SHOT_EXAMPLES[:num_shots]:
+        assistant_response = json.dumps({
+            "responses": [{"domain_pddl": ex["domain_pddl"], "problem_pddl": ex["problem_pddl"]}]
+        })
+        messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(ex["question"]))})
+        messages.append({"role": "assistant", "content": assistant_response})
+
+    messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))})
+    return messages
+
+
+def build_retry_messages(
+    question: str,
+    domain_pddl: str | None,
+    problem_pddl: str | None,
+    error: str,
+    num_shots: int = 0,
+) -> list[dict[str, str]]:
+    """Build retry messages that feed solver/parse errors back to the LLM."""
+    messages = build_pddl_messages(question, num_shots=num_shots)
+
+    if domain_pddl and problem_pddl:
+        prev_attempt = json.dumps({
+            "responses": [{"domain_pddl": domain_pddl, "problem_pddl": problem_pddl}]
+        })
+        messages.append({"role": "assistant", "content": prev_attempt})
+
+    messages.append({"role": "user", "content": RETRY_USER_TEMPLATE.format(error=error)})
+    return messages
 
 
 # ── Parse structured response ──────────────────────────────────────────
@@ -145,4 +539,4 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str]]:
     except (json.JSONDecodeError, ValueError, KeyError):
         pass
 
-    return None, None
+    return None
