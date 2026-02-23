@@ -87,10 +87,12 @@ class OpenRouterLLM(BaseLLM):
 
     
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
-        completion = self.client.beta.chat.completions.parse(
+        # Use plain create() — OpenRouter models don't reliably support structured output.
+        # The JSON schema instruction is already in the system prompt; parse_pddl_response
+        # handles extraction and validation downstream.
+        completion = self.client.chat.completions.create(
             model=self.model_name,
             messages=messages,
-            response_format=schema,
             **self.config,
         )
         return completion.choices[0].message.content

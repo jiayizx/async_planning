@@ -171,7 +171,22 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
     if not plan:
         return None
 
-    makespan = max(start + dur for start, _, dur in plan)
+    # Prefer OPTIC's reported cost over manually summing action timestamps.
+    # Large durations (e.g. millions of seconds) may overflow OPTIC's internal
+    # int32 millisecond counter, producing garbled negative values in plan
+    # action lines.  "; Cost: X" is most reliable; if missing (output was
+    # truncated before final summary), fall back to the last
+    # "; Plan found with metric X" line.
+    cost_match = re.search(r";\s*Cost:\s*([\d.]+)", last_section)
+    if cost_match:
+        makespan = float(cost_match.group(1))
+    else:
+        plan_idx = output.rfind("; Plan found with metric")
+        if plan_idx != -1:
+            m = re.search(r"([\d.]+)", output[plan_idx + len("; Plan found with metric"):])
+            makespan = float(m.group(1)) if m else max(start + dur for start, _, dur in plan)
+        else:
+            makespan = max(start + dur for start, _, dur in plan)
     return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
 
 

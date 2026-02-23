@@ -54,21 +54,85 @@ CRITICAL PDDL RULES for OPTIC planner compatibility:
 6. Use `(at start ...)`, `(at end ...)`, or `(over all ...)` inside `:condition` and `:effect`.
 7. Initialize ALL "pending" predicates as true in the problem's `:init`.
 
-Example durative-action pattern:
-```
-(:durative-action do_task
-  :parameters (?a - agent)
-  :duration (= ?duration 5)
-  :condition (and
-    (at start (task_pending ?a))
-    (over all (available ?a))
-  )
-  :effect (and
-    (at start (not (task_pending ?a)))
-    (at end (task_done ?a))
-  )
-)
-```
+CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find wrong shortcuts:
+
+8. Every action MUST produce a UNIQUE semantic predicate (besides step_done) in its `(at end ...)` effect,
+   AND that predicate MUST be required as `(at start ...)` condition by the next action in the chain.
+   Every action EXCEPT the very first one must require the previous action's semantic predicate as a precondition.
+   This creates a mandatory causal chain — the planner cannot skip or reorder steps.
+   - BAD (no chain — planner runs all actions in parallel or skips slow ones):
+     ```
+     (:durative-action apply_passport :parameters (?s - step) :duration (= ?duration 2700)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s))))
+     (:durative-action submit_application :parameters (?s - step) :duration (= ?duration 1800)
+       :condition (at start (step_pending ?s))   ; ← does NOT require passport_applied
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (application_submitted))))
+     ```
+   - GOOD (each action requires the previous one's output):
+     ```
+     (:durative-action apply_passport :parameters (?s - step) :duration (= ?duration 2700)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (passport_applied))))
+     (:durative-action submit_application :parameters (?s - step) :duration (= ?duration 1800)
+       :condition (and (at start (step_pending ?s)) (at start (passport_applied)))   ; ← enforces order
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (application_submitted))))
+     ```
+
+9. The problem's `:goal` MUST include the FINAL semantic predicate (the outcome of the last action in the chain),
+   in addition to all `(step_done stepN)` conditions.
+   - BAD (planner completes all steps trivially using only the fastest action):
+     ```
+     (:goal (and (step_done step1) (step_done step2) ... (step_done step6)))
+     ```
+   - GOOD (forces the planner to execute the full causal chain):
+     ```
+     (:goal (and (step_done step1) (step_done step2) ... (step_done step6) (departure_prepared)))
+     ```
+
+10. Every action's `:duration` MUST come from the time stated in the problem for that step.
+    NEVER give any action a duration of 1 second (or any tiny placeholder) unless the problem
+    explicitly states that step takes 1 second.
+    Do NOT split a step into "the real work" + a 1-second "state confirmation" action —
+    the semantic predicate is simply an effect of the step's action, not a separate action.
+    - BAD (the act of "buying beer" is given 1 second; its real duration is absorbed into prior steps):
+      ```
+      (:durative-action give_money      :duration (= ?duration 120) :effect (at end (money_given)))
+      (:durative-action buy_beer        :duration (= ?duration 1)   :effect (at end (beer_bought)))
+      ; "buy_beer" should have the duration from the problem, not 1 second
+      ```
+    - GOOD (each step uses the duration stated in the problem):
+      ```
+      (:durative-action give_money      :duration (= ?duration 120) :effect (at end (money_given)))
+      (:durative-action buy_beer        :duration (= ?duration 60)  ; ← from the problem statement
+        :effect (and (at end (step_done ?s)) (at end (beer_bought))))
+      ```
+
+11. A `:durative-action` may only have ONE `:condition` keyword. If multiple conditions are needed,
+    wrap them ALL in a single `(and ...)` block. Never write multiple separate `:condition` lines.
+    - BAD (PDDL parsers only keep the last `:condition`, silently dropping all others):
+      ```
+      :condition (at start (supplies_obtained))
+      :condition (at start (step_pending ?s))
+      ```
+    - GOOD:
+      ```
+      :condition (and (at start (supplies_obtained)) (at start (step_pending ?s)))
+      ```
+
+12. The number of `:durative-actions` MUST exactly equal the number of steps (one action per step).
+    Declare exactly N step objects (step1 ... stepN) for N steps. Never generate more or fewer actions
+    than steps — extra actions let the planner skip the most expensive one.
+    - BAD (7 actions but only 6 step objects — planner skips the slowest action):
+      ```
+      (:objects step1 step2 step3 step4 step5 step6 - step)
+      ; but domain defines 7 durative-actions including an expensive assemble_X (1200s)
+      ; planner uses the 6 cheapest actions and ignores assemble_X entirely
+      ```
+    - GOOD:
+      ```
+      (:objects step1 step2 step3 step4 step5 step6 step7 - step)  ; 7 steps → 7 actions
+      ```
 
 Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
 - 'domain_pddl': the domain in PDDL 2.1 format as a string.
@@ -530,8 +594,25 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str]]:
     if not response:
         return None
 
+    # Extract JSON from markdown code fence if present (some models add reasoning preamble)
+    fence_match = re.search(r"```(?:json)?\s*(\{.*?)\s*```", response, re.DOTALL)
+    if fence_match:
+        response = fence_match.group(1).strip()
+    else:
+        # No code fence — try to find a bare JSON object in the text (e.g. "Here are the PDDL:\n\n{...}")
+        brace_idx = response.find("{")
+        if brace_idx != -1:
+            response = response[brace_idx:]
+
+    # Some models (e.g. llama) use line-continuation style in JSON string values:
+    # they write \n\ + actual-newline instead of a clean \n escape.
+    # Remove the bare backslash + actual-newline sequences so json.loads can parse.
+    response = response.replace("\\\n", "")
+
     try:
-        data = json.loads(response)
+        # Use raw_decode to parse the first JSON object and ignore any trailing text
+        # (some models append explanations after the JSON block)
+        data, _ = json.JSONDecoder().raw_decode(response)
         pddl_resp = PDDLResponse(**data)
         if pddl_resp.responses:
             r = pddl_resp.responses[0]
