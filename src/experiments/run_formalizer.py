@@ -240,6 +240,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-shots", type=int, default=0, choices=[0, 1, 2, 3])
     parser.add_argument("--solver-retries", type=int, default=0)
     parser.add_argument("--llm-retries", type=int, default=0)
+    parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
 
     return parser.parse_args()
 
@@ -249,6 +250,10 @@ def main() -> None:
 
     if args.benchmark_name == "asynchow":
         eval_dataset = load_dataset("fangrulin/asynchow", split="test")
+    elif args.benchmark_name == "gen-data":
+        if not args.data_path:
+            raise ValueError("--data-path is required when --benchmark-name gen-data")
+        eval_dataset = json.loads(Path(args.data_path).read_text(encoding="utf-8"))
     else:
         raise ValueError(f"Unknown benchmark: {args.benchmark_name}")
 

@@ -11,6 +11,7 @@ from .base import BaseLLM
 GEMINI_MODELS_MAPPING = {
     "gemini/gemini-2.5-flash": "gemini-2.5-flash",
     "gemini/gemini-3-flash": "gemini-3-flash-preview",
+    "gemini/gemini-3-pro": "gemini-3-pro-preview",
 }
 
 # thinking_budget=0 disables thinking for 2.5 series.
@@ -18,6 +19,7 @@ GEMINI_MODELS_MAPPING = {
 GEMINI_THINKING_CONFIG = {
     "gemini-2.5-flash": types.ThinkingConfig(thinking_budget=2048),
     "gemini-3-flash-preview": types.ThinkingConfig(thinking_level="minimal"),
+    "gemini-3-pro-preview": types.ThinkingConfig(thinking_level="low"),  # supports: low, high (not minimal)
 }
 
 
