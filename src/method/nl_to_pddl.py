@@ -56,28 +56,36 @@ CRITICAL PDDL RULES for OPTIC planner compatibility:
 
 CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find wrong shortcuts:
 
-8. Every action MUST produce a UNIQUE semantic predicate (besides step_done) in its `(at end ...)` effect,
-   AND that predicate MUST be required as `(at start ...)` condition by the next action in the chain.
-   Every action EXCEPT the very first one must require the previous action's semantic predicate as a precondition.
-   This creates a mandatory causal chain — the planner cannot skip or reorder steps.
-   - BAD (no chain — planner runs all actions in parallel or skips slow ones):
+8. Every action MUST produce a UNIQUE semantic predicate (besides step_done) in its `(at end ...)` effect.
+   Every action that has one or more predecessors listed in the "ordering constraints" MUST require
+   ALL of those predecessors' semantic predicates as `(at start ...)` conditions — not just one of them.
+   This is a DAG (not a linear chain): a step may have multiple direct predecessors and ALL must be
+   enforced, otherwise the planner can skip slow predecessors and find an illegally short makespan.
+   - BAD (step C requires only A but not B, so planner skips slow B):
      ```
-     (:durative-action apply_passport :parameters (?s - step) :duration (= ?duration 2700)
+     (:durative-action do_A :duration (= ?duration 3600)
        :condition (at start (step_pending ?s))
-       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s))))
-     (:durative-action submit_application :parameters (?s - step) :duration (= ?duration 1800)
-       :condition (at start (step_pending ?s))   ; ← does NOT require passport_applied
-       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (application_submitted))))
-     ```
-   - GOOD (each action requires the previous one's output):
-     ```
-     (:durative-action apply_passport :parameters (?s - step) :duration (= ?duration 2700)
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (a_done))))
+     (:durative-action do_B :duration (= ?duration 7200)
        :condition (at start (step_pending ?s))
-       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (passport_applied))))
-     (:durative-action submit_application :parameters (?s - step) :duration (= ?duration 1800)
-       :condition (and (at start (step_pending ?s)) (at start (passport_applied)))   ; ← enforces order
-       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (application_submitted))))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (b_done))))
+     (:durative-action do_C :duration (= ?duration 600)
+       :condition (and (at start (step_pending ?s)) (at start (a_done)))   ; ← missing (b_done)!
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (c_done))))
      ```
+   - GOOD (step C requires BOTH A and B — the full AND-join):
+     ```
+     (:durative-action do_A :duration (= ?duration 3600)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (a_done))))
+     (:durative-action do_B :duration (= ?duration 7200)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (b_done))))
+     (:durative-action do_C :duration (= ?duration 600)
+       :condition (and (at start (step_pending ?s)) (at start (a_done)) (at start (b_done)))   ; ← both
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (c_done))))
+     ```
+   Steps with NO predecessors listed in the constraints need only `(at start (step_pending ?s))`.
 
 9. The problem's `:goal` MUST include the FINAL semantic predicate (the outcome of the last action in the chain),
    in addition to all `(step_done stepN)` conditions.

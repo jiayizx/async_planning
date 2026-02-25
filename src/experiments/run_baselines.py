@@ -64,7 +64,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
             "user_prompt": user_prompt,
         })
 
-        if idx == 100:
+        if idx + 1 >= args.max_examples:
             break
 
     # ── 2. Batch call LLM in parallel (num_workers threads) ──────────
@@ -122,6 +122,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cot", type=lambda v: v.lower() in ("true", "1", "yes"), default=False)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--num-workers", type=int, default=4)
+    parser.add_argument("--max-examples", type=int, default=100)
+    parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
 
     print(parser.parse_args())
 
@@ -134,6 +136,12 @@ def main() -> None:
     eval_dataset = None
     if args.benchmark_name == "asynchow":
         eval_dataset = load_dataset("fangrulin/asynchow", split="test")
+    elif args.benchmark_name == "gen-data":
+        if not args.data_path:
+            raise ValueError("--data-path is required when --benchmark-name gen-data")
+        import json as _json
+        from pathlib import Path as _Path
+        eval_dataset = _json.loads(_Path(args.data_path).read_text(encoding="utf-8"))
 
     if args.cot:
         args.save_path = args.save_path + "cot"
