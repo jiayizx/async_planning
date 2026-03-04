@@ -134,8 +134,9 @@ The PDDL you generated caused the following error from the OPTIC planner:
 
 {error}
 
-Please fix ALL issues and return corrected domain and problem PDDL.
+Given the previous PDDL and the error message, please first think step by step about how to fix the issues and then fix ALL issues and return corrected domain and problem PDDL.
 """
+# Please fix ALL issues and return corrected domain and problem PDDL.
 
 
 def _format_example_no_cot(example: dict, example_idx: int) -> str:
@@ -187,10 +188,11 @@ def build_icl_prefix(
     if icl_examples <= 0:
         return ""
 
-    if dataset == "asynchow":
-        train_ds = datasets.load_dataset("fangrulin/asynchow", split="train")
-    else:
-        raise ValueError(f"Unknown dataset: {dataset}")
+    # if dataset == "asynchow":
+    #     train_ds = datasets.load_dataset("fangrulin/asynchow", split="train")
+    # else:
+        # raise ValueError(f"Unknown dataset: {dataset}")
+    train_ds = datasets.load_dataset("fangrulin/asynchow", split="train")
 
     examples = train_ds.shuffle(seed=42).select(range(icl_examples))
 

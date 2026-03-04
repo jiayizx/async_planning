@@ -34,17 +34,20 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/nl_rewrite"
-MODEL="claude-4.5-haiku"
+# DATA_DIR="data/nl_rewrite"
+DATA_DIR="data/async_planning"
+# MODEL="openai/gpt-4.1"
+MODEL="gemini/gemini-2.5-flash"
 SAVE_DIR="results/gen-data/baselines"
-MAX_EXAMPLES=500
+MAX_EXAMPLES=400
 ICL_EXAMPLES=0
-COT=false
+COT=true
 BATCH=16
-NUM_WORKERS=4
+NUM_WORKERS=8
 TEMPERATURE=0.0
-MAX_TOKENS=2048
-PATTERN="*_nlrewrite_*.json"
+MAX_TOKENS=4096
+# PATTERN="*_nlrewrite_*.json"
+PATTERN="*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -65,7 +68,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ── Discover files ────────────────────────────────────────────────────────────
-mapfile -t FILES < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
+FILES=()
+while IFS= read -r f; do FILES+=("$f"); done < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
     echo "No files matching '$PATTERN' found in $DATA_DIR" >&2

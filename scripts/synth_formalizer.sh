@@ -8,7 +8,6 @@
 #   --save-dir DIR       Root folder for results                     [results/gen-data/formalizer]
 #   --max-examples N     Max examples per file (0 = all)             [500]
 #   --num-shots N        Few-shot examples (0-3)                     [0]
-#   --solver-retries N   Max retries for transient solver errors     [3]
 #   --llm-retries N      Max retries where LLM fixes from error      [3]
 #   --batch N            Solver/LLM batch size                       [16]
 #   --num-workers N      Parallel workers                            [8]
@@ -36,18 +35,19 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/nl_rewrite"
+DATA_DIR="data/async_planning"
 MODEL="openai/gpt-4.1"
+# MODEL="gemini/gemini-2.5-flash"
 SAVE_DIR="results/gen-data/formalizer"
-MAX_EXAMPLES=100
+MAX_EXAMPLES=400
 NUM_SHOTS=0
-SOLVER_RETRIES=3
 LLM_RETRIES=3
 BATCH=16
 NUM_WORKERS=8
 TEMPERATURE=0.0
 MAX_TOKENS=32768
-PATTERN="steps15-15*_nlrewrite_*.json"
+# PATTERN="*_nlrewrite_*.json"
+PATTERN="*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -57,7 +57,6 @@ while [[ $# -gt 0 ]]; do
         --save-dir)       SAVE_DIR="$2";       shift 2 ;;
         --max-examples)   MAX_EXAMPLES="$2";   shift 2 ;;
         --num-shots)      NUM_SHOTS="$2";      shift 2 ;;
-        --solver-retries) SOLVER_RETRIES="$2"; shift 2 ;;
         --llm-retries)    LLM_RETRIES="$2";    shift 2 ;;
         --batch)          BATCH="$2";          shift 2 ;;
         --num-workers)    NUM_WORKERS="$2";    shift 2 ;;
@@ -69,7 +68,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ── Discover files ────────────────────────────────────────────────────────────
-mapfile -t FILES < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
+FILES=()
+while IFS= read -r f; do FILES+=("$f"); done < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
     echo "No files matching '$PATTERN' found in $DATA_DIR" >&2
@@ -87,7 +87,7 @@ echo "  model         : $MODEL"
 echo "  save-dir      : $SAVE_DIR"
 echo "  max-examples  : $MAX_EXAMPLES"
 echo "  num-shots     : $NUM_SHOTS"
-echo "  solver-retries: $SOLVER_RETRIES  llm-retries: $LLM_RETRIES"
+echo "  llm-retries: $LLM_RETRIES"
 echo "  files found   : ${#FILES[@]}"
 for f in "${FILES[@]}"; do echo "    $f"; done
 echo "============================================================"
@@ -118,7 +118,6 @@ for DATA_PATH in "${FILES[@]}"; do
         --max-examples    "$MAX_EXAMPLES" \
         --num-workers     "$NUM_WORKERS" \
         --num-shots       "$NUM_SHOTS" \
-        --solver-retries  "$SOLVER_RETRIES" \
         --llm-retries     "$LLM_RETRIES"; then
         echo "  Done → $SAVE_PATH"
     else
