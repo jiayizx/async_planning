@@ -455,6 +455,7 @@ def generate_dataset(
         question = format_nl_question(dag, rng=rng)
         answer = format_answer(metrics["min_seconds"], metrics["sequential_seconds"])
 
+        topo_order = _topo_step_order(n_steps, dag["edges"])
         sample = {
             "id": len(samples) + 1,
             "question": question,
@@ -473,6 +474,9 @@ def generate_dataset(
                 "durations": dag["durations"],
                 "edges": dag["edges"],
                 "layer_of": dag["layer_of"],
+                # topo_order[k-1] = graph node id for NL "Step k"
+                # Used for plan validity checking after formalizer evaluation
+                "topo_order": topo_order,
             },
         }
         samples.append(sample)
