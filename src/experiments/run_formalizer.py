@@ -35,6 +35,7 @@ from src.evaluation.accuracy_metrics import (
     exact_match,
     parse_gold_seconds,
 )
+from src.evaluation.plan_validity import check_plan_validity
 from src.experiments.utils import build_llm_client, clean_question
 from src.llms.base import BaseLLM
 from src.llms.prompts import RETRY_USER_TEMPLATE
@@ -69,6 +70,8 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
             "question": example["question"],
             "gold_answer": example["answer"],
             "gold_seconds": gold_seconds,
+            # Only present for gen-data; None for asynchow
+            "graph": example.get("graph"),
         })
         if idx + 1 >= args.max_examples:
             break
@@ -79,6 +82,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     # Per-example mutable state (updated in-place across retries)
     domains: list[str | None] = [None] * n
     problems: list[str | None] = [None] * n
+    step_actions_list: list[list[str] | None] = [None] * n
     solver_results: list[SolverResult | None] = [None] * n
     raw_responses: list[str | None] = [None] * n
     errors: list[str] = ["not started"] * n
@@ -114,14 +118,15 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
 
         if solvable:
             solve_outputs = batch_solve(
-                [(d, p) for _, (d, p) in solvable],
+                [(d, p) for _, (d, p, _sa) in solvable],
                 num_workers=args.batch,
                 max_retries=_TRANSIENT_SOLVER_RETRIES,
                 desc="Solving PDDL",
             )
-            for (i, (d, p)), sr in zip(solvable, solve_outputs):
+            for (i, (d, p, sa)), sr in zip(solvable, solve_outputs):
                 domains[i] = d
                 problems[i] = p
+                step_actions_list[i] = sa or None
                 solver_results[i] = sr
                 errors[i] = sr.error  # "" on success
 
@@ -212,39 +217,36 @@ def _build_records(
         err = errors[i]
         sr = solver_results[i]
 
-        if err:
-            # Solver or parse error → syntax_error
-            rec = {
-                "question": gold["question"],
-                "gold_answer": gold["gold_answer"],
-                "gold_seconds": gold["gold_seconds"],
-                "pred_seconds": None,
-                "correct": False,
-                "error_type": "syntax_error",
-                "error": err,
-                "domain_pddl": domains[i],
-                "problem_pddl": problems[i],
-                "llm_response": raw_responses[i],
-            }
-            if sr is not None:
-                rec["raw_solver_output"] = sr.raw_output
-        else:
-            pred_seconds = int(round(sr.makespan_seconds))
-            is_correct = exact_match(pred_seconds, gold["gold_seconds"])
-            rec = {
-                "question": gold["question"],
-                "gold_answer": gold["gold_answer"],
-                "gold_seconds": gold["gold_seconds"],
-                "pred_seconds": pred_seconds,
-                "correct": is_correct,
-                "error_type": None if is_correct else "semantic_error",
-                "error": None if is_correct else f"expected {gold['gold_seconds']}s, got {pred_seconds}s",
-                "plan": [(start, action, dur) for start, action, dur in sr.plan],
-                "raw_solver_output": sr.raw_output,
-                "domain_pddl": domains[i],
-                "problem_pddl": problems[i],
-                "llm_response": raw_responses[i],
-            }
+            if err:
+                rec = _failure_record(
+                    gold, raw_responses[i], error=err,
+                    domain=domains[i], problem=problems[i],
+                )
+                if sr is not None:
+                    rec["raw_solver_output"] = sr.raw_output
+            else:
+                pred_seconds = int(round(sr.makespan_seconds))
+                plan_valid: bool | None = None
+                plan_validity_error: str | None = None
+                if gold["graph"] and sr.plan:
+                    plan_valid, plan_validity_error = check_plan_validity(
+                        sr.plan, gold["graph"],
+                        step_actions=step_actions_list[i],
+                    )
+                rec = {
+                    "question": gold["question"],
+                    "gold_answer": gold["gold_answer"],
+                    "gold_seconds": gold["gold_seconds"],
+                    "pred_seconds": pred_seconds,
+                    "correct": exact_match(pred_seconds, gold["gold_seconds"]),
+                    "plan_valid": plan_valid,
+                    "plan_validity_error": plan_validity_error,
+                    "plan": [(start, action, dur) for start, action, dur in sr.plan],
+                    "raw_solver_output": sr.raw_output,
+                    "domain_pddl": domains[i],
+                    "problem_pddl": problems[i],
+                    "llm_response": raw_responses[i],
+                }
 
         # Attach full dialogue history if available
         if histories is not None:
@@ -329,6 +331,24 @@ def _save_summary(records: list[dict], args: argparse.Namespace) -> None:
     semantic_errors = sum(1 for r in records if r.get("error_type") == "semantic_error")
     accuracy = correct / len(records) if records else 0.0
 
+    # Plan validity stats — only meaningful for gen-data (graph available)
+    has_validity = any(r.get("plan_valid") is not None for r in records)
+    plan_valid_count = sum(1 for r in records if r.get("plan_valid") is True)
+    correct_and_valid = sum(
+        1 for r in records if r.get("correct") and r.get("plan_valid") is True
+    )
+    correct_but_invalid = sum(
+        1 for r in records if r.get("correct") and r.get("plan_valid") is False
+    )
+    incorrect_but_valid = sum(
+        1 for r in records if not r.get("correct") and r.get("plan_valid") is True
+    )
+    # denominator for plan validity rate: solved (non-failure) records with graph
+    solved_with_graph = sum(
+        1 for r in records if not r.get("error") and r.get("plan_valid") is not None
+    )
+    plan_valid_rate = plan_valid_count / solved_with_graph if solved_with_graph else None
+
     metrics = {
         "benchmark": args.benchmark_name,
         "model_name": args.model_name,
@@ -337,17 +357,28 @@ def _save_summary(records: list[dict], args: argparse.Namespace) -> None:
         "num_syntax_errors": syntax_errors,
         "num_semantic_errors": semantic_errors,
         "num_data_points": len(records),
-        "llm_retries": args.llm_retries,
+        # Plan validity (null when graph unavailable, e.g. asynchow)
+        "plan_valid_rate": plan_valid_rate,
+        "num_plan_valid": plan_valid_count if has_validity else None,
+        "num_correct_and_valid": correct_and_valid if has_validity else None,
+        "num_correct_but_invalid": correct_but_invalid if has_validity else None,
+        "num_incorrect_but_valid": incorrect_but_valid if has_validity else None,
     }
     with (save_path / "summary_results.json").open("w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
 
-    print(f"\n{'='*60}")
-    print(f"Results saved to {save_path}")
-    print(f"  Accuracy:        {accuracy:.4f} ({correct}/{len(records)})")
-    print(f"  Syntax errors:   {syntax_errors}/{len(records)}")
-    print(f"  Semantic errors: {semantic_errors}/{len(records)}")
-    print(f"{'='*60}")
+    print(f"\nResults saved to {save_path}")
+    print(f"Accuracy: {accuracy:.4f} ({correct}/{len(records)})")
+    print(f"Parse/solver failures: {parse_failures}/{len(records)}")
+    print(f"Solution errors: {len(records) - correct - parse_failures}/{len(records)}")
+    if has_validity:
+        print(f"\nPlan validity (gold graph check, n={solved_with_graph} solved):")
+        print(f"  plan_valid_rate  : {plan_valid_rate:.4f} ({plan_valid_count}/{solved_with_graph})")
+        print(f"  correct & valid  : {correct_and_valid}  ← formalizer got it right")
+        print(f"  correct & INVALID: {correct_but_invalid}  ← lucky (wrong plan, right makespan)")
+        print(f"  wrong   & valid  : {incorrect_but_valid}  ← overconstrained PDDL")
+    else:
+        print("Plan validity: N/A (no gold graph in dataset)")
 
 
 # ── CLI ─────────────────────────────────────────────────────────────────

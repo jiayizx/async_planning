@@ -29,6 +29,7 @@ from src.llms.prompts import (
 class PDDLResult(BaseModel):
     domain_pddl: str
     problem_pddl: str
+    step_actions: List[str] = []  # action names in step order: step_actions[i] = action for Step i+1
 
 
 class PDDLResponse(BaseModel):
@@ -71,13 +72,28 @@ def build_pddl_messages(question: str, num_shots: int = 0) -> list[dict[str, str
 
     for ex in PDDL_FEW_SHOT_EXAMPLES[:num_shots]:
         assistant_response = json.dumps({
-            "responses": [{"domain_pddl": ex["domain_pddl"], "problem_pddl": ex["problem_pddl"]}]
+            "responses": [{"domain_pddl": ex["domain_pddl"], "problem_pddl": ex["problem_pddl"], "step_actions": ex["step_actions"]}]
         })
         messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(ex["question"]))})
         messages.append({"role": "assistant", "content": assistant_response})
 
     messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))})
     return messages
+
+
+def _truncate_solver_error(error: str, head: int = 10, tail: int = 20) -> str:
+    """Keep only the first `head` and last `tail` lines of solver output.
+
+    OPTIC emits thousands of lines of search trace (e.g. 2500 "is uninteresting"
+    lines) that are useless for the LLM but can bloat the retry message to 200k+
+    characters and stall API calls.  Only the first few lines (parse errors) and
+    last few lines (final status / heuristic) matter.
+    """
+    lines = error.splitlines()
+    if len(lines) <= head + tail:
+        return error
+    kept = lines[:head] + [f"... ({len(lines) - head - tail} lines omitted) ..."] + lines[-tail:]
+    return "\n".join(kept)
 
 
 
@@ -109,8 +125,8 @@ def _fix_trailing_brace(pddl: str) -> str:
 # ── Parse structured response ──────────────────────────────────────────
 
 
-def parse_pddl_response(response: str) -> Optional[tuple[str, str]]:
-    """Parse the structured JSON response into (domain_pddl, problem_pddl).
+def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
+    """Parse the structured JSON response into (domain_pddl, problem_pddl, step_actions).
 
     Expects a JSON string matching the PDDLResponse schema.
     Returns None if parsing fails. Applies sanitization fixes to the PDDL.
