@@ -8,7 +8,6 @@
 #   --save-dir DIR       Root folder for results                     [results/gen-data/formalizer]
 #   --max-examples N     Max examples per file (0 = all)             [500]
 #   --num-shots N        Few-shot examples (0-3)                     [0]
-#   --solver-retries N   Max retries for transient solver errors     [3]
 #   --llm-retries N      Max retries where LLM fixes from error      [3]
 #   --batch N            Solver/LLM batch size                       [16]
 #   --num-workers N      Parallel workers                            [8]
@@ -36,18 +35,21 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/nl_rewrite"
-MODEL="openai/gpt-4.1"
+# DATA_DIR="data/async_planning"
+DATA_DIR="data/async_planning/nodes15_n50_s42_nlrewrite_gemini-3-flash.json"
+MODEL="gemini-3-flash"
+# MODEL="openai/gpt-4.1"
 SAVE_DIR="results/gen-data/formalizer"
-MAX_EXAMPLES=100
+MAX_EXAMPLES=400
 NUM_SHOTS=0
-SOLVER_RETRIES=3
 LLM_RETRIES=3
-BATCH=16
-NUM_WORKERS=8
+HISTORY_MODE="single-turn" # cumulative | single-turn
+BATCH=16 # how many pddl problem are sent to the solver to solve at once
+NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=32768
-PATTERN="steps15-15*_nlrewrite_*.json"
+# PATTERN="*_nlrewrite_*.json"
+PATTERN="*nlrewrite_*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -57,8 +59,8 @@ while [[ $# -gt 0 ]]; do
         --save-dir)       SAVE_DIR="$2";       shift 2 ;;
         --max-examples)   MAX_EXAMPLES="$2";   shift 2 ;;
         --num-shots)      NUM_SHOTS="$2";      shift 2 ;;
-        --solver-retries) SOLVER_RETRIES="$2"; shift 2 ;;
         --llm-retries)    LLM_RETRIES="$2";    shift 2 ;;
+        --history-mode)   HISTORY_MODE="$2";   shift 2 ;;
         --batch)          BATCH="$2";          shift 2 ;;
         --num-workers)    NUM_WORKERS="$2";    shift 2 ;;
         --temperature)    TEMPERATURE="$2";    shift 2 ;;
@@ -69,7 +71,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ── Discover files ────────────────────────────────────────────────────────────
-mapfile -t FILES < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
+FILES=()
+while IFS= read -r f; do FILES+=("$f"); done < <(find "$DATA_DIR" -maxdepth 1 -name "$PATTERN" | sort)
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
     echo "No files matching '$PATTERN' found in $DATA_DIR" >&2
@@ -85,9 +88,10 @@ echo "============================================================"
 echo "  data-dir      : $DATA_DIR"
 echo "  model         : $MODEL"
 echo "  save-dir      : $SAVE_DIR"
+echo "  history-mode  : $HISTORY_MODE"
 echo "  max-examples  : $MAX_EXAMPLES"
 echo "  num-shots     : $NUM_SHOTS"
-echo "  solver-retries: $SOLVER_RETRIES  llm-retries: $LLM_RETRIES"
+echo "  llm-retries: $LLM_RETRIES"
 echo "  files found   : ${#FILES[@]}"
 for f in "${FILES[@]}"; do echo "    $f"; done
 echo "============================================================"
@@ -118,8 +122,8 @@ for DATA_PATH in "${FILES[@]}"; do
         --max-examples    "$MAX_EXAMPLES" \
         --num-workers     "$NUM_WORKERS" \
         --num-shots       "$NUM_SHOTS" \
-        --solver-retries  "$SOLVER_RETRIES" \
-        --llm-retries     "$LLM_RETRIES"; then
+        --llm-retries     "$LLM_RETRIES" \
+        --history-mode    "$HISTORY_MODE"; then
         echo "  Done → $SAVE_PATH"
     else
         echo "  FAILED: $DATA_PATH" >&2
@@ -128,53 +132,3 @@ for DATA_PATH in "${FILES[@]}"; do
 
     echo ""
 done
-
-# ── Aggregate summary ─────────────────────────────────────────────────────────
-echo "============================================================"
-echo " Aggregated Results"
-echo "============================================================"
-python - <<EOF
-import json, glob, os, sys
-
-save_dir = "${SAVE_DIR}/${SAFE_MODEL}"
-pattern  = os.path.join(save_dir, "**", "summary_results.json")
-files    = sorted(glob.glob(pattern, recursive=True))
-
-if not files:
-    print("No summary_results.json found.")
-    sys.exit(0)
-
-rows = []
-for f in files:
-    with open(f) as fh:
-        d = json.load(fh)
-    stem = os.path.basename(os.path.dirname(f))
-    rows.append({
-        "file":         stem,
-        "accuracy":     d.get("accuracy", 0),
-        "correct":      d.get("num_correct", 0),
-        "total":        d.get("num_data_points", 0),
-        "parse_fails":  d.get("num_parse_failures", 0),
-    })
-
-# Print table
-w = max(len(r["file"]) for r in rows)
-print(f"{'file':<{w}}  {'acc':>6}  {'correct':>7}  {'total':>5}  {'parse_fail':>10}")
-print("-" * (w + 35))
-for r in rows:
-    print(f"{r['file']:<{w}}  {r['accuracy']:>6.3f}  {r['correct']:>7}  {r['total']:>5}  {r['parse_fails']:>10}")
-
-total_c = sum(r["correct"] for r in rows)
-total_n = sum(r["total"]   for r in rows)
-overall = total_c / total_n if total_n else 0
-print("-" * (w + 35))
-print(f"{'OVERALL':<{w}}  {overall:>6.3f}  {total_c:>7}  {total_n:>5}")
-print(f"\nSaved under: {save_dir}")
-EOF
-
-if [[ ${#FAILED[@]} -gt 0 ]]; then
-    echo ""
-    echo "WARNING: ${#FAILED[@]} file(s) failed:"
-    for f in "${FAILED[@]}"; do echo "  $f"; done
-    exit 1
-fi

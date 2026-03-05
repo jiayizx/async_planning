@@ -44,6 +44,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
     metadata = []  # parallel list: gold info per example
 
     for idx, example in enumerate(tqdm(eval_dataset, desc="Collecting baseline prompts")):
+        if "nl_rewrite_failed" in example and example["nl_rewrite_failed"]:
+            continue
+            
         question = clean_question(example["question"])
         gold_seconds = parse_gold_seconds(example["answer"])
 
@@ -101,6 +104,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
         "num_correct": correct,
         "num_data_points": len(records),
     }
+    print("Num correct: ", correct)
+    print("Num data points: ", len(records))
+    print("Accuracy: ", accuracy)
     with (save_path / "summary_results.json").open("w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
 
@@ -120,7 +126,6 @@ def parse_args() -> argparse.Namespace:
     # Task-specific arguments
     parser.add_argument("--icl-examples", type=int, default=0)
     parser.add_argument("--cot", type=lambda v: v.lower() in ("true", "1", "yes"), default=False)
-    parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--num-workers", type=int, default=4)
     parser.add_argument("--max-examples", type=int, default=100)
     parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")

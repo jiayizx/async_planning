@@ -21,11 +21,22 @@ UNIT_SECONDS = {
 }
 
 def parse_gold_seconds(answer: Any) -> int:
+    """Convert gold answer to seconds. Handles: int, timedelta, duration str, legacy [timedelta,...] str."""
+    if isinstance(answer, int):
+        return answer
     if isinstance(answer, timedelta):
         return int(answer.total_seconds())
     if isinstance(answer, str):
+        parsed = parse_duration_text(answer)
+        if parsed is not None:
+            return parsed
+        if answer.strip().replace("-", "").isdigit():
+            return int(answer.strip())
         s = eval(answer)
-        return int(s[0].total_seconds())
+        if isinstance(s, (list, tuple)) and len(s) > 0 and isinstance(s[0], timedelta):
+            return int(s[0].total_seconds())
+        if isinstance(s, (int, float)):
+            return int(s)
     raise ValueError(f"Unrecognized answer format: {answer}")
 
 

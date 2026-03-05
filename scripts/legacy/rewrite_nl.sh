@@ -40,8 +40,8 @@ OUTPUT=""
 OUTPUT_DIR="data/nl_rewrite"
 MODEL="openai/gpt-4.1"
 WORKERS=8
-TEMPERATURE=0.8
-MAX_TOKENS=0
+TEMPERATURE=0.7
+MAX_TOKENS=4096
 LIMIT=0
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────

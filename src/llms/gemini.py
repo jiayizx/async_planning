@@ -9,9 +9,9 @@ from pydantic import BaseModel
 from .base import BaseLLM
 
 GEMINI_MODELS_MAPPING = {
-    "gemini/gemini-2.5-flash": "gemini-2.5-flash",
-    "gemini/gemini-3-flash": "gemini-3-flash-preview",
-    "gemini/gemini-3-pro": "gemini-3-pro-preview",
+    "gemini-2.5-flash": "gemini-2.5-flash",
+    "gemini-3-flash": "gemini-3-flash-preview",
+    "gemini-3-pro": "gemini-3-pro-preview",
 }
 
 # thinking_budget=0 disables thinking for 2.5 series.
