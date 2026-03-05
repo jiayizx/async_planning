@@ -160,14 +160,18 @@ class AsyncDAGGenerator:
 # NL formatting  (AsyncHow format — compatible with rewrite_nl.py)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def format_question(G: DiGraph, task_title: str, rng: random.Random | None = None) -> str:
-    """Output structure only — steps and dependencies. LLM adds names and durations."""
+def format_question(
+    G: DiGraph, task_title: str, rng: random.Random | None = None
+) -> tuple[str, dict[int, int]]:
+    """Output structure only — steps and dependencies. LLM adds names and durations.
+    Returns (question_text, step_to_node) where step_to_node maps step number (1-indexed) to node id."""
     rng = rng or random.Random()
     n   = G.num_nodes()
 
     display_order = list(range(n))
     rng.shuffle(display_order)
     step_num = {node: i + 1 for i, node in enumerate(display_order)}
+    step_to_node = {step_num[node]: node for node in G.nodes()}
 
     lines = [f"To {task_title}, here are the steps needed."]
     for node in display_order:
@@ -187,7 +191,7 @@ def format_question(G: DiGraph, task_title: str, rng: random.Random | None = Non
         f"the task and that infinite resources are available. What is the "
         f"shortest possible time to {task_title}?",
     ]
-    return "\n".join(lines)
+    return "\n".join(lines), step_to_node
 
 
 def format_answer(critical_path_length: int) -> str:
@@ -238,10 +242,11 @@ def generate_samples(
             "edges":     G.edges(),
         })
 
+        question_text, step_to_node = format_question(G, task_title, rng=rng)
         samples.append({
             "id":               len(samples) + 1,
-            "question":        format_question(G, task_title, rng=rng),
-            "answer":          format_answer(makespan),  # critical path length (durations=1)
+            "question":        question_text,
+            "answer":          format_answer(makespan),  # placeholder until rewrite adds durations
             "n_steps":         num_nodes,
             "n_edges":         metrics["n_edges"],
             "edge_probability": ep,
@@ -256,7 +261,8 @@ def generate_samples(
             "cp_node_frac":    metrics["cp_node_frac"],
             "edge_density":    metrics["edge_density"],
             "graph": {
-                "edges": G.edges(),
+                "edges":       G.edges(),
+                "step_to_node": step_to_node,  # step number (1-indexed) -> node id
             },
         })
 

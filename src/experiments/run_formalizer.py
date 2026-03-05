@@ -37,12 +37,14 @@ from src.evaluation.accuracy_metrics import (
 )
 from src.evaluation.plan_validity import check_plan_validity
 from src.experiments.utils import build_llm_client, clean_question
+from src.gen_data.utils import parse_node_durations
 from src.llms.base import BaseLLM
-from src.llms.prompts import RETRY_USER_TEMPLATE
+from src.llms.prompts import SYNTAX_RETRY_TEMPLATE, SEMANTIC_RETRY_TEMPLATE
 from src.method.nl_to_pddl import (
     build_pddl_messages,
     parse_pddl_response,
     PDDLResponse,
+    _truncate_solver_error,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 
@@ -50,7 +52,7 @@ from src.method.pddl_solver import solve, batch_solve, SolverResult
 # Hard-coded transient-server retry (not user-facing; just protects against
 # flaky solver.planning.domains containers).
 _TRANSIENT_SOLVER_RETRIES = 2
-
+SOLVER_TIMEOUT = 10  # 10 seconds
 
 # ── Core logic ──────────────────────────────────────────────────────────
 
@@ -77,7 +79,6 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
             break
 
     n = len(questions)
-    save_path = Path(args.save_path)
 
     # Per-example mutable state (updated in-place across retries)
     domains: list[str | None] = [None] * n
@@ -86,41 +87,58 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     solver_results: list[SolverResult | None] = [None] * n
     raw_responses: list[str | None] = [None] * n
     errors: list[str] = ["not started"] * n
+    # "syntax_error" | "semantic_error" | "" (success) | "not_started"
+    error_types: list[str] = ["not_started"] * n
 
-    # Per-example conversation history (grows with each retry turn)
+    # Multi-turn conversation histories — each list grows across retries:
+    #   [system, user₀, asst₁, user_err₁, asst₂, user_err₂, …]
+    # On retry we just append; the LLM sees all prior attempts.
     histories: list[list[dict]] = [
         build_pddl_messages(q, num_shots=args.num_shots)
         for q in questions
     ]
 
-    def _call_and_solve(indices: list[int], desc: str) -> None:
-        """Send current histories for *indices* to the LLM, parse, solve.
+    def _attempt(indices: list[int], desc: str) -> None:
+        """Run one LLM batch for *indices* using each example's current history.
 
-        After the LLM responds, the assistant message is appended to each
-        example's history so that subsequent retries see the full conversation.
+        Error taxonomy:
+          syntax_error  — PDDL JSON parse failed, or OPTIC reported a planner error.
+          semantic_error — OPTIC produced a valid plan but the makespan is wrong.
+
+        After the LLM responds the assistant message is appended to histories[i].
+        The appropriate retry feedback message is then appended so the next retry
+        sees the full conversation with the specific error type and guidance.
         """
         msgs = [histories[i] for i in indices]
-
         responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
         pairs = [parse_pddl_response(r) for r in responses]
 
         for i, resp in zip(indices, responses):
             raw_responses[i] = resp
-            # Append assistant response to conversation history
             if resp:
                 histories[i].append({"role": "assistant", "content": resp})
 
-        solvable = [(i, pair) for i, pair in zip(indices, pairs) if pair is not None]
-
+        solvable = []
         for i, pair in zip(indices, pairs):
             if pair is None:
                 errors[i] = "PDDL parse failed"
+                error_types[i] = "syntax_error"
+                histories[i].append({
+                    "role": "user",
+                    "content": SYNTAX_RETRY_TEMPLATE.format(
+                        error="Your response could not be parsed as valid PDDL JSON. "
+                              "Please output only the JSON object matching the schema."
+                    ),
+                })
+            else:
+                solvable.append((i, pair))
 
         if solvable:
             solve_outputs = batch_solve(
                 [(d, p) for _, (d, p, _sa) in solvable],
                 num_workers=args.batch,
                 max_retries=_TRANSIENT_SOLVER_RETRIES,
+                timeout=SOLVER_TIMEOUT,
                 desc="Solving PDDL",
             )
             for (i, (d, p, sa)), sr in zip(solvable, solve_outputs):
@@ -128,117 +146,106 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                 problems[i] = p
                 step_actions_list[i] = sa or None
                 solver_results[i] = sr
-                errors[i] = sr.error  # "" on success
 
-    # ── 2. Initial pass (run_0) ──────────────────────────────────────
-    _call_and_solve(list(range(n)), desc="LLM translation (NL→PDDL)")
+                if sr.error:
+                    # Planner rejected the PDDL — syntax/validation issue
+                    errors[i] = sr.error
+                    error_types[i] = "syntax_error"
+                    histories[i].append({
+                        "role": "user",
+                        "content": SYNTAX_RETRY_TEMPLATE.format(
+                            error=_truncate_solver_error(sr.error)
+                        ),
+                    })
+                else:
+                    # Planner succeeded — check if the makespan is correct
+                    pred_seconds = int(round(sr.makespan_seconds))
+                    gold_seconds = gold_data[i]["gold_seconds"]
+                    if gold_seconds is not None and not exact_match(pred_seconds, gold_seconds):
+                        errors[i] = f"wrong makespan: got {pred_seconds}s"
+                        error_types[i] = "semantic_error"
+                        histories[i].append({
+                            "role": "user",
+                            "content": SEMANTIC_RETRY_TEMPLATE.format(
+                                pred_seconds=pred_seconds
+                            ),
+                        })
+                    else:
+                        errors[i] = ""
+                        error_types[i] = ""
 
-    _save_run_snapshot(
-        run_idx=0,
-        save_path=save_path,
-        gold_data=gold_data,
-        domains=domains,
-        problems=problems,
-        solver_results=solver_results,
-        raw_responses=raw_responses,
-        errors=errors,
-    )
+    # ── 2. Initial pass ───────────────────────────────────────────────
+    _attempt(list(range(n)), desc="LLM translation (NL→PDDL)")
 
-    # ── 3. Multi-turn retry loop (run_1, run_2, …) ───────────────────
-    #
-    # For each failed example, append the error feedback as a new user
-    # message, then call the LLM again.  The conversation grows:
-    #   [system, user, asst₁, user_err₁, asst₂, user_err₂, …]
-    #
+    # ── 3. LLM retry loop ─────────────────────────────────────────────
+    # histories[i] already has the typed error feedback appended by _attempt,
+    # so we simply pass failed indices — no message rebuilding needed.
     for retry in range(args.llm_retries):
-        # Only retry examples with syntax errors (non-empty error string).
+        n_syntax   = sum(1 for t in error_types if t == "syntax_error")
+        n_semantic = sum(1 for t in error_types if t == "semantic_error")
         failed = [i for i in range(n) if errors[i]]
         if not failed:
             break
-        print(f"\nRetry {retry + 1}/{args.llm_retries}: "
-              f"retrying {len(failed)} syntax-error examples")
-
-        # Append error feedback to each failed example's history
-        for i in failed:
-            histories[i].append({
-                "role": "user",
-                "content": RETRY_USER_TEMPLATE.format(error=errors[i]),
-            })
-
-        _call_and_solve(failed, desc=f"LLM retry {retry + 1}")
-
-        _save_run_snapshot(
-            run_idx=retry + 1,
-            save_path=save_path,
-            gold_data=gold_data,
-            domains=domains,
-            problems=problems,
-            solver_results=solver_results,
-            raw_responses=raw_responses,
-            errors=errors,
+        print(
+            f"\nRetry {retry + 1}/{args.llm_retries}: "
+            f"{len(failed)} failed ({n_syntax} syntax, {n_semantic} semantic)"
         )
+        _attempt(failed, desc=f"LLM retry {retry + 1}")
 
-    # ── 4. Assemble final records & save ─────────────────────────────
-    records = _build_records(
-        gold_data, domains, problems, solver_results, raw_responses, errors,
-        histories,
-    )
-
+    # ── 4. Assemble records & save ────────────────────────────────────
+    save_path = Path(args.save_path)
     pddl_dir = save_path / "pddl"
     pddl_dir.mkdir(parents=True, exist_ok=True)
     jsonl_path = save_path / "full_results.jsonl"
 
-    with jsonl_path.open("w", encoding="utf-8") as jsonl_f:
-        for i, rec in enumerate(records):
-            _save_example(pddl_dir, i, rec)
-            jsonl_f.write(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
-            jsonl_f.flush()
-
-    # ── 5. Save summary ──────────────────────────────────────────────
-    _save_summary(records, args)
-    return records
-
-
-# ── Record building ─────────────────────────────────────────────────────
-
-
-def _build_records(
-    gold_data: list[dict],
-    domains: list[str | None],
-    problems: list[str | None],
-    solver_results: list[SolverResult | None],
-    raw_responses: list[str | None],
-    errors: list[str],
-    histories: list[list[dict]] | None = None,
-) -> list[dict]:
-    """Build result records with syntax_error / semantic_error labels."""
     records: list[dict] = []
-    for i, gold in enumerate(gold_data):
-        err = errors[i]
-        sr = solver_results[i]
 
-            if err:
+    with jsonl_path.open("w", encoding="utf-8") as jsonl_f:
+        for i, gold in enumerate(gold_data):
+            err = errors[i]
+            etype = error_types[i]
+            sr = solver_results[i]
+
+            if etype == "syntax_error":
                 rec = _failure_record(
-                    gold, raw_responses[i], error=err,
+                    gold, raw_responses[i], error=err, error_type="syntax_error",
                     domain=domains[i], problem=problems[i],
                 )
                 if sr is not None:
                     rec["raw_solver_output"] = sr.raw_output
+
+            elif etype == "semantic_error":
+                # Solver produced a plan but the makespan is wrong
+                pred_seconds = int(round(sr.makespan_seconds))
+                rec = _failure_record(
+                    gold, raw_responses[i], error=err, error_type="semantic_error",
+                    domain=domains[i], problem=problems[i],
+                )
+                rec["pred_seconds"] = pred_seconds
+                rec["raw_solver_output"] = sr.raw_output
+                rec["plan"] = [(start, action, dur) for start, action, dur in sr.plan]
+
             else:
+                # Success
                 pred_seconds = int(round(sr.makespan_seconds))
                 plan_valid: bool | None = None
                 plan_validity_error: str | None = None
                 if gold["graph"] and sr.plan:
-                    plan_valid, plan_validity_error = check_plan_validity(
-                        sr.plan, gold["graph"],
-                        step_actions=step_actions_list[i],
-                    )
+                    g = gold["graph"]
+                    if "durations" not in g:
+                        g["durations"] = parse_node_durations(gold["question"], g)
+                    if g.get("durations"):
+                        plan_valid, plan_validity_error = check_plan_validity(
+                            sr.plan, g,
+                            step_actions=step_actions_list[i],
+                        )
                 rec = {
                     "question": gold["question"],
                     "gold_answer": gold["gold_answer"],
                     "gold_seconds": gold["gold_seconds"],
                     "pred_seconds": pred_seconds,
                     "correct": exact_match(pred_seconds, gold["gold_seconds"]),
+                    "error_type": "",
                     "plan_valid": plan_valid,
                     "plan_validity_error": plan_validity_error,
                     "plan": [(start, action, dur) for start, action, dur in sr.plan],
@@ -248,65 +255,41 @@ def _build_records(
                     "llm_response": raw_responses[i],
                 }
 
-        # Attach full dialogue history if available
-        if histories is not None:
-            rec["dialogue_history"] = histories[i]
+            rec["chat_history"] = histories[i]
+            records.append(rec)
+            _save_example(pddl_dir, i, rec)
+            jsonl_f.write(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+            jsonl_f.flush()
 
-        records.append(rec)
+    # ── 5. Save summary ───────────────────────────────────────────────
+    _save_summary(records, args)
     return records
 
 
-# ── Per-run snapshot saving ─────────────────────────────────────────────
-
-
-def _save_run_snapshot(
-    run_idx: int,
-    save_path: Path,
-    gold_data: list[dict],
-    domains: list[str | None],
-    problems: list[str | None],
-    solver_results: list[SolverResult | None],
-    raw_responses: list[str | None],
-    errors: list[str],
-) -> None:
-    """Save a full snapshot of results after run_<run_idx> (run_0 = initial, run_1 = retry 1, …)."""
-    run_dir = save_path / f"run_{run_idx}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-
-    records = _build_records(gold_data, domains, problems, solver_results, raw_responses, errors)
-
-    # Write full_results.jsonl
-    with (run_dir / "full_results.jsonl").open("w", encoding="utf-8") as f:
-        for rec in records:
-            f.write(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
-
-    # Write summary
-    n = len(records)
-    correct = sum(1 for r in records if r["correct"])
-    syntax_errors = sum(1 for r in records if r.get("error_type") == "syntax_error")
-    semantic_errors = sum(1 for r in records if r.get("error_type") == "semantic_error")
-    accuracy = correct / n if n else 0.0
-
-    summary = {
-        "run": run_idx,
-        "accuracy": accuracy,
-        "num_correct": correct,
-        "num_syntax_errors": syntax_errors,
-        "num_semantic_errors": semantic_errors,
-        "num_data_points": n,
+def _failure_record(
+    gold: dict,
+    raw_resp: str | None,
+    error: str,
+    error_type: str = "syntax_error",
+    domain: str | None = None,
+    problem: str | None = None,
+) -> dict:
+    return {
+        "question": gold["question"],
+        "gold_answer": gold["gold_answer"],
+        "gold_seconds": gold["gold_seconds"],
+        "pred_seconds": None,
+        "correct": False,
+        "error_type": error_type,
+        "error": error,
+        "domain_pddl": domain,
+        "problem_pddl": problem,
+        "llm_response": raw_resp,
     }
-    with (run_dir / "summary.json").open("w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
-
-    print(f"  run_{run_idx}: accuracy={accuracy:.4f}  correct={correct}  "
-          f"syntax_err={syntax_errors}  semantic_err={semantic_errors}  total={n}")
-
-
-# ── Helpers ─────────────────────────────────────────────────────────────
 
 
 def _save_example(pddl_dir: Path, idx: int, rec: dict) -> None:
-    """Save a single example's PDDL files, plan, and dialogue history."""
+    """Save a single example's PDDL files, plan, and chat history."""
     example_dir = pddl_dir / f"example_{idx:04d}"
     example_dir.mkdir(exist_ok=True)
     if rec.get("domain_pddl"):
@@ -317,9 +300,9 @@ def _save_example(pddl_dir: Path, idx: int, rec: dict) -> None:
         with (example_dir / "plan.txt").open("w") as f:
             for start, action, dur in rec["plan"]:
                 f.write(f"{start:.3f}: ({action}) [{dur:.3f}]\n")
-    if rec.get("dialogue_history"):
-        with (example_dir / "dialogue.json").open("w", encoding="utf-8") as f:
-            json.dump(rec["dialogue_history"], f, indent=2, ensure_ascii=False)
+    if rec.get("chat_history"):
+        with (example_dir / "chat_history.json").open("w", encoding="utf-8") as f:
+            json.dump(rec["chat_history"], f, indent=2, ensure_ascii=False)
 
 
 def _save_summary(records: list[dict], args: argparse.Namespace) -> None:
@@ -327,8 +310,9 @@ def _save_summary(records: list[dict], args: argparse.Namespace) -> None:
     save_path = Path(args.save_path)
 
     correct = sum(1 for r in records if r["correct"])
-    syntax_errors = sum(1 for r in records if r.get("error_type") == "syntax_error")
+    syntax_errors   = sum(1 for r in records if r.get("error_type") == "syntax_error")
     semantic_errors = sum(1 for r in records if r.get("error_type") == "semantic_error")
+    parse_failures = syntax_errors + semantic_errors  # backward-compat alias
     accuracy = correct / len(records) if records else 0.0
 
     # Plan validity stats — only meaningful for gen-data (graph available)
@@ -368,9 +352,9 @@ def _save_summary(records: list[dict], args: argparse.Namespace) -> None:
         json.dump(metrics, f, indent=2)
 
     print(f"\nResults saved to {save_path}")
-    print(f"Accuracy: {accuracy:.4f} ({correct}/{len(records)})")
-    print(f"Parse/solver failures: {parse_failures}/{len(records)}")
-    print(f"Solution errors: {len(records) - correct - parse_failures}/{len(records)}")
+    print(f"Accuracy       : {accuracy:.4f} ({correct}/{len(records)})")
+    print(f"Syntax errors  : {syntax_errors}/{len(records)}  (PDDL parse / planner rejection)")
+    print(f"Semantic errors: {semantic_errors}/{len(records)}  (valid plan, wrong makespan)")
     if has_validity:
         print(f"\nPlan validity (gold graph check, n={solved_with_graph} solved):")
         print(f"  plan_valid_rate  : {plan_valid_rate:.4f} ({plan_valid_count}/{solved_with_graph})")
@@ -397,11 +381,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-examples", type=int, default=100)
     parser.add_argument("--num-workers", type=int, default=8)
     parser.add_argument("--num-shots", type=int, default=0, choices=[0, 1, 2, 3])
-    parser.add_argument("--llm-retries", type=int, default=0,
-                        help="Number of LLM retry rounds (multi-turn: each retry "
-                             "appends error feedback to the conversation history)")
-    parser.add_argument("--data-path", default="",
-                        help="Local JSON file (used when --benchmark-name gen-data)")
+    parser.add_argument("--llm-retries", type=int, default=0)
+    parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
 
     return parser.parse_args()
 

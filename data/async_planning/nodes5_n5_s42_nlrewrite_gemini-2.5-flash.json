@@ -1,0 +1,263 @@
+[
+  {
+    "id": 1,
+    "question": "To make eggless chocolate cake, here are the steps needed.\nStep 1. Preheat the oven (15 minutes)\nStep 2. Sift flour, cocoa powder, sugar, baking soda, and salt into a bowl (5 minutes)\nStep 3. Whisk together oil, water, vinegar, and vanilla extract in a separate bowl (3 minutes)\nStep 4. Combine wet and dry ingredients, pour batter into a greased pan, and bake (40 minutes)\nStep 5. Let the cake cool completely on a wire rack (1 hour 30 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make eggless chocolate cake?",
+    "answer": 6900,
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make eggless chocolate cake",
+    "par_ratio": 1.0696,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "5": 4
+      },
+      "durations": [
+        900,
+        300,
+        180,
+        2400,
+        3600
+      ]
+    },
+    "question_abstract": "To make eggless chocolate cake, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make eggless chocolate cake?"
+  },
+  {
+    "id": 2,
+    "question": "To introduce friends to other friends, here are the steps needed.\nStep 1. Plan a casual group activity or gathering (1 hour)\nStep 2. Confirm the activity details with everyone (30 minutes)\nStep 3. Identify the friends and common interests (30 minutes)\nStep 4. Send out individual invitations to each friend (20 minutes)\nStep 5. Facilitate the in-person introductions at the event (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to introduce friends to other friends?",
+    "answer": 10200,
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "introduce friends to other friends",
+    "par_ratio": 1.5294,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "1": 2,
+        "2": 3,
+        "5": 4
+      },
+      "durations": [
+        1200,
+        1800,
+        3600,
+        1800,
+        7200
+      ]
+    },
+    "question_abstract": "To introduce friends to other friends, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to introduce friends to other friends?"
+  },
+  {
+    "id": 3,
+    "question": "To count to ten in finnish, here are the steps needed.\nStep 1. Practice reciting Finnish numbers yksi-viisi clearly (10 minutes)\nStep 2. Practice reciting Finnish numbers kuusi-kymmenen clearly (10 minutes)\nStep 3. Learn the pronunciation and spelling of Finnish numbers yksi-viisi (45 minutes)\nStep 4. Learn the pronunciation and spelling of Finnish numbers kuusi-kymmenen (45 minutes)\nStep 5. Locate a reliable online resource for Finnish number pronunciation (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 4 must precede Step 2.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to count to ten in finnish?",
+    "answer": 4200,
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "count to ten in finnish",
+    "par_ratio": 1.7857,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "2": 2,
+        "5": 3,
+        "1": 4
+      },
+      "durations": [
+        2700,
+        2700,
+        600,
+        900,
+        600
+      ]
+    },
+    "question_abstract": "To count to ten in finnish, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 4 must precede Step 2.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to count to ten in finnish?"
+  },
+  {
+    "id": 4,
+    "question": "To hang planters with knotted rope, here are the steps needed.\nStep 1. Tie the decorative macrame knots for the hanger (30 minutes)\nStep 2. Measure and cut rope lengths for the hanger (10 minutes)\nStep 3. Attach the knotted rope hanger to the planter (5 minutes)\nStep 4. Install the ceiling hook and position the planter (20 minutes)\nStep 5. Fill the planter with soil and plant the chosen plant (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 2 must precede Step 3.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hang planters with knotted rope?",
+    "answer": 2700,
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "hang planters with knotted rope",
+    "par_ratio": 1.7778,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "4": 1,
+        "1": 2,
+        "5": 3,
+        "2": 4
+      },
+      "durations": [
+        300,
+        1200,
+        1800,
+        900,
+        600
+      ]
+    },
+    "question_abstract": "To hang planters with knotted rope, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 2 must precede Step 3.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hang planters with knotted rope?"
+  },
+  {
+    "id": 5,
+    "question": "To make farina, here are the steps needed.\nStep 1. Measure water or milk into a saucepan (2 minutes)\nStep 2. Reduce heat and simmer farina until thickened (5 minutes)\nStep 3. Measure dry farina grains (1 minute)\nStep 4. Slowly whisk dry farina into the boiling liquid (1 minute)\nStep 5. Bring water or milk to a rolling boil (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make farina?",
+    "answer": 780,
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "make farina",
+    "par_ratio": 1.0769,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 2,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "5": 1,
+        "1": 2,
+        "3": 3,
+        "2": 4
+      },
+      "durations": [
+        60,
+        300,
+        120,
+        60,
+        300
+      ]
+    },
+    "question_abstract": "To make farina, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make farina?"
+  }
+]

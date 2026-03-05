@@ -5,11 +5,13 @@ Exported:
     DiGraph                   lightweight directed graph
     compute_metrics(dag)       → dict of raw graph metrics
     compute_difficulty(...)    → (score: float, ranking: str)
+    compute_gold_makespan(question, graph) → int (seconds)
 """
 
 from __future__ import annotations
 
 import math
+import re
 from collections import deque
 
 
@@ -192,6 +194,85 @@ def compute_metrics(dag: dict) -> dict:
         "edge_density":       round(len(edges) / max_edges, 4) if max_edges > 0 else 0.0,
         "n_edges":            len(edges),
     }
+
+
+# Duration parsing for compute_gold_makespan
+_DURATION_UNITS = {
+    "second": 1, "seconds": 1, "sec": 1, "secs": 1,
+    "minute": 60, "minutes": 60, "min": 60, "mins": 60,
+    "hour": 3600, "hours": 3600, "hr": 3600, "hrs": 3600,
+    "day": 86400, "days": 86400,
+    "week": 604800, "weeks": 604800,
+    "month": 2592000, "months": 2592000,  # ~30 days
+    "year": 31536000, "years": 31536000,
+}
+
+_DURATION_PATTERN = re.compile(
+    r"(\d+(?:\.\d+)?)\s*(" + "|".join(_DURATION_UNITS) + r")",
+    re.IGNORECASE,
+)
+
+
+def parse_node_durations(question: str, graph: dict) -> list[int] | None:
+    """Parse step durations from a question and map them to node-indexed list.
+
+    Reads lines like "Step N. ... (X minutes)" and uses graph["step_to_node"]
+    to map step numbers → node IDs, returning a list where durations[node_id]
+    is the duration in seconds.  Returns None if any step is missing a duration.
+    """
+    step_to_node = graph.get("step_to_node")
+    if not step_to_node:
+        return None
+
+    n = len(step_to_node)
+    step_durations: dict[int, int] = {}
+
+    for line in question.split("\n"):
+        line = line.strip()
+        step_match = re.match(r"^Step\s+(\d+)\.", line, re.IGNORECASE)
+        if not step_match:
+            continue
+        step_num = int(step_match.group(1))
+        dur_match = _DURATION_PATTERN.search(line)
+        if not dur_match:
+            continue
+        value = float(dur_match.group(1))
+        unit = dur_match.group(2).lower()
+        step_durations[step_num] = int(round(value * _DURATION_UNITS[unit]))
+
+    if len(step_durations) != n:
+        return None
+
+    durations = [0] * n
+    for step, node in step_to_node.items():
+        step_int = int(step) if isinstance(step, str) else step
+        if step_int in step_durations:
+            durations[node] = step_durations[step_int]
+
+    return durations
+
+
+def compute_gold_makespan(question: str, graph: dict) -> int | None:
+    """Compute the gold makespan in seconds from a question with durations.
+
+    Parses "Step N. ... (X minutes)" lines, uses graph["step_to_node"] to map
+    to node IDs, runs CPM on graph["edges"], returns makespan. Returns None if
+    any step is missing a duration.
+    """
+    durations = parse_node_durations(question, graph)
+    if durations is None:
+        return None
+
+    edges = graph.get("edges", [])
+    n = len(durations)
+    adj = [[] for _ in range(n)]
+    pred = [[] for _ in range(n)]
+    for u, v in edges:
+        adj[u].append(v)
+        pred[v].append(u)
+
+    makespan, _ = _compute_critical_path(durations, adj, pred)
+    return makespan
 
 
 def compute_difficulty(metrics: dict, n_steps: int) -> tuple[float, str]:

@@ -9,7 +9,6 @@
 #   --max-examples N     Max examples per file (0 = all)             [500]
 #   --icl-examples N     Number of ICL (few-shot) examples           [0]
 #   --cot BOOL           Enable chain-of-thought                     [false]
-#   --batch N            LLM batch size                              [16]
 #   --num-workers N      Parallel workers                            [4]
 #   --temperature F      Sampling temperature                        [0.0]
 #   --max-tokens N       Max output tokens                           [2048]
@@ -35,19 +34,18 @@ cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
 # DATA_DIR="data/nl_rewrite"
-DATA_DIR="data/async_planning"
+DATA_DIR="data/async_planning/nodes5_n5_s42_nlrewrite_gemini-2.5-flash.json"
 # MODEL="openai/gpt-4.1"
-MODEL="gemini/gemini-2.5-flash"
+MODEL="gemini-2.5-flash"
 SAVE_DIR="results/gen-data/baselines"
 MAX_EXAMPLES=400
 ICL_EXAMPLES=0
 COT=true
-BATCH=16
-NUM_WORKERS=8
+NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=4096
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*.json"
+PATTERN="*nlrewrite_*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -58,7 +56,6 @@ while [[ $# -gt 0 ]]; do
         --max-examples) MAX_EXAMPLES="$2"; shift 2 ;;
         --icl-examples) ICL_EXAMPLES="$2"; shift 2 ;;
         --cot)          COT="$2";          shift 2 ;;
-        --batch)        BATCH="$2";        shift 2 ;;
         --num-workers)  NUM_WORKERS="$2";  shift 2 ;;
         --temperature)  TEMPERATURE="$2";  shift 2 ;;
         --max-tokens)   MAX_TOKENS="$2";   shift 2 ;;
@@ -119,7 +116,6 @@ for DATA_PATH in "${FILES[@]}"; do
         --save-path       "$SAVE_PATH" \
         --icl-examples    "$ICL_EXAMPLES" \
         --cot             "$COT" \
-        --batch           "$BATCH" \
         --num-workers     "$NUM_WORKERS"; then
         echo "  Done → ${SAVE_PATH}${COT_TAG}${ICL_TAG}"
     else
@@ -129,56 +125,3 @@ for DATA_PATH in "${FILES[@]}"; do
 
     echo ""
 done
-
-# ── Aggregate summary ─────────────────────────────────────────────────────────
-echo "============================================================"
-echo " Aggregated Results  (${COT_TAG}${ICL_TAG})"
-echo "============================================================"
-python - <<EOF
-import json, glob, os, sys
-
-save_dir = "${SAVE_DIR}/${SAFE_MODEL}"
-cot_tag  = "${COT_TAG}${ICL_TAG}"
-pattern  = os.path.join(save_dir, "**", "summary_results.json")
-files    = sorted(glob.glob(pattern, recursive=True))
-
-# Only show results matching current cot/icl config
-files = [f for f in files if cot_tag in f]
-
-if not files:
-    print("No summary_results.json found.")
-    sys.exit(0)
-
-rows = []
-for f in files:
-    with open(f) as fh:
-        d = json.load(fh)
-    # stem is the dataset file name (parent of cot_tag dir)
-    stem = os.path.basename(os.path.dirname(os.path.dirname(f)))
-    rows.append({
-        "file":    stem,
-        "accuracy": d.get("accuracy", 0),
-        "correct":  d.get("num_correct", 0),
-        "total":    d.get("num_data_points", 0),
-    })
-
-w = max(len(r["file"]) for r in rows)
-print(f"{'file':<{w}}  {'acc':>6}  {'correct':>7}  {'total':>5}")
-print("-" * (w + 25))
-for r in rows:
-    print(f"{r['file']:<{w}}  {r['accuracy']:>6.3f}  {r['correct']:>7}  {r['total']:>5}")
-
-total_c = sum(r["correct"] for r in rows)
-total_n = sum(r["total"]   for r in rows)
-overall = total_c / total_n if total_n else 0
-print("-" * (w + 25))
-print(f"{'OVERALL':<{w}}  {overall:>6.3f}  {total_c:>7}  {total_n:>5}")
-print(f"\nSaved under: {save_dir}")
-EOF
-
-if [[ ${#FAILED[@]} -gt 0 ]]; then
-    echo ""
-    echo "WARNING: ${#FAILED[@]} file(s) failed:"
-    for f in "${FAILED[@]}"; do echo "  $f"; done
-    exit 1
-fi

@@ -35,19 +35,19 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/async_planning"
-MODEL="openai/gpt-4.1"
+DATA_DIR="data/async_planning/nodes5_n5_s42_nlrewrite_gemini-2.5-flash.json"
+MODEL="gemini-2.5-flash"
 # MODEL="gemini/gemini-2.5-flash"
 SAVE_DIR="results/gen-data/formalizer"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
-BATCH=16
-NUM_WORKERS=8
+BATCH=16 # how many pddl problem are sent to the solver to solve at once
+NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=32768
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*.json"
+PATTERN="*nlrewrite_*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -127,53 +127,3 @@ for DATA_PATH in "${FILES[@]}"; do
 
     echo ""
 done
-
-# ── Aggregate summary ─────────────────────────────────────────────────────────
-echo "============================================================"
-echo " Aggregated Results"
-echo "============================================================"
-python - <<EOF
-import json, glob, os, sys
-
-save_dir = "${SAVE_DIR}/${SAFE_MODEL}"
-pattern  = os.path.join(save_dir, "**", "summary_results.json")
-files    = sorted(glob.glob(pattern, recursive=True))
-
-if not files:
-    print("No summary_results.json found.")
-    sys.exit(0)
-
-rows = []
-for f in files:
-    with open(f) as fh:
-        d = json.load(fh)
-    stem = os.path.basename(os.path.dirname(f))
-    rows.append({
-        "file":         stem,
-        "accuracy":     d.get("accuracy", 0),
-        "correct":      d.get("num_correct", 0),
-        "total":        d.get("num_data_points", 0),
-        "parse_fails":  d.get("num_parse_failures", 0),
-    })
-
-# Print table
-w = max(len(r["file"]) for r in rows)
-print(f"{'file':<{w}}  {'acc':>6}  {'correct':>7}  {'total':>5}  {'parse_fail':>10}")
-print("-" * (w + 35))
-for r in rows:
-    print(f"{r['file']:<{w}}  {r['accuracy']:>6.3f}  {r['correct']:>7}  {r['total']:>5}  {r['parse_fails']:>10}")
-
-total_c = sum(r["correct"] for r in rows)
-total_n = sum(r["total"]   for r in rows)
-overall = total_c / total_n if total_n else 0
-print("-" * (w + 35))
-print(f"{'OVERALL':<{w}}  {overall:>6.3f}  {total_c:>7}  {total_n:>5}")
-print(f"\nSaved under: {save_dir}")
-EOF
-
-if [[ ${#FAILED[@]} -gt 0 ]]; then
-    echo ""
-    echo "WARNING: ${#FAILED[@]} file(s) failed:"
-    for f in "${FAILED[@]}"; do echo "  $f"; done
-    exit 1
-fi

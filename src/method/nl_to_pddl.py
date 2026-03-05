@@ -157,7 +157,7 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
         if pddl_resp.responses:
             r = pddl_resp.responses[0]
             domain, problem = _sanitize_pddl(r.domain_pddl, r.problem_pddl)
-            return domain, problem
+            return domain, problem, r.step_actions
     except (json.JSONDecodeError, ValueError, KeyError):
         pass
 

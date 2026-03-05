@@ -20,65 +20,90 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from src.experiments.utils import build_llm_client
+from src.gen_data.utils import compute_gold_makespan, parse_node_durations, compute_metrics
 
 
 # ── Prompt ────────────────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT = """\
-You are a creative writer who turns abstract planning problems into realistic, \
-natural-language scenarios. Your rewrites are used as test questions for AI planning \
-systems, so structural accuracy is critical."""
+SYSTEM_PROMPT = """
+You are a creative writer who specializes in turning abstract asynchronous planning problems into concrete, realistic scenarios.
 
+You will be given an abstract asynchronous planning problem that has:
+- A task title
+- Numbered steps (with NO names or durations)
+- Ordering constraints between steps
 
-USER_TEMPLATE_STRUCTURE_ONLY = """\
-Below is a planning problem with steps and ordering constraints, but NO step names or durations.
-Rewrite it as a realistic, everyday scenario.
+Your job: fill in each step with a concrete activity name and a realistic duration in natural language, making the problem feel like a real everyday task.
 
-Rules you MUST follow:
-1. Keep the EXACT same task description, first and last sentence.
+STRICT RULES:
+1. Keep the task title EXACTLY as given.
 2. Keep the EXACT same number of steps.
-3. Keep ALL ordering constraints UNCHANGED (copy "Step X must precede Step Y" lines word-for-word, same step numbers).
-4. Give each step a concrete, activity-specific name (e.g. "chop onions", "install dependencies").
-5. Add a reasonable duration for each step in parentheses, e.g. (5 minutes), (2 hours), (3 days). Use units appropriate to the task.
-6. Try to use diverse but reasonable activity names and durations.
-7. Output ONLY the rewritten problem text — no commentary, no markdown fences.
+3. Copy ALL ordering constraints VERBATIM — same step numbers, same wording.
+4. Copy the final Question line VERBATIM.
+5. For each step, add:
+   - A concrete, activity-specific name that fits the task (e.g., "Preheat the oven", "Sift the flour")
+   - A reasonable duration in parentheses (e.g., (30 seconds), (5 minutes), (2 hours), (3 days), (1 week), (2 months), (1 year))
+6. The step names should form a coherent, realistic workflow for the given task.
+7. Use diverse but plausible durations — not every step should take the same amount of time or use the same unit.
+8. The ordering constraints should make logical sense with the step names you choose.
+9. Output ONLY the rewritten problem. No commentary, no markdown fences, no extra text.
 
-The output must follow this format:
-To [task description], here are the steps and the times needed for each step.
-Step 1. [activity name] ([duration])
-Step 2. [activity name] ([duration])
-...
+EXAMPLE INPUT:
+To audition for the school play, here are the steps needed.
+Step 1.
+Step 2.
+Step 3.
+Step 4.
+Step 5.
+
 These ordering constraints need to be obeyed when executing above steps:
-Step X must precede Step Y.
-...
-Question: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to [task description]?
+Step 1 must precede Step 2.
+Step 2 must precede Step 3 and 4.
+Step 3 must precede Step 5.
+Step 4 must precede Step 5.
 
-Abstract problem to rewrite:
-{abstract_question}"""
+Question: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to audition for the school play?
+
+EXAMPLE OUTPUT:
+To audition for the school play, here are the steps needed.
+Step 1. Sign up for auditions (15 minutes)
+Step 2. Get script to practice (15 minutes)
+Step 3. Practice reading lines with friends (4 hours)
+Step 4. Practice reading lines before bed (3 hours)
+Step 5. Show up to auditions (15 minutes)
+
+These ordering constraints need to be obeyed when executing above steps:
+Step 1 must precede Step 2.
+Step 2 must precede Step 3 and 4.
+Step 3 must precede Step 5.
+Step 4 must precede Step 5.
+
+Question: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to audition for the school play?
+"""
 
 
-def _has_durations(question: str) -> bool:
-    """True if step lines include durations in parentheses."""
-    step_with_dur = re.findall(r"^Step \d+\. .+ \([^)]+\)", question, re.MULTILINE)
-    return len(step_with_dur) > 0
+USER_TEMPLATE = """\
+Here is an abstract asynchronous planning problem:
+{abstract_question}
+"""
+# Rewrite it as a realistic, everyday scenario with step names and durations in natural language.
 
 
-def _build_messages(abstract_question: str, structure_only: bool = False) -> list[dict]:
-    template = USER_TEMPLATE_STRUCTURE_ONLY # if structure_only else USER_TEMPLATE_WITH_DURATIONS
+def _build_messages(abstract_question: str) -> list[dict]:
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": template.format(abstract_question=abstract_question)},
+        {"role": "user", "content": USER_TEMPLATE.format(abstract_question=abstract_question)},
     ]
 
 
 # ── Validation ────────────────────────────────────────────────────────────────
 
 def _validate_rewrite(
-    original: str, rewrite: str, n_steps: int, structure_only: bool = False
+    original: str, rewrite: str, n_steps: int
 ) -> bool:
     """
     Sanity check: rewrite has the right number of step lines, preserves
-    all constraint step-number pairs. If structure_only, also verify each step has a duration.
+    all constraint step-number pairs.
     """
     if not rewrite or not rewrite.strip():
         return False
@@ -92,26 +117,24 @@ def _validate_rewrite(
     if orig_pairs != rewrite_pairs:
         return False
 
-    if structure_only:
-        # Each step line should have a duration in parentheses
+    # When original has no durations (structure-only), rewrite must add them
+    orig_durations = re.findall(r"\([^)]+\)", original)
+    for d in orig_durations:
+        if d not in rewrite:
+            return False
+    if not orig_durations:
+        # Structure-only: each step line in rewrite must have a duration
         steps_with_dur = re.findall(r"^Step \d+\. .+ \([^)]+\)", rewrite, re.MULTILINE)
         if len(steps_with_dur) != n_steps:
             return False
-    else:
-        orig_durations = re.findall(r"\([^)]+\)", original)
-        for d in orig_durations:
-            if d not in rewrite:
-                return False
 
     return True
 
 
-def _estimate_max_tokens(n_steps: int, n_constraints: int, structure_only: bool = False) -> int:
-    """Estimate token budget. Structure-only needs more (LLM adds durations and answer)."""
+def _estimate_max_tokens(n_steps: int, n_constraints: int) -> int:
+    """Estimate token budget."""
     base = n_steps * 35 + n_constraints * 15 + 200
-    if structure_only:
-        base += 150
-    return max(512, base)
+    return max(8192, base)
 
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
@@ -135,13 +158,12 @@ def rewrite_dataset(
     )
 
     def _call_one(sample: dict) -> str:
-        structure_only = not _has_durations(sample["question"])
-        msgs = _build_messages(sample["question"], structure_only=structure_only)
+        msgs = _build_messages(sample["question"])
         n_constraints = len(_re.findall(r"Step \d+ must precede Step \d+\.", sample["question"]))
         tok = (
             max_tokens
             if max_tokens > 0
-            else _estimate_max_tokens(sample["n_steps"], n_constraints, structure_only)
+            else _estimate_max_tokens(sample["n_steps"], n_constraints)
         )
         # Temporarily override max_tokens for this call
         original_cfg = llm.config.copy()
@@ -173,18 +195,29 @@ def rewrite_dataset(
     for sample, resp in zip(samples, responses):
         new_sample = dict(sample)
         rewrite = (resp or "").strip()
-        structure_only = not _has_durations(sample["question"])
 
         if _validate_rewrite(
-            sample["question"], rewrite, sample["n_steps"], structure_only=structure_only
+            sample["question"], rewrite, sample["n_steps"]
         ):
             new_sample["question"] = rewrite
             new_sample["question_abstract"] = sample["question"]
-            if structure_only:
-                # Extract answer from "Answer: X" if present
-                ans_match = _re.search(r"Answer:\s*(.+)", rewrite, _re.IGNORECASE)
-                if ans_match:
-                    new_sample["answer"] = ans_match.group(1).strip()
+            # Parse durations from the rewritten question and store in graph
+            graph = new_sample.get("graph", {})
+            if graph.get("step_to_node"):
+                durations = parse_node_durations(rewrite, graph)
+                if durations is not None:
+                    graph["durations"] = durations
+                    new_sample["answer"] = compute_gold_makespan(rewrite, graph)
+                    # Recompute time-weighted metrics now that real durations are known.
+                    # gen_dag.py uses duration=1 placeholders; par_ratio and cp_node_frac
+                    # only become meaningful once the LLM assigns actual step durations.
+                    real_metrics = compute_metrics({
+                        "n_steps":   new_sample["n_steps"],
+                        "durations": durations,
+                        "edges":     graph["edges"],
+                    })
+                    new_sample["par_ratio"]    = real_metrics["par_ratio"]
+                    new_sample["cp_node_frac"] = real_metrics["cp_node_frac"]
             n_ok += 1
         else:
             # Keep original question; mark for easy filtering

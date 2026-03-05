@@ -5,7 +5,6 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-2048}"
-BATCH="${BATCH:-16}"
 NUM_WORKERS="${NUM_WORKERS:-4}"
 
 # for MODEL_NAME in "GPT-4.1"; do
@@ -19,7 +18,6 @@ NUM_WORKERS="${NUM_WORKERS:-4}"
 #                 --save-path results/asynchow/baselines/$MODEL_NAME/ \
 #                 --icl-examples $ICL_EXAMPLES \
 #                 --cot $COT \
-#                 --batch $BATCH
 #         done
 #     done
 # done
@@ -34,5 +32,4 @@ python -m src.experiments.run_baselines \
     --save-path results/asynchow/baselines/$MODEL_NAME/ \
     --icl-examples 3 \
     --cot true \
-    --batch $BATCH \
     --num-workers $NUM_WORKERS

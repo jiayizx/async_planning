@@ -1,0 +1,290 @@
+[
+  {
+    "id": 1,
+    "question": "To restrain a dog, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 1.\nStep 3 must precede Step 1.\nStep 3 must precede Step 2.\nStep 4 must precede Step 6.\nStep 6 must precede Step 8.\nStep 8 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to restrain a dog?",
+    "answer": "4",
+    "n_steps": 8,
+    "n_edges": 7,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "restrain a dog",
+    "par_ratio": 2.0,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.25,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "2": 1,
+        "5": 2,
+        "8": 3,
+        "3": 4,
+        "7": 5,
+        "1": 6,
+        "6": 7
+      }
+    }
+  },
+  {
+    "id": 2,
+    "question": "To groom pugs, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 3 must precede Step 1.\nStep 4 must precede Step 3.\nStep 6 must precede Step 2.\nStep 7 must precede Step 5.\nStep 8 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to groom pugs?",
+    "answer": "5",
+    "n_steps": 8,
+    "n_edges": 6,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "groom pugs",
+    "par_ratio": 1.6,
+    "path_count": 3,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.625,
+    "edge_density": 0.2143,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "1": 1,
+        "5": 2,
+        "2": 3,
+        "4": 4,
+        "8": 5,
+        "7": 6,
+        "3": 7
+      }
+    }
+  },
+  {
+    "id": 3,
+    "question": "To choose a cruise, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 3.\nStep 5 must precede Step 4.\nStep 7 must precede Step 2.\nStep 8 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to choose a cruise?",
+    "answer": "7",
+    "n_steps": 8,
+    "n_edges": 7,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "choose a cruise",
+    "par_ratio": 1.1429,
+    "path_count": 2,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.875,
+    "edge_density": 0.25,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "8": 1,
+        "4": 2,
+        "3": 3,
+        "5": 4,
+        "6": 5,
+        "1": 6,
+        "2": 7
+      }
+    }
+  },
+  {
+    "id": 4,
+    "question": "To apply for jobs, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 6.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 7 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to apply for jobs?",
+    "answer": "3",
+    "n_steps": 8,
+    "n_edges": 5,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "apply for jobs",
+    "par_ratio": 2.6667,
+    "path_count": 4,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1786,
+    "graph": {
+      "edges": [
+        [
+          2,
+          0
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "2": 2,
+        "6": 3,
+        "8": 4,
+        "3": 5,
+        "7": 6,
+        "1": 7
+      }
+    }
+  },
+  {
+    "id": 5,
+    "question": "To use deductive reasoning, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 3 must precede Step 6.\nStep 5 must precede Step 3.\nStep 7 must precede Step 2.\nStep 8 must precede Step 3.\nStep 8 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use deductive reasoning?",
+    "answer": "4",
+    "n_steps": 8,
+    "n_edges": 7,
+    "edge_probability": 0.3,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "use deductive reasoning",
+    "par_ratio": 2.0,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.25,
+    "graph": {
+      "edges": [
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "6": 1,
+        "1": 2,
+        "2": 3,
+        "8": 4,
+        "3": 5,
+        "5": 6,
+        "7": 7
+      }
+    }
+  }
+]

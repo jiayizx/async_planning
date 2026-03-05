@@ -7,12 +7,13 @@ import json
 def extract_task_title(text):
     """
     Extracts the task title (e.g., 'create a video game') from a given data instance string.
+    Converts the title to lowercase.
     Assumes the format starts with: "To [task title], here are the steps and the times needed for each step."
     """
     pattern = r"^To\s+(.*?),\s+here are the steps and the times needed for each step\."
     match = re.search(pattern, text, re.MULTILINE)
     if match:
-        return match.group(1).strip()
+        return match.group(1).strip().lower()
     return None
 
 
