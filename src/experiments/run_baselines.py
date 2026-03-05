@@ -44,6 +44,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace) -> dic
     metadata = []  # parallel list: gold info per example
 
     for idx, example in enumerate(tqdm(eval_dataset, desc="Collecting baseline prompts")):
+        if "nl_rewrite_failed" in example and example["nl_rewrite_failed"]:
+            continue
+            
         question = clean_question(example["question"])
         gold_seconds = parse_gold_seconds(example["answer"])
 

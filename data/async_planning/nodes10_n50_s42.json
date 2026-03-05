@@ -1,0 +1,3466 @@
+[
+  {
+    "id": 1,
+    "question": "To know if you have a hiatal hernia, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to know if you have a hiatal hernia?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "know if you have a hiatal hernia",
+    "par_ratio": 1.6667,
+    "path_count": 4,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "7": 1,
+        "2": 2,
+        "5": 3,
+        "3": 4,
+        "10": 5,
+        "9": 6,
+        "1": 7,
+        "6": 8,
+        "4": 9
+      }
+    }
+  },
+  {
+    "id": 2,
+    "question": "To add a new product, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 5 must precede Step 7.\nStep 5 must precede Step 9.\nStep 5 must precede Step 10.\nStep 6 must precede Step 1.\nStep 7 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to add a new product?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "add a new product",
+    "par_ratio": 1.4286,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "6": 1,
+        "1": 2,
+        "8": 3,
+        "2": 4,
+        "5": 5,
+        "3": 6,
+        "10": 7,
+        "7": 8,
+        "4": 9
+      }
+    }
+  },
+  {
+    "id": 3,
+    "question": "To remember the five great lakes, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 8.\nStep 8 must precede Step 2.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to remember the five great lakes?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "remember the five great lakes",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "10": 1,
+        "4": 2,
+        "5": 3,
+        "6": 4,
+        "3": 5,
+        "8": 6,
+        "2": 7,
+        "7": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 4,
+    "question": "To eat roast beef for dinner, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 1.\nStep 6 must precede Step 10.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to eat roast beef for dinner?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "eat roast beef for dinner",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "9": 1,
+        "3": 2,
+        "5": 3,
+        "10": 4,
+        "8": 5,
+        "1": 6,
+        "6": 7,
+        "7": 8,
+        "4": 9
+      }
+    }
+  },
+  {
+    "id": 5,
+    "question": "To go into nature, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 5.\nStep 3 must precede Step 6.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go into nature?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "go into nature",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "7": 1,
+        "2": 2,
+        "1": 3,
+        "3": 4,
+        "4": 5,
+        "6": 6,
+        "9": 7,
+        "10": 8,
+        "8": 9
+      }
+    }
+  },
+  {
+    "id": 6,
+    "question": "To wear gloves to bed, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 10.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 9 must precede Step 5.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to wear gloves to bed?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "wear gloves to bed",
+    "par_ratio": 2.5,
+    "path_count": 5,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "5": 1,
+        "2": 2,
+        "10": 3,
+        "6": 4,
+        "4": 5,
+        "8": 6,
+        "3": 7,
+        "9": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 7,
+    "question": "To treat cervical cancer, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat cervical cancer?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "treat cervical cancer",
+    "par_ratio": 2.0,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "5": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "6": 5,
+        "8": 6,
+        "1": 7,
+        "9": 8,
+        "2": 9
+      }
+    }
+  },
+  {
+    "id": 8,
+    "question": "To buy or rent a piano or keyboard, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 5.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy or rent a piano or keyboard?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "buy or rent a piano or keyboard",
+    "par_ratio": 2.0,
+    "path_count": 3,
+    "dag_depth_actual": 4,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "9": 1,
+        "1": 2,
+        "2": 3,
+        "10": 4,
+        "4": 5,
+        "8": 6,
+        "3": 7,
+        "6": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 9,
+    "question": "To roast turnips, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 7 must precede Step 3.\nStep 8 must precede Step 1.\nStep 9 must precede Step 2.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "roast turnips",
+    "par_ratio": 2.0,
+    "path_count": 3,
+    "dag_depth_actual": 4,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "7": 1,
+        "2": 2,
+        "1": 3,
+        "10": 4,
+        "4": 5,
+        "5": 6,
+        "9": 7,
+        "3": 8,
+        "6": 9
+      }
+    }
+  },
+  {
+    "id": 10,
+    "question": "To host a party, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 10.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 5 must precede Step 4.\nStep 6 must precede Step 9.\nStep 8 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to host a party?",
+    "answer": "3",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "host a party",
+    "par_ratio": 3.3333,
+    "path_count": 6,
+    "dag_depth_actual": 2,
+    "and_join_count": 2,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "6": 1,
+        "4": 2,
+        "8": 3,
+        "9": 4,
+        "10": 5,
+        "7": 6,
+        "2": 7,
+        "3": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 11,
+    "question": "To get tickets to wimbledon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 7 must precede Step 9.\nStep 8 must precede Step 1.\nStep 8 must precede Step 6.\nStep 9 must precede Step 4.\nStep 9 must precede Step 5.\nStep 10 must precede Step 2.\nStep 10 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get tickets to wimbledon?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "get tickets to wimbledon",
+    "par_ratio": 1.4286,
+    "path_count": 5,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "5": 1,
+        "7": 2,
+        "4": 3,
+        "3": 4,
+        "10": 5,
+        "1": 6,
+        "2": 7,
+        "8": 8,
+        "9": 9
+      }
+    }
+  },
+  {
+    "id": 12,
+    "question": "To put some color in our house, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 4 must precede Step 2.\nStep 6 must precede Step 1.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to put some color in our house?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "put some color in our house",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "1": 1,
+        "9": 2,
+        "5": 3,
+        "8": 4,
+        "10": 5,
+        "6": 6,
+        "4": 7,
+        "7": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 13,
+    "question": "To use cocoa as a chocolate substitute, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 9.\nStep 4 must precede Step 10.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 3.\nStep 7 must precede Step 8.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use cocoa as a chocolate substitute?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "use cocoa as a chocolate substitute",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "10": 1,
+        "2": 2,
+        "5": 3,
+        "4": 4,
+        "7": 5,
+        "3": 6,
+        "6": 7,
+        "9": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 14,
+    "question": "To join marching band, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 9.\nStep 2 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 7.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 4.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to join marching band?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "join marching band",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "4": 1,
+        "8": 2,
+        "1": 3,
+        "10": 4,
+        "3": 5,
+        "7": 6,
+        "5": 7,
+        "9": 8,
+        "2": 9
+      }
+    }
+  },
+  {
+    "id": 15,
+    "question": "To make chickpea and red bean salad, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 3 must precede Step 9.\nStep 4 must precede Step 7.\nStep 7 must precede Step 9.\nStep 8 must precede Step 5.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chickpea and red bean salad?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make chickpea and red bean salad",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "4": 1,
+        "8": 2,
+        "10": 3,
+        "5": 4,
+        "9": 5,
+        "6": 6,
+        "3": 7,
+        "2": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 16,
+    "question": "To keep animals out of your vegetable garden, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 6.\nStep 6 must precede Step 1.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep animals out of your vegetable garden?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "keep animals out of your vegetable garden",
+    "par_ratio": 2.0,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "9": 1,
+        "4": 2,
+        "3": 3,
+        "6": 4,
+        "2": 5,
+        "10": 6,
+        "8": 7,
+        "7": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 17,
+    "question": "To keep guppies healthy, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 3 must precede Step 9.\nStep 5 must precede Step 6.\nStep 6 must precede Step 2.\nStep 7 must precede Step 1.\nStep 9 must precede Step 5.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep guppies healthy?",
+    "answer": "8",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "keep guppies healthy",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 7,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "1": 1,
+        "8": 2,
+        "10": 3,
+        "4": 4,
+        "6": 5,
+        "2": 6,
+        "3": 7,
+        "7": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 18,
+    "question": "To firm your breasts, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 6 must precede Step 7.\nStep 7 must precede Step 4.\nStep 7 must precede Step 9.\nStep 8 must precede Step 3.\nStep 8 must precede Step 6.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to firm your breasts?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "firm your breasts",
+    "par_ratio": 1.4286,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "9": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "5": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "6": 9
+      }
+    }
+  },
+  {
+    "id": 19,
+    "question": "To professionally clean a house, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 5 must precede Step 2.\nStep 6 must precede Step 8.\nStep 7 must precede Step 3.\nStep 9 must precede Step 10.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to professionally clean a house?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "professionally clean a house",
+    "par_ratio": 2.5,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          8
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "8": 1,
+        "5": 2,
+        "10": 3,
+        "4": 4,
+        "2": 5,
+        "9": 6,
+        "1": 7,
+        "3": 8,
+        "7": 9
+      }
+    }
+  },
+  {
+    "id": 20,
+    "question": "To start the new year fresh, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 9.\nStep 2 must precede Step 10.\nStep 3 must precede Step 10.\nStep 4 must precede Step 6.\nStep 5 must precede Step 2.\nStep 7 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 7.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to start the new year fresh?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "start the new year fresh",
+    "par_ratio": 1.6667,
+    "path_count": 6,
+    "dag_depth_actual": 5,
+    "and_join_count": 3,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "1": 1,
+        "8": 2,
+        "3": 3,
+        "9": 4,
+        "7": 5,
+        "10": 6,
+        "4": 7,
+        "6": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 21,
+    "question": "To play a nintendo ds, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\nStep 6 must precede Step 4.\nStep 8 must precede Step 2.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to play a nintendo ds?",
+    "answer": "9",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "play a nintendo ds",
+    "par_ratio": 1.1111,
+    "path_count": 2,
+    "dag_depth_actual": 8,
+    "and_join_count": 1,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "7": 1,
+        "9": 2,
+        "6": 3,
+        "1": 4,
+        "8": 5,
+        "3": 6,
+        "10": 7,
+        "4": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 22,
+    "question": "To do something crazy, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 10.\nStep 6 must precede Step 7.\nStep 8 must precede Step 5.\nStep 9 must precede Step 7.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to do something crazy?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "do something crazy",
+    "par_ratio": 2.0,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "6": 2,
+        "8": 3,
+        "1": 4,
+        "2": 5,
+        "10": 6,
+        "7": 7,
+        "3": 8,
+        "4": 9
+      }
+    }
+  },
+  {
+    "id": 23,
+    "question": "To decorate a car for halloween, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 3.\nStep 5 must precede Step 9.\nStep 6 must precede Step 9.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to decorate a car for halloween?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "decorate a car for halloween",
+    "par_ratio": 2.5,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "8": 1,
+        "5": 2,
+        "4": 3,
+        "2": 4,
+        "1": 5,
+        "3": 6,
+        "9": 7,
+        "6": 8,
+        "7": 9
+      }
+    }
+  },
+  {
+    "id": 24,
+    "question": "To make an educational word slider, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 6.\nStep 2 must precede Step 10.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make an educational word slider?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "make an educational word slider",
+    "par_ratio": 1.6667,
+    "path_count": 4,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "10": 1,
+        "3": 2,
+        "6": 3,
+        "4": 4,
+        "5": 5,
+        "1": 6,
+        "2": 7,
+        "7": 8,
+        "9": 9
+      }
+    }
+  },
+  {
+    "id": 25,
+    "question": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 6.\nStep 9 must precede Step 1.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "explain the meaning of kwanzaa",
+    "par_ratio": 2.5,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "8": 1,
+        "7": 2,
+        "1": 3,
+        "9": 4,
+        "6": 5,
+        "4": 6,
+        "3": 7,
+        "10": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 26,
+    "question": "To try some new tea, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 5.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to try some new tea?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "try some new tea",
+    "par_ratio": 2.0,
+    "path_count": 6,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "2": 1,
+        "5": 2,
+        "1": 3,
+        "6": 4,
+        "3": 5,
+        "4": 6,
+        "7": 7,
+        "10": 8,
+        "9": 9
+      }
+    }
+  },
+  {
+    "id": 27,
+    "question": "To improve your posture with rowing exercises, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 2.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 5 must precede Step 3.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 9 must precede Step 10.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to improve your posture with rowing exercises?",
+    "answer": "9",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "improve your posture with rowing exercises",
+    "par_ratio": 1.1111,
+    "path_count": 3,
+    "dag_depth_actual": 8,
+    "and_join_count": 2,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "5": 1,
+        "4": 2,
+        "1": 3,
+        "7": 4,
+        "3": 5,
+        "9": 6,
+        "6": 7,
+        "2": 8,
+        "10": 9
+      }
+    }
+  },
+  {
+    "id": 28,
+    "question": "To make peruvian fish ceviche, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 10.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 7 must precede Step 2.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make peruvian fish ceviche?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make peruvian fish ceviche",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "3": 1,
+        "10": 2,
+        "7": 3,
+        "2": 4,
+        "6": 5,
+        "8": 6,
+        "5": 7,
+        "4": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 29,
+    "question": "To fingerboard, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 4 must precede Step 9.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to fingerboard?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "fingerboard",
+    "par_ratio": 2.5,
+    "path_count": 7,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "6": 2,
+        "7": 3,
+        "10": 4,
+        "2": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 30,
+    "question": "To make brownies in the microwave, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 6.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\nStep 10 must precede Step 4.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make brownies in the microwave?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "make brownies in the microwave",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "1": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4,
+        "4": 5,
+        "9": 6,
+        "6": 7,
+        "7": 8,
+        "8": 9
+      }
+    }
+  },
+  {
+    "id": 31,
+    "question": "To be safe while pregnant, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\nStep 6 must precede Step 3.\nStep 7 must precede Step 1.\nStep 7 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 6.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to be safe while pregnant?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "be safe while pregnant",
+    "par_ratio": 1.6667,
+    "path_count": 5,
+    "dag_depth_actual": 5,
+    "and_join_count": 2,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          9
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "10": 1,
+        "2": 2,
+        "9": 3,
+        "4": 4,
+        "6": 5,
+        "7": 6,
+        "1": 7,
+        "5": 8,
+        "8": 9
+      }
+    }
+  },
+  {
+    "id": 32,
+    "question": "To photograph rugs, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 6 must precede Step 2.\nStep 7 must precede Step 6.\nStep 8 must precede Step 1.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to photograph rugs?",
+    "answer": "8",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "photograph rugs",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 7,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "2": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "8": 5,
+        "1": 6,
+        "9": 7,
+        "6": 8,
+        "4": 9
+      }
+    }
+  },
+  {
+    "id": 33,
+    "question": "To get a new camera, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 7.\nStep 4 must precede Step 8.\nStep 6 must precede Step 9.\nStep 7 must precede Step 4.\nStep 8 must precede Step 9.\nStep 8 must precede Step 10.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new camera?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "get a new camera",
+    "par_ratio": 1.4286,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "9": 1,
+        "8": 2,
+        "7": 3,
+        "3": 4,
+        "4": 5,
+        "5": 6,
+        "6": 7,
+        "2": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 34,
+    "question": "To go on a traditional honeymoon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 5.\nStep 8 must precede Step 7.\nStep 8 must precede Step 9.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on a traditional honeymoon?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "go on a traditional honeymoon",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "4": 1,
+        "8": 2,
+        "9": 3,
+        "1": 4,
+        "6": 5,
+        "10": 6,
+        "5": 7,
+        "2": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 35,
+    "question": "To make tuna fish patties, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 2 must precede Step 6.\nStep 3 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 8.\nStep 6 must precede Step 7.\nStep 7 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make tuna fish patties?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make tuna fish patties",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "7": 2,
+        "8": 3,
+        "9": 4,
+        "6": 5,
+        "1": 6,
+        "2": 7,
+        "10": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 36,
+    "question": "To knit a blanket, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 2 must precede Step 7.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 10.\nStep 9 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to knit a blanket?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "knit a blanket",
+    "par_ratio": 2.5,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "8": 2,
+        "6": 3,
+        "1": 4,
+        "7": 5,
+        "3": 6,
+        "9": 7,
+        "10": 8,
+        "2": 9
+      }
+    }
+  },
+  {
+    "id": 37,
+    "question": "To roast fall vegetables, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast fall vegetables?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "roast fall vegetables",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "6": 2,
+        "4": 3,
+        "3": 4,
+        "5": 5,
+        "9": 6,
+        "10": 7,
+        "7": 8,
+        "8": 9
+      }
+    }
+  },
+  {
+    "id": 38,
+    "question": "To hold a pick, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 2.\nStep 5 must precede Step 7.\nStep 7 must precede Step 3.\nStep 8 must precede Step 4.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hold a pick?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "hold a pick",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          5
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "4": 1,
+        "9": 2,
+        "6": 3,
+        "10": 4,
+        "7": 5,
+        "8": 6,
+        "2": 7,
+        "1": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 39,
+    "question": "To make a giant pancake for breakfast, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 7.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 6.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 8 must precede Step 9.\nStep 9 must precede Step 1.\nStep 10 must precede Step 1.\nStep 10 must precede Step 5.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a giant pancake for breakfast?",
+    "answer": "9",
+    "n_steps": 10,
+    "n_edges": 12,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "make a giant pancake for breakfast",
+    "par_ratio": 1.1111,
+    "path_count": 5,
+    "dag_depth_actual": 8,
+    "and_join_count": 2,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2667,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "9": 1,
+        "2": 2,
+        "8": 3,
+        "6": 4,
+        "5": 5,
+        "1": 6,
+        "4": 7,
+        "7": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 40,
+    "question": "To go on an adventure, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 4 must precede Step 5.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on an adventure?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "go on an adventure",
+    "par_ratio": 2.5,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "10": 2,
+        "4": 3,
+        "2": 4,
+        "8": 5,
+        "6": 6,
+        "1": 7,
+        "7": 8,
+        "9": 9
+      }
+    }
+  },
+  {
+    "id": 41,
+    "question": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 4.\nStep 3 must precede Step 2.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 1.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "explain the meaning of kwanzaa",
+    "par_ratio": 2.5,
+    "path_count": 5,
+    "dag_depth_actual": 3,
+    "and_join_count": 3,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "6": 1,
+        "4": 2,
+        "10": 3,
+        "1": 4,
+        "5": 5,
+        "8": 6,
+        "9": 7,
+        "7": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 42,
+    "question": "To use deductive reasoning, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 4 must precede Step 8.\nStep 5 must precede Step 10.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 6.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use deductive reasoning?",
+    "answer": "8",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "use deductive reasoning",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 7,
+    "and_join_count": 2,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "9": 1,
+        "10": 2,
+        "2": 3,
+        "5": 4,
+        "3": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "7": 9
+      }
+    }
+  },
+  {
+    "id": 43,
+    "question": "To raise $1000 for the new playground balls, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 1.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 8 must precede Step 10.\nStep 9 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to raise $1000 for the new playground balls?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "raise $1000 for the new playground balls",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "8": 1,
+        "5": 2,
+        "3": 3,
+        "4": 4,
+        "10": 5,
+        "9": 6,
+        "1": 7,
+        "2": 8,
+        "6": 9
+      }
+    }
+  },
+  {
+    "id": 44,
+    "question": "To obtain book name, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 3.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\nStep 6 must precede Step 9.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to obtain book name?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "obtain book name",
+    "par_ratio": 2.0,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "6": 1,
+        "8": 2,
+        "2": 3,
+        "7": 4,
+        "4": 5,
+        "3": 6,
+        "9": 7,
+        "10": 8,
+        "1": 9
+      }
+    }
+  },
+  {
+    "id": 45,
+    "question": "To make pico de gallo, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 2 must precede Step 3.\nStep 3 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 9 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make pico de gallo?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "make pico de gallo",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          2,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "6": 1,
+        "2": 2,
+        "7": 3,
+        "5": 4,
+        "1": 5,
+        "9": 6,
+        "10": 7,
+        "8": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 46,
+    "question": "To roast turnips, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 5 must precede Step 4.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?",
+    "answer": "3",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "roast turnips",
+    "par_ratio": 3.3333,
+    "path_count": 5,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "8": 2,
+        "1": 3,
+        "7": 4,
+        "3": 5,
+        "10": 6,
+        "4": 7,
+        "6": 8,
+        "2": 9
+      }
+    }
+  },
+  {
+    "id": 47,
+    "question": "To participate in a marathon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 9.\nStep 2 must precede Step 3.\nStep 3 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to participate in a marathon?",
+    "answer": "7",
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "participate in a marathon",
+    "par_ratio": 1.4286,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "9": 2,
+        "3": 3,
+        "7": 4,
+        "10": 5,
+        "8": 6,
+        "6": 7,
+        "2": 8,
+        "5": 9
+      }
+    }
+  },
+  {
+    "id": 48,
+    "question": "To convert kilograms to pounds, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 7.\nStep 5 must precede Step 8.\nStep 5 must precede Step 9.\nStep 6 must precede Step 3.\nStep 6 must precede Step 7.\nStep 6 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to convert kilograms to pounds?",
+    "answer": "4",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "convert kilograms to pounds",
+    "par_ratio": 2.5,
+    "path_count": 7,
+    "dag_depth_actual": 3,
+    "and_join_count": 2,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "4": 1,
+        "7": 2,
+        "8": 3,
+        "6": 4,
+        "9": 5,
+        "1": 6,
+        "5": 7,
+        "2": 8,
+        "3": 9
+      }
+    }
+  },
+  {
+    "id": 49,
+    "question": "To cook sunchokes, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 2.\nStep 3 must precede Step 10.\nStep 4 must precede Step 1.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 8 must precede Step 6.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook sunchokes?",
+    "answer": "6",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "cook sunchokes",
+    "par_ratio": 1.6667,
+    "path_count": 5,
+    "dag_depth_actual": 5,
+    "and_join_count": 2,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "1": 2,
+        "2": 3,
+        "10": 4,
+        "8": 5,
+        "4": 6,
+        "6": 7,
+        "7": 8,
+        "9": 9
+      }
+    }
+  },
+  {
+    "id": 50,
+    "question": "To make a herbarium, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 1 must precede Step 9.\nStep 2 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 7.\nStep 9 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a herbarium?",
+    "answer": "5",
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make a herbarium",
+    "par_ratio": 2.0,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "6": 1,
+        "10": 2,
+        "7": 3,
+        "5": 4,
+        "8": 5,
+        "1": 6,
+        "3": 7,
+        "9": 8,
+        "4": 9
+      }
+    }
+  }
+]

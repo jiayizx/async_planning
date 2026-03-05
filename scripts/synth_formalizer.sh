@@ -35,13 +35,15 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/async_planning/nodes5_n5_s42_nlrewrite_gemini-2.5-flash.json"
-MODEL="gemini-2.5-flash"
-# MODEL="gemini/gemini-2.5-flash"
+# DATA_DIR="data/async_planning"
+DATA_DIR="data/async_planning/nodes15_n50_s42_nlrewrite_gemini-3-flash.json"
+MODEL="gemini-3-flash"
+# MODEL="openai/gpt-4.1"
 SAVE_DIR="results/gen-data/formalizer"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
+HISTORY_MODE="single-turn" # cumulative | single-turn
 BATCH=16 # how many pddl problem are sent to the solver to solve at once
 NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
@@ -58,6 +60,7 @@ while [[ $# -gt 0 ]]; do
         --max-examples)   MAX_EXAMPLES="$2";   shift 2 ;;
         --num-shots)      NUM_SHOTS="$2";      shift 2 ;;
         --llm-retries)    LLM_RETRIES="$2";    shift 2 ;;
+        --history-mode)   HISTORY_MODE="$2";   shift 2 ;;
         --batch)          BATCH="$2";          shift 2 ;;
         --num-workers)    NUM_WORKERS="$2";    shift 2 ;;
         --temperature)    TEMPERATURE="$2";    shift 2 ;;
@@ -85,6 +88,7 @@ echo "============================================================"
 echo "  data-dir      : $DATA_DIR"
 echo "  model         : $MODEL"
 echo "  save-dir      : $SAVE_DIR"
+echo "  history-mode  : $HISTORY_MODE"
 echo "  max-examples  : $MAX_EXAMPLES"
 echo "  num-shots     : $NUM_SHOTS"
 echo "  llm-retries: $LLM_RETRIES"
@@ -118,7 +122,8 @@ for DATA_PATH in "${FILES[@]}"; do
         --max-examples    "$MAX_EXAMPLES" \
         --num-workers     "$NUM_WORKERS" \
         --num-shots       "$NUM_SHOTS" \
-        --llm-retries     "$LLM_RETRIES"; then
+        --llm-retries     "$LLM_RETRIES" \
+        --history-mode    "$HISTORY_MODE"; then
         echo "  Done → $SAVE_PATH"
     else
         echo "  FAILED: $DATA_PATH" >&2

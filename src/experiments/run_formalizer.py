@@ -6,13 +6,16 @@ Pipeline per example:
   2. Solve with OPTIC via solver.planning.domains API
   3. Compare solver answer with gold answer
 
-Retry strategy (multi-turn conversation):
-  Each failed example accumulates its full chat history. On retry, the
-  assistant's previous response + the solver error are appended, so the LLM
-  sees ALL prior attempts and won't repeat the same mistakes.
+Retry strategy — two history modes (--history-mode):
+  cumulative (default):
+    Each failed example accumulates its full chat history. On retry the LLM
+    sees ALL prior attempts and won't repeat the same mistakes.
+      system, user, asst₁, err₁, asst₂, err₂, asst₃
 
-  retry=3 produces:
-    system, user, assistant₁, user_error₁, assistant₂, user_error₂, assistant₃
+  single-turn:
+    Only the immediately preceding assistant response + error are kept.
+    The LLM sees exactly one prior attempt, keeping context short.
+      system, user, asst_prev, err_prev  (rebuilt every retry)
 
 Error taxonomy:
   - syntax_error : PDDL parse failure OR solver reported a syntax / validation error
@@ -63,6 +66,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     gold_data: list[dict] = []
 
     for idx, example in enumerate(tqdm(eval_dataset, desc="Collecting questions")):
+        if "nl_rewrite_failed" in example and example["nl_rewrite_failed"]:
+            continue
+            
         question = clean_question(example["question"])
         gold_seconds = parse_gold_seconds(example["answer"])
 
@@ -97,6 +103,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
         build_pddl_messages(q, num_shots=args.num_shots)
         for q in questions
     ]
+    # Number of messages in the initial (pre-retry) history — used by
+    # single-turn mode to trim back to base + [last_asst, last_error].
+    _base_len: int = len(histories[0]) if histories else 0
 
     def _attempt(indices: list[int], desc: str) -> None:
         """Run one LLM batch for *indices* using each example's current history.
@@ -108,7 +117,20 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
         After the LLM responds the assistant message is appended to histories[i].
         The appropriate retry feedback message is then appended so the next retry
         sees the full conversation with the specific error type and guidance.
+
+        History modes (args.history_mode):
+          cumulative  — full history grows; LLM sees every prior attempt.
+          single-turn — trim to [base_messages, last_asst, last_error] before
+                        sending, so the LLM only sees one prior round.
         """
+        if args.history_mode == "single-turn":
+            for i in indices:
+                h = histories[i]
+                # Only trim once at least one retry round has been appended
+                # (base + asst + error = _base_len + 2 messages minimum).
+                if len(h) > _base_len + 2:
+                    histories[i] = h[:_base_len] + h[-2:]
+
         msgs = [histories[i] for i in indices]
         responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
         pairs = [parse_pddl_response(r) for r in responses]
@@ -138,7 +160,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                 [(d, p) for _, (d, p, _sa) in solvable],
                 num_workers=args.batch,
                 max_retries=_TRANSIENT_SOLVER_RETRIES,
-                timeout=SOLVER_TIMEOUT,
+                # timeout=SOLVER_TIMEOUT,
                 desc="Solving PDDL",
             )
             for (i, (d, p, sa)), sr in zip(solvable, solve_outputs):
@@ -382,6 +404,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-workers", type=int, default=8)
     parser.add_argument("--num-shots", type=int, default=0, choices=[0, 1, 2, 3])
     parser.add_argument("--llm-retries", type=int, default=0)
+    parser.add_argument(
+        "--history-mode",
+        default="cumulative",
+        choices=["cumulative", "single-turn"],
+        dest="history_mode",
+        help=(
+            "cumulative (default): full chat history grows across retries — "
+            "[sys, user, asst₁, err₁, asst₂, err₂, …]. "
+            "single-turn: only the immediately preceding round is kept — "
+            "[sys, user, asst_prev, err_prev]."
+        ),
+    )
     parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
 
     return parser.parse_args()

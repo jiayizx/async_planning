@@ -33,10 +33,10 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-# DATA_DIR="data/nl_rewrite"
-DATA_DIR="data/async_planning/nodes5_n5_s42_nlrewrite_gemini-2.5-flash.json"
-# MODEL="openai/gpt-4.1"
-MODEL="gemini-2.5-flash"
+DATA_DIR="data/async_planning"
+# DATA_DIR="data/async_planning/nodes50_n50_s42_nlrewrite_gemini-3-flash.json"
+# MODEL="gemini-3-flash"
+MODEL="openai/gpt-4.1"
 SAVE_DIR="results/gen-data/baselines"
 MAX_EXAMPLES=400
 ICL_EXAMPLES=0

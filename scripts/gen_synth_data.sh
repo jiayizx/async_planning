@@ -34,20 +34,20 @@
 set -euo pipefail
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-NUM_NODES=(5 8 10)
-EDGE_PROBS=(0.3)
+NUM_NODES=(5 10 15 20 30 40 50 100)
+EDGE_PROBS=(0.2)
 MIN_WIDTH=2
 LONG_RANGE_PROB=0.05
 
-SAMPLES_PER_SIZE=5
+SAMPLES_PER_SIZE=50
 OUTPUT_DIR="data/async_planning"
 SEED=42
 COMBINED=""
 
-REWRITE_MODEL="gemini-2.5-flash"
+REWRITE_MODEL="gemini-3-flash"
 REWRITE_TEMPERATURE=0.8
 REWRITE_MAX_TOKENS=0
-REWRITE_WORKERS=8
+REWRITE_WORKERS=16
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
