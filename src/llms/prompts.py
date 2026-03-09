@@ -134,6 +134,14 @@ CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find w
       (:init (a_pending) (b_pending) (c_pending) (d_pending) (e_pending) (f_pending) (g_pending))
       ```
 
+DEPENDENCY ANALYSIS — do this mentally before writing any PDDL:
+For EACH step in the problem, ask: "What must be fully completed before this step can start?"
+- Check for EXPLICIT cues: "after X", "once Y is done", "following Z", numbered sequences.
+- Check for IMPLICIT cues: logical necessity (cannot cook before preheating; cannot assemble
+  before all parts are ready; cannot depart before packing AND booking).
+- A step with multiple prerequisites needs ALL of them as (at start ...) conditions (Rule 8).
+Missing even one dependency lets the planner find an illegally short makespan.
+
 Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
 - 'domain_pddl': the domain in PDDL 2.1 format as a string.
 - 'problem_pddl': the problem in PDDL 2.1 format as a string.
@@ -179,6 +187,93 @@ Return the fully corrected domain and problem PDDL.
 
 # Backward-compatible alias
 RETRY_USER_TEMPLATE = SYNTAX_RETRY_TEMPLATE
+
+
+# ── Two-step graph extraction prompts ──────────────────────────────────
+
+GRAPH_SYSTEM_PROMPT = """You are a planning expert. Given an asynchronous planning problem, extract the dependency graph.
+
+For each step, identify:
+1. A short snake_case name (e.g., "boil_water", "add_pasta") — use ONLY lowercase letters, digits, and underscores
+2. The duration in SECONDS (convert minutes/hours/days if needed: 1 min=60s, 1 hour=3600s, 1 day=86400s)
+3. The DIRECT predecessors — steps that MUST complete before this step can start
+
+DEPENDENCY ANALYSIS — do this for EACH step before filling "depends_on":
+- Ask: "What must be fully completed before this step can start?"
+- Check EXPLICIT cues: "after X", "once Y is done", "following Z", numbered sequences.
+- Check IMPLICIT cues: logical necessity (cannot assemble before all parts ready;
+  cannot depart before packing AND booking; cannot cook before preheating).
+- A step with multiple prerequisites needs ALL of them listed — missing one causes a wrong answer.
+
+CRITICAL RULES:
+- List ALL direct predecessor steps in "depends_on". A missing dependency will cause a wrong answer.
+- If a step has no prerequisites, use an empty list [].
+- Every name in "depends_on" MUST exactly match a "name" defined in the same "steps" list.
+- Capture ONLY dependencies stated in the problem. Do NOT add extra constraints.
+
+SELF-CHECK before returning:
+1. Re-read EVERY ordering constraint in the problem. Is each one captured in some step's "depends_on"?
+2. For every entry in any "depends_on" list, confirm that exact name appears as a "name" in the steps list.
+
+Return JSON with key "responses" (list of dicts). Each dict must have key "steps" (list of step dicts).
+Each step dict must include:
+- "step_number": integer, the original step number from the problem (1-indexed)
+- "name": snake_case string identifier
+- "duration": integer seconds
+- "depends_on": list of step name strings (direct predecessors only)
+
+Example:
+{
+  "responses": [{
+    "steps": [
+      {"step_number": 1, "name": "boil_water",  "duration": 300,  "depends_on": []},
+      {"step_number": 2, "name": "add_pasta",   "duration": 600,  "depends_on": ["boil_water"]},
+      {"step_number": 3, "name": "make_sauce",  "duration": 900,  "depends_on": []},
+      {"step_number": 4, "name": "combine",     "duration": 60,   "depends_on": ["add_pasta", "make_sauce"]}
+    ]
+  }]
+}
+"""
+
+GRAPH_USER_TEMPLATE = """\
+Here is an asynchronous planning problem.
+
+{question}
+"""
+
+GRAPH_SYNTAX_RETRY_TEMPLATE = """\
+Your response could not be parsed as a valid dependency graph JSON. \
+Please output ONLY the JSON object matching the schema, with no extra text.
+
+Schema:
+{{
+  "responses": [{{
+    "steps": [
+      {{"name": "step_name", "duration": 123, "depends_on": ["other_step"]}},
+      ...
+    ]
+  }}]
+}}
+
+Error: {error}
+"""
+
+GRAPH_SEMANTIC_RETRY_TEMPLATE = """\
+Your dependency graph was used to generate a PDDL plan, but the computed \
+makespan ({pred_seconds} seconds) is incorrect.
+
+Recall: the correct answer is the *critical path* — the minimum completion time \
+assuming infinite parallel resources.
+
+Please recheck your dependency graph:
+1. **Step durations** — is every duration in seconds and matching the problem statement?
+2. **Missing dependencies** — are there "Step A must precede Step B" constraints \
+missing from "depends_on"?
+3. **Spurious dependencies** — are there extra entries in "depends_on" NOT stated \
+in the problem that artificially lengthen the critical path?
+
+Return the fully corrected dependency graph JSON.
+"""
 
 
 def _format_example_no_cot(example: dict, example_idx: int) -> str:

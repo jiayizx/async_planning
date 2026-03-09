@@ -99,7 +99,7 @@ class GeminiLLM(BaseLLM):
         new_text = last.parts[0].text + f"\n\nRespond with valid JSON matching this schema:\n{schema_json}"
         contents[-1] = types.Content(role=last.role, parts=[types.Part(text=new_text)])
 
-        extra = {"response_mime_type": "application/json"}
+        extra = {"response_mime_type": "application/json", "response_schema": schema}
         if system_text:
             extra["system_instruction"] = system_text
         config = self._build_gemini_config(extra)
