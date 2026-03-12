@@ -1,0 +1,5 @@
+0.000: (do_step1_choose_computer_and_stylus) [900.000]
+900.001: (do_step5_pay_for_photoshop) [1200.000]
+900.001: (do_step4_choose_clip_studio_or_paint_tool_sai) [1200.000]
+900.001: (do_step3_consider_corel_painter) [1800.000]
+900.001: (do_step2_download_gimp_or_krita) [1800.000]

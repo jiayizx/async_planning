@@ -1,0 +1,5 @@
+0.000: (ask_parents) [300.000]
+0.000: (gather_bag) [600.000]
+300.001: (call_parents) [120.000]
+420.002: (ring_doorbell) [60.000]
+600.001: (walk_across) [180.000]

@@ -1,0 +1,17 @@
+(define (problem steamed_sweet_potatoes-problem)
+  (:domain steamed_sweet_potatoes)
+  (:init
+    (peel_pending)
+    (cut_pending)
+    (place_pending)
+    (boil_pending)
+    (serve_pending)
+  )
+  (:goal (and
+    (peel_done)
+    (cut_done)
+    (place_done)
+    (boil_done)
+    (serve_done)
+  ))
+)

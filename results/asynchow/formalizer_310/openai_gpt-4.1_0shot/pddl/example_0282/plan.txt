@@ -1,0 +1,3 @@
+0.000: (prepare_whelping_box) [1800.000]
+1800.001: (place_heat_lamp) [600.000]
+1800.001: (line_whelping_box) [900.000]

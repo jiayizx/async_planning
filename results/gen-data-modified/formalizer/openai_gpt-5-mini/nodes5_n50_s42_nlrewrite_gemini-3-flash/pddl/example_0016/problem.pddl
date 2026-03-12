@@ -1,0 +1,19 @@
+(define (problem go_fishing_problem)
+  (:domain go_fishing)
+
+  (:init
+    (renew_license_pending)
+    (research_spots_pending)
+    (locate_tackle_pending)
+    (cast_line_pending)
+    (buy_bait_pending)
+  )
+
+  (:goal (and
+    (renew_license_done)
+    (research_spots_done)
+    (locate_tackle_done)
+    (cast_line_done)
+    (buy_bait_done)
+  ))
+)

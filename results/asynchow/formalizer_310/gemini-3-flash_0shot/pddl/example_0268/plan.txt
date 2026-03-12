@@ -1,0 +1,6 @@
+0.000: (light_stove) [120.000]
+0.000: (mix_ingredients) [300.000]
+300.001: (heat_mixture) [600.000]
+900.002: (cool_mixture) [1800.000]
+2700.003: (shape_flare) [300.000]
+3000.004: (wrap_flare) [120.000]

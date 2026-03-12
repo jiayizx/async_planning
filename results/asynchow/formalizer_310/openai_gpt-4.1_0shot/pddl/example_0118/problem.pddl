@@ -1,0 +1,17 @@
+(define (problem make_app_problem)
+  (:domain make_app)
+  (:init
+    (come_up_with_app_idea_pending)
+    (plan_app_functions_pending)
+    (plan_logistics_of_app_pending)
+    (write_code_for_app_pending)
+    (test_app_out_pending)
+  )
+  (:goal (and
+    (come_up_with_app_idea_done)
+    (plan_app_functions_done)
+    (plan_logistics_of_app_done)
+    (write_code_for_app_done)
+    (test_app_out_done)
+  ))
+)

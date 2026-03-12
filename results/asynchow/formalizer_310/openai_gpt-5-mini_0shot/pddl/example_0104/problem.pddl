@@ -1,0 +1,17 @@
+(define (problem buy_piano_prob)
+  (:domain buy_piano)
+  (:init
+    (step1_visit_pending)
+    (step2_decide_pending)
+    (step3_pay_pending)
+    (step4_arrive_pending)
+    (step5_try_pending)
+  )
+  (:goal (and
+    (step1_visit_done)
+    (step2_decide_done)
+    (step3_pay_done)
+    (step4_arrive_done)
+    (step5_try_done)
+  ))
+)

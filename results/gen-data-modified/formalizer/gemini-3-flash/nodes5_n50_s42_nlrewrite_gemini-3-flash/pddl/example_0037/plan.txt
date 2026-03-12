@@ -1,0 +1,5 @@
+0.000: (cut_flowers) [1800.000]
+0.000: (sterilize_shears) [300.000]
+300.001: (gather_heads) [1200.000]
+1500.002: (spread_petals) [600.000]
+1800.001: (strip_leaves) [900.000]

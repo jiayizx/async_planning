@@ -1,0 +1,17 @@
+(define (problem cooking-knowhow-problem)
+  (:domain cooking-knowhow)
+  (:init
+    (buy_food_items_pending)
+    (look_up_videos_pending)
+    (watch_videos_pending)
+    (cut_ingredients_pending)
+    (put_ingredients_together_pending)
+  )
+  (:goal (and
+    (buy_food_items_done)
+    (look_up_videos_done)
+    (watch_videos_done)
+    (cut_ingredients_done)
+    (put_ingredients_together_done)
+  ))
+)

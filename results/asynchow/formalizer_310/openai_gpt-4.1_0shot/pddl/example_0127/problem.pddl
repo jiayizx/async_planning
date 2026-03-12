@@ -1,0 +1,17 @@
+(define (problem get-into-car-problem)
+  (:domain get-into-car)
+  (:init
+    (grab_wallet_pending)
+    (grab_keys_pending)
+    (exit_garage_pending)
+    (unlock_car_pending)
+    (check_wallet_pending)
+  )
+  (:goal (and
+    (grab_wallet_done)
+    (grab_keys_done)
+    (exit_garage_done)
+    (unlock_car_done)
+    (check_wallet_done)
+  ))
+)

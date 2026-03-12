@@ -1,0 +1,50 @@
+(define (domain purchase-soil)
+  (:requirements :durative-actions)
+  (:predicates
+    (grab_wallet_pending)
+    (grab_wallet_done)
+    (grab_keys_pending)
+    (grab_keys_done)
+    (exit_house_pending)
+    (exit_house_done)
+    (get_in_car_pending)
+    (get_in_car_done)
+    (drive_to_store_pending)
+    (drive_to_store_done)
+  )
+
+  (:durative-action grab_wallet
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (at start (grab_wallet_pending))
+    :effect (and (at start (not (grab_wallet_pending))) (at end (grab_wallet_done)))
+  )
+
+  (:durative-action grab_keys
+    :parameters ()
+    :duration (= ?duration 20)
+    :condition (at start (grab_keys_pending))
+    :effect (and (at start (not (grab_keys_pending))) (at end (grab_keys_done)))
+  )
+
+  (:durative-action exit_house
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (and (at start (exit_house_pending)) (at start (grab_wallet_done)) (at start (grab_keys_done)))
+    :effect (and (at start (not (exit_house_pending))) (at end (exit_house_done)))
+  )
+
+  (:durative-action get_in_car
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (and (at start (get_in_car_pending)) (at start (exit_house_done)))
+    :effect (and (at start (not (get_in_car_pending))) (at end (get_in_car_done)))
+  )
+
+  (:durative-action drive_to_store
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (and (at start (drive_to_store_pending)) (at start (get_in_car_done)))
+    :effect (and (at start (not (drive_to_store_pending))) (at end (drive_to_store_done)))
+  )
+)

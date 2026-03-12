@@ -1,0 +1,70 @@
+(define (domain eat-kumquat)
+  (:requirements :durative-actions)
+  (:predicates
+    (choose_ripe_kumquats_pending)
+    (choose_ripe_kumquats_done)
+    (wash_and_dry_fruit_pending)
+    (wash_and_dry_fruit_done)
+    (rub_kumquat_pending)
+    (rub_kumquat_done)
+    (remove_seeds_pending)
+    (remove_seeds_done)
+    (eat_kumquat_pending)
+    (eat_kumquat_done)
+    (store_extra_kumquats_pending)
+    (store_extra_kumquats_done)
+  )
+
+  (:durative-action choose_ripe_kumquats
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (choose_ripe_kumquats_pending))
+    :effect (and (at start (not (choose_ripe_kumquats_pending)))
+                 (at end (choose_ripe_kumquats_done)))
+  )
+
+  (:durative-action wash_and_dry_fruit
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (wash_and_dry_fruit_pending))
+                    (at start (choose_ripe_kumquats_done)))
+    :effect (and (at start (not (wash_and_dry_fruit_pending)))
+                 (at end (wash_and_dry_fruit_done)))
+  )
+
+  (:durative-action rub_kumquat
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (rub_kumquat_pending))
+                    (at start (wash_and_dry_fruit_done)))
+    :effect (and (at start (not (rub_kumquat_pending)))
+                 (at end (rub_kumquat_done)))
+  )
+
+  (:durative-action remove_seeds
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (remove_seeds_pending))
+                    (at start (wash_and_dry_fruit_done)))
+    :effect (and (at start (not (remove_seeds_pending)))
+                 (at end (remove_seeds_done)))
+  )
+
+  (:durative-action eat_kumquat
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (eat_kumquat_pending))
+                    (at start (rub_kumquat_done))
+                    (at start (remove_seeds_done)))
+    :effect (and (at start (not (eat_kumquat_pending)))
+                 (at end (eat_kumquat_done)))
+  )
+
+  (:durative-action store_extra_kumquats
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (store_extra_kumquats_pending))
+    :effect (and (at start (not (store_extra_kumquats_pending)))
+                 (at end (store_extra_kumquats_done)))
+  )
+)

@@ -1,0 +1,4 @@
+0.000: (mix_apples_butter_sugar_nutmeg_lemon) [300.000]
+0.000: (scoop_seeds_and_pulp) [600.000]
+0.000: (preheat_oven) [300.000]
+600.001: (cover_and_bake) [2400.000]

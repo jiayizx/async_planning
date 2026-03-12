@@ -1,0 +1,7 @@
+0.000: (do_step2_walk_into_garage) [120.000]
+0.000: (do_step1_unlock_garage) [5.000]
+120.001: (do_step3_get_into_truck) [30.000]
+150.002: (do_step4_start_truck) [5.000]
+155.003: (do_step5_drive_to_vra) [3600.000]
+3755.004: (do_step6_pay_day_fee) [120.000]
+3875.005: (do_step7_drive_onto_trails) [300.000]

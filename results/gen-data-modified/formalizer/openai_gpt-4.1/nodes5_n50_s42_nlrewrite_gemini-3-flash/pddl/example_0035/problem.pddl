@@ -1,0 +1,17 @@
+(define (problem buy_stamps_problem)
+  (:domain buy_stamps)
+  (:init
+    (drive_to_post_office_pending)
+    (locate_wallet_pending)
+    (affix_stamps_pending)
+    (research_stamp_price_pending)
+    (purchase_stamps_pending)
+  )
+  (:goal (and
+    (drive_to_post_office_done)
+    (locate_wallet_done)
+    (affix_stamps_done)
+    (research_stamp_price_done)
+    (purchase_stamps_done)
+  ))
+)

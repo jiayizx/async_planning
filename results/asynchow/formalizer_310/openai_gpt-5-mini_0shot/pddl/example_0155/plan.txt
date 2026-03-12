@@ -1,0 +1,3 @@
+0.000: (do_step3_stuff_socks) [86400.000]
+0.000: (do_step2_stuff_newspaper) [172800.000]
+172800.001: (do_step1_stuff_freeze) [36000.000]

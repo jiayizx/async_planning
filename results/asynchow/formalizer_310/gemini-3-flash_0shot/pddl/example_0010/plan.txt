@@ -1,0 +1,6 @@
+0.000: (open_laptop) [60.000]
+60.001: (search_forums) [1800.000]
+1860.002: (upload_resume) [300.000]
+1860.002: (fill_applications) [14400.000]
+16260.003: (wait_callbacks) [432000.000]
+448260.004: (go_interview) [3600.000]

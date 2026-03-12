@@ -1,0 +1,15 @@
+(define (problem exfoliate_eyebrows_problem)
+  (:domain exfoliate_eyebrows)
+  (:init
+    (step1_sanitize_pending)
+    (step2_apply_pending)
+    (step3_rub_pending)
+    (step4_rinse_pending)
+  )
+  (:goal (and
+    (step1_sanitize_done)
+    (step2_apply_done)
+    (step3_rub_done)
+    (step4_rinse_done)
+  ))
+)

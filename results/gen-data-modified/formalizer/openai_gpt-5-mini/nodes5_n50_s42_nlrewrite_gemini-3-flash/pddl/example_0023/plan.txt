@@ -1,0 +1,5 @@
+0.000: (do_step1_research) [7200.000]
+7200.001: (do_step3_contact_coordinator) [86400.000]
+93600.002: (do_step5_setup_collection_gather) [604800.000]
+93600.002: (do_step4_design_print_flyers) [10800.000]
+698400.003: (do_step2_deliver) [1800.000]

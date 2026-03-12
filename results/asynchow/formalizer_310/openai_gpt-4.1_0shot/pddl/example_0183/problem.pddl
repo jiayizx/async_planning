@@ -1,0 +1,15 @@
+(define (problem revise-writing-problem)
+  (:domain revise-writing)
+  (:init
+    (wait_pending)
+    (print_pending)
+    (readaloud_pending)
+    (peerproof_pending)
+  )
+  (:goal (and
+    (wait_done)
+    (print_done)
+    (readaloud_done)
+    (peerproof_done)
+  ))
+)

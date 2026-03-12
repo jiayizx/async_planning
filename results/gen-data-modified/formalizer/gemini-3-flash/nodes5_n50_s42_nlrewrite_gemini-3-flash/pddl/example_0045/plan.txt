@@ -1,0 +1,5 @@
+0.000: (dip_brush) [10.000]
+0.000: (wash_moisturize) [300.000]
+10.001: (buff_powder) [180.000]
+190.002: (setting_spray) [30.000]
+300.001: (apply_primer) [120.000]

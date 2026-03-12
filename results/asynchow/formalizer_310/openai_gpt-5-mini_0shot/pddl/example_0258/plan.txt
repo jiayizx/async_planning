@@ -1,0 +1,3 @@
+0.000: (do_gather_supplies) [900.000]
+0.000: (do_download_pattern) [900.000]
+900.001: (do_buy_felt) [1800.000]

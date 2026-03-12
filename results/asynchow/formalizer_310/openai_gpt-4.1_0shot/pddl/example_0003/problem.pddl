@@ -1,0 +1,17 @@
+(define (problem bath-problem)
+  (:domain bath)
+  (:init
+    (take_off_clothes_pending)
+    (add_bubble_bath_pending)
+    (turn_off_running_water_pending)
+    (fill_up_bath_tub_pending)
+    (set_out_towel_pending)
+  )
+  (:goal (and
+    (take_off_clothes_done)
+    (add_bubble_bath_done)
+    (turn_off_running_water_done)
+    (fill_up_bath_tub_done)
+    (set_out_towel_done)
+  ))
+)

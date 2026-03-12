@@ -1,0 +1,15 @@
+(define (problem make-room-look-apartment-problem)
+  (:domain make-room-look-apartment)
+  (:init
+    (couch_pending)
+    (coffee_table_pending)
+    (tv_pending)
+    (waste_can_pending)
+  )
+  (:goal (and
+    (couch_done)
+    (coffee_table_done)
+    (tv_done)
+    (waste_can_done)
+  ))
+)

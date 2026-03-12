@@ -1,0 +1,7 @@
+0.000: (cut_power_and_water) [300.000]
+0.000: (purchase_pump) [1800.000]
+300.001: (remove_dishwasher_from_cabinet) [1800.000]
+2100.002: (disconnect_wires_and_lines) [900.000]
+3000.003: (disconnect_old_pump) [900.000]
+3900.004: (install_new_pump) [1800.000]
+5700.005: (reconnect_dishwasher) [900.000]

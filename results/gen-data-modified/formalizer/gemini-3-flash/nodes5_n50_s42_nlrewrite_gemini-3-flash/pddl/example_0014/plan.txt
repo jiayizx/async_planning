@@ -1,0 +1,5 @@
+0.000: (drink_water) [300.000]
+0.000: (eat_garlic_onions) [1200.000]
+300.001: (chew_herbs) [120.000]
+1200.001: (brush_teeth) [240.000]
+1440.002: (rinse_mouthwash) [60.000]

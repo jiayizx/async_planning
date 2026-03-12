@@ -1,0 +1,5 @@
+0.000: (clean_ring) [300.000]
+300.001: (apply_silicone) [120.000]
+420.002: (dry_silicone) [1800.000]
+420.002: (smooth_silicone) [180.000]
+2220.003: (try_on_ring) [120.000]

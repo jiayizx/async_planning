@@ -1,0 +1,17 @@
+(define (problem feel_nature_problem)
+  (:domain feel_more_in_touch_with_nature)
+  (:init
+    (take_week_off_pending)
+    (drive_to_park_pending)
+    (hike_out_pending)
+    (live_off_land_pending)
+    (stay_away_electronics_pending)
+  )
+  (:goal (and
+    (take_week_off_done)
+    (drive_to_park_done)
+    (hike_out_done)
+    (live_off_land_done)
+    (stay_away_electronics_done)
+  ))
+)

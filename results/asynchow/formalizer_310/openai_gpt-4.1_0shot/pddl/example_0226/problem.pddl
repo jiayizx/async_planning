@@ -1,0 +1,17 @@
+(define (problem organize-house-problem)
+  (:domain organize-house)
+  (:init
+    (throw_out_pending)
+    (purchase_storage_pending)
+    (use_bookshelves_pending)
+    (use_drawers_pending)
+    (purchase_kitchen_pending)
+  )
+  (:goal (and
+    (throw_out_done)
+    (purchase_storage_done)
+    (use_bookshelves_done)
+    (use_drawers_done)
+    (purchase_kitchen_done)
+  ))
+)

@@ -1,0 +1,5 @@
+0.000: (do_research_varieties) [1800.000]
+1800.001: (do_purchase_supplies) [2700.000]
+1800.001: (do_install_lights) [7200.000]
+4500.002: (do_sow_seeds) [864000.000]
+868500.003: (do_transplant_seedlings) [3600.000]

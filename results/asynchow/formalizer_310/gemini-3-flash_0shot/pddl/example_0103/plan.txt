@@ -1,0 +1,6 @@
+0.000: (pick_up_device) [1.000]
+1.001: (search_nearby) [20.000]
+21.002: (narrow_food_kind) [120.000]
+141.003: (look_at_ratings) [600.000]
+141.003: (look_at_menus) [600.000]
+741.004: (look_at_pricing) [600.000]

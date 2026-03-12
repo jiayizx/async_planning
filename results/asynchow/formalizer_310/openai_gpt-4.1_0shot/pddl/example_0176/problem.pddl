@@ -1,0 +1,15 @@
+(define (problem lower-androgen-levels-problem)
+  (:domain lower-androgen-levels)
+  (:init
+    (get_tested_pending)
+    (speak_doctor_pending)
+    (get_medication_pending)
+    (ask_antiandrogen_pending)
+  )
+  (:goal (and
+    (get_tested_done)
+    (speak_doctor_done)
+    (get_medication_done)
+    (ask_antiandrogen_done)
+  ))
+)

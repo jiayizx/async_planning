@@ -1,0 +1,1 @@
+(define (problem treat_diarrhea_problem)(:domain treat_diarrhea_lovebirds)(:init (identify_diarrhea_pending) (check_symptoms_pending) (seek_medical_pending))(:goal (and (identify_diarrhea_done) (check_symptoms_done) (seek_medical_done)))(:metric minimize (total-time)))

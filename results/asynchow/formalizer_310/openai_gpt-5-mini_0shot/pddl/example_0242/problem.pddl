@@ -1,0 +1,17 @@
+(define (problem make_calzones_problem)
+  (:domain make_calzones)
+  (:init
+    (preheat_pending)
+    (roll_pending)
+    (add_pending)
+    (fold_pending)
+    (bake_pending)
+  )
+  (:goal (and
+    (preheat_done)
+    (roll_done)
+    (add_done)
+    (fold_done)
+    (bake_done)
+  ))
+)

@@ -1,0 +1,16 @@
+(define (problem dentist_problem)
+(:domain dentist_visit)
+(:init
+(choose_dentist_pending)
+(offer_appointment_pending)
+(go_with_him_pending)
+(give_music_pending)
+)
+(:goal (and
+(choose_dentist_done)
+(offer_appointment_done)
+(go_with_him_done)
+(give_music_done)
+))
+(:metric minimize (total-time))
+)

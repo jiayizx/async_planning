@@ -1,0 +1,17 @@
+(define (problem learn-basketball-problem)
+  (:domain learn-basketball)
+  (:init
+    (hire_coach_pending)
+    (buy_ball_pending)
+    (find_court_pending)
+    (practice_dribble_pending)
+    (practice_shoot_pending)
+  )
+  (:goal (and
+    (hire_coach_done)
+    (buy_ball_done)
+    (find_court_done)
+    (practice_dribble_done)
+    (practice_shoot_done)
+  ))
+)

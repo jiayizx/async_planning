@@ -1,0 +1,17 @@
+(define (problem make_balloon_pet)
+  (:domain balloon_pet)
+  (:init
+    (draw_face_pending)
+    (twist_legs_pending)
+    (stretch_balloon_pending)
+    (inflate_balloon_pending)
+    (choose_color_pending)
+  )
+  (:goal (and
+    (draw_face_done)
+    (twist_legs_done)
+    (stretch_balloon_done)
+    (inflate_balloon_done)
+    (choose_color_done)
+  ))
+)

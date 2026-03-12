@@ -1,0 +1,15 @@
+(define (problem diagnose-patellar-luxation)
+  (:domain patellar-luxation-diagnosis)
+  (:init
+    (physical_exam_pending)
+    (xray_leg_pending)
+    (manage_condition_pending)
+    (undergo_surgery_pending)
+  )
+  (:goal (and
+    (physical_exam_done)
+    (xray_leg_done)
+    (manage_condition_done)
+    (undergo_surgery_done)
+  ))
+)

@@ -1,0 +1,5 @@
+0.000: (download_app_and_sign_up) [300.000]
+300.001: (pair_app_with_nest) [120.000]
+420.002: (adjust_settings) [120.000]
+420.002: (schedule_temperatures) [180.000]
+420.002: (change_temperature) [60.000]

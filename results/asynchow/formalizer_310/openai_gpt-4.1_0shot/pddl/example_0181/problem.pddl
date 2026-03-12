@@ -1,0 +1,15 @@
+(define (problem recycle-wood-problem)
+  (:domain recycle-wood)
+  (:init
+    (search_place_pending)
+    (remove_screws_pending)
+    (cut_wood_pending)
+    (transport_wood_pending)
+  )
+  (:goal (and
+    (search_place_done)
+    (remove_screws_done)
+    (cut_wood_done)
+    (transport_wood_done)
+  ))
+)

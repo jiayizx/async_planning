@@ -1,0 +1,5 @@
+0.000: (download_app) [300.000]
+300.001: (pair_app) [120.000]
+420.002: (adjust_settings) [120.000]
+420.002: (schedule_temp) [180.000]
+420.002: (change_temp) [60.000]

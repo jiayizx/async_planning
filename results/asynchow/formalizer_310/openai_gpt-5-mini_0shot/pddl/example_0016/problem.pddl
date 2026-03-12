@@ -1,0 +1,17 @@
+(define (problem make_huge_sand_castle)
+  (:domain sandcastle)
+  (:init
+    (pack_pending)
+    (dress_pending)
+    (drive_pending)
+    (park_pending)
+    (fetch_pending)
+  )
+  (:goal (and
+    (pack_done)
+    (dress_done)
+    (drive_done)
+    (park_done)
+    (fetch_done)
+  ))
+)

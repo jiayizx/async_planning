@@ -1,0 +1,17 @@
+(define (problem leave_school_instance)
+  (:domain leave_school)
+  (:init
+    (log_out_library_computer_pending)
+    (save_paper_cloud_pending)
+    (walk_to_bus_stop_pending)
+    (pack_backpack_pending)
+    (return_locker_key_pending)
+  )
+  (:goal (and
+    (log_out_library_computer_done)
+    (save_paper_cloud_done)
+    (walk_to_bus_stop_done)
+    (pack_backpack_done)
+    (return_locker_key_done)
+  ))
+)

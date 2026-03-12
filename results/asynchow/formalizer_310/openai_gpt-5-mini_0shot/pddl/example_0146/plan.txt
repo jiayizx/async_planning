@@ -1,0 +1,3 @@
+0.000: (do_pick_top) [180.000]
+0.000: (do_wear_crop_top) [300.000]
+180.001: (do_tuck_shirt) [120.000]

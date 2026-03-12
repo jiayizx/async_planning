@@ -1,0 +1,14 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "openai/gpt-5-mini",
+  "accuracy": 0.971875,
+  "num_correct": 311,
+  "num_syntax_errors": 1,
+  "num_semantic_errors": 8,
+  "num_data_points": 320,
+  "plan_valid_rate": null,
+  "num_plan_valid": null,
+  "num_correct_and_valid": null,
+  "num_correct_but_invalid": null,
+  "num_incorrect_but_valid": null
+}

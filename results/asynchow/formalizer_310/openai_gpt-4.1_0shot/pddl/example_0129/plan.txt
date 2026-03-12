@@ -1,0 +1,5 @@
+0.000: (decide_to_stand_up) [1.000]
+1.001: (find_open_space) [1.000]
+2.002: (stick_right_foot_out) [1.000]
+2.002: (stick_left_foot_out) [1.000]
+3.003: (move_body_upwards) [1.000]

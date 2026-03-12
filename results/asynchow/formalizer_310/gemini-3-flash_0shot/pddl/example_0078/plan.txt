@@ -1,0 +1,5 @@
+0.000: (take_shower) [1200.000]
+1200.001: (put_on_shoes) [120.000]
+1200.001: (put_on_clothes) [300.000]
+1500.002: (drive_to_bookstore) [1800.000]
+3300.003: (find_books) [300.000]

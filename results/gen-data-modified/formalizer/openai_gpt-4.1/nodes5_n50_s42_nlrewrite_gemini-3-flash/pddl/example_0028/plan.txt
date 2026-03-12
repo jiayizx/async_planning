@@ -1,0 +1,4 @@
+0.000: (do_mealplan) [3600.000]
+0.000: (do_consultation) [900.000]
+900.001: (do_endoscopy) [2700.000]
+3600.002: (do_antibiotics) [1209600.000]

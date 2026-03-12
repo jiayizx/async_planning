@@ -1,0 +1,6 @@
+0.000: (mull_pros_cons) [172800.000]
+172800.001: (select_preference) [60.000]
+172800.001: (ask_husband) [300.000]
+173100.002: (write_locations) [120.000]
+173220.003: (put_in_hat) [60.000]
+173280.004: (draw_from_hat) [60.000]

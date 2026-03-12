@@ -1,0 +1,1 @@
+(define (problem pickle_jalapenos_prob)(:domain pickle_jalapenos)(:init (slice_peppers_pending) (combine_ingredients_pending) (cool_mixture_pending))(:goal (and (slice_peppers_done) (combine_ingredients_done) (cool_mixture_done)))(:metric minimize (total-time)))

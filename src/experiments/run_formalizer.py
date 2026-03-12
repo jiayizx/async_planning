@@ -42,12 +42,21 @@ from src.evaluation.plan_validity import check_plan_validity
 from src.experiments.utils import build_llm_client, clean_question
 from src.gen_data.utils import parse_node_durations
 from src.llms.base import BaseLLM
-from src.llms.prompts import SYNTAX_RETRY_TEMPLATE, SEMANTIC_RETRY_TEMPLATE
+from src.llms.prompts import (
+    SYNTAX_RETRY_TEMPLATE, SEMANTIC_RETRY_TEMPLATE,
+    GRAPH_SYNTAX_RETRY_TEMPLATE, GRAPH_SEMANTIC_RETRY_TEMPLATE,
+)
 from src.method.nl_to_pddl import (
     build_pddl_messages,
     parse_pddl_response,
     PDDLResponse,
     _truncate_solver_error,
+)
+from src.method.nl_to_graph import (
+    build_graph_messages,
+    parse_graph_response,
+    graph_to_pddl,
+    GraphResponse,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 
@@ -99,10 +108,13 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     # Multi-turn conversation histories — each list grows across retries:
     #   [system, user₀, asst₁, user_err₁, asst₂, user_err₂, …]
     # On retry we just append; the LLM sees all prior attempts.
-    histories: list[list[dict]] = [
-        build_pddl_messages(q, num_shots=args.num_shots)
-        for q in questions
-    ]
+    if args.two_step:
+        histories: list[list[dict]] = [build_graph_messages(q) for q in questions]
+    else:
+        histories: list[list[dict]] = [
+            build_pddl_messages(q, num_shots=args.num_shots)
+            for q in questions
+        ]
     # Number of messages in the initial (pre-retry) history — used by
     # single-turn mode to trim back to base + [last_asst, last_error].
     _base_len: int = len(histories[0]) if histories else 0
@@ -132,8 +144,22 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                     histories[i] = h[:_base_len] + h[-2:]
 
         msgs = [histories[i] for i in indices]
-        responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
-        pairs = [parse_pddl_response(r) for r in responses]
+
+        if args.two_step:
+            responses = llm_client.batch_chat(msgs, schema=GraphResponse, desc=desc)
+            pairs = []
+            for r in responses:
+                steps = parse_graph_response(r)
+                if steps is None:
+                    pairs.append(None)
+                else:
+                    domain, problem = graph_to_pddl(steps)
+                    # Sort by step_number so step_actions[i] = action for Step i+1
+                    ordered = sorted(steps, key=lambda s: s.step_number)
+                    pairs.append((domain, problem, [s.name for s in ordered]))
+        else:
+            responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
+            pairs = [parse_pddl_response(r) for r in responses]
 
         for i, resp in zip(indices, responses):
             raw_responses[i] = resp
@@ -143,15 +169,23 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
         solvable = []
         for i, pair in zip(indices, pairs):
             if pair is None:
-                errors[i] = "PDDL parse failed"
+                errors[i] = "Graph/PDDL parse failed" if args.two_step else "PDDL parse failed"
                 error_types[i] = "syntax_error"
-                histories[i].append({
-                    "role": "user",
-                    "content": SYNTAX_RETRY_TEMPLATE.format(
-                        error="Your response could not be parsed as valid PDDL JSON. "
-                              "Please output only the JSON object matching the schema."
-                    ),
-                })
+                if args.two_step:
+                    histories[i].append({
+                        "role": "user",
+                        "content": GRAPH_SYNTAX_RETRY_TEMPLATE.format(
+                            error="Your response could not be parsed as a valid dependency graph JSON."
+                        ),
+                    })
+                else:
+                    histories[i].append({
+                        "role": "user",
+                        "content": SYNTAX_RETRY_TEMPLATE.format(
+                            error="Your response could not be parsed as valid PDDL JSON. "
+                                  "Please output only the JSON object matching the schema."
+                        ),
+                    })
             else:
                 solvable.append((i, pair))
 
@@ -173,12 +207,22 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                     # Planner rejected the PDDL — syntax/validation issue
                     errors[i] = sr.error
                     error_types[i] = "syntax_error"
-                    histories[i].append({
-                        "role": "user",
-                        "content": SYNTAX_RETRY_TEMPLATE.format(
-                            error=_truncate_solver_error(sr.error)
-                        ),
-                    })
+                    if args.two_step:
+                        # In two-step mode, Python generates PDDL — solver errors are
+                        # rare (e.g. reserved keyword in name). Ask LLM to fix its graph.
+                        histories[i].append({
+                            "role": "user",
+                            "content": GRAPH_SYNTAX_RETRY_TEMPLATE.format(
+                                error=_truncate_solver_error(sr.error)
+                            ),
+                        })
+                    else:
+                        histories[i].append({
+                            "role": "user",
+                            "content": SYNTAX_RETRY_TEMPLATE.format(
+                                error=_truncate_solver_error(sr.error)
+                            ),
+                        })
                 else:
                     # Planner succeeded — check if the makespan is correct
                     pred_seconds = int(round(sr.makespan_seconds))
@@ -186,11 +230,10 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                     if gold_seconds is not None and not exact_match(pred_seconds, gold_seconds):
                         errors[i] = f"wrong makespan: got {pred_seconds}s"
                         error_types[i] = "semantic_error"
+                        retry_template = GRAPH_SEMANTIC_RETRY_TEMPLATE if args.two_step else SEMANTIC_RETRY_TEMPLATE
                         histories[i].append({
                             "role": "user",
-                            "content": SEMANTIC_RETRY_TEMPLATE.format(
-                                pred_seconds=pred_seconds
-                            ),
+                            "content": retry_template.format(pred_seconds=pred_seconds),
                         })
                     else:
                         errors[i] = ""
@@ -417,6 +460,12 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
+    parser.add_argument(
+        "--two-step",
+        action="store_true",
+        default=False,
+        help="Use two-step generation: LLM extracts dependency graph JSON, Python generates PDDL.",
+    )
 
     return parser.parse_args()
 

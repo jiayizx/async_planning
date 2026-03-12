@@ -1,0 +1,17 @@
+(define (problem paint_rustic_cabin)
+  (:domain rustic_cabin)
+  (:init
+    (map_horizon_pending)
+    (varnish_pending)
+    (sketch_wireframe_pending)
+    (prepare_palette_pending)
+    (paint_base_pending)
+  )
+  (:goal (and
+    (map_horizon_done)
+    (varnish_done)
+    (sketch_wireframe_done)
+    (prepare_palette_done)
+    (paint_base_done)
+  ))
+)

@@ -1,0 +1,5 @@
+0.000: (do_ask_own_parents) [300.000]
+0.000: (do_gather_toys) [600.000]
+300.001: (do_call_neighbors_parents) [120.000]
+420.002: (do_ring_doorbell) [60.000]
+600.001: (do_walk_across_street) [180.000]

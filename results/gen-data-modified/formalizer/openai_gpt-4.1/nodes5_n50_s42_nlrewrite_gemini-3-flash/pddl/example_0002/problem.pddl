@@ -1,0 +1,17 @@
+(define (problem count-to-ten-finnish-problem)
+  (:domain count-to-ten-finnish)
+  (:init
+    (lookup_pending)
+    (record_pending)
+    (listen_pending)
+    (memorize_pending)
+    (flashcards_pending)
+  )
+  (:goal (and
+    (lookup_done)
+    (record_done)
+    (listen_done)
+    (memorize_done)
+    (flashcards_done)
+  ))
+)

@@ -1,0 +1,1 @@
+(define (problem service_brakes_prob) (:domain service_brakes) (:init (remove_wheels_pending) (remove_drum_pending) (inspect_shoes_pending) (inspect_springs_pending) (change_cylinder_pending)) (:goal (and (remove_wheels_done) (remove_drum_done) (inspect_shoes_done) (inspect_springs_done) (change_cylinder_done))))

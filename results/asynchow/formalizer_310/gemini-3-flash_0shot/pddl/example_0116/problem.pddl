@@ -1,0 +1,1 @@
+(define (problem vacation_plan)(:domain cheap_vacation)(:init (drive_pending) (pack_pending) (hike_out_pending) (camp_pending) (hike_back_pending))(:goal (and (drive_done) (pack_done) (hike_out_done) (camp_done) (hike_back_done))))

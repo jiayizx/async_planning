@@ -1,0 +1,15 @@
+(define (problem cow_pregnancy_diagnosis-problem)
+  (:domain cow_pregnancy_diagnosis)
+  (:init
+    (observe_behaviour_pending)
+    (pay_attention_pending)
+    (fetal_responsiveness_pending)
+    (scientific_diagnosis_pending)
+  )
+  (:goal (and
+    (observe_behaviour_done)
+    (pay_attention_done)
+    (fetal_responsiveness_done)
+    (scientific_diagnosis_done)
+  ))
+)
