@@ -1,0 +1,4 @@
+647.000: (apply_to_contest) [86400.000]
+647.000: (pay_fees) [300.000]
+647.000: (bring_racing_gear) [21600.000]
+647.000: (bring_friends) [21600.000]

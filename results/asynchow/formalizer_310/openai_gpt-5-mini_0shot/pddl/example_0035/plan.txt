@@ -1,0 +1,5 @@
+0.000: (do_decide_area) [3600.000]
+3600.001: (do_go_library) [7200.000]
+3600.001: (do_research_online) [7200.000]
+10800.002: (do_read_research) [7200.000]
+18000.003: (do_enjoy_respect) [600.000]

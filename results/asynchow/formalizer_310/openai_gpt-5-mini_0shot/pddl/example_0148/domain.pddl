@@ -1,0 +1,32 @@
+(define (domain charge_bmw_key)
+  (:requirements :durative-actions)
+  (:predicates
+    (step1_pending)
+    (step1_done)
+    (step2_pending)
+    (step2_done)
+    (step3_pending)
+    (step3_done)
+  )
+
+  (:durative-action do_step1_insert_display_key
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (step1_pending))
+    :effect (and (at start (not (step1_pending))) (at end (step1_done)))
+  )
+
+  (:durative-action do_step2_ensure_blue_led
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (step2_pending)) (at start (step1_done)) (at start (step3_done)))
+    :effect (and (at start (not (step2_pending))) (at end (step2_done)))
+  )
+
+  (:durative-action do_step3_plug_micro_usb
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (step3_pending))
+    :effect (and (at start (not (step3_pending))) (at end (step3_done)))
+  )
+)

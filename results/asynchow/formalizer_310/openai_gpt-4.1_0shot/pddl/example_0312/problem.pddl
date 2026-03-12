@@ -1,0 +1,15 @@
+(define (problem eat_lemon_instance)
+  (:domain eat_lemon)
+  (:init
+    (make_simple_syrup_pending)
+    (get_lemon_juice_pending)
+    (combine_ingredients_pending)
+    (refrigerate_and_serve_pending)
+  )
+  (:goal (and
+    (make_simple_syrup_done)
+    (get_lemon_juice_done)
+    (combine_ingredients_done)
+    (refrigerate_and_serve_done)
+  ))
+)

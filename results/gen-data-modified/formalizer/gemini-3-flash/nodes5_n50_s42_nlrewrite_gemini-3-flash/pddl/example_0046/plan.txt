@@ -1,0 +1,5 @@
+0.000: (purchase_produce) [7200.000]
+0.000: (gather_ribbons) [3600.000]
+3600.001: (dance_maypole) [1800.000]
+7200.001: (prepare_feast) [14400.000]
+21600.002: (host_picnic) [10800.000]

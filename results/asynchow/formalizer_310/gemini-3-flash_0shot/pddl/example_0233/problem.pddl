@@ -1,0 +1,1 @@
+(define (problem air_dry_thick_hair_prob)(:domain air_dry_thick_hair)(:init (step1_pending) (step2_pending) (step3_pending))(:goal (and (step1_done) (step2_done) (step3_done)))(:metric minimize (total-time)))

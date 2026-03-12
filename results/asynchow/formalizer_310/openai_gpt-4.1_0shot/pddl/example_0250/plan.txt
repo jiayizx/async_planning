@@ -1,0 +1,3 @@
+0.000: (look_for_other_symptoms) [3600.000]
+0.000: (look_for_watery_feces) [86400.000]
+86400.001: (seek_medical_attention) [1800.000]

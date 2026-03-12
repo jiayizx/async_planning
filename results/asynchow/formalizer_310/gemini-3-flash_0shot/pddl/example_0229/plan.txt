@@ -1,0 +1,5 @@
+0.000: (step1_garage_navigation) [120.000]
+120.001: (step5_tire_brakes_tuning) [60.000]
+120.001: (step4_aerodynamics_tuning) [60.000]
+120.001: (step3_drivetrain_tuning) [60.000]
+120.001: (step2_suspension_tuning) [180.000]

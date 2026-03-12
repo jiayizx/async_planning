@@ -1,0 +1,7 @@
+0.000: (go_on_internet) [60.000]
+60.001: (research_locations) [3600.000]
+3660.002: (make_hotel_reservations) [600.000]
+3660.002: (look_for_airline_tickets) [1800.000]
+5460.003: (purchase_airline_tickets) [600.000]
+6060.004: (pack_suitcase) [1800.000]
+7860.005: (drive_to_airport) [1800.000]

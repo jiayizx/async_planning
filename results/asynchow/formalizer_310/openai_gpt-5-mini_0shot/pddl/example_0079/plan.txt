@@ -1,0 +1,7 @@
+0.000: (do_step1_decide_to_learn) [30.000]
+30.001: (do_step2_sit_down_at_desk) [30.000]
+60.002: (do_step3_turn_on_computer) [60.000]
+120.003: (do_step4_navigate_to_cooking_site) [120.000]
+240.004: (do_step6_decide_on_best_recipe) [300.000]
+240.004: (do_step5_search_available_recipes) [1800.000]
+2040.005: (do_step7_print_out_recipe) [120.000]

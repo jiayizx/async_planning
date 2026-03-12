@@ -1,0 +1,4 @@
+0.000: (rinse_brow) [60.000]
+0.000: (sanitize_toothbrush) [60.000]
+60.001: (apply_cleanser) [30.000]
+90.002: (rub_brush) [120.000]

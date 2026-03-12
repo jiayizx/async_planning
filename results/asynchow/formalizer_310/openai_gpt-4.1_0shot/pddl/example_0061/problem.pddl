@@ -1,0 +1,17 @@
+(define (problem voter_registration_problem)
+  (:domain voter_registration)
+  (:init
+    (go_to_website_pending)
+    (login_pending)
+    (signup_pending)
+    (confirm_info_pending)
+    (wait_card_pending)
+  )
+  (:goal (and
+    (go_to_website_done)
+    (login_done)
+    (signup_done)
+    (confirm_info_done)
+    (wait_card_done)
+  ))
+)

@@ -1,0 +1,6 @@
+0.000: (visit_website) [600.000]
+600.001: (register_website) [600.000]
+1200.002: (fill_application) [1200.000]
+2400.003: (schedule_appointment) [600.000]
+2400.003: (pay_fee) [300.000]
+3000.004: (print_confirmation) [120.000]

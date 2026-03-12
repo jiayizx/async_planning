@@ -1,0 +1,17 @@
+(define (problem get_ahead_at_work-problem)
+  (:domain get_ahead_at_work)
+  (:init
+    (decide_pending)
+    (comein_pending)
+    (monitor_pending)
+    (letboss_pending)
+    (vacation_pending)
+  )
+  (:goal (and
+    (decide_done)
+    (comein_done)
+    (monitor_done)
+    (letboss_done)
+    (vacation_done)
+  ))
+)

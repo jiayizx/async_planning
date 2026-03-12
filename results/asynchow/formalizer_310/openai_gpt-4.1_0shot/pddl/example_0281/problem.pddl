@@ -1,0 +1,17 @@
+(define (problem strengthen_hips_instance)
+  (:domain strengthen_hips)
+  (:init
+    (stretch_right_time_pending)
+    (stretch_itb_pending)
+    (piriformis_stretch_pending)
+    (leg_to_chest_pending)
+    (hamstring_stretch_pending)
+  )
+  (:goal (and
+    (stretch_right_time_done)
+    (stretch_itb_done)
+    (piriformis_stretch_done)
+    (leg_to_chest_done)
+    (hamstring_stretch_done)
+  ))
+)

@@ -1,0 +1,15 @@
+(define (problem react_bumped_flight_problem)
+  (:domain react_bumped_flight)
+  (:init
+    (speak_with_gate_agent_pending)
+    (confirm_flight_pending)
+    (ask_for_reimbursement_pending)
+    (ask_for_vouchers_pending)
+  )
+  (:goal (and
+    (speak_with_gate_agent_done)
+    (confirm_flight_done)
+    (ask_for_reimbursement_done)
+    (ask_for_vouchers_done)
+  ))
+)

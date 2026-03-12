@@ -1,0 +1,17 @@
+(define (problem make-girl-feel-beautiful-problem)
+  (:domain make-girl-feel-beautiful)
+  (:init
+    (buy_pretty_pending)
+    (photo_shoot_pending)
+    (sing_song_pending)
+    (write_poem_pending)
+    (give_card_pending)
+  )
+  (:goal (and
+    (buy_pretty_done)
+    (photo_shoot_done)
+    (sing_song_done)
+    (write_poem_done)
+    (give_card_done)
+  ))
+)

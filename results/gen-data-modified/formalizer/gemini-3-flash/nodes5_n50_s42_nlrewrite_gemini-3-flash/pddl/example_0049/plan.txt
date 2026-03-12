@@ -1,0 +1,5 @@
+0.000: (purchase_journal) [900.000]
+900.001: (set_goals) [3600.000]
+900.001: (gather_feedback) [259200.000]
+260100.002: (identify_values) [7200.000]
+267300.003: (write_summary) [14400.000]

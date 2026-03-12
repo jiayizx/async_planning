@@ -1,0 +1,17 @@
+(define (problem acclimate-starfish)
+  (:domain starfish-acclimation)
+  (:init
+    (float_bag_pending)
+    (setup_drip_pending)
+    (prepare_quarantine_pending)
+    (add_tank_water_pending)
+    (transfer_starfish_pending)
+  )
+  (:goal (and
+    (float_bag_done)
+    (setup_drip_done)
+    (prepare_quarantine_done)
+    (add_tank_water_done)
+    (transfer_starfish_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem save-for-vacation-problem)
+  (:domain save-for-vacation)
+  (:init
+    (budget_pending)
+    (work_pending)
+    (groceries_pending)
+    (alcohol_pending)
+    (eatingout_pending)
+  )
+  (:goal (and
+    (budget_done)
+    (work_done)
+    (groceries_done)
+    (alcohol_done)
+    (eatingout_done)
+  ))
+)

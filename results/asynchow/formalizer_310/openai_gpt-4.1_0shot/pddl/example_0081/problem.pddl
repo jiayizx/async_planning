@@ -1,0 +1,17 @@
+(define (problem memorable_vacation)
+  (:domain vacation)
+  (:init
+    (research_trip_pending)
+    (plan_budget_pending)
+    (invite_others_pending)
+    (split_cost_pending)
+    (meet_at_airport_pending)
+  )
+  (:goal (and
+    (research_trip_done)
+    (plan_budget_done)
+    (invite_others_done)
+    (split_cost_done)
+    (meet_at_airport_done)
+  ))
+)

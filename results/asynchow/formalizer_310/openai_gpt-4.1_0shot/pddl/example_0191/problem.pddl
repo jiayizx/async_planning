@@ -1,0 +1,15 @@
+(define (problem sims3_hunger_games_problem)
+  (:domain sims3_hunger_games)
+  (:init
+    (create_sims_pending)
+    (name_sims_pending)
+    (clothe_sims_pending)
+    (trait_sims_pending)
+  )
+  (:goal (and
+    (create_sims_done)
+    (name_sims_done)
+    (clothe_sims_done)
+    (trait_sims_done)
+  ))
+)

@@ -1,0 +1,50 @@
+(define (domain amusement_park)
+  (:requirements :durative-actions)
+  (:predicates
+    (get_money_pending)
+    (get_money_done)
+    (find_park_pending)
+    (find_park_done)
+    (travel_pending)
+    (travel_done)
+    (purchase_pass_pending)
+    (purchase_pass_done)
+    (enter_park_pending)
+    (enter_park_done)
+  )
+
+  (:durative-action do_get_money
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (at start (get_money_pending))
+    :effect (and (at start (not (get_money_pending))) (at end (get_money_done)))
+  )
+
+  (:durative-action do_find_park
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (find_park_pending))
+    :effect (and (at start (not (find_park_pending))) (at end (find_park_done)))
+  )
+
+  (:durative-action do_travel
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (travel_pending)) (at start (find_park_done)))
+    :effect (and (at start (not (travel_pending))) (at end (travel_done)))
+  )
+
+  (:durative-action do_purchase_pass
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (purchase_pass_pending)) (at start (get_money_done)) (at start (travel_done)))
+    :effect (and (at start (not (purchase_pass_pending))) (at end (purchase_pass_done)))
+  )
+
+  (:durative-action do_enter_park
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (enter_park_pending)) (at start (purchase_pass_done)))
+    :effect (and (at start (not (enter_park_pending))) (at end (enter_park_done)))
+  )
+)

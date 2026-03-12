@@ -1,0 +1,5 @@
+0.000: (take_week_off) [604800.000]
+604800.001: (drive_to_park) [10800.000]
+615600.002: (hike_with_supplies) [604800.000]
+1220400.003: (stay_away_devices) [604800.000]
+1220400.003: (live_off_land) [604800.000]

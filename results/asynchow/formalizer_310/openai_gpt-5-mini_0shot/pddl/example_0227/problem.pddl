@@ -1,0 +1,17 @@
+(define (problem season_tilapia_problem)
+  (:domain season_tilapia)
+  (:init
+    (melt_pending)
+    (zest_pending)
+    (whisk_pending)
+    (pour_pending)
+    (bake_pending)
+  )
+  (:goal (and
+    (melt_done)
+    (zest_done)
+    (whisk_done)
+    (pour_done)
+    (bake_done)
+  ))
+)

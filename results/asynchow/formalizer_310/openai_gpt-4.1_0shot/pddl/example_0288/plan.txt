@@ -1,0 +1,6 @@
+0.000: (do_visit_website) [600.000]
+600.001: (do_register) [600.000]
+1200.002: (do_fill_application) [1200.000]
+2400.003: (do_schedule_appointment) [600.000]
+2400.003: (do_pay_fee) [300.000]
+3000.004: (do_print_confirmation) [120.000]

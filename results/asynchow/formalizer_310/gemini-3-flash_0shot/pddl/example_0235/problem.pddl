@@ -1,0 +1,1 @@
+(define (problem bird_garden_prob) (:domain attract_birds) (:init (hang_pending) (install_pending) (materials_pending)) (:goal (and (hang_done) (install_done) (materials_done))) (:metric minimize (total-time)))

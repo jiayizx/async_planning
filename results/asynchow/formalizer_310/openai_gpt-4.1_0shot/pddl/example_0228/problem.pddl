@@ -1,0 +1,17 @@
+(define (problem anxiety_ordering_problem)
+  (:domain anxiety_ordering)
+  (:init
+    (order_over_phone_pending)
+    (go_through_drive_thru_pending)
+    (ask_friend_to_order_pending)
+    (use_app_or_online_pending)
+    (receive_food_pending)
+  )
+  (:goal (and
+    (order_over_phone_done)
+    (go_through_drive_thru_done)
+    (ask_friend_to_order_done)
+    (use_app_or_online_done)
+    (receive_food_done)
+  ))
+)

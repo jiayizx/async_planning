@@ -1,0 +1,17 @@
+(define (problem learn-digital-art-problem)
+  (:domain learn-digital-art)
+  (:init
+    (choose_computer_and_stylus_pending)
+    (download_gimp_or_krita_pending)
+    (consider_corel_painter_pending)
+    (choose_clip_studio_or_sai_pending)
+    (pay_for_photoshop_pending)
+  )
+  (:goal (and
+    (choose_computer_and_stylus_done)
+    (download_gimp_or_krita_done)
+    (consider_corel_painter_done)
+    (choose_clip_studio_or_sai_done)
+    (pay_for_photoshop_done)
+  ))
+)

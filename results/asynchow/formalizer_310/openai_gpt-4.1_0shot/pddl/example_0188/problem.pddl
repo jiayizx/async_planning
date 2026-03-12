@@ -1,0 +1,15 @@
+(define (problem early-payment-discount-problem)
+  (:domain early-payment-discount)
+  (:init
+    (calculate_total_pending)
+    (decide_discount_pending)
+    (multiply_discount_pending)
+    (subtract_discount_pending)
+  )
+  (:goal (and
+    (calculate_total_done)
+    (decide_discount_done)
+    (multiply_discount_done)
+    (subtract_discount_done)
+  ))
+)

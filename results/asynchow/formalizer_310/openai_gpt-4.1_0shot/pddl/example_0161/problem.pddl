@@ -1,0 +1,15 @@
+(define (problem nail_polish_separation-problem)
+  (:domain nail_polish_separation)
+  (:init
+    (add_thinner_pending)
+    (roll_bottle_pending)
+    (check_results_pending)
+    (paint_shaker_pending)
+  )
+  (:goal (and
+    (add_thinner_done)
+    (roll_bottle_done)
+    (check_results_done)
+    (paint_shaker_done)
+  ))
+)

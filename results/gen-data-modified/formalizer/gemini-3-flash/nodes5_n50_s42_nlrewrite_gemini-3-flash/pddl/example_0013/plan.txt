@@ -1,0 +1,5 @@
+0.000: (map_horizon) [300.000]
+300.001: (prepare_palette) [300.000]
+300.001: (sketch_wireframe) [2700.000]
+3000.002: (paint_logs) [7200.000]
+10200.003: (apply_varnish) [600.000]

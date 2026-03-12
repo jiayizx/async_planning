@@ -1,0 +1,5 @@
+0.000: (do_go_to_website) [25.000]
+25.001: (do_login) [25.000]
+50.002: (do_confirm_info) [35.000]
+50.002: (do_signup) [35.000]
+85.003: (do_wait_card) [604800.000]

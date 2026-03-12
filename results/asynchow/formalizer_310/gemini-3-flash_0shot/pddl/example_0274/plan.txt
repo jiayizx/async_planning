@@ -1,0 +1,6 @@
+0.000: (bend_waist) [10.000]
+0.000: (extend_knees) [3.000]
+0.000: (open_elbow) [3.000]
+0.000: (push_thumb) [5.000]
+0.000: (lift_pinky) [10.000]
+10.001: (total_points) [60.000]

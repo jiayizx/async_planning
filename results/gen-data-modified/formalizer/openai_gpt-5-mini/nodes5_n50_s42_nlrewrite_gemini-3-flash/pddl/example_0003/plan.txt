@@ -1,0 +1,5 @@
+0.000: (transfer_plant_to_ceramic_pot) [900.000]
+0.000: (measure_and_cut_cord) [600.000]
+600.001: (tie_decorative_knots) [2700.000]
+900.001: (place_plant_in_cradle) [120.000]
+3300.002: (attach_rope_to_ceiling) [300.000]

@@ -1,0 +1,8 @@
+0.000: (conduct_market_research) [1209600.000]
+1209600.001: (secure_contract) [864000.000]
+1209600.001: (draft_specs) [259200.000]
+1468800.002: (create_prototype) [604800.000]
+2073600.002: (stock_inventory) [432000.000]
+2073600.003: (conduct_stress_tests) [259200.000]
+647.000: (finalize_packaging) [14400.000]
+647.000: (launch_marketing) [172800.000]

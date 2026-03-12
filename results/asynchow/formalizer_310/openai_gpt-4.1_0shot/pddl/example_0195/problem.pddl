@@ -1,0 +1,15 @@
+(define (problem make_strawberry_butterflies)
+  (:domain strawberry_butterflies)
+  (:init
+    (slice_strawberry_pending)
+    (pull_quarters_pending)
+    (prepare_chili_pending)
+    (place_chili_pending)
+  )
+  (:goal (and
+    (slice_strawberry_done)
+    (pull_quarters_done)
+    (prepare_chili_done)
+    (place_chili_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem make-chicken-curry)
+  (:domain chicken-curry)
+  (:init
+    (brown_chicken_pending)
+    (simmer_chicken_pending)
+    (dice_aromatics_pending)
+    (gather_ingredients_pending)
+    (saute_aromatics_pending)
+  )
+  (:goal (and
+    (brown_chicken_done)
+    (simmer_chicken_done)
+    (dice_aromatics_done)
+    (gather_ingredients_done)
+    (saute_aromatics_done)
+  ))
+)

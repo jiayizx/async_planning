@@ -1,0 +1,5 @@
+0.000: (step4_prepare_medium) [7200.000]
+7200.001: (step3_harvest_microalgae) [21600.000]
+28800.002: (step5_solve_extract_lipids) [14400.000]
+28800.002: (step1_centrifuge) [2700.000]
+43200.003: (step2_refine_and_bottle) [172800.000]

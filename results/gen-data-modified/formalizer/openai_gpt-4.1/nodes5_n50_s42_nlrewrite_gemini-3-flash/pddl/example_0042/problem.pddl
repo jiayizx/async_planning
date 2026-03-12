@@ -1,0 +1,17 @@
+(define (problem make-fruit-punch)
+  (:domain fruit-punch)
+  (:init
+    (wash_and_slice_pending)
+    (stir_pending)
+    (chill_juices_pending)
+    (macerate_pending)
+    (add_ice_pending)
+  )
+  (:goal (and
+    (wash_and_slice_done)
+    (stir_done)
+    (chill_juices_done)
+    (macerate_done)
+    (add_ice_done)
+  ))
+)

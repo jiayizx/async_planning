@@ -1,0 +1,17 @@
+(define (problem get-up-from-couch-problem)
+  (:domain get-up-from-couch)
+  (:init
+    (decide_to_stand_up_pending)
+    (find_open_space_pending)
+    (stick_left_foot_out_pending)
+    (stick_right_foot_out_pending)
+    (move_body_upwards_pending)
+  )
+  (:goal (and
+    (decide_to_stand_up_done)
+    (find_open_space_done)
+    (stick_left_foot_out_done)
+    (stick_right_foot_out_done)
+    (move_body_upwards_done)
+  ))
+)

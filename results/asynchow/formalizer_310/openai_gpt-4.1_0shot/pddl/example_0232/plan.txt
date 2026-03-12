@@ -1,0 +1,4 @@
+0.000: (look_to_a_friend_or_peer_for_guidance) [1800.000]
+0.000: (hire_a_tutor) [10800.000]
+0.000: (go_for_extra_help) [3600.000]
+10800.001: (practice_more_on_your_own) [7200.000]

@@ -1,0 +1,1 @@
+(define (problem stand_up_problem) (:domain couch_stand_up) (:init (decide_pending) (find_space_pending) (left_foot_pending) (right_foot_pending) (move_up_pending)) (:goal (and (decide_done) (find_space_done) (left_foot_done) (right_foot_done) (move_up_done))) (:metric minimize (total-time)))

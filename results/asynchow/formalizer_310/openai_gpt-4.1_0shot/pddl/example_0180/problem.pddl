@@ -1,0 +1,15 @@
+(define (problem cook-baby-carrots-problem)
+  (:domain cook-baby-carrots)
+  (:init
+    (rinse_pending)
+    (boil_pending)
+    (cook_pending)
+    (plate_pending)
+  )
+  (:goal (and
+    (rinse_done)
+    (boil_done)
+    (cook_done)
+    (plate_done)
+  ))
+)

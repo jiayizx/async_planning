@@ -1,0 +1,5 @@
+0.000: (choose_computer_and_stylus) [900.000]
+900.001: (pay_for_photoshop) [1200.000]
+900.001: (choose_clip_studio_or_sai) [1200.000]
+900.001: (consider_corel_painter) [1800.000]
+900.001: (download_gimp_or_krita) [1800.000]

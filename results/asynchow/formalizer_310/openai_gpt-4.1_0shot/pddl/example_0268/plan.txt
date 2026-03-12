@@ -1,0 +1,6 @@
+0.000: (do_light_stove) [120.000]
+0.000: (do_mix) [300.000]
+300.001: (do_heat_mixture) [600.000]
+900.002: (do_cool_mixture) [1800.000]
+2700.003: (do_shape_bar) [300.000]
+3000.004: (do_wrap_flare) [120.000]

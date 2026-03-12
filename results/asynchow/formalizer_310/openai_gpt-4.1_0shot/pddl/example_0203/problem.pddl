@@ -1,0 +1,17 @@
+(define (problem finish_maple_instance)
+  (:domain finish_maple)
+  (:init
+    (stir_pending)
+    (paint_pending)
+    (dry_pending)
+    (sand_pending)
+    (secondcoat_pending)
+  )
+  (:goal (and
+    (stir_done)
+    (paint_done)
+    (dry_done)
+    (sand_done)
+    (secondcoat_done)
+  ))
+)

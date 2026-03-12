@@ -1,0 +1,15 @@
+(define (problem look_good_party_prob)
+  (:domain look_good_party)
+  (:init
+    (groom_pending)
+    (hair_pending)
+    (route_pending)
+    (schedule_pending)
+  )
+  (:goal (and
+    (groom_done)
+    (hair_done)
+    (route_done)
+    (schedule_done)
+  ))
+)

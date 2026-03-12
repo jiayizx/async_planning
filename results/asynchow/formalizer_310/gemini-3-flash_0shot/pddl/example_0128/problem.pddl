@@ -1,0 +1,1 @@
+(define (problem sock_problem)(:domain put_on_left_sock)(:init (grab_sock_pending) (sit_down_pending) (raise_foot_pending) (pull_over_toes_pending) (pull_backwards_pending))(:goal (and (grab_sock_done) (sit_down_done) (raise_foot_done) (pull_over_toes_done) (pull_backwards_done))))

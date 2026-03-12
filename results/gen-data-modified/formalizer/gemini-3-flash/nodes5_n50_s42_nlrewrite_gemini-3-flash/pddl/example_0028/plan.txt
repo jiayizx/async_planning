@@ -1,0 +1,4 @@
+0.000: (research_meal_plan) [3600.000]
+0.000: (schedule_consultation) [900.000]
+900.001: (undergo_endoscopy) [2700.000]
+3600.002: (complete_antibiotics) [1209600.000]

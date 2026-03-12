@@ -1,0 +1,7 @@
+0.000: (purchase_sumac) [1800.000]
+1800.001: (sprinkle_over_vegetables) [180.000]
+1800.001: (add_to_frittata) [480.000]
+1800.001: (add_sumac_to_zaatar) [180.000]
+1800.001: (use_sumac_in_marinade) [600.000]
+1800.001: (add_sumac_to_dips) [180.000]
+1800.001: (use_sumac_in_place_of_lemon) [300.000]

@@ -1,0 +1,17 @@
+(define (problem fly_as_a_kid-problem)
+  (:domain fly_as_a_kid)
+  (:init
+    (attend_flight_school_pending)
+    (find_plane_pending)
+    (talk_to_bank_pending)
+    (buy_plane_pending)
+    (go_to_runway_pending)
+  )
+  (:goal (and
+    (attend_flight_school_done)
+    (find_plane_done)
+    (talk_to_bank_done)
+    (buy_plane_done)
+    (go_to_runway_done)
+  ))
+)

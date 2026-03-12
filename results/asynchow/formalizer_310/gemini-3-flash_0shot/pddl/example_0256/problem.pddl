@@ -1,0 +1,1 @@
+(define (problem lose_fat_problem)(:domain lose_upper_body_fat)(:init (step1_pending) (step2_pending) (step3_pending) (step4_pending))(:goal (and (step1_done) (step2_done) (step3_done) (step4_done)))(:metric minimize (total-time)))

@@ -1,0 +1,17 @@
+(define (problem lacrosse-tryout-problem)
+  (:domain lacrosse-tryout)
+  (:init
+    (find_out_when_tryouts_are_pending)
+    (practice_for_tryouts_pending)
+    (improve_lacrosse_skills_pending)
+    (stay_after_school_for_tryouts_pending)
+    (go_to_the_tryouts_pending)
+  )
+  (:goal (and
+    (find_out_when_tryouts_are_done)
+    (practice_for_tryouts_done)
+    (improve_lacrosse_skills_done)
+    (stay_after_school_for_tryouts_done)
+    (go_to_the_tryouts_done)
+  ))
+)

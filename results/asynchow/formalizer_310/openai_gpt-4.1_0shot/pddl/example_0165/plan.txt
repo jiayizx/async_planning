@@ -1,0 +1,2 @@
+0.000: (do_property_value) [3600.000]
+647.000: (do_yield_calc) [120.000]

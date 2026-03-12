@@ -1,0 +1,1 @@
+(define (problem sun_protection_prob)(:domain sun_protection)(:init (test_clothing_pending) (wear_sunglasses_pending) (wear_hat_pending) (wear_more_clothing_pending))(:goal (and (test_clothing_done) (wear_sunglasses_done) (wear_hat_done) (wear_more_clothing_done))))

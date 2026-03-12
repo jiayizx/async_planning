@@ -1,0 +1,5 @@
+0.000: (research_shade) [3600.000]
+0.000: (clean_tools) [300.000]
+300.001: (squeeze_yellow) [30.000]
+3600.001: (purchase_red) [1200.000]
+4800.002: (blend_paints) [120.000]

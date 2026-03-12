@@ -1,0 +1,15 @@
+(define (problem keep-bees-prob)
+  (:domain keep-bees)
+  (:init
+    (catch_swarm_pending)
+    (purchase_hive_pending)
+    (order_bees_pending)
+    (place_bees_pending)
+  )
+  (:goal (and
+    (catch_swarm_done)
+    (purchase_hive_done)
+    (order_bees_done)
+    (place_bees_done)
+  ))
+)

@@ -1,0 +1,15 @@
+(define (problem do_off_balance_exercise)
+  (:domain off_balance_exercise)
+  (:init
+    (work_with_trainer_pending)
+    (use_bosu_and_stability_ball_pending)
+    (incorporate_split_and_one_leg_pending)
+    (try_balance_or_wobble_board_pending)
+  )
+  (:goal (and
+    (work_with_trainer_done)
+    (use_bosu_and_stability_ball_done)
+    (incorporate_split_and_one_leg_done)
+    (try_balance_or_wobble_board_done)
+  ))
+)

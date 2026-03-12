@@ -1,0 +1,15 @@
+(define (problem coconut_water_skincare-problem)
+  (:domain coconut_water_skincare)
+  (:init
+    (wash_face_pending)
+    (moisturize_skin_pending)
+    (remove_makeup_pending)
+    (refresh_pending)
+  )
+  (:goal (and
+    (wash_face_done)
+    (moisturize_skin_done)
+    (remove_makeup_done)
+    (refresh_done)
+  ))
+)

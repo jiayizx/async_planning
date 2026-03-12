@@ -1,0 +1,15 @@
+(define (problem oily_skin_care_problem)
+  (:domain oily_skin_care)
+  (:init
+    (try_face_masks_pending)
+    (use_blotting_pads_pending)
+    (consider_mild_astringent_pending)
+    (talk_medical_professional_pending)
+  )
+  (:goal (and
+    (try_face_masks_done)
+    (use_blotting_pads_done)
+    (consider_mild_astringent_done)
+    (talk_medical_professional_done)
+  ))
+)

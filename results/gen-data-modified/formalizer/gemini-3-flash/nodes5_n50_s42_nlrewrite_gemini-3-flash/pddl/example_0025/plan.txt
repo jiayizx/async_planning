@@ -1,0 +1,5 @@
+0.000: (pack_backpack) [180.000]
+0.000: (save_paper) [300.000]
+180.001: (return_key) [480.000]
+300.001: (logout_computer) [120.000]
+660.002: (walk_gates) [600.000]

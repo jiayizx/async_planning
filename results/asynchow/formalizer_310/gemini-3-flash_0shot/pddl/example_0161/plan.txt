@@ -1,0 +1,4 @@
+0.000: (paint_shaker) [120.000]
+0.000: (roll_bottle) [60.000]
+120.001: (add_thinner_drops) [60.000]
+180.002: (check_results) [60.000]

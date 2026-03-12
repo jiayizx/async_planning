@@ -1,0 +1,17 @@
+(define (problem mayday_celebration_instance)
+  (:domain mayday_celebration)
+  (:init
+    (dance_around_maypole_pending)
+    (gather_ribbons_and_crowns_pending)
+    (prepare_community_feast_pending)
+    (host_neighborhood_picnic_pending)
+    (purchase_fresh_produce_pending)
+  )
+  (:goal (and
+    (dance_around_maypole_done)
+    (gather_ribbons_and_crowns_done)
+    (prepare_community_feast_done)
+    (host_neighborhood_picnic_done)
+    (purchase_fresh_produce_done)
+  ))
+)

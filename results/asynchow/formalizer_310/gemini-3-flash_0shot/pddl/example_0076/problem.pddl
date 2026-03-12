@@ -1,0 +1,1 @@
+(define (problem dressing_problem)(:domain dressing_domain)(:init (shirt_pending) (underwear_pending) (pants_pending) (mirror_pending) (socks_pending) (shoes_pending))(:goal (and (shirt_done) (underwear_done) (pants_done) (mirror_done) (socks_done) (shoes_done))))

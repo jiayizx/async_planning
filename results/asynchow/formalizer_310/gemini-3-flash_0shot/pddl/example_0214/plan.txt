@@ -1,0 +1,5 @@
+0.000: (put_in_toaster) [300.000]
+0.000: (scoop_margarine) [120.000]
+120.001: (mash_ingredients) [180.000]
+300.002: (spread_mixture) [60.000]
+360.003: (enjoy_toast) [300.000]

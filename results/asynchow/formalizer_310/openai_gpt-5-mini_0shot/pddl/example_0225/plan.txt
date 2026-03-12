@@ -1,0 +1,5 @@
+0.000: (do_step5_hang_clothes_in_shower) [600.000]
+0.000: (do_step3_put_item_on_hanger) [60.000]
+0.000: (do_step1_buy_steamer) [600.000]
+600.001: (do_step2_fill_and_turn_on) [120.000]
+720.002: (do_step4_hold_steamer_head_up) [600.000]

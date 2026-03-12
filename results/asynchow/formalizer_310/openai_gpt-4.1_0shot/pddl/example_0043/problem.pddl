@@ -1,0 +1,17 @@
+(define (problem beer-buying-problem)
+  (:domain beer-buying)
+  (:init
+    (get_in_car_pending)
+    (count_money_pending)
+    (give_money_pending)
+    (drive_store_pending)
+    (show_id_pending)
+  )
+  (:goal (and
+    (get_in_car_done)
+    (count_money_done)
+    (give_money_done)
+    (drive_store_done)
+    (show_id_done)
+  ))
+)

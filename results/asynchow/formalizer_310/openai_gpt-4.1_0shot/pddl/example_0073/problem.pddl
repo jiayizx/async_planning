@@ -1,0 +1,17 @@
+(define (problem get-into-car-problem)
+  (:domain get-into-car)
+  (:init
+    (put_on_clothes_pending)
+    (put_on_left_shoe_pending)
+    (put_on_right_shoe_pending)
+    (grab_car_keys_pending)
+    (exit_house_pending)
+  )
+  (:goal (and
+    (put_on_clothes_done)
+    (put_on_left_shoe_done)
+    (put_on_right_shoe_done)
+    (grab_car_keys_done)
+    (exit_house_done)
+  ))
+)

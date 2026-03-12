@@ -1,0 +1,15 @@
+(define (problem care-hedgehog-problem)
+  (:domain care-hedgehog)
+  (:init
+    (recognize_pending)
+    (findvet_pending)
+    (diagnose_pending)
+    (discuss_pending)
+  )
+  (:goal (and
+    (recognize_done)
+    (findvet_done)
+    (diagnose_done)
+    (discuss_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem gastritis-cure-problem)
+  (:domain gastritis-cure)
+  (:init
+    (antibiotics_pending)
+    (consultation_pending)
+    (mealplan_pending)
+    (endoscopy_pending)
+    (diet_pending)
+  )
+  (:goal (and
+    (antibiotics_done)
+    (consultation_done)
+    (mealplan_done)
+    (endoscopy_done)
+    (diet_done)
+  ))
+)
