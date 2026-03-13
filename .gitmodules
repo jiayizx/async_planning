@@ -4,3 +4,6 @@
 [submodule "baselines/Plan-over-Graph"]
 	path = baselines/Plan-over-Graph
 	url = https://github.com/zsq259/Plan-over-Graph.git
+[submodule "baselines/robotouille"]
+	path = baselines/robotouille
+	url = https://github.com/portal-cornell/robotouille.git
