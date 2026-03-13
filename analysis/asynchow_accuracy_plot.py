@@ -29,9 +29,9 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 # ColorBrewer Set2 — soft, pastel-toned, print-friendly.
 # (internal key, display label, bar color)
 MODELS = [
-    ("gemini-3-flash", "G3F",   "#66C2A5"),   # Set2 teal
-    ("gpt-4.1",        "G4.1",  "#8DA0CB"),   # Set2 periwinkle
-    ("gpt-5-mini",     "G5.2m", "#FC8D62"),   # Set2 salmon
+    ("gemini-3-flash", "Gemini 3 Flash", "#66C2A5"),   # Set2 teal
+    ("gpt-4.1",        "GPT-4.1",        "#8DA0CB"),   # Set2 periwinkle
+    ("gpt-5-mini",     "GPT-5-mini",     "#FC8D62"),   # Set2 salmon
 ]
 
 # ── data loading ───────────────────────────────────────────────────────────
