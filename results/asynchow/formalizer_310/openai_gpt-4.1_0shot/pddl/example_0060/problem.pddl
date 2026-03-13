@@ -1,0 +1,17 @@
+(define (problem move_out_of_town_problem)
+  (:domain move_out_of_town)
+  (:init
+    (pack_belongings_pending)
+    (rent_uhaul_pending)
+    (load_uhaul_pending)
+    (start_uhaul_pending)
+    (leave_town_pending)
+  )
+  (:goal (and
+    (pack_belongings_done)
+    (rent_uhaul_done)
+    (load_uhaul_done)
+    (start_uhaul_done)
+    (leave_town_done)
+  ))
+)

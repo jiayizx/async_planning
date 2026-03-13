@@ -1,0 +1,2 @@
+0.000: (do_obtain_report) [604800.000]
+604800.001: (do_find_quarterly_rate) [86400.000]

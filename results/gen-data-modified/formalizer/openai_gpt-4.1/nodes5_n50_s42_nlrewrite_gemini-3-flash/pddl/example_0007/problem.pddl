@@ -1,0 +1,17 @@
+(define (problem leave-house-problem)
+  (:domain leave-house)
+  (:init
+    (put_on_coat_pending)
+    (put_keys_in_pocket_pending)
+    (check_stove_lights_pending)
+    (set_alarm_pending)
+    (find_wallet_phone_pending)
+  )
+  (:goal (and
+    (put_on_coat_done)
+    (put_keys_in_pocket_done)
+    (check_stove_lights_done)
+    (set_alarm_done)
+    (find_wallet_phone_done)
+  ))
+)

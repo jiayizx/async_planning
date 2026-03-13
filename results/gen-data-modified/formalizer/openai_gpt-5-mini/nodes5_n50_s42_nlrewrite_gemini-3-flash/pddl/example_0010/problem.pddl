@@ -1,0 +1,17 @@
+(define (problem get_new_tv_problem)
+  (:domain get_new_tv)
+  (:init
+    (step1_research_pending)
+    (step2_measure_pending)
+    (step3_drive_purchase_pending)
+    (step4_unbox_mount_pending)
+    (step5_transfer_funds_pending)
+  )
+  (:goal (and
+    (step1_research_done)
+    (step2_measure_done)
+    (step3_drive_purchase_done)
+    (step4_unbox_mount_done)
+    (step5_transfer_funds_done)
+  ))
+)

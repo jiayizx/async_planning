@@ -1,0 +1,17 @@
+(define (problem school_prep_problem)
+  (:domain school_prep)
+  (:init
+    (shower_pending)
+    (dress_pending)
+    (wake_pending)
+    (pack_lunch_pending)
+    (commute_pending)
+  )
+  (:goal (and
+    (shower_done)
+    (dress_done)
+    (wake_done)
+    (pack_lunch_done)
+    (commute_done)
+  ))
+)

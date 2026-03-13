@@ -4,8 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 TEMPERATURE="${TEMPERATURE:-0.0}"
-MAX_TOKENS="${MAX_TOKENS:-2048}"
+MAX_TOKENS="${MAX_TOKENS:-8192}"
 NUM_WORKERS="${NUM_WORKERS:-4}"
+MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 
 # for MODEL_NAME in "GPT-4.1"; do
 #     for ICL_EXAMPLES in 0 3; do
@@ -23,13 +24,14 @@ NUM_WORKERS="${NUM_WORKERS:-4}"
 # done
 
 
-MODEL_NAME="${MODEL_NAME:-deepseek-r1}"
+MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
 python -m src.experiments.run_baselines \
     --model-name $MODEL_NAME \
     --temperature $TEMPERATURE \
     --max-tokens $MAX_TOKENS \
     --benchmark-name asynchow \
-    --save-path results/asynchow/baselines/$MODEL_NAME/ \
-    --icl-examples 3 \
+    --save-path results/asynchow/baselines_310/$MODEL_NAME/ \
+    --icl-examples 0 \
     --cot true \
-    --num-workers $NUM_WORKERS
+    --num-workers $NUM_WORKERS \
+    --max-examples $MAX_EXAMPLES

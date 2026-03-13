@@ -1,0 +1,17 @@
+(define (problem lemon-bars-problem)
+  (:domain lemon-bars)
+  (:init
+    (preheat_oven_pending)
+    (pour_filling_pending)
+    (mix_base_pending)
+    (bake_crust_pending)
+    (zest_juice_pending)
+  )
+  (:goal (and
+    (preheat_oven_done)
+    (pour_filling_done)
+    (mix_base_done)
+    (bake_crust_done)
+    (zest_juice_done)
+  ))
+)

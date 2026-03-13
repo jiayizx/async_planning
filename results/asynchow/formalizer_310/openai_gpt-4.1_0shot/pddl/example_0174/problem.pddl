@@ -1,0 +1,15 @@
+(define (problem pass_time_by_doing_art_instance)
+  (:domain pass_time_by_doing_art)
+  (:init
+    (gather_materials_pending)
+    (make_desk_caddy_pending)
+    (make_drum_kit_pending)
+    (make_bowling_game_pending)
+  )
+  (:goal (and
+    (gather_materials_done)
+    (make_desk_caddy_done)
+    (make_drum_kit_done)
+    (make_bowling_game_done)
+  ))
+)

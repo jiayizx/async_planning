@@ -1,0 +1,6 @@
+0.000: (call_friends) [1800.000]
+0.000: (dress_to_play_baseball) [900.000]
+1800.001: (arrange_time) [1200.000]
+3000.002: (drive_to_venue) [600.000]
+3600.003: (exit_car) [60.000]
+3660.004: (walk_to_field) [120.000]

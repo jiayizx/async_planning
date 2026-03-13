@@ -1,0 +1,15 @@
+(define (problem hang_picture_problem)
+  (:domain hang_picture_domain)
+  (:init
+    (measure_pending) (mark_pending) (hammer_pending) (level_pending) (unpack_pending)
+    (locate_stud_pending) (scan_pending) (determine_height_pending) (attach_wire_pending)
+    (calc_distance_pending) (clean_glass_pending) (cut_wire_pending) (choose_wall_pending)
+    (secure_crimps_pending) (check_wall_pending)
+  )
+  (:goal (and
+    (measure_done) (mark_done) (hammer_done) (level_done) (unpack_done)
+    (locate_stud_done) (scan_done) (determine_height_done) (attach_wire_done)
+    (calc_distance_done) (clean_glass_done) (cut_wire_done) (choose_wall_done)
+    (secure_crimps_done) (check_wall_done)
+  ))
+)

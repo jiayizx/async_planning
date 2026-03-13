@@ -1,0 +1,5 @@
+(define (problem deter-squirrels-prob)
+  (:domain deter-squirrels)
+  (:init (hang_pending) (buy_pending) (make_pending))
+  (:goal (and (hang_done) (buy_done) (make_done)))
+)

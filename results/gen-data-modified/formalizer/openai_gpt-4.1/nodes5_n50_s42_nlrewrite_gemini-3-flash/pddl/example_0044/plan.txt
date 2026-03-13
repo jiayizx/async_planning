@@ -1,0 +1,5 @@
+0.000: (logout_lab) [60.000]
+0.000: (locate_keys) [30.000]
+60.001: (pack_backpack) [180.000]
+240.002: (walk_to_parking) [480.000]
+720.003: (unlock_car) [45.000]

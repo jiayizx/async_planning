@@ -1,0 +1,17 @@
+(define (problem indoor_herbs_problem)
+  (:domain indoor_herbs)
+  (:init
+    (install_lights_pending)
+    (purchase_seeds_soil_pending)
+    (sow_seeds_pending)
+    (transplant_seedlings_pending)
+    (research_varieties_pending)
+  )
+  (:goal (and
+    (install_lights_done)
+    (purchase_seeds_soil_done)
+    (sow_seeds_done)
+    (transplant_seedlings_done)
+    (research_varieties_done)
+  ))
+)

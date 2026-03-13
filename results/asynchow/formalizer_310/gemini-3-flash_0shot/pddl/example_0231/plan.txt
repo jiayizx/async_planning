@@ -1,0 +1,3 @@
+0.000: (list_authors) [120.000]
+0.000: (choose_title) [300.000]
+300.001: (edit_abstract) [900.000]

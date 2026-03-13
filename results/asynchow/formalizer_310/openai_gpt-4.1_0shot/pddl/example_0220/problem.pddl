@@ -1,0 +1,17 @@
+(define (problem make_cherry_pie_filling)
+  (:domain cherry_pie_filling)
+  (:init
+    (layer_crust_pending)
+    (thaw_filling_pending)
+    (unwrap_filling_pending)
+    (add_top_crust_pending)
+    (bake_pie_pending)
+  )
+  (:goal (and
+    (layer_crust_done)
+    (thaw_filling_done)
+    (unwrap_filling_done)
+    (add_top_crust_done)
+    (bake_pie_done)
+  ))
+)

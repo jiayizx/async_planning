@@ -1,0 +1,7 @@
+0.000: (open_drawer) [5.000]
+5.001: (take_pants) [10.000]
+5.001: (take_socks) [10.000]
+5.001: (take_shirt) [10.000]
+15.002: (put_pants) [20.000]
+15.002: (put_socks) [10.000]
+15.002: (put_shirt) [10.000]

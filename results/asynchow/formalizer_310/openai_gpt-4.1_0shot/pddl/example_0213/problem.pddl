@@ -1,0 +1,17 @@
+(define (problem make_cookies)
+  (:domain cookies)
+  (:init
+    (preheat_pending)
+    (combine_pending)
+    (blend_pending)
+    (add_pending)
+    (place_pending)
+  )
+  (:goal (and
+    (preheat_done)
+    (combine_done)
+    (blend_done)
+    (add_done)
+    (place_done)
+  ))
+)

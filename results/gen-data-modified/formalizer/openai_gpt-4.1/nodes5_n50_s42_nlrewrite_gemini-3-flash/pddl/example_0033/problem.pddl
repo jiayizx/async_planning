@@ -1,0 +1,17 @@
+(define (problem restrain-dog-problem)
+  (:domain restrain-dog)
+  (:init
+    (attach_leash_pending)
+    (calm_dog_pending)
+    (retrieve_harness_pending)
+    (adjust_straps_pending)
+    (slide_harness_pending)
+  )
+  (:goal (and
+    (attach_leash_done)
+    (calm_dog_done)
+    (retrieve_harness_done)
+    (adjust_straps_done)
+    (slide_harness_done)
+  ))
+)

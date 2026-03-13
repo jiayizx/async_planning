@@ -1,0 +1,1 @@
+(define (problem video_game_problem) (:domain video_game_domain) (:init (buy_game_pending) (buy_console_pending) (hook_up_pending) (put_game_pending) (hit_play_pending)) (:goal (and (buy_game_done) (buy_console_done) (hook_up_done) (put_game_done) (hit_play_done))))

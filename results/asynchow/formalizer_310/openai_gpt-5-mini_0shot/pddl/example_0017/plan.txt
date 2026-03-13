@@ -1,0 +1,5 @@
+0.000: (step1_search_internet) [1200.000]
+1200.001: (step3_find_compatible_hours) [1200.000]
+1200.001: (step2_compare_prices) [900.000]
+2400.002: (step4_drive_to_gym) [900.000]
+3300.003: (step5_get_membership_at_desk) [1200.000]

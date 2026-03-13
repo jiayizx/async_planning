@@ -1,0 +1,17 @@
+(define (problem try_ice_skate)
+  (:domain ice_skate_try)
+  (:init
+    (search_for_ice_rink_pending)
+    (drive_to_ice_rink_pending)
+    (rent_ice_skates_pending)
+    (put_left_skate_on_pending)
+    (put_right_skate_on_pending)
+  )
+  (:goal (and
+    (search_for_ice_rink_done)
+    (drive_to_ice_rink_done)
+    (rent_ice_skates_done)
+    (put_left_skate_on_done)
+    (put_right_skate_on_done)
+  ))
+)

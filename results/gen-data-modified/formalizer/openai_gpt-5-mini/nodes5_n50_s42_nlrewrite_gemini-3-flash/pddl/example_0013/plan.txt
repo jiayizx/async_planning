@@ -1,0 +1,5 @@
+0.000: (do_map_horizon) [300.000]
+300.001: (do_prepare_palette) [300.000]
+300.001: (do_sketch_wireframe) [2700.000]
+3000.002: (do_paint_base) [7200.000]
+10200.003: (do_varnish) [600.000]

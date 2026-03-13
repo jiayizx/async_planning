@@ -1,0 +1,14 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "openai/gpt-4.1",
+  "accuracy": 0.8958333333333334,
+  "num_correct": 43,
+  "num_syntax_errors": 2,
+  "num_semantic_errors": 3,
+  "num_data_points": 48,
+  "plan_valid_rate": 0.7441860465116279,
+  "num_plan_valid": 32,
+  "num_correct_and_valid": 32,
+  "num_correct_but_invalid": 11,
+  "num_incorrect_but_valid": 0
+}

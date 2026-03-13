@@ -1,0 +1,17 @@
+(define (problem drumset-customization-problem)
+  (:domain drumset-customization)
+  (:init
+    (apply_wraps_pending)
+    (select_stain_pending)
+    (sand_shells_pending)
+    (order_hardware_pending)
+    (install_hardware_pending)
+  )
+  (:goal (and
+    (apply_wraps_done)
+    (select_stain_done)
+    (sand_shells_done)
+    (order_hardware_done)
+    (install_hardware_done)
+  ))
+)

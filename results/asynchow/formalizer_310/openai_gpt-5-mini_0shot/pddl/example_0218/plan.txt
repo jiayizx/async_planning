@@ -1,0 +1,3 @@
+0.000: (do_make_brine) [900.000]
+0.000: (do_slice_peppers) [300.000]
+900.001: (do_cool_mixture) [600.000]

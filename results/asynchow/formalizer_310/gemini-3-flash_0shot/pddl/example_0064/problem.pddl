@@ -1,0 +1,1 @@
+(define (problem exit_house_prob) (:domain exit_house) (:init (grab_keys_pending) (put_shoes_pending) (go_door_pending) (lock_door_pending) (put_jacket_pending)) (:goal (and (grab_keys_done) (put_shoes_done) (go_door_done) (lock_door_done) (put_jacket_done))))

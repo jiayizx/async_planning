@@ -1,0 +1,17 @@
+(define (problem dress-metal-girls-problem)
+  (:domain dress-metal-girls)
+  (:init
+    (cover_jacket_pending)
+    (accessorize_wrists_pending)
+    (accessorize_neck_pending)
+    (wear_belt_pending)
+    (carry_bag_pending)
+  )
+  (:goal (and
+    (cover_jacket_done)
+    (accessorize_wrists_done)
+    (accessorize_neck_done)
+    (wear_belt_done)
+    (carry_bag_done)
+  ))
+)

@@ -18,14 +18,19 @@ from pydantic import BaseModel
 
 from src.llms.prompts import (
     PDDL_SYSTEM_PROMPT,
+    PDDL_SYSTEM_PROMPT_OLD,
     PDDL_USER_TEMPLATE,
     PDDL_FEW_SHOT_EXAMPLES,
-    ROBOTOUILLE_USER_TEMPLATE,
-    ROBOTOUILLE_SYSTEM_PROMPT,
+    DEP_ANALYSIS_SYSTEM_PROMPT,
+    DEP_ANALYSIS_USER_TEMPLATE,
 )
 
 
 # ── Pydantic schema for structured output ──────────────────────────────
+
+
+class DepAnalysis(BaseModel):
+    analysis: str
 
 
 class PDDLResult(BaseModel):
@@ -68,9 +73,19 @@ def optimize_question_to_seconds(question: str) -> str:
     return new_question
 
 
-def build_pddl_messages(question: str, num_shots: int = 0) -> list[dict[str, str]]:
-    """Return the chat messages for one NL→PDDL translation call."""
-    messages = [{"role": "system", "content": PDDL_SYSTEM_PROMPT}]
+def build_pddl_messages(
+    question: str,
+    num_shots: int = 0,
+    dep_analysis: str | None = None,
+    effect_goal: bool = False,
+) -> list[dict[str, str]]:
+    """Return the chat messages for one NL→PDDL translation call.
+
+    effect_goal=False → PDDL_SYSTEM_PROMPT_OLD  (old parameterized encoding, Formalizer)
+    effect_goal=True  → PDDL_SYSTEM_PROMPT       (parameterless encoding, Formalizer+)
+    """
+    system_prompt = PDDL_SYSTEM_PROMPT if effect_goal else PDDL_SYSTEM_PROMPT_OLD
+    messages = [{"role": "system", "content": system_prompt}]
 
     for ex in PDDL_FEW_SHOT_EXAMPLES[:num_shots]:
         assistant_response = json.dumps({
@@ -79,8 +94,37 @@ def build_pddl_messages(question: str, num_shots: int = 0) -> list[dict[str, str
         messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(ex["question"]))})
         messages.append({"role": "assistant", "content": assistant_response})
 
-    messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))})
+    user_content = PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))
+    if dep_analysis:
+        user_content += (
+            "\n\nDEPENDENCY ANALYSIS (pre-computed — use this to set correct preconditions):\n"
+            + dep_analysis
+        )
+    messages.append({"role": "user", "content": user_content})
     return messages
+
+
+def build_dep_analysis_messages(question: str) -> list[dict[str, str]]:
+    """Return messages for the Phase-1 dependency analysis call."""
+    return [
+        {"role": "system", "content": DEP_ANALYSIS_SYSTEM_PROMPT},
+        {"role": "user", "content": DEP_ANALYSIS_USER_TEMPLATE.format(question=question)},
+    ]
+
+
+def parse_dep_analysis_response(resp: str) -> str | None:
+    """Extract the analysis string from a DepAnalysis JSON response."""
+    if not resp:
+        return None
+    try:
+        brace_idx = resp.find("{")
+        if brace_idx != -1:
+            resp = resp[brace_idx:]
+        data, _ = json.JSONDecoder().raw_decode(resp)
+        return data.get("analysis", "").strip() or None
+    except Exception:
+        # Fallback: use raw response as plain text
+        return resp.strip() or None
 
 
 def _truncate_solver_error(error: str, head: int = 10, tail: int = 20) -> str:

@@ -14,7 +14,8 @@ GPT_MODELS_MAPPING = {
     "openai/gpt-4o": "gpt-4o",  # gpt-4o-2024-03-27
     "openai/gpt-4.1-mini": "gpt-4.1-mini",  # gpt-4.1-mini-2025-04-14
     "openai/gpt-4.1": "gpt-4.1",  # gpt-4.1-2025-04-14
-  
+    "openai/gpt-5-mini": "gpt-5-mini",
+
     # OpenAI reasoning models
     "openai/o1-mini": "o1-mini",
     "openai/o3-mini": "o3-mini",
@@ -37,12 +38,14 @@ class OpenAILLM(BaseLLM):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
         # Handle o3/o4 models that don't support temperature and top_p
-        if "o3" in self.model_name or "o4" in self.model_name:
+        if "o3" in self.model_name or "o4" in self.model_name or "gpt-5" in self.model_name:
             # Remove temperature and top_p for o3/o4 models
             self.config.pop("temperature", None)
             self.config.pop("top_p", None)
             if "max_tokens" in self.config:
                 self.config.update({"max_completion_tokens": self.config.pop("max_tokens")})
+            if "reasoning_effort" not in self.config:
+                self.config["reasoning_effort"] = "low"
 
 
     def _chat(self, messages: List[Dict[str, str]]) -> str:

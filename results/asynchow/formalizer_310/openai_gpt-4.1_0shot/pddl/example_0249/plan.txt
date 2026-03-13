@@ -1,0 +1,4 @@
+0.000: (find_properties) [1209600.000]
+0.000: (hire_agent) [1209600.000]
+1209600.001: (check_parking) [172800.000]
+1209600.001: (speak_property_manager) [3600.000]

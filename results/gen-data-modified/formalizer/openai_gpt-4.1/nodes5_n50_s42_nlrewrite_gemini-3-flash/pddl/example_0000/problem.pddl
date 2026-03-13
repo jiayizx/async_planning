@@ -1,0 +1,17 @@
+(define (problem make-eggless-cake)
+  (:domain eggless-cake)
+  (:init
+    (whisk_pending)
+    (preheat_pending)
+    (sift_pending)
+    (prepare_pan_pending)
+    (combine_pending)
+  )
+  (:goal (and
+    (whisk_done)
+    (preheat_done)
+    (sift_done)
+    (prepare_pan_done)
+    (combine_done)
+  ))
+)

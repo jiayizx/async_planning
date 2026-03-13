@@ -1,0 +1,5 @@
+0.000: (open_browser) [25.000]
+25.001: (search_sloths) [35.000]
+60.002: (select_websites) [120.000]
+60.002: (select_videos) [300.000]
+360.003: (find_zoo) [300.000]

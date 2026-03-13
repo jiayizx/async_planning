@@ -1,0 +1,17 @@
+(define (problem hang_planters_problem)
+  (:domain hang_planters)
+  (:init
+    (attach_rope_pending)
+    (place_plant_pending)
+    (tie_knots_pending)
+    (measure_cut_pending)
+    (transfer_plant_pending)
+  )
+  (:goal (and
+    (attach_rope_done)
+    (place_plant_done)
+    (tie_knots_done)
+    (measure_cut_done)
+    (transfer_plant_done)
+  ))
+)

@@ -1,0 +1,9 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "gemini-3-flash",
+  "icl_examples": 0,
+  "cot": true,
+  "accuracy": 0.2653061224489796,
+  "num_correct": 13,
+  "num_data_points": 49
+}

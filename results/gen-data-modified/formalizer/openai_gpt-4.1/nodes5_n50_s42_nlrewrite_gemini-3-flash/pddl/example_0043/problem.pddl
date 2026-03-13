@@ -1,0 +1,17 @@
+(define (problem child-safety-warning-signs-problem)
+  (:domain child-safety-warning-signs)
+  (:init
+    (attend_seminar_pending)
+    (review_checklist_pending)
+    (research_grooming_pending)
+    (observe_child_pending)
+    (document_incidents_pending)
+  )
+  (:goal (and
+    (attend_seminar_done)
+    (review_checklist_done)
+    (research_grooming_done)
+    (observe_child_done)
+    (document_incidents_done)
+  ))
+)

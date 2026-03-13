@@ -1,0 +1,17 @@
+(define (problem steamed-ginger-pudding-problem)
+  (:domain steamed-ginger-pudding)
+  (:init
+    (whisk_pending)
+    (garnish_pending)
+    (steam_pending)
+    (grate_pending)
+    (cool_pending)
+  )
+  (:goal (and
+    (whisk_done)
+    (garnish_done)
+    (steam_done)
+    (grate_done)
+    (cool_done)
+  ))
+)

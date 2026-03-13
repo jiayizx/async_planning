@@ -1,0 +1,17 @@
+(define (problem race-prep-problem)
+  (:domain race-prep)
+  (:init
+    (sign_up_pending)
+    (practice_pending)
+    (eat_well_pending)
+    (rest_pending)
+    (arrive_pending)
+  )
+  (:goal (and
+    (sign_up_done)
+    (practice_done)
+    (eat_well_done)
+    (rest_done)
+    (arrive_done)
+  ))
+)

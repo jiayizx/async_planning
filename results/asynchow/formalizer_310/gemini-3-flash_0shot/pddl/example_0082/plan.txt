@@ -1,0 +1,5 @@
+0.000: (go_to_car) [180.000]
+180.001: (drive_to_location) [1200.000]
+1380.002: (wait_for_actors) [3600.000]
+1380.002: (get_out_camera_gear) [1800.000]
+4980.003: (direct_actors) [28800.000]

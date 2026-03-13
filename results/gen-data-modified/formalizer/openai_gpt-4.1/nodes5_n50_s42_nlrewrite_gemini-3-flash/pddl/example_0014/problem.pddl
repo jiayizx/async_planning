@@ -1,0 +1,17 @@
+(define (problem cure-alcohol-breath-problem)
+  (:domain cure-alcohol-breath)
+  (:init
+    (rinse_pending)
+    (eat_pending)
+    (brush_pending)
+    (chew_pending)
+    (drink_pending)
+  )
+  (:goal (and
+    (rinse_done)
+    (eat_done)
+    (brush_done)
+    (chew_done)
+    (drink_done)
+  ))
+)

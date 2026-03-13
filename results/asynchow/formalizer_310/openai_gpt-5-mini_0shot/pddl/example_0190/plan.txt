@@ -1,0 +1,4 @@
+0.000: (do_catch_cinccino) [900.000]
+900.001: (do_trade_cinccino) [600.000]
+1500.002: (do_rare_candy) [120.000]
+1500.002: (do_raise_friendship) [3600.000]

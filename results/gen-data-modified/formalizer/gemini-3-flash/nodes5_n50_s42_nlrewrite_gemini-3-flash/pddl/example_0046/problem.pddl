@@ -1,0 +1,17 @@
+(define (problem may_day_task)
+  (:domain may_day_celebration)
+  (:init
+    (dance_maypole_pending)
+    (gather_ribbons_pending)
+    (prepare_feast_pending)
+    (host_picnic_pending)
+    (purchase_produce_pending)
+  )
+  (:goal (and
+    (dance_maypole_done)
+    (gather_ribbons_done)
+    (prepare_feast_done)
+    (host_picnic_done)
+    (purchase_produce_done)
+  ))
+)

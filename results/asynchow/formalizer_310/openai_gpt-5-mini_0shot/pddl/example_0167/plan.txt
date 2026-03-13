@@ -1,0 +1,4 @@
+0.000: (weekly_clean_enamel_tub) [1800.000]
+0.000: (mix_hot_water_and_soap) [300.000]
+300.001: (rub_solution_over_tub) [600.000]
+900.002: (rinse_tub_with_clean_water) [300.000]

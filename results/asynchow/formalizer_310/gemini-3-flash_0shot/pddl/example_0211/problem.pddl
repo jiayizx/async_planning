@@ -1,0 +1,1 @@
+(define (problem write_paper_prob)(:domain write_paper)(:init (calm_down_pending) (read_guidelines_pending) (research_topic_pending) (find_sources_pending) (pick_evidence_pending))(:goal (and (calm_down_done) (read_guidelines_done) (research_topic_done) (find_sources_done) (pick_evidence_done)))(:metric minimize (total-time)))

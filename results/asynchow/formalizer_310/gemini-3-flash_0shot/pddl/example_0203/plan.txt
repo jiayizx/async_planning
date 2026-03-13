@@ -1,0 +1,5 @@
+0.000: (sand_finish) [1200.000]
+0.000: (stir_polyurethane) [120.000]
+1200.001: (apply_second_coat) [14400.000]
+15600.002: (paint_first_coat) [600.000]
+16200.003: (dry_first_coat) [14400.000]

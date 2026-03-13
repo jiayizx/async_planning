@@ -36,10 +36,10 @@ cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
 # DATA_DIR="data/async_planning"
-DATA_DIR="data/async_planning/nodes15_n50_s42_nlrewrite_gemini-3-flash.json"
-MODEL="gemini-3-flash"
-# MODEL="openai/gpt-4.1"
-SAVE_DIR="results/gen-data/formalizer"
+DATA_DIR="data/async_planning/nodes5_n50_s42_nlrewrite_gemini-3-flash.json"
+MODEL="openai/gpt-4.1"
+# MODEL="gemini-3-flash"
+SAVE_DIR="results/gen-data-modified/formalizer_origin"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
@@ -48,6 +48,9 @@ BATCH=16 # how many pddl problem are sent to the solver to solve at once
 NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=32768
+# MAX_TOKENS=65536
+TWO_PHASE=1      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
+EFFECT_GOAL=0    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 # PATTERN="*_nlrewrite_*.json"
 PATTERN="*nlrewrite_*.json"
 
@@ -65,6 +68,8 @@ while [[ $# -gt 0 ]]; do
         --num-workers)    NUM_WORKERS="$2";    shift 2 ;;
         --temperature)    TEMPERATURE="$2";    shift 2 ;;
         --max-tokens)     MAX_TOKENS="$2";     shift 2 ;;
+        --two-phase)      TWO_PHASE="$2";      shift 2 ;;
+        --effect-goal)    EFFECT_GOAL="$2";   shift 2 ;;
         --pattern)        PATTERN="$2";        shift 2 ;;
         *) echo "Unknown argument: $1" >&2; exit 1 ;;
     esac
@@ -123,7 +128,9 @@ for DATA_PATH in "${FILES[@]}"; do
         --num-workers     "$NUM_WORKERS" \
         --num-shots       "$NUM_SHOTS" \
         --llm-retries     "$LLM_RETRIES" \
-        --history-mode    "$HISTORY_MODE"; then
+        --history-mode    "$HISTORY_MODE" \
+        $([[ "$TWO_PHASE" == "1" ]] && echo "--two-phase") \
+        $([[ "$EFFECT_GOAL" == "1" ]] && echo "--effect-goal"); then
         echo "  Done → $SAVE_PATH"
     else
         echo "  FAILED: $DATA_PATH" >&2

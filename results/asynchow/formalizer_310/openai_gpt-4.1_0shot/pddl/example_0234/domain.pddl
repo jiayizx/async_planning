@@ -1,0 +1,44 @@
+(define (domain stop_coworker_bullying)
+  (:requirements :durative-actions)
+  (:predicates
+    (talk_coworkers_pending)
+    (talk_coworkers_done)
+    (discuss_supervisor_pending)
+    (discuss_supervisor_done)
+    (stand_up_together_pending)
+    (stand_up_together_done)
+  )
+
+  (:durative-action talk_coworkers
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (at start (talk_coworkers_pending))
+    :effect (and
+      (at start (not (talk_coworkers_pending)))
+      (at end (talk_coworkers_done))
+    )
+  )
+
+  (:durative-action discuss_supervisor
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (at start (discuss_supervisor_pending))
+    :effect (and
+      (at start (not (discuss_supervisor_pending)))
+      (at end (discuss_supervisor_done))
+    )
+  )
+
+  (:durative-action stand_up_together
+    :parameters ()
+    :duration (= ?duration 604800)
+    :condition (and
+      (at start (stand_up_together_pending))
+      (at start (talk_coworkers_done))
+    )
+    :effect (and
+      (at start (not (stand_up_together_pending)))
+      (at end (stand_up_together_done))
+    )
+  )
+)

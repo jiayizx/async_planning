@@ -1,0 +1,4 @@
+0.000: (do_step3_bls_cpr) [14400.000]
+0.000: (do_step2_enroll_program) [604800.000]
+14400.001: (do_step5_jurisprudence_exam) [7200.000]
+647.000: (do_step1_submit_registration) [1209600.000]

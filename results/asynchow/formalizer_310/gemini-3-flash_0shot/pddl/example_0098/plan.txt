@@ -1,0 +1,7 @@
+0.000: (get_screwdriver) [20.000]
+0.000: (get_sim_card) [60.000]
+20.001: (unscrew_back) [60.000]
+80.002: (remove_back) [25.000]
+105.003: (remove_old_sim) [60.000]
+165.004: (install_new_sim) [60.000]
+225.005: (screw_back_in) [120.000]

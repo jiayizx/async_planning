@@ -1,0 +1,1 @@
+(define (problem look_good_for_party_prob)(:domain look_good_for_party)(:init (groom_hands_feet_pending) (make_hair_appointment_pending) (figure_out_transport_pending) (schedule_party_pending))(:goal (and (groom_hands_feet_done) (make_hair_appointment_done) (figure_out_transport_done) (schedule_party_done)))(:metric minimize (total-time)))

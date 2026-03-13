@@ -1,0 +1,4 @@
+0.000: (choose_exercises) [1200.000]
+1200.001: (perform_bent_over_rear_delt_raise) [600.000]
+1200.001: (try_dumbbell_row) [900.000]
+1200.001: (do_chin_ups) [600.000]

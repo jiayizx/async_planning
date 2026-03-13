@@ -1,0 +1,17 @@
+(define (problem exciting_night_instance)
+  (:domain weekend_exciting_night)
+  (:init
+    (make_plan_pending)
+    (call_invite_pending)
+    (groceries_pending)
+    (fill_gas_pending)
+    (pickup_friends_pending)
+  )
+  (:goal (and
+    (make_plan_done)
+    (call_invite_done)
+    (groceries_done)
+    (fill_gas_done)
+    (pickup_friends_done)
+  ))
+)

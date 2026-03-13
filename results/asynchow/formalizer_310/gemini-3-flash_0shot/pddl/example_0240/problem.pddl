@@ -1,0 +1,1 @@
+(define (problem cook_squash_prob)(:domain cook_buttercup_squash)(:init (preheat_pending) (scoop_pending) (combine_pending) (bake_pending))(:goal (and (preheat_done) (scoop_done) (combine_done) (bake_done))))

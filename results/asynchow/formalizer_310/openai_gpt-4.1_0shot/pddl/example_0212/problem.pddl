@@ -1,0 +1,17 @@
+(define (problem bad_day_turnaround-problem)
+  (:domain bad_day_turnaround)
+  (:init
+    (identify_source_pending)
+    (small_step_pending)
+    (identify_ongoing_pending)
+    (focus_positive_pending)
+    (remember_pass_pending)
+  )
+  (:goal (and
+    (identify_source_done)
+    (small_step_done)
+    (identify_ongoing_done)
+    (focus_positive_done)
+    (remember_pass_done)
+  ))
+)

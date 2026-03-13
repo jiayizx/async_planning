@@ -134,6 +134,14 @@ CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find w
       (:init (a_pending) (b_pending) (c_pending) (d_pending) (e_pending) (f_pending) (g_pending))
       ```
 
+DEPENDENCY ANALYSIS — do this mentally before writing any PDDL:
+For EACH step in the problem, ask: "What must be fully completed before this step can start?"
+- Check for EXPLICIT cues: "after X", "once Y is done", "following Z", numbered sequences.
+- Check for IMPLICIT cues: logical necessity (cannot cook before preheating; cannot assemble
+  before all parts are ready; cannot depart before packing AND booking).
+- A step with multiple prerequisites needs ALL of them as (at start ...) conditions (Rule 8).
+Missing even one dependency lets the planner find an illegally short makespan.
+
 Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
 - 'domain_pddl': the domain in PDDL 2.1 format as a string.
 - 'problem_pddl': the problem in PDDL 2.1 format as a string.
@@ -179,6 +187,8 @@ Return the fully corrected domain and problem PDDL.
 
 # Backward-compatible alias
 RETRY_USER_TEMPLATE = SYNTAX_RETRY_TEMPLATE
+
+
 
 
 def _format_example_no_cot(example: dict, example_idx: int) -> str:
@@ -259,6 +269,133 @@ def get_prompts(
         parts.append(icl_prefix)
     parts.append(_format_query(question, cot=CoT))
     return "\n\n".join(parts)
+
+
+# ── Old parameterized encoding prompts (Formalizer / Formalizer+) ──────
+
+PDDL_SYSTEM_PROMPT_OLD = """
+You are a PDDL expert. Given an asynchronous planning problem, write the domain and problem files in minimal PDDL 2.1 format.
+
+CRITICAL PDDL RULES for OPTIC planner compatibility:
+1. Use ONLY `:durative-actions` and `:typing` in `:requirements`. Do NOT use `:negative-preconditions`, `:adl`, or `:disjunctive-preconditions`.
+2. NEVER use `(not ...)` in action preconditions. Instead, create positive "not_done" predicates:
+   - BAD:  `:condition (at start (not (task_done)))`
+   - GOOD: `:condition (at start (task_pending))`
+   Then in `:effect`, set `(not (task_pending))` and `(task_done)`.
+   Note: `(not ...)` is allowed in effects, just not in conditions.
+3. ALL predicates must be declared in the `:predicates` block before use.
+4. ALL types must be declared in the `:types` block.
+5. Use `(:durative-action ...)` with `:duration`, `:condition`, and `:effect` — not `(:action ...)`.
+6. Use `(at start ...)`, `(at end ...)`, or `(over all ...)` inside `:condition` and `:effect`.
+7. Initialize ALL "pending" predicates as true in the problem's `:init`.
+
+CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find wrong shortcuts:
+8. Every action MUST produce a UNIQUE semantic predicate (besides step_done) in its `(at end ...)` effect.
+   Every action that has one or more predecessors listed in the "ordering constraints" MUST require
+   ALL of those predecessors' semantic predicates as `(at start ...)` conditions — not just one of them.
+   This is a DAG (not a linear chain): a step may have multiple direct predecessors and ALL must be
+   enforced, otherwise the planner can skip slow predecessors and find an illegally short makespan.
+   - BAD (step C requires only A but not B, so planner skips slow B):
+     ```
+     (:durative-action do_A :duration (= ?duration 3600)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (a_done))))
+     (:durative-action do_B :duration (= ?duration 7200)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (b_done))))
+     (:durative-action do_C :duration (= ?duration 600)
+       :condition (and (at start (step_pending ?s)) (at start (a_done)))   ; ← missing (b_done)!
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (c_done))))
+     ```
+   - GOOD (step C requires BOTH A and B — the full AND-join):
+     ```
+     (:durative-action do_A :duration (= ?duration 3600)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (a_done))))
+     (:durative-action do_B :duration (= ?duration 7200)
+       :condition (at start (step_pending ?s))
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (b_done))))
+     (:durative-action do_C :duration (= ?duration 600)
+       :condition (and (at start (step_pending ?s)) (at start (a_done)) (at start (b_done)))   ; ← both
+       :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (c_done))))
+     ```
+   Steps with NO predecessors listed in the constraints need only `(at start (step_pending ?s))`.
+9. The problem's `:goal` MUST include the FINAL semantic predicate (the outcome of the last action in the chain),
+   in addition to all `(step_done stepN)` conditions.
+   - BAD (planner completes all steps trivially using only the fastest action):
+     ```
+     (:goal (and (step_done step1) (step_done step2) ... (step_done step6)))
+     ```
+   - GOOD (forces the planner to execute the full causal chain):
+     ```
+     (:goal (and (step_done step1) (step_done step2) ... (step_done step6) (departure_prepared)))
+     ```
+10. Every action's `:duration` MUST come from the time stated in the problem for that step.
+    NEVER give any action a duration of 1 second (or any tiny placeholder) unless the problem
+    explicitly states that step takes 1 second.
+    Do NOT split a step into "the real work" + a 1-second "state confirmation" action —
+    the semantic predicate is simply an effect of the step's action, not a separate action.
+    - BAD (the act of "buying beer" is given 1 second; its real duration is absorbed into prior steps):
+      ```
+      (:durative-action give_money      :duration (= ?duration 120) :effect (at end (money_given)))
+      (:durative-action buy_beer        :duration (= ?duration 1)   :effect (at end (beer_bought)))
+      ; "buy_beer" should have the duration from the problem, not 1 second
+      ```
+    - GOOD (each step uses the duration stated in the problem):
+      ```
+      (:durative-action give_money      :duration (= ?duration 120) :effect (at end (money_given)))
+      (:durative-action buy_beer        :duration (= ?duration 60)  ; ← from the problem statement
+        :effect (and (at end (step_done ?s)) (at end (beer_bought))))
+      ```
+11. A `:durative-action` may only have ONE `:condition` keyword. If multiple conditions are needed,
+    wrap them ALL in a single `(and ...)` block. Never write multiple separate `:condition` lines.
+    - BAD (PDDL parsers only keep the last `:condition`, silently dropping all others):
+      ```
+      :condition (at start (supplies_obtained))
+      :condition (at start (step_pending ?s))
+      ```
+    - GOOD:
+      ```
+      :condition (and (at start (supplies_obtained)) (at start (step_pending ?s)))
+      ```
+12. The number of `:durative-actions` MUST exactly equal the number of steps (one action per step).
+    Declare exactly N step objects (step1 ... stepN) for N steps. Never generate more or fewer actions
+    than steps — extra actions let the planner skip the most expensive one.
+    - BAD (7 actions but only 6 step objects — planner skips the slowest action):
+      ```
+      (:objects step1 step2 step3 step4 step5 step6 - step)
+      ; but domain defines 7 durative-actions including an expensive assemble_X (1200s)
+      ; planner uses the 6 cheapest actions and ignores assemble_X entirely
+      ```
+    - GOOD:
+      ```
+      (:objects step1 step2 step3 step4 step5 step6 step7 - step)  ; 7 steps → 7 actions
+      ```
+
+Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
+- 'domain_pddl': the domain in PDDL 2.1 format as a string.
+- 'problem_pddl': the problem in PDDL 2.1 format as a string.
+"""
+
+
+DEP_ANALYSIS_SYSTEM_PROMPT = """\
+You are an expert at analyzing step dependencies in planning problems.
+Given a planning problem with N steps, output a concise dependency analysis.
+For each step, list which steps MUST be fully completed before it can start.
+Include BOTH explicit constraints (e.g. "Step A must precede Step B") and
+implicit ones (logical necessity: cannot cook before heating; cannot assemble
+before all parts are ready).
+Format: one line per step:
+  Step N: [no prerequisites | requires Step X, Step Y, ...]
+Output ONLY the dependency list, no extra explanation."""
+
+
+DEP_ANALYSIS_USER_TEMPLATE = """\
+Here is an asynchronous planning problem. Analyze the dependencies between steps.
+
+{question}
+
+For each step, list ALL steps that must be fully completed before it can start."""
 
 
 PDDL_FEW_SHOT_EXAMPLES = [

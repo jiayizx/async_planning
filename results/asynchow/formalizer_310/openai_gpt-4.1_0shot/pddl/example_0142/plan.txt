@@ -1,0 +1,3 @@
+0.000: (sense_attention) [604800.000]
+0.000: (watch_how_person_acts_with_others) [604800.000]
+604800.001: (put_clues_together) [172800.000]

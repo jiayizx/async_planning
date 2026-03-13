@@ -42,12 +42,18 @@ from src.evaluation.plan_validity import check_plan_validity
 from src.experiments.utils import build_llm_client, clean_question
 from src.gen_data.utils import parse_node_durations
 from src.llms.base import BaseLLM
-from src.llms.prompts import SYNTAX_RETRY_TEMPLATE, SEMANTIC_RETRY_TEMPLATE
+from src.llms.prompts import (
+    SYNTAX_RETRY_TEMPLATE, SEMANTIC_RETRY_TEMPLATE,
+)
 from src.method.nl_to_pddl import (
     build_pddl_messages,
+    build_dep_analysis_messages,
     parse_pddl_response,
+    parse_dep_analysis_response,
     PDDLResponse,
+    DepAnalysis,
     _truncate_solver_error,
+    optimize_question_to_seconds,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 
@@ -56,6 +62,7 @@ from src.method.pddl_solver import solve, batch_solve, SolverResult
 # flaky solver.planning.domains containers).
 _TRANSIENT_SOLVER_RETRIES = 2
 SOLVER_TIMEOUT = 10  # 10 seconds
+
 
 # ── Core logic ──────────────────────────────────────────────────────────
 
@@ -96,12 +103,22 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     # "syntax_error" | "semantic_error" | "" (success) | "not_started"
     error_types: list[str] = ["not_started"] * n
 
+    # ── Phase 1: dependency analysis (two-phase mode only) ───────────────
+    dep_analyses: list[str | None] = [None] * n
+    if args.two_phase:
+        analysis_msgs = [build_dep_analysis_messages(q) for q in questions]
+        analysis_responses = llm_client.batch_chat(
+            analysis_msgs, schema=DepAnalysis, desc="Phase 1: dependency analysis"
+        )
+        for i, resp in enumerate(analysis_responses):
+            dep_analyses[i] = parse_dep_analysis_response(resp)
+
     # Multi-turn conversation histories — each list grows across retries:
     #   [system, user₀, asst₁, user_err₁, asst₂, user_err₂, …]
     # On retry we just append; the LLM sees all prior attempts.
     histories: list[list[dict]] = [
-        build_pddl_messages(q, num_shots=args.num_shots)
-        for q in questions
+        build_pddl_messages(q, num_shots=args.num_shots, dep_analysis=dep_analyses[i], effect_goal=args.effect_goal)
+        for i, q in enumerate(questions)
     ]
     # Number of messages in the initial (pre-retry) history — used by
     # single-turn mode to trim back to base + [last_asst, last_error].
@@ -132,6 +149,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                     histories[i] = h[:_base_len] + h[-2:]
 
         msgs = [histories[i] for i in indices]
+
         responses = llm_client.batch_chat(msgs, schema=PDDLResponse, desc=desc)
         pairs = [parse_pddl_response(r) for r in responses]
 
@@ -170,7 +188,6 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                 solver_results[i] = sr
 
                 if sr.error:
-                    # Planner rejected the PDDL — syntax/validation issue
                     errors[i] = sr.error
                     error_types[i] = "syntax_error"
                     histories[i].append({
@@ -180,7 +197,6 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                         ),
                     })
                 else:
-                    # Planner succeeded — check if the makespan is correct
                     pred_seconds = int(round(sr.makespan_seconds))
                     gold_seconds = gold_data[i]["gold_seconds"]
                     if gold_seconds is not None and not exact_match(pred_seconds, gold_seconds):
@@ -188,9 +204,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                         error_types[i] = "semantic_error"
                         histories[i].append({
                             "role": "user",
-                            "content": SEMANTIC_RETRY_TEMPLATE.format(
-                                pred_seconds=pred_seconds
-                            ),
+                            "content": SEMANTIC_RETRY_TEMPLATE.format(pred_seconds=pred_seconds),
                         })
                     else:
                         errors[i] = ""
@@ -199,9 +213,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
     # ── 2. Initial pass ───────────────────────────────────────────────
     _attempt(list(range(n)), desc="LLM translation (NL→PDDL)")
 
-    # ── 3. LLM retry loop ─────────────────────────────────────────────
-    # histories[i] already has the typed error feedback appended by _attempt,
-    # so we simply pass failed indices — no message rebuilding needed.
+    # ── 3. LLM retry loop ────────────────────────────────────────────
     for retry in range(args.llm_retries):
         n_syntax   = sum(1 for t in error_types if t == "syntax_error")
         n_semantic = sum(1 for t in error_types if t == "semantic_error")
@@ -417,6 +429,20 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--data-path", default="", help="Local JSON file (used when --benchmark-name gen-data)")
+    parser.add_argument(
+        "--two-phase",
+        action="store_true",
+        default=False,
+        dest="two_phase",
+        help="Enable two-phase generation: Phase 1 extracts dependency analysis, Phase 2 generates PDDL using that analysis.",
+    )
+    parser.add_argument(
+        "--effect-goal",
+        action="store_true",
+        default=False,
+        dest="effect_goal",
+        help="Formalizer+: strengthen Rule 9 so ALL at-end effect predicates (not just _done) are required in :goal.",
+    )
 
     return parser.parse_args()
 

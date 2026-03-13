@@ -1,0 +1,17 @@
+(define (problem body_measurements-instance)
+  (:domain body_measurements)
+  (:init
+    (locate_tape_pending)
+    (measure_circum_pending)
+    (put_on_clothes_pending)
+    (log_data_pending)
+    (record_notepad_pending)
+  )
+  (:goal (and
+    (locate_tape_done)
+    (measure_circum_done)
+    (put_on_clothes_done)
+    (log_data_done)
+    (record_notepad_done)
+  ))
+)

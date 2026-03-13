@@ -1,0 +1,6 @@
+0.000: (do_step1_pick_up_phone) [1.000]
+1.001: (do_step2_search_nearby) [20.000]
+21.002: (do_step3_narrow_by_food) [120.000]
+141.003: (do_step5_look_at_ratings) [600.000]
+141.003: (do_step4_look_at_menus) [600.000]
+741.004: (do_step6_look_at_pricing) [600.000]

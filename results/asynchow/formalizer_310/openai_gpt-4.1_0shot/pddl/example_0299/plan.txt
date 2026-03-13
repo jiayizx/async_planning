@@ -1,0 +1,7 @@
+0.000: (prepare_pads) [60.000]
+0.000: (select_cigar) [120.000]
+0.000: (choose_flavor) [300.000]
+300.001: (soak_pads) [300.000]
+600.002: (stash_cigar) [60.000]
+660.003: (place_baggie) [259200.000]
+259860.004: (enjoy_cigar) [3600.000]

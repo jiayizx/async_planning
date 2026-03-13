@@ -1,0 +1,6 @@
+0.000: (palms_floor) [10.000]
+0.000: (knee_extend) [3.000]
+0.000: (elbow_open) [3.000]
+0.000: (thumb_push) [5.000]
+0.000: (pinky_lift) [10.000]
+10.001: (total_points) [60.000]

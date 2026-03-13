@@ -1,0 +1,5 @@
+0.000: (do_step1_go_to_kitchen) [60.000]
+60.001: (do_step4_take_out_plate) [10.000]
+60.001: (do_step3_take_out_knife) [10.000]
+60.001: (do_step2_open_cabinet) [10.000]
+70.002: (do_step5_take_out_peanut_butter_and_bread) [20.000]

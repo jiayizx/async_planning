@@ -1,0 +1,17 @@
+(define (problem go_to_amusement_park)
+  (:domain amusement_park)
+  (:init
+    (get_money_pending)
+    (find_park_pending)
+    (travel_pending)
+    (purchase_pass_pending)
+    (enter_park_pending)
+  )
+  (:goal (and
+    (get_money_done)
+    (find_park_done)
+    (travel_done)
+    (purchase_pass_done)
+    (enter_park_done)
+  ))
+)

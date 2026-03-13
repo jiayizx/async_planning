@@ -1,0 +1,17 @@
+(define (problem dha_production_instance)
+  (:domain dha_production)
+  (:init
+    (centrifuge_pending)
+    (refine_pending)
+    (harvest_pending)
+    (prepare_pending)
+    (extract_pending)
+  )
+  (:goal (and
+    (centrifuge_done)
+    (refine_done)
+    (harvest_done)
+    (prepare_done)
+    (extract_done)
+  ))
+)

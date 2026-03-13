@@ -1,0 +1,8 @@
+0.000: (use_north_star_find_hemisphere) [120.000]
+0.000: (use_map_find_hemisphere) [60.000]
+0.000: (hold_watch_horizontal1) [60.000]
+60.001: (point_hour_hand_sun) [60.000]
+120.001: (hold_watch_horizontal2) [60.000]
+120.002: (bisect_hour_12_south) [60.000]
+180.002: (point_12_sun) [60.000]
+240.003: (bisect_hour_12_north) [60.000]

@@ -1,0 +1,17 @@
+(define (problem make_den_for_greyhound)
+  (:domain italian_greyhound_den)
+  (:init
+    (find_materials_pending)
+    (make_case_pending)
+    (cut_item_pending)
+    (sew_together_pending)
+    (get_pet_used_pending)
+  )
+  (:goal (and
+    (find_materials_done)
+    (make_case_done)
+    (cut_item_done)
+    (sew_together_done)
+    (get_pet_used_done)
+  ))
+)
