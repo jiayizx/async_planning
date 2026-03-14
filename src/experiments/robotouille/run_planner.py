@@ -132,6 +132,45 @@ def _load_records(data_path: Path) -> list[dict]:
     return records
 
 
+def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
+    """Expand records by applying each seed via randomize_environment.
+
+    Each (record, seed) pair produces one entry. If seeds is empty, returns
+    records unchanged (seed=None, base layout).
+    """
+    if not seeds:
+        return records
+    try:
+        from environments.env_generator.procedural_generator import randomize_environment
+    except ImportError as e:
+        raise ImportError(f"Cannot import randomize_environment: {e}")
+
+    import copy
+    expanded: list[dict] = []
+    for rec in records:
+        for seed in seeds:
+            new_rec = copy.deepcopy(rec)
+            new_rec["original_json"] = randomize_environment(
+                copy.deepcopy(rec["original_json"]), seed, noisy_randomization=False
+            )
+            new_rec["seed"] = seed
+            new_rec["id"] = f"{rec['id']}_seed{seed}"
+            # Rebuild NL prompt from randomized env
+            from src.gen_data.robotouille.data_transform import convert
+            problem = convert(new_rec["original_json"])
+            new_rec["nl"] = {
+                "task": problem.task,
+                "prompt": problem.prompt,
+                "goal_predicates": [
+                    {"predicate": g["predicate"], "args": g["args"]}
+                    for g in problem.goal_predicates
+                ],
+                "config": problem.config,
+            }
+            expanded.append(new_rec)
+    return expanded
+
+
 def _format_nl(nl_dict: dict) -> str:
     if "prompt" in nl_dict:
         return nl_dict["prompt"]
@@ -390,6 +429,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-examples", type=int, default=999)
     parser.add_argument("--num-workers", type=int, default=4)
     parser.add_argument("--llm-retries", type=int, default=2)
+    parser.add_argument("--seeds", type=int, nargs="*", default=[],
+                        help="Seeds for procedural randomization. If omitted, use base layout only.")
     return parser.parse_args()
 
 
@@ -402,6 +443,10 @@ def main() -> None:
 
     records = _load_records(data_path)
     print(f"Loaded {len(records)} records from {data_path}")
+
+    if args.seeds:
+        records = _expand_with_seeds(records, args.seeds)
+        print(f"Expanded to {len(records)} records with seeds {args.seeds}")
 
     os.makedirs(args.save_path, exist_ok=True)
 

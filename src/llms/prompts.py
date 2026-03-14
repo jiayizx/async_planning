@@ -190,7 +190,6 @@ RETRY_USER_TEMPLATE = SYNTAX_RETRY_TEMPLATE
 
 
 
-
 def _format_example_no_cot(example: dict, example_idx: int) -> str:
     question = clean_question(example["question"]) + "\n" + "Do NOT explain your reasoning. Output ONLY your final answer inside <answer></answer> tags (e.g. <answer>1 min</answer>)."
     golden_answer = parse_gold_seconds(example['answer'])
@@ -726,3 +725,98 @@ PDDL_FEW_SHOT_EXAMPLES = [
     "step_actions": ["light_grill", "warm_charcoal", "make_patties", "cook_burgers", "put_on_bun"],
    },
 ]
+
+
+# ── Robotouille problem-only formalizer prompt ─────────────────────────
+
+ROBOTOUILLE_SYSTEM_PROMPT_OLD = """\
+You are a PDDL expert.
+
+You will be given:
+1. A PDDL 2.1 **domain** (with :durative-actions) that defines all types, predicates and actions.
+2. A **natural language** description of a asynchronous planning problem.
+
+Your job is to write ONLY the **problem PDDL** file that is compatible with the given domain.
+
+RULES:
+1. Read the domain carefully — use ONLY the types, predicates and action names it defines.
+2. Declare all objects in `:objects` with their correct types (station, player, item, container, water as needed).
+3. In `:init`, set up ALL required predicates:
+   - Identity predicates for every object (e.g. `(istable table_1)`, `(isbread bread_1)`, `(isrobot robot_1)`).
+   - Initialize the player's starting location: the player faces a direction (up=-Y, down=+Y, left=-X, right=+X). Compute `facing_pos = player_pos + direction_offset` and find the station at those coordinates. Use that station for `(loc robot_1 <that_station>)`. Do NOT create a new station for the player.
+   - Capability flags from the NL description (e.g. `(iscookable chicken_1)`, `(iscuttable lettuce_1)`).
+   - Spatial predicates: `(loc ?p ?s)`, `(at ?i ?s)`, `(on ?i ?s)` for bottom items, `(atop ?i1 ?i2)` for stacked items.
+   - `(clear ?i)` for the topmost item in each stack (or a lone item on a station).
+   - `(empty ?s)` for stations with NO items on them.
+   - `(vacant ?s)` for stations where no player is standing.
+   - `(nothing ?p)` and `(nocontainer ?p)` if the player starts empty-handed.
+4. In `:goal`, express the desired final state using the domain's predicates.
+   Translate NL goals (e.g. "cooked chicken on table with cheese on top") into the appropriate
+   combination of `(on ...)`, `(atop ...)`, `(iscooked ...)`, `(iscut ...)`, `(clear ...)`, `(at ...)` etc.
+5. Use underscored names matching the NL description (e.g. `table_1`, `bread_1`, `robot_1`).
+6. The domain name in `(:domain ...)` inside the problem must match the domain's `(define (domain ...))`.
+
+Return JSON with: {"problem_pddl": "<the full problem PDDL string>"}
+"""
+
+ROBOTOUILLE_SYSTEM_PROMPT = """\
+You are a PDDL expert.
+
+You will be given:
+1. A PDDL 2.1 **domain** (with :durative-actions) that defines all types, predicates and actions.
+2. A **natural language** description of a asynchronous planning problem.
+
+Your job is to write ONLY the **problem PDDL** file that is compatible with the given domain.
+
+RULES:
+1. Read the domain carefully — use ONLY the types, predicates and action names it defines.
+2. Declare all objects in `:objects` with their correct types (station, player, item, container, water as needed).
+3. In `:init`, set up ALL required predicates:
+   - Identity predicates for every object (e.g. `(istable table_1)`, `(isbread bread_1)`, `(isrobot robot_1)`).
+   - Initialize the player's starting location: the player faces a direction (up=-Y, down=+Y, left=-X, right=+X). Compute `facing_pos = player_pos + direction_offset` and find the station at those coordinates. Use that station for `(loc robot_1 <that_station>)`. Do NOT create a new station for the player.
+   - Capability flags from the NL description (e.g. `(iscookable chicken_1)`, `(iscuttable lettuce_1)`).
+   - Spatial predicates: `(loc ?p ?s)`, `(at ?i ?s)`, `(on ?i ?s)` for bottom items, `(atop ?i1 ?i2)` for stacked items.
+   - `(clear ?i)` for the topmost item in each stack (or a lone item on a station).
+   - `(empty ?s)` for stations with NO items on them.
+   - `(vacant ?s)` for stations where no player is standing.
+   - `(nothing ?p)` and `(nocontainer ?p)` if the player starts empty-handed.
+   - Initialize ALL "pending" predicates that the domain's actions require as preconditions.
+     Every action that consumes a `_pending` predicate at start must have that predicate set to true
+     in `:init`, or the action can never fire.
+4. In `:goal`, express the desired final state using the domain's predicates.
+   Translate NL goals (e.g. "cooked chicken on table with cheese on top") into the appropriate
+   combination of `(on ...)`, `(atop ...)`, `(iscooked ...)`, `(iscut ...)`, `(clear ...)`, `(at ...)` etc.
+   The `:goal` MUST include ALL completion predicates needed to ensure no step can be skipped by the
+   planner. If the domain uses `_done` predicates, include every relevant one — missing even one lets
+   the planner find an illegally short makespan.
+5. Use underscored names matching the NL description (e.g. `table_1`, `bread_1`, `robot_1`).
+6. The domain name in `(:domain ...)` inside the problem must match the domain's `(define (domain ...))`.
+7. NEVER use `(not ...)` in the `:goal`. If a negated condition is needed, use the corresponding
+   positive predicate from the domain (e.g. `(empty ?s)` instead of `(not (occupied ?s))`).
+
+DEPENDENCY ANALYSIS — do this mentally before writing the problem PDDL:
+For EACH goal in the NL description, ask: "What objects, locations, and initial states are needed?"
+- Check for EXPLICIT cues: named items, stations, positions, player directions.
+- Check for IMPLICIT cues: logical necessity (cannot cook without a stove station; cannot cut without
+  the item being declared cuttable; cannot stack without both items existing).
+- Verify that every object referenced in `:goal` is declared in `:objects` and properly initialized
+  in `:init`.
+Missing even one predicate in `:init` can make the problem unsolvable or produce wrong plans.
+
+Return JSON with: {"problem_pddl": "<the full problem PDDL string>"}
+"""
+
+
+ROBOTOUILLE_USER_TEMPLATE = """\
+## Domain PDDL
+
+```
+{domain_pddl}
+```
+
+## Problem Description
+
+{question}
+
+Generate the problem PDDL file that is compatible with the domain above.
+"""

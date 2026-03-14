@@ -75,8 +75,13 @@ _OPTIMAL_STEPS: dict[str, int] = _load_optimal_steps()
 
 
 def get_optimal_steps(record_id: str) -> Optional[int]:
-    """Look up the optimal step count for a record id."""
-    return _OPTIMAL_STEPS.get(record_id)
+    """Look up the optimal step count for a record id.
+
+    Strips trailing _seed{N} suffix so that seed-expanded IDs like
+    '0_cheese_chicken_sandwich_seed42' resolve to '0_cheese_chicken_sandwich'.
+    """
+    base_id = re.sub(r"_seed\d+$", "", record_id)
+    return _OPTIMAL_STEPS.get(base_id) or _OPTIMAL_STEPS.get(record_id)
 
 
 # ── PDDL parsing helpers ────────────────────────────────────────────────
@@ -614,11 +619,11 @@ def evaluate_record(
         result["env_simulation_success"] = None
         result["env_simulation_error"] = None
 
-    if not original_json:
+    if not original_json or problem_pddl is None:
         return result
 
     gold_preds = parse_gold_goal_predicates(original_json)
-    pddl_preds = parse_pddl_goal_predicates(problem_pddl or "")
+    pddl_preds = parse_pddl_goal_predicates(problem_pddl)
 
     gold_pred_counts: dict[str, int] = {}
     for p in gold_preds:

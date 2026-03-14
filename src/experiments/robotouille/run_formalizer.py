@@ -32,7 +32,7 @@ load_dotenv()
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 _ROBOTOUILLE_ROOT = _PROJECT_ROOT / "baselines" / "robotouille"
-_DOMAIN_PDDL_PATH = _ROBOTOUILLE_ROOT / "environments" / "robotouille.pddl"
+_DOMAIN_PDDL_PATH = "src/experiments/robotouille/robotouille.pddl"
 _DEFAULT_DATA_PATH = _PROJECT_ROOT / "data" / "robotouille_single_agent_async.json"
 
 for p in (_PROJECT_ROOT, _ROBOTOUILLE_ROOT):
@@ -43,8 +43,11 @@ from src.experiments.utils import build_llm_client
 from src.llms.base import BaseLLM
 from src.llms.prompts import SYNTAX_RETRY_TEMPLATE
 from src.method.nl_to_pddl import (
+    PDDLResponse,
     RobotouillePDDL,
+    build_pddl_messages,
     build_robotouille_problem_messages,
+    parse_pddl_response,
     parse_robotouille_problem_response,
     normalize_robotouille_problem_to_domain,
     _truncate_solver_error,
@@ -57,7 +60,7 @@ _TRANSIENT_SOLVER_RETRIES = 2
 SOLVER_TIMEOUT = 120
 
 
-# ── Data loading (from test_data_formation.py) ──────────────────────────
+# ── Data loading ─────────────────────────────────────────────────────────
 
 
 def _load_records(data_path: Path) -> list[dict]:
@@ -73,7 +76,6 @@ def _format_nl(nl_dict: dict) -> str:
     """Build NL string from a record's 'nl' field."""
     if "prompt" in nl_dict:
         return nl_dict["prompt"]
-    # Fallback for older data format
     lines: list[str] = []
     lines.append("## Task\n")
     lines.append(nl_dict.get("task", ""))
@@ -86,12 +88,12 @@ def _format_nl(nl_dict: dict) -> str:
     return "\n".join(lines)
 
 
-
 # ── Core experiment logic ───────────────────────────────────────────────
 
 
 def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace):
-    domain_pddl = _DOMAIN_PDDL_PATH.read_text(encoding="utf-8")
+    domain_pddl = Path(_DOMAIN_PDDL_PATH).read_text(encoding="utf-8") if not args.generate_domain else None
+
     n = min(len(records), args.max_examples)
     records = records[:n]
 
@@ -99,28 +101,42 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     gold_data: list[dict] = []
 
     for rec in tqdm(records, desc="Preparing NL questions"):
-        nl_str = _format_nl(rec.get("nl", {}))
+        nl_raw = rec.get("natural_language") or rec.get("nl")
+        if isinstance(nl_raw, str):
+            nl_str = nl_raw
+        else:
+            nl_str = _format_nl(nl_raw or {})
         questions.append(nl_str)
         gold_data.append({
             "id": rec.get("id", "?"),
-            "nl": rec.get("nl"),
+            "nl": nl_str,
             "original_json": rec.get("original_json"),
         })
 
     # Per-example mutable state
+    domains: list[str | None] = [domain_pddl] * n
     problems: list[str | None] = [None] * n
     solver_results: list[SolverResult | None] = [None] * n
     raw_responses: list[str | None] = [None] * n
     errors: list[str] = ["not_started"] * n
     error_types: list[str] = ["not_started"] * n
 
-    histories: list[list[dict]] = [
-        build_robotouille_problem_messages(q, domain_pddl)
-        for q in questions
-    ]
+    if args.generate_domain:
+        histories: list[list[dict]] = [
+            build_pddl_messages(q, effect_goal=args.effect_goal)
+            for q in questions
+        ]
+        schema = PDDLResponse
+    else:
+        histories: list[list[dict]] = [
+            build_robotouille_problem_messages(q, domain_pddl, effect_goal=args.effect_goal)
+            for q in questions
+        ]
+        schema = RobotouillePDDL
+        
+
     _base_len: int = len(histories[0]) if histories else 0
 
-    # ── Attempt function (mirrors run_formalizer.py) ─────────────────
     def _attempt(indices: list[int], desc: str) -> None:
         if args.history_mode == "single-turn":
             for i in indices:
@@ -129,7 +145,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     histories[i] = h[:_base_len] + h[-2:]
 
         msgs = [histories[i] for i in indices]
-        responses = llm_client.batch_chat(msgs, schema=RobotouillePDDL, desc=desc)
+        responses = llm_client.batch_chat(msgs, schema=schema, desc=desc)
 
         for i, resp in zip(indices, responses):
             raw_responses[i] = resp
@@ -137,27 +153,47 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 histories[i].append({"role": "assistant", "content": resp})
 
         solvable: list[tuple[int, str]] = []
-        for i, resp in zip(indices, responses):
-            problem_pddl = parse_robotouille_problem_response(resp or "")
-            if not problem_pddl:
-                errors[i] = "PDDL parse failed"
-                error_types[i] = "syntax_error"
-                histories[i].append({
-                    "role": "user",
-                    "content": SYNTAX_RETRY_TEMPLATE.format(
-                        error="Your response could not be parsed as valid PDDL JSON. "
-                              "Please output only the JSON object matching the schema: "
-                              '{"problem_pddl": "<full problem PDDL string>"}'
-                    ),
-                })
-            else:
-                problem_pddl = normalize_robotouille_problem_to_domain(problem_pddl)
-                problems[i] = problem_pddl
-                solvable.append((i, problem_pddl))
+
+        if args.generate_domain:
+            for i, resp in zip(indices, responses):
+                pair = parse_pddl_response(resp or "")
+                if pair is None:
+                    errors[i] = "PDDL parse failed"
+                    error_types[i] = "syntax_error"
+                    histories[i].append({
+                        "role": "user",
+                        "content": SYNTAX_RETRY_TEMPLATE.format(
+                            error="Your response could not be parsed as valid PDDL JSON. "
+                                  "Please output only the JSON object matching the schema."
+                        ),
+                    })
+                else:
+                    d, p, _sa = pair
+                    domains[i] = d
+                    problems[i] = p
+                    solvable.append((i, p))
+        else:
+            for i, resp in zip(indices, responses):
+                problem_pddl = parse_robotouille_problem_response(resp or "")
+                if not problem_pddl:
+                    errors[i] = "PDDL parse failed"
+                    error_types[i] = "syntax_error"
+                    histories[i].append({
+                        "role": "user",
+                        "content": SYNTAX_RETRY_TEMPLATE.format(
+                            error="Your response could not be parsed as valid PDDL JSON. "
+                                  "Please output only the JSON object matching the schema: "
+                                  '{"problem_pddl": "<full problem PDDL string>"}'
+                        ),
+                    })
+                else:
+                    problem_pddl = normalize_robotouille_problem_to_domain(problem_pddl)
+                    problems[i] = problem_pddl
+                    solvable.append((i, problem_pddl))
 
         if solvable:
             solve_outputs = batch_solve(
-                [(domain_pddl, p) for _, p in solvable],
+                [(domains[i], p) for i, p in solvable],
                 num_workers=args.batch,
                 max_retries=_TRANSIENT_SOLVER_RETRIES,
                 timeout=SOLVER_TIMEOUT,
@@ -209,7 +245,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 plan=plan,
                 original_json=gold.get("original_json"),
                 error=errors[i] if errors[i] else None,
-                domain_pddl=domain_pddl,
+                domain_pddl=domains[i],
                 record_id=gold["id"],
             )
             eval_results.append(ev)
@@ -223,12 +259,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 "plan_length": len(plan) if plan else None,
                 "solved": plan is not None,
                 "eval": ev,
-                "domain_pddl": domain_pddl,
+                # "domain_pddl": domains[i],
                 "problem_pddl": problems[i],
+                # "chat_history": histories[i],
                 "llm_response": raw_responses[i],
                 "raw_solver_output": sr.raw_output if sr else None,
             }
-            rec["chat_history"] = histories[i]
             result_records.append(rec)
 
             _save_example(pddl_dir, i, rec)
@@ -271,6 +307,8 @@ def _save_summary(
     metrics = {
         "benchmark": "robotouille",
         "model_name": args.model_name,
+        "generate_domain": args.generate_domain,
+        "effect_goal": args.effect_goal,
         "num_examples": n,
         "num_syntax_errors": n_syntax,
         **eval_summary,
@@ -292,7 +330,8 @@ def _save_summary(
     n_env_ok = eval_summary.get("num_env_simulation_success", 0)
     avg_ratio = eval_summary.get("avg_steps_ratio")
 
-    print(f"\nResults saved to {save_path}")
+    mode = "domain+problem" if args.generate_domain else "problem-only"
+    print(f"\nResults saved to {save_path}  (mode: {mode})")
     print(f"Accuracy (done)       : {acc:.4f} ({n_done}/{n})")
     print(f"Syntax errors         : {n_syntax}/{n}")
     print(f"Average steps (done)  : {avg_steps:.1f}")
@@ -315,7 +354,7 @@ def _save_summary(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Robotouille LLM-as-Formalizer: NL → problem PDDL → OPTIC solver"
+        description="Robotouille LLM-as-Formalizer: NL → PDDL → OPTIC solver"
     )
     parser.add_argument("--model-name", required=True)
     parser.add_argument("--temperature", type=float, default=0.0)
@@ -333,6 +372,20 @@ def parse_args() -> argparse.Namespace:
         choices=["cumulative", "single-turn"],
         dest="history_mode",
     )
+    parser.add_argument(
+        "--generate-domain",
+        action="store_true",
+        default=False,
+        dest="generate_domain",
+        help="LLM generates both domain+problem PDDL (default: problem-only with fixed domain).",
+    )
+    parser.add_argument(
+        "--effect-goal",
+        action="store_true",
+        default=False,
+        dest="effect_goal",
+        help="(Only with --generate-domain) Use parameterless encoding with all at-end effects in :goal.",
+    )
     return parser.parse_args()
 
 
@@ -345,6 +398,11 @@ def main() -> None:
 
     records = _load_records(data_path)
     print(f"Loaded {len(records)} records from {data_path}")
+
+    if args.generate_domain:
+        print("Mode: LLM generates domain + problem PDDL")
+    else:
+        print("Mode: Fixed domain PDDL, LLM generates problem PDDL only")
 
     os.makedirs(args.save_path, exist_ok=True)
 

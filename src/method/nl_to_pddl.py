@@ -208,3 +208,81 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
         pass
 
     return None
+
+
+# ── Robotouille problem-only generation ────────────────────────────────
+
+from src.llms.prompts import (
+    ROBOTOUILLE_SYSTEM_PROMPT,
+    ROBOTOUILLE_SYSTEM_PROMPT_OLD,
+    ROBOTOUILLE_USER_TEMPLATE,
+)
+
+
+class RobotouillePDDL(BaseModel):
+    """Schema for Robotouille problem-only generation (domain is fixed)."""
+    problem_pddl: str
+
+
+def build_robotouille_problem_messages(
+    question: str,
+    domain_pddl: str,
+    effect_goal: bool = False,
+) -> list[dict[str, str]]:
+    """Build chat messages for Robotouille problem-only PDDL generation.
+
+    The domain PDDL is provided as context; the LLM generates only the
+    problem PDDL (:objects, :init, :goal).
+    """
+    system_prompt = ROBOTOUILLE_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_SYSTEM_PROMPT_OLD
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.append({"role": "user", "content": ROBOTOUILLE_USER_TEMPLATE.format(domain_pddl=domain_pddl, question=question)})
+
+    return messages
+
+
+def parse_robotouille_problem_response(response: str) -> Optional[str]:
+    """Parse the LLM response to extract problem_pddl string.
+
+    Returns the problem PDDL string, or None if parsing fails.
+    """
+    if not response:
+        return None
+
+    fence_match = re.search(r"```(?:json)?\s*(\{.*?)\s*```", response, re.DOTALL)
+    if fence_match:
+        response = fence_match.group(1).strip()
+    else:
+        brace_idx = response.find("{")
+        if brace_idx != -1:
+            response = response[brace_idx:]
+
+    response = response.replace("\\\n", "")
+
+    try:
+        data, _ = json.JSONDecoder().raw_decode(response)
+        parsed = RobotouillePDDL(**data)
+        problem = _fix_trailing_brace(parsed.problem_pddl)
+        return problem
+    except (json.JSONDecodeError, ValueError, KeyError):
+        pass
+
+    # Fallback: try to extract raw PDDL directly (model may skip JSON wrapper)
+    pddl_match = re.search(r"(\(define\s*\(problem\b.*)", response, re.DOTALL)
+    if pddl_match:
+        return _fix_trailing_brace(pddl_match.group(1).strip())
+
+    return None
+
+
+def normalize_robotouille_problem_to_domain(problem_pddl: str) -> str:
+    """Ensure the (:domain ...) reference in the problem matches our domain name.
+
+    Some LLMs invent a different domain name; patch it to 'robotouille-async'.
+    """
+    return re.sub(
+        r"\(:domain\s+[\w-]+\)",
+        "(:domain robotouille)",
+        problem_pddl,
+        count=1,
+    )
