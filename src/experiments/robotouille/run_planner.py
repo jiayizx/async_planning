@@ -59,69 +59,123 @@ class RobotouillePlan(BaseModel):
 
 # ── System prompt ────────────────────────────────────────────────────────
 
+# NOTE: Updated prompt to request PDDL-style action format directly,
+# with explicit examples and argument ordering instructions.
 
 _PLANNER_SYSTEM_PROMPT = """\
-You are a planning expert for the Robotouille kitchen domain.
-Given a kitchen environment description, you must produce an optimal \
-step-by-step plan using the available PDDL actions.
+You are a helpful plan organizer.
 
-Available actions (PDDL STRIPS):
+Given a natural language description of a planning problem, you must produce a step-by-step plan using the available actions to reach the goal.
 
-  move ?player ?from_station ?to_station
-    Move the player from one station to another.
-    Preconditions: player is at from_station, to_station is vacant.
+Below is a general description of the environment and the actions you can take:
+You are a robot in a kitchen environment. The objects in the kitchen and your goal are described in the Observation. The various types of objects in the kitchen include
+- Station: A location in the kitchen where you can perform special actions, e.g. cooking or cutting
+- Item: An object that can be picked up and potentially used in a Station
+- Player: Robots, including you, that are present in the kitchen
+- Container: An object that can hold other objects, e.g. a pot or a pan
+- Meal: A mixture of ingredients contained within a Container
 
-  pick-up ?player ?item ?station
-    Pick up the top item from a station.
-    Preconditions: player has nothing, item is on station, player is at station, item is clear (top of stack).
+The rules of the environment are as follows:
+- A Player can only hold a single Item at a time
+- An Item must be placed on a Station to perform an action on it
+- A Station must contain a single Item to perform an action on it
+- Items can only be stacked on top of one another
+- A Container can hold multiple Items
+- A Meal can be transferred between Containers
 
-  place ?player ?item ?station
-    Place the held item on an empty station.
-    Preconditions: player has item, player is at station, station is empty.
+The goal of this environment is to satisfy a human's request, such as 'make me a hamburger'. These goals are intentionally underspecified so common sense reasoning is required to complete them. Specifically, it is important to consider
+- the minimal ingredients required to satisfy the request
+- any preparation steps for the ingredients like cooking, cutting, etc.
 
-  cook ?player ?item ?station
-    Cook a cookable item on a stove.
-    Preconditions: station is a stove, item is cookable, item is on station, player is at station, item is clear.
-    Effect: item becomes cooked.
+When the goal is achieved or a time limit is reached, the environment will end.
 
-  cut ?player ?item ?station
-    Cut a cuttable item on a cutting board.
-    Preconditions: station is a board, item is cuttable, item is on station, player is at station, item is clear.
-    Effect: item becomes cut.
+Follow this recipe guide to learn how to make food in Robotouille:
+Sandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.
+Hamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.
+Soup - A pot of boiling water containing prepared ingredients served in a bowl.
 
-  fry ?player ?item ?station
-    Fry a fryable item in a fryer.
-    Preconditions: station is a fryer, item is fryable, item is on station, player is at station, item is clear.
-    Effect: item becomes fried.
+## CRITICAL: Action Format
 
-  fry_cut_item ?player ?item ?station
-    Fry an item that must be cut first.
-    Preconditions: station is a fryer, item is fryable-if-cut, item is cut, item is on station, player is at station, item is clear.
-    Effect: item becomes fried.
+You MUST format every action in PDDL style: `action_name arg1 arg2 ...`
 
-  stack ?player ?item_top ?item_bottom ?station
-    Stack the held item on top of another item at a station.
-    Preconditions: player has item_top, item_bottom is clear, player is at station, item_bottom is at station.
-    Effect: item_top is atop item_bottom, item_top is clear, item_bottom is no longer clear.
+Use ONLY station names (like table_1, stove_1, board_1) — NEVER use coordinate tuples like (0, 2).
 
-  unstack ?player ?item_top ?item_bottom ?station
-    Pick up the top item from a stack.
-    Preconditions: player has nothing, item_top is clear, item_top is atop item_bottom, player is at station, both items at station.
-    Effect: player has item_top, item_bottom is clear.
+The available actions and their EXACT formats are:
 
-IMPORTANT RULES:
-- The player can only carry ONE item at a time.
-- You must unstack items from top to bottom (pick up the clear/top item first).
-- Items placed on an empty station go "on" that station (bottom of stack).
-- Items stacked on other items go "atop" the item below.
-- A station with items on it is NOT empty; use "stack" instead of "place" to add items.
-- After picking up the only item on a station, the station becomes empty.
-- Output ONLY the action names and arguments. Use the exact entity names from the problem description.
+- `move player station_from station_to`
+- `pick-up player item station`
+- `place player item station`
+- `stack player item_top item_bottom`
+- `cook player item station`
+- `cut player item station`
+- `fry player item station`
+- `fill-water player container station`
+- `boil player container station`
+- `add player item container`
+- `fill-container player container_to container_from`
+- `unstack player item_top item_bottom`
+- `noop`
+
+### Examples of correct action formatting:
+```
+move robot_1 table_1 stove_1
+pick-up robot_1 chicken_1 table_2
+place robot_1 chicken_1 stove_1
+cook robot_1 chicken_1 stove_1
+cook robot_1 chicken_1 stove_1
+cook robot_1 chicken_1 stove_1
+pick-up robot_1 chicken_1 stove_1
+move robot_1 stove_1 table_1
+stack robot_1 chicken_1 bread_1
+cut robot_1 lettuce_1 board_1
+fry robot_1 onion_1 fryer_1
+fill-water robot_1 pot_1 sink_1
+boil robot_1 pot_1 stove_1
+add robot_1 potato_1 pot_1
+fill-container robot_1 bowl_1 pot_1
+unstack robot_1 bread_2 bread_1
+noop
+```
+
+### Common mistakes to avoid:
+- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG
+- Do NOT use natural language: `Pick up chicken_1 from table_2 using robot_1` is WRONG
+- Do NOT use `do nothing` — use `noop` instead
+- The player argument always comes FIRST after the action name
+- For `stack`, the first item is placed ON TOP of the second item
+- For `unstack`, the first item is removed FROM the second item
+- Cook/cut/fry take 3 timesteps each — repeat the action 3 times
+
+### Important notes on the first move:
+- The problem description may state the robot's position as coordinates. Ignore the coordinates.
+- For your first `move` action, use the station nearest to the robot's stated position as station_from.
+- If the robot is described as being at the same coordinates as a station, use that station name.
+
+Always format your response as follows:
+```json
+{
+    "plan": [
+        "move robot_1 table_1 stove_1",
+        "pick-up robot_1 chicken_1 stove_1",
+        "..."
+    ]
+}
+```
 """
 
+_PLANNER_USER_TEMPLATE = """\
+Here is a natural language description of a planning problem:
+{natural_language}
+
+{starting_station_hint}
+
+Please think step by step and produce a step-by-step plan using the PDDL-style action format described above. Remember:
+- Use ONLY station names (e.g., table_1, stove_1), NEVER coordinates
+- Format: `action_name player args...`
+- Player argument comes first after the action name
+"""
 
 # ── Data loading ────────────────────────────────────────────────────────
-
 
 def _load_records(data_path: Path) -> list[dict]:
     if not data_path.exists():
@@ -186,6 +240,55 @@ def _format_nl(nl_dict: dict) -> str:
     return "\n".join(lines)
 
 
+# ── Starting station detection ──────────────────────────────────────────
+
+
+def _find_nearest_station(nl_str: str) -> str | None:
+    """Parse the NL to find the station nearest to the robot's starting position.
+
+    Returns a hint string like:
+        "The robot starts at station table_1 (nearest to coordinates (0, 2))."
+    or None if we can't determine it.
+    """
+    # Extract robot position
+    robot_pos_match = re.search(
+        r'[Yy]ou are currently at \((\d+),\s*(\d+)\)', nl_str
+    )
+    if not robot_pos_match:
+        return None
+    rx, ry = int(robot_pos_match.group(1)), int(robot_pos_match.group(2))
+
+    # Extract all station positions
+    station_pattern = re.compile(
+        r'-\s+([\w]+)\s+at\s+\((\d+),\s*(\d+)\)'
+    )
+    stations = []
+    for m in station_pattern.finditer(nl_str):
+        name = m.group(1)
+        sx, sy = int(m.group(2)), int(m.group(3))
+        dist = abs(rx - sx) + abs(ry - sy)  # Manhattan distance
+        stations.append((name, sx, sy, dist))
+
+    if not stations:
+        return None
+
+    stations.sort(key=lambda t: t[3])
+    best = stations[0]
+
+    # If robot is exactly at a station, say so
+    if best[3] == 0:
+        return (
+            f"IMPORTANT: The robot starts at station {best[0]}. "
+            f"Use '{best[0]}' as station_from in your first move action."
+        )
+    else:
+        return (
+            f"IMPORTANT: The robot's starting coordinates ({rx}, {ry}) are closest to "
+            f"station {best[0]} at ({best[1]}, {best[2]}). "
+            f"Use '{best[0]}' as station_from in your first move action."
+        )
+
+
 # ── Plan parsing ────────────────────────────────────────────────────────
 
 
@@ -218,11 +321,13 @@ def _parse_plan_response(response: str) -> list[str] | None:
             pass
 
     # Try line-by-line: look for lines that match action patterns
+    # Updated regex to capture all action types including fill-water, boil, add, etc.
     action_pattern = re.compile(
         r'^\s*(?:\d+[\.\)]\s*)?'  # optional step number
         r'\(?\s*'                  # optional opening paren
-        r'((?:move|pick-up|place|cook|cut|fry|fry_cut_item|stack|unstack)'
-        r'(?:\s+[^\s)]+)+)'       # args (no parens in tokens)
+        r'((?:move|pick-up|place|cook|cut|fry|stack|unstack|'
+        r'fill-water|fill-container|boil|add|noop)'
+        r'(?:\s+[^\s)]+)*)'       # args (no parens in tokens)
         r'\s*\)?\s*$',
         re.IGNORECASE,
     )
@@ -235,6 +340,302 @@ def _parse_plan_response(response: str) -> list[str] | None:
         return actions
 
     return None
+
+
+# ── Action normalization (NL-style → PDDL-style) ───────────────────────
+
+
+# Mapping from coordinate tuples to station names, built per-problem
+def _build_coord_to_station(nl_str: str) -> dict[str, str]:
+    """Build a mapping from '(x, y)' strings to station names."""
+    mapping = {}
+    station_pattern = re.compile(
+        r'-\s+([\w]+)\s+at\s+\((\d+),\s*(\d+)\)'
+    )
+    for m in station_pattern.finditer(nl_str):
+        name = m.group(1)
+        coord_key = f"({m.group(2)},{m.group(3)})"
+        # Also store with space after comma
+        coord_key2 = f"({m.group(2)}, {m.group(3)})"
+        mapping[coord_key] = name
+        mapping[coord_key2] = name
+    return mapping
+
+
+def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None = None) -> str:
+    """Normalize a single action string from NL-style to PDDL-style.
+
+    Handles conversions like:
+      "Move robot_1 (0, 2) (1, 3)"           → "move robot_1 table_1 table_2"
+      "Pick up chicken_1 from table_2 using robot_1" → "pick-up robot_1 chicken_1 table_2"
+      "Place chicken_1 on stove_1 using robot_1"     → "place robot_1 chicken_1 stove_1"
+      "Cook chicken_1 on stove_1 using robot_1"      → "cook robot_1 chicken_1 stove_1"
+      "Cut lettuce_1 on board_1 using robot_1"       → "cut robot_1 lettuce_1 board_1"
+      "Fry onion_1 on fryer_1 using robot_1"         → "fry robot_1 onion_1 fryer_1"
+      "Stack cheese_1 on top of chicken_1 using robot_1" → "stack robot_1 cheese_1 chicken_1"
+      "Unstack bread_2 from bread_1 using robot_1"   → "unstack robot_1 bread_2 bread_1"
+      "Fill pot_1 with water from sink_1 using robot_1"  → "fill-water robot_1 pot_1 sink_1"
+      "Boil pot_1's contents on stove_1 using robot_1"   → "boil robot_1 pot_1 stove_1"
+      "Add potato_1 into pot_1 using robot_1"        → "add robot_1 potato_1 pot_1"
+      "Fill bowl_1 with pot_1's contents using robot_1"  → "fill-container robot_1 bowl_1 pot_1"
+      "Do nothing"                                    → "noop"
+    """
+    s = action_str.strip()
+
+    # If already in PDDL format (lowercase, no filler words), return as-is
+    lower = s.lower()
+    if lower == "noop" or lower == "do nothing" or lower == "do_nothing":
+        return "noop"
+
+    # Check if it's already in clean PDDL format
+    first_token = lower.split()[0] if lower.split() else ""
+    pddl_actions = {
+        "move", "pick-up", "place", "cook", "cut", "fry",
+        "stack", "unstack", "fill-water", "fill-container",
+        "boil", "add", "noop",
+    }
+    # If the first token is a known PDDL action and there are no filler words,
+    # it's likely already normalized
+    filler_words = {"from", "to", "using", "on", "into", "top", "of", "with", "water", "'s", "contents"}
+    tokens = s.split()
+    has_fillers = any(t.lower().rstrip("'s") in filler_words for t in tokens[1:])
+
+    if first_token in pddl_actions and not has_fillers:
+        # Already PDDL-style, just ensure lowercase action name
+        tokens[0] = tokens[0].lower()
+        # But still resolve any coordinates
+        if coord_to_station:
+            tokens = _resolve_coordinates_in_tokens(tokens, coord_to_station)
+        return " ".join(tokens)
+
+    # ── NL-style normalization via regex patterns ──
+
+    # Do nothing
+    if re.match(r'^do\s+nothing$', s, re.IGNORECASE):
+        return "noop"
+
+    # Move {p1} from {s1} to {s2}  OR  Move {p1} {s1} {s2}  OR  Move {p1} {coord} {coord/station}
+    m = re.match(
+        r'^move\s+(\S+)\s+(?:from\s+)?(.+?)\s+(?:to\s+)?(\S+(?:\s*\(\s*\d+\s*,\s*\d+\s*\))?)$',
+        s, re.IGNORECASE
+    )
+    if not m:
+        # Try: Move player station_from to station_to (with "to" keyword)
+        m = re.match(
+            r'^move\s+(\S+)\s+(.+?)\s+to\s+(.+?)$',
+            s, re.IGNORECASE
+        )
+    if m:
+        player = m.group(1)
+        src = _resolve_station(m.group(2).strip(), coord_to_station)
+        dst = _resolve_station(m.group(3).strip(), coord_to_station)
+        return f"move {player} {src} {dst}"
+
+    # Pick up {item} from {station} using {player}
+    m = re.match(
+        r'^pick\s+up\s+(\S+)\s+from\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"pick-up {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Place {item} on {station} using {player}
+    m = re.match(
+        r'^place\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"place {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Stack {item1} on top of {item2} using {player}
+    m = re.match(
+        r'^stack\s+(\S+)\s+on\s+top\s+of\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"stack {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Unstack {item1} from {item2} using {player}
+    m = re.match(
+        r'^unstack\s+(\S+)\s+from\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"unstack {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Cook {item} on {station} using {player}
+    m = re.match(
+        r'^cook\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"cook {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Cut {item} on {station} using {player}
+    m = re.match(
+        r'^cut\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"cut {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Fry {item} on {station} using {player}
+    m = re.match(
+        r'^fry\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"fry {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Fill {container} with water from {station} using {player}
+    m = re.match(
+        r'^fill\s+(\S+)\s+with\s+water\s+from\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"fill-water {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Boil {container}'s contents on {station} using {player}
+    m = re.match(
+        r'^boil\s+(\S+?)(?:\'s)?\s+(?:contents\s+)?on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"boil {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Add {item} into {container} using {player}
+    m = re.match(
+        r'^add\s+(\S+)\s+into\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"add {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Fill {container1} with {container2}'s contents using {player}
+    m = re.match(
+        r'^fill\s+(\S+)\s+with\s+(\S+?)(?:\'s)?\s+(?:contents\s+)?using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"fill-container {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    # Fallback: try to at least lowercase and resolve coordinates
+    result = s.lower()
+    if coord_to_station:
+        for coord, station in coord_to_station.items():
+            result = result.replace(coord.lower(), station)
+    return result
+
+
+def _resolve_station(text: str, coord_to_station: dict[str, str] | None) -> str:
+    """Resolve a station reference that might be a coordinate tuple or a station name.
+
+    Examples:
+      "(0, 2)"     → "table_1"  (via coord_to_station mapping)
+      "table_1"    → "table_1"
+      "stove_1 (1, 1)" → "stove_1"
+      "(0, 2) facing up" → resolve the coord part
+    """
+    text = text.strip()
+
+    # If it's just a plain station name (alphanumeric + underscore), return it
+    if re.match(r'^[a-zA-Z]\w*$', text):
+        return text
+
+    # Check if it contains a station name followed by coordinates: "table_2 (1, 3)"
+    m = re.match(r'^([a-zA-Z]\w*)\s*\(', text)
+    if m:
+        return m.group(1)
+
+    # Check if it's a coordinate tuple: "(x, y)" or "(x,y)"
+    coord_match = re.search(r'\((\d+)\s*,\s*(\d+)\)', text)
+    if coord_match and coord_to_station:
+        x, y = coord_match.group(1), coord_match.group(2)
+        for fmt in [f"({x},{y})", f"({x}, {y})"]:
+            if fmt in coord_to_station:
+                return coord_to_station[fmt]
+
+    # Last resort: return the text with whitespace cleaned
+    return re.sub(r'\s+', '_', text)
+
+
+def _resolve_coordinates_in_tokens(
+    tokens: list[str], coord_to_station: dict[str, str]
+) -> list[str]:
+    """Resolve any coordinate tokens in a token list."""
+    result = []
+    i = 0
+    while i < len(tokens):
+        # Check for coordinate pattern spanning multiple tokens: "(x," "y)"
+        if (
+            i + 1 < len(tokens)
+            and tokens[i].startswith("(")
+            and tokens[i + 1].endswith(")")
+        ):
+            coord_str = tokens[i] + " " + tokens[i + 1]
+            resolved = _resolve_station(coord_str, coord_to_station)
+            result.append(resolved)
+            i += 2
+        else:
+            result.append(tokens[i])
+            i += 1
+    return result
+
+
+def normalize_plan(
+    actions: list[str],
+    nl_str: str,
+    nearest_station: str | None = None,
+) -> list[str]:
+    """Normalize a full plan from NL-style to PDDL-style actions.
+
+    Also fixes the first move's source station if the robot starts at
+    a coordinate position rather than a named station.
+    """
+    coord_to_station = _build_coord_to_station(nl_str)
+    normalized = []
+    first_move_fixed = False
+
+    for action in actions:
+        norm = _normalize_action(action, coord_to_station)
+        tokens = norm.split()
+
+        # Fix the first move: if the source station doesn't match any known station,
+        # replace it with the nearest station
+        if (
+            not first_move_fixed
+            and tokens
+            and tokens[0] == "move"
+            and len(tokens) >= 4
+        ):
+            first_move_fixed = True
+            src = tokens[2]
+            # Check if src looks like a coordinate remnant or is unknown
+            if nearest_station and (
+                src.startswith("(")
+                or "_" not in src  # not a proper station name
+                or any(c.isdigit() and not c.isalnum() for c in src)
+            ):
+                # Only replace if source doesn't look like a valid station
+                pass  # src might already be resolved, check further
+
+            # Also handle the case where robot starts at coords and Move uses coords
+            # that got resolved to a wrong station
+            # Actually, just ensure the first move's source is the nearest station
+            if nearest_station:
+                # Check if the resolved src matches any known station in the problem
+                all_stations = set(coord_to_station.values())
+                if src not in all_stations and nearest_station in all_stations:
+                    tokens[2] = nearest_station
+                    norm = " ".join(tokens)
+
+        # Handle "Move robot_1 (0, 1) (0, 1)" same-station moves → noop
+        if tokens and tokens[0] == "move" and len(tokens) >= 4 and tokens[2] == tokens[3]:
+            norm = "noop"
+
+        normalized.append(norm)
+
+    return normalized
 
 
 def _actions_to_plan(actions: list[str]) -> list[tuple[float, str, float]]:
@@ -267,17 +668,30 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     # Build messages
     all_messages: list[list[dict]] = []
     gold_data: list[dict] = []
+    nl_strings: list[str] = []  # Keep NL strings for normalization
 
     for rec in tqdm(records, desc="Preparing NL questions"):
-        nl_str = _format_nl(rec.get("nl", {}))
+        nl_raw = rec.get("natural_language") or rec.get("nl")
+        if isinstance(nl_raw, str):
+            nl_str = nl_raw
+        else:
+            nl_str = _format_nl(nl_raw or {})
+
+        # Compute starting station hint
+        starting_hint = _find_nearest_station(nl_str) or ""
+
         messages = [
             {"role": "system", "content": _PLANNER_SYSTEM_PROMPT},
-            {"role": "user", "content": nl_str},
+            {"role": "user", "content": _PLANNER_USER_TEMPLATE.format(
+                natural_language=nl_str,
+                starting_station_hint=starting_hint,
+            )},
         ]
         all_messages.append(messages)
+        nl_strings.append(nl_str)
         gold_data.append({
             "id": rec.get("id", "?"),
-            "nl": rec.get("nl"),
+            "nl": nl_str,
             "original_json": rec.get("original_json"),
         })
 
@@ -309,9 +723,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 "content": (
                     "Your response could not be parsed as a valid plan. "
                     "Please output a JSON object with a single key 'plan' "
-                    "containing a list of action strings. Example:\n"
+                    "containing a list of PDDL-style action strings. "
+                    "Use the format: action_name player arg1 arg2\n"
+                    "Example:\n"
                     '{"plan": ["move robot_1 table_1 stove_1", '
-                    '"pick-up robot_1 chicken_1 table_2"]}'
+                    '"pick-up robot_1 chicken_1 table_2", '
+                    '"cook robot_1 chicken_1 stove_1"]}'
                 ),
             })
             retry_msgs.append(msgs)
@@ -324,6 +741,20 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
             raw_responses[i] = resp
             all_messages[i] = retry_msgs[idx]
             plans[i] = _parse_plan_response(resp)
+
+    # ── Normalize all parsed plans ──────────────────────────────────────
+    for i in range(n):
+        if plans[i] is not None:
+            nl_str = nl_strings[i]
+            # Find nearest station for first-move fix
+            nearest = None
+            hint = _find_nearest_station(nl_str)
+            if hint:
+                # Extract station name from the hint string
+                m = re.search(r"station (\w+)", hint)
+                if m:
+                    nearest = m.group(1)
+            plans[i] = normalize_plan(plans[i], nl_str, nearest)
 
     # Evaluate and save
     save_path = Path(args.save_path)
@@ -338,10 +769,14 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
             action_list = plans[i]
             plan = _actions_to_plan(action_list) if action_list else None
 
+            # Build ground-truth problem PDDL for simulation
+            original_json = gold.get("original_json")
+            problem_pddl = _build_problem_pddl_from_json(original_json) if original_json else None
+
             ev = evaluate_record(
-                problem_pddl=None,
+                problem_pddl=problem_pddl,
                 plan=plan,
-                original_json=gold.get("original_json"),
+                original_json=original_json,
                 error=None if action_list else "plan_parse_failed",
                 domain_pddl=domain_pddl,
                 record_id=gold["id"],

@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Configuration ────────────────────────────────────────────────────────
-MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-openai/gpt-4.1}"
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-8192}"
 MAX_EXAMPLES="${MAX_EXAMPLES:-999}"
