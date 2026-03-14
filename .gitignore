@@ -24,7 +24,7 @@ env/
 Thumbs.db
 
 # Results
-results/
+# results/
 test/
 
 # Test files
