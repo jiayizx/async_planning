@@ -137,25 +137,43 @@ class ActionSchema:
     eff_neg: list[Atom]
 
 
+def _strip_temporal(block: str) -> str:
+    """Remove (at start ...), (at end ...), (over all ...) wrappers.
+
+    Flattens durative-action conditions/effects into plain atoms so
+    the sequential simulator can treat them as STRIPS preconditions/effects.
+    """
+    result = block
+    for wrapper in ("at start", "at end", "over all"):
+        result = re.sub(
+            rf"\(\s*{wrapper}\s+(\([^()]*\))\s*\)",
+            r"\1",
+            result,
+        )
+    return result
+
+
 def parse_domain_actions(domain_pddl: str) -> dict[str, ActionSchema]:
     text = _strip_comments(domain_pddl).lower()
     actions: dict[str, ActionSchema] = {}
-    for m in re.finditer(r"\(:action\s+(\S+)", text):
+    for m in re.finditer(r"\(:(?:durative-)?action\s+(\S+)", text):
         name = m.group(1)
         action_block = _find_balanced(text, m.start())
         body = action_block[1:-1]
         params_m = re.search(r":parameters\s*\(([^)]*)\)", body)
         param_tokens = params_m.group(1).split() if params_m else []
         params = [t for t in param_tokens if t.startswith("?")]
-        pre_m = re.search(r":precondition\s*(\()", body)
+        pre_m = re.search(r":(?:precondition|condition)\s*(\()", body)
         pre_pos, pre_neg = [], []
         if pre_m:
             pre_block = _find_balanced(body, pre_m.start(1))
+            pre_block = _strip_temporal(pre_block)
             pre_pos, pre_neg = _parse_atoms(pre_block)
         eff_m = re.search(r":effect\s*(\()", body)
         eff_pos, eff_neg = [], []
         if eff_m:
             eff_block = _find_balanced(body, eff_m.start(1))
+            eff_block = _strip_temporal(eff_block)
             eff_pos, eff_neg = _parse_atoms(eff_block)
         actions[name] = ActionSchema(
             name=name, params=params,
@@ -332,6 +350,12 @@ def _build_name_map(
             base = _strip_digits(entity["name"].lower())
             builder_by_subtype.setdefault(base, []).append(entity["name"].lower())
 
+    # Capability predicates that look like identity predicates but aren't
+    _CAPABILITY_SUBTYPES = {
+        "cookable", "cuttable", "fryable", "fryableifcut", "cookableifcut",
+        "cooked", "cut", "fried",
+    }
+
     # LLM: extract identity predicates from (:init) to group by sub-type
     llm_init = parse_problem_init(problem_pddl)
     llm_by_subtype: dict[str, list[str]] = {}
@@ -353,10 +377,12 @@ def _build_name_map(
         m = re.search(r"(\d+)$", name)
         return int(m.group(1)) if m else 0
 
-    # Check identity predicates (is<type> <obj>)
+    # Check identity predicates (is<type> <obj>), skip capability flags
     for atom in llm_init:
         if len(atom) == 2 and atom[0].startswith("is"):
             subtype = atom[0][2:]  # istable → table
+            if subtype in _CAPABILITY_SUBTYPES:
+                continue
             obj_name = atom[1]
             if obj_name in all_llm_names:
                 llm_by_subtype.setdefault(subtype, []).append(obj_name)
@@ -369,8 +395,7 @@ def _build_name_map(
         for i, llm_name in enumerate(llm_sorted):
             if i < len(builder_sorted):
                 name_map[llm_name] = builder_sorted[i]
-            else:
-                name_map[llm_name] = llm_name
+            # Don't map to self here; let the fallback handle unmatched names
 
     # Fallback: any unmapped LLM names, try direct match or stripped match
     for llm_name in all_llm_names:
@@ -461,23 +486,29 @@ def simulate_with_env(
             return False, f"Step {step_idx}: env action '{env_action_name}' not in domain"
 
         # Map PDDL arg names to builder object names
-        mapped_args = [name_map.get(a, a) for a in pddl_args]
+        # Fallback: strip underscores (chicken_1 → chicken1)
+        mapped_args = [name_map.get(a, a.replace("_", "")) for a in pddl_args]
 
         # Find matching valid action binding
         valid_bindings = state.actions.get(env_action, [])
         matched_binding = None
+        name_matched = False
         for binding in valid_bindings:
             binding_obj_names = [v.name.lower() for v in binding.values()]
             if set(mapped_args) == set(binding_obj_names) and len(mapped_args) == len(binding_obj_names):
+                name_matched = True
                 if env_action.is_valid(state, binding):
                     matched_binding = binding
                     break
 
         if matched_binding is None:
+            if name_matched:
+                reason = "preconditions not met"
+            else:
+                reason = "no matching object binding found"
             return False, (
                 f"Step {step_idx} ({action_str}): "
-                f"no valid binding for env action '{env_action_name}' "
-                f"with args {mapped_args}"
+                f"env action '{env_action_name}' with args {mapped_args}: {reason}"
             )
 
         try:
