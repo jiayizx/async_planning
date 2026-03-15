@@ -330,6 +330,18 @@ _PDDL_TO_ENV_ACTION = {
     "unstack": "unstack",
 }
 
+# PDDL actions that map to a "null" game engine step (just advance the clock).
+# These allow the LLM to model cooking/cutting timers in PDDL without a real game-engine action.
+# Prefix-matched: any action whose name starts with one of these prefixes is treated as null.
+_NULL_PDDL_ACTION_PREFIXES: tuple[str, ...] = (
+    "cook-tick", "cut-tick", "fry-tick", "wait",
+    "cook-step", "cut-step", "fry-step",
+)
+
+
+def _is_null_pddl_action(name: str) -> bool:
+    return any(name == p or name.startswith(p + "-") for p in _NULL_PDDL_ACTION_PREFIXES)
+
 
 def _strip_digits(name: str) -> str:
     """Strip trailing digits: 'table1' → 'table', 'bread_2' → 'bread_'."""
@@ -482,6 +494,16 @@ def simulate_with_env(
         pddl_action_name = tokens[0]
         pddl_args = tokens[1:]
 
+        # Null actions (cooking-tick, wait, etc.) just advance the game clock
+        if _is_null_pddl_action(pddl_action_name):
+            try:
+                done = state.step([])
+                if done:
+                    return True, ""
+            except Exception as e:
+                return False, f"Step {step_idx} ({action_str}): null tick failed: {e}"
+            continue
+
         env_action_name = _PDDL_TO_ENV_ACTION.get(pddl_action_name)
         if env_action_name is None:
             return False, f"Step {step_idx}: no env mapping for PDDL action '{pddl_action_name}'"
@@ -553,7 +575,7 @@ def parse_pddl_goal_predicates(problem_pddl: str) -> list[str]:
     if not goal_match:
         return []
     goal_body = goal_match.group(1)
-    preds = re.findall(r"\((\w+)\s+[^()]+\)", goal_body)
+    preds = re.findall(r"\(([\w-]+)\s+[^()]+\)", goal_body)
     preds = [p for p in preds if p not in ("and", "or", "not")]
     return [_normalize_predicate(p) for p in preds]
 

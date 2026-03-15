@@ -65,31 +65,40 @@ class RobotouillePlan(BaseModel):
 _PLANNER_SYSTEM_PROMPT = """\
 You are a helpful plan organizer.
 
-Given a natural language description of a planning problem, you must produce a step-by-step plan using the available actions to reach the goal.
+Given a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.
 
-Below is a general description of the environment and the actions you can take:
-You are a robot in a kitchen environment. The objects in the kitchen and your goal are described in the Observation. The various types of objects in the kitchen include
-- Station: A location in the kitchen where you can perform special actions, e.g. cooking or cutting
-- Item: An object that can be picked up and potentially used in a Station
-- Player: Robots, including you, that are present in the kitchen
-- Container: An object that can hold other objects, e.g. a pot or a pan
-- Meal: A mixture of ingredients contained within a Container
+## JSON Schema
 
-The rules of the environment are as follows:
+```
+{
+  "width": int, "height": int,
+  "players": [{"name": str, "x": int, "y": int, "direction": [dx, dy]}],
+  "stations": [{"name": str, "x": int, "y": int}],
+  "items": [
+    {"name": str, "x": int, "y": int,
+     "predicates": ["iscookable", "iscuttable", ...],
+     "stack-level": int}
+  ],
+  "config": {"cook_time": {"default": int}, "num_cuts": {"default": int}},
+  "goal": [{"predicate": str, "args": [str], "ids": [int]}],
+  "goal_description": str
+}
+```
+
+## Naming Convention
+
+Assign names by entity type and 1-based array order:
+- `stations[0]` of type "table" → `table_1`, `stations[1]` of same type → `table_2`, etc.
+- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.
+
+## Environment Rules
+
 - A Player can only hold a single Item at a time
 - An Item must be placed on a Station to perform an action on it
 - A Station must contain a single Item to perform an action on it
 - Items can only be stacked on top of one another
-- A Container can hold multiple Items
-- A Meal can be transferred between Containers
 
-The goal of this environment is to satisfy a human's request, such as 'make me a hamburger'. These goals are intentionally underspecified so common sense reasoning is required to complete them. Specifically, it is important to consider
-- the minimal ingredients required to satisfy the request
-- any preparation steps for the ingredients like cooking, cutting, etc.
-
-When the goal is achieved or a time limit is reached, the environment will end.
-
-Follow this recipe guide to learn how to make food in Robotouille:
+Follow this recipe guide:
 Sandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.
 Hamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.
 Soup - A pot of boiling water containing prepared ingredients served in a bowl.
@@ -98,7 +107,7 @@ Soup - A pot of boiling water containing prepared ingredients served in a bowl.
 
 You MUST format every action in PDDL style: `action_name arg1 arg2 ...`
 
-Use ONLY station names (like table_1, stove_1, board_1) — NEVER use coordinate tuples like (0, 2).
+Use ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.
 
 The available actions and their EXACT formats are:
 
@@ -116,7 +125,7 @@ The available actions and their EXACT formats are:
 - `unstack player item_top item_bottom`
 - `noop`
 
-### Examples of correct action formatting:
+### Examples:
 ```
 move robot_1 table_1 stove_1
 pick-up robot_1 chicken_1 table_2
@@ -125,31 +134,15 @@ cook robot_1 chicken_1 stove_1
 cook robot_1 chicken_1 stove_1
 cook robot_1 chicken_1 stove_1
 pick-up robot_1 chicken_1 stove_1
-move robot_1 stove_1 table_1
 stack robot_1 chicken_1 bread_1
 cut robot_1 lettuce_1 board_1
-fry robot_1 onion_1 fryer_1
-fill-water robot_1 pot_1 sink_1
-boil robot_1 pot_1 stove_1
-add robot_1 potato_1 pot_1
-fill-container robot_1 bowl_1 pot_1
-unstack robot_1 bread_2 bread_1
-noop
 ```
 
 ### Common mistakes to avoid:
 - Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG
-- Do NOT use natural language: `Pick up chicken_1 from table_2 using robot_1` is WRONG
-- Do NOT use `do nothing` — use `noop` instead
 - The player argument always comes FIRST after the action name
 - For `stack`, the first item is placed ON TOP of the second item
-- For `unstack`, the first item is removed FROM the second item
 - Cook/cut/fry take 3 timesteps each — repeat the action 3 times
-
-### Important notes on the first move:
-- The problem description may state the robot's position as coordinates. Ignore the coordinates.
-- For your first `move` action, use the station nearest to the robot's stated position as station_from.
-- If the robot is described as being at the same coordinates as a station, use that station name.
 
 Always format your response as follows:
 ```json
@@ -164,15 +157,14 @@ Always format your response as follows:
 """
 
 _PLANNER_USER_TEMPLATE = """\
-Here is a natural language description of a planning problem:
-{natural_language}
+Here is the environment JSON:
+```json
+{original_json}
+```
 
 {starting_station_hint}
 
-Please think step by step and produce a step-by-step plan using the PDDL-style action format described above. Remember:
-- Use ONLY station names (e.g., table_1, stove_1), NEVER coordinates
-- Format: `action_name player args...`
-- Player argument comes first after the action name
+Please think step by step and produce a step-by-step plan using the PDDL-style action format described above.
 """
 
 # ── Data loading ────────────────────────────────────────────────────────
@@ -210,17 +202,8 @@ def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
             new_rec["seed"] = seed
             new_rec["id"] = f"{rec['id']}_seed{seed}"
             # Rebuild NL prompt from randomized env
-            from src.gen_data.robotouille.data_transform import convert
-            problem = convert(new_rec["original_json"])
-            new_rec["nl"] = {
-                "task": problem.task,
-                "prompt": problem.prompt,
-                "goal_predicates": [
-                    {"predicate": g["predicate"], "args": g["args"]}
-                    for g in problem.goal_predicates
-                ],
-                "config": problem.config,
-            }
+            from src.gen_data.robotouille.data_transform_regex import convert_task
+            new_rec["natural_language"] = convert_task(new_rec["original_json"])
             expanded.append(new_rec)
     return expanded
 
@@ -243,50 +226,53 @@ def _format_nl(nl_dict: dict) -> str:
 # ── Starting station detection ──────────────────────────────────────────
 
 
-def _find_nearest_station(nl_str: str) -> str | None:
-    """Parse the NL to find the station nearest to the robot's starting position.
+def _find_nearest_station(original_json: dict) -> str | None:
+    """Find the station nearest to the robot's starting position from JSON.
 
     Returns a hint string like:
-        "The robot starts at station table_1 (nearest to coordinates (0, 2))."
+        "IMPORTANT: The robot starts at station table_1. Use 'table_1' as station_from."
     or None if we can't determine it.
     """
-    # Extract robot position
-    robot_pos_match = re.search(
-        r'[Yy]ou are currently at \((\d+),\s*(\d+)\)', nl_str
-    )
-    if not robot_pos_match:
-        return None
-    rx, ry = int(robot_pos_match.group(1)), int(robot_pos_match.group(2))
-
-    # Extract all station positions
-    station_pattern = re.compile(
-        r'-\s+([\w]+)\s+at\s+\((\d+),\s*(\d+)\)'
-    )
-    stations = []
-    for m in station_pattern.finditer(nl_str):
-        name = m.group(1)
-        sx, sy = int(m.group(2)), int(m.group(3))
-        dist = abs(rx - sx) + abs(ry - sy)  # Manhattan distance
-        stations.append((name, sx, sy, dist))
-
-    if not stations:
+    players = original_json.get("players", [])
+    stations = original_json.get("stations", [])
+    if not players or not stations:
         return None
 
-    stations.sort(key=lambda t: t[3])
-    best = stations[0]
+    player = players[0]
+    rx, ry = player["x"], player["y"]
+    dx, dy = player.get("direction", [0, -1])
+    facing_x, facing_y = rx + dx, ry + dy
 
-    # If robot is exactly at a station, say so
-    if best[3] == 0:
+    # Build station name map (type + 1-based index)
+    from collections import defaultdict
+    type_count: dict[str, int] = defaultdict(int)
+    station_labels = []
+    for s in stations:
+        type_count[s["name"]] += 1
+        station_labels.append(f"{s['name']}_{type_count[s['name']]}")
+
+    # Find station at facing position first (that's where robot stands)
+    for s, label in zip(stations, station_labels):
+        if s["x"] == facing_x and s["y"] == facing_y:
+            return (
+                f"IMPORTANT: The robot starts facing station {label} at ({facing_x}, {facing_y}). "
+                f"Use '{label}' as station_from in your first move action."
+            )
+
+    # Fallback: nearest station by Manhattan distance from player position
+    best_label, best_dist, best_s = None, float("inf"), None
+    for s, label in zip(stations, station_labels):
+        dist = abs(rx - s["x"]) + abs(ry - s["y"])
+        if dist < best_dist:
+            best_dist, best_label, best_s = dist, label, s
+
+    if best_label:
         return (
-            f"IMPORTANT: The robot starts at station {best[0]}. "
-            f"Use '{best[0]}' as station_from in your first move action."
+            f"IMPORTANT: The robot's starting position ({rx}, {ry}) is closest to "
+            f"station {best_label} at ({best_s['x']}, {best_s['y']}). "
+            f"Use '{best_label}' as station_from in your first move action."
         )
-    else:
-        return (
-            f"IMPORTANT: The robot's starting coordinates ({rx}, {ry}) are closest to "
-            f"station {best[0]} at ({best[1]}, {best[2]}). "
-            f"Use '{best[0]}' as station_from in your first move action."
-        )
+    return None
 
 
 # ── Plan parsing ────────────────────────────────────────────────────────
@@ -346,19 +332,18 @@ def _parse_plan_response(response: str) -> list[str] | None:
 
 
 # Mapping from coordinate tuples to station names, built per-problem
-def _build_coord_to_station(nl_str: str) -> dict[str, str]:
-    """Build a mapping from '(x, y)' strings to station names."""
+def _build_coord_to_station(original_json: dict) -> dict[str, str]:
+    """Build a mapping from '(x, y)' strings to station names from JSON."""
+    from collections import defaultdict
     mapping = {}
-    station_pattern = re.compile(
-        r'-\s+([\w]+)\s+at\s+\((\d+),\s*(\d+)\)'
-    )
-    for m in station_pattern.finditer(nl_str):
-        name = m.group(1)
-        coord_key = f"({m.group(2)},{m.group(3)})"
-        # Also store with space after comma
-        coord_key2 = f"({m.group(2)}, {m.group(3)})"
-        mapping[coord_key] = name
-        mapping[coord_key2] = name
+    type_count: dict[str, int] = defaultdict(int)
+    for s in original_json.get("stations", []):
+        type_count[s["name"]] += 1
+        label = f"{s['name']}_{type_count[s['name']]}"
+        coord_key = f"({s['x']},{s['y']})"
+        coord_key2 = f"({s['x']}, {s['y']})"
+        mapping[coord_key] = label
+        mapping[coord_key2] = label
     return mapping
 
 
@@ -584,7 +569,7 @@ def _resolve_coordinates_in_tokens(
 
 def normalize_plan(
     actions: list[str],
-    nl_str: str,
+    original_json: dict,
     nearest_station: str | None = None,
 ) -> list[str]:
     """Normalize a full plan from NL-style to PDDL-style actions.
@@ -592,7 +577,7 @@ def normalize_plan(
     Also fixes the first move's source station if the robot starts at
     a coordinate position rather than a named station.
     """
-    coord_to_station = _build_coord_to_station(nl_str)
+    coord_to_station = _build_coord_to_station(original_json)
     normalized = []
     first_move_fixed = False
 
@@ -670,29 +655,22 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     gold_data: list[dict] = []
     nl_strings: list[str] = []  # Keep NL strings for normalization
 
-    for rec in tqdm(records, desc="Preparing NL questions"):
-        nl_raw = rec.get("natural_language") or rec.get("nl")
-        if isinstance(nl_raw, str):
-            nl_str = nl_raw
-        else:
-            nl_str = _format_nl(nl_raw or {})
-
-        # Compute starting station hint
-        starting_hint = _find_nearest_station(nl_str) or ""
+    for rec in tqdm(records, desc="Preparing questions"):
+        original_json = rec.get("original_json", {})
+        starting_hint = _find_nearest_station(original_json) or ""
 
         messages = [
             {"role": "system", "content": _PLANNER_SYSTEM_PROMPT},
             {"role": "user", "content": _PLANNER_USER_TEMPLATE.format(
-                natural_language=nl_str,
+                original_json=json.dumps(original_json, indent=2),
                 starting_station_hint=starting_hint,
             )},
         ]
         all_messages.append(messages)
-        nl_strings.append(nl_str)
+        nl_strings.append(original_json)
         gold_data.append({
             "id": rec.get("id", "?"),
-            "nl": nl_str,
-            "original_json": rec.get("original_json"),
+            "original_json": original_json,
         })
 
     # Batch LLM call
@@ -745,16 +723,15 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     # ── Normalize all parsed plans ──────────────────────────────────────
     for i in range(n):
         if plans[i] is not None:
-            nl_str = nl_strings[i]
+            orig_json = nl_strings[i]
             # Find nearest station for first-move fix
             nearest = None
-            hint = _find_nearest_station(nl_str)
+            hint = _find_nearest_station(orig_json)
             if hint:
-                # Extract station name from the hint string
                 m = re.search(r"station (\w+)", hint)
                 if m:
                     nearest = m.group(1)
-            plans[i] = normalize_plan(plans[i], nl_str, nearest)
+            plans[i] = normalize_plan(plans[i], orig_json, nearest)
 
     # Evaluate and save
     save_path = Path(args.save_path)
@@ -785,7 +762,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
 
             rec = {
                 "id": gold["id"],
-                "nl": gold["nl"],
+                "original_json": gold.get("original_json"),
                 "plan": [a for a in action_list] if action_list else None,
                 "plan_length": len(action_list) if action_list else None,
                 "solved": action_list is not None,

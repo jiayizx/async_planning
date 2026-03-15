@@ -1,7 +1,7 @@
-(define (domain robotouille-async)
-    (:requirements :strips :typing :durative-actions)
+(define (domain robotouille)
+    (:requirements :strips :typing)
     (:types
-        station player item container
+        station player item container water
     )
     (:predicates
         ;; === Station identity ===
@@ -37,342 +37,275 @@
 
         ;; === Spatial: player ===
         (loc ?p - player ?s - station)
-        (nothing ?p - player)          ; player hands are empty (no item)
-        (nocontainer ?p - player)      ; player is not carrying a container
+        (nothing ?p - player)
+        (nocontainer ?p - player)
 
         ;; === Spatial: items on stations ===
-        (at ?i - item ?s - station)    ; item is at station (possibly in a stack)
-        (on ?i - item ?s - station)    ; item is directly on the station surface
-        (clear ?i - item)              ; nothing is on top of this item
-        (atop ?i1 - item ?i2 - item)   ; i1 is stacked on i2
-        (has ?p - player ?i - item)    ; player is holding item
+        (at ?i - item ?s - station)
+        (on ?i - item ?s - station)
+        (clear ?i - item)
+        (atop ?i1 - item ?i2 - item)
+        (has ?p - player ?i - item)
 
         ;; === Spatial: stations ===
-        (empty ?s - station)           ; no item directly on station surface
-        (vacant ?s - station)          ; no player at this station
+        (empty ?s - station)
+        (vacant ?s - station)
 
         ;; === Container predicates ===
         (container_at ?c - container ?s - station)
         (has_container ?p - player ?c - container)
-        (container_on_station ?c - container)  ; container is on some station (not held)
-        (ispottype ?c - container)     ; is a pot
-        (isbowltype ?c - container)    ; is a bowl
+        (container_on_station ?c - container)
+        (ispottype ?c - container)
+        (isbowltype ?c - container)
 
         ;; === Water / soup predicates ===
-        (has_water ?c - container ?w - water)  ; container has water in it
+        (has_water ?c - container ?w - water)
         (isboiling ?w - water)
-        (addedto ?i - item ?w - water)         ; item has been added to the water
-        (in ?w - water ?c - container)         ; water is in container (goal-facing)
-
-        ;; Positive complement of "water not yet created"
-        ;; true in :init, consumed by fill
+        (addedto ?i - item ?w - water)
+        (in ?w - water ?c - container)
         (water_available ?w - water)
-
-        ;; Positive complement of "station not busy"
-        ;; true in :init for all processing stations, toggled by durative actions
-        (station_free ?s - station)
     )
 
     ;; =====================================================================
     ;; MOVEMENT AND LOGISTICS
     ;; =====================================================================
 
-    (:durative-action move
+    (:action move
         :parameters (?p - player ?s1 - station ?s2 - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (loc ?p ?s1))
-            (at start (vacant ?s2))
+        :precondition (and
+            (loc ?p ?s1)
+            (vacant ?s2)
         )
         :effect (and
-            (at start (not (loc ?p ?s1)))
-            (at start (not (vacant ?s2)))
-            (at end (loc ?p ?s2))
-            (at end (vacant ?s1))
+            (not (loc ?p ?s1))
+            (not (vacant ?s2))
+            (loc ?p ?s2)
+            (vacant ?s1)
         )
     )
 
-    (:durative-action pick-up
+    (:action pick-up
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (nothing ?p))
-            (at start (on ?i ?s))
-            (at start (loc ?p ?s))
-            (at start (clear ?i))
+        :precondition (and
+            (nothing ?p)
+            (on ?i ?s)
+            (loc ?p ?s)
+            (clear ?i)
         )
         :effect (and
-            (at start (not (nothing ?p)))
-            (at start (not (on ?i ?s)))
-            (at start (not (at ?i ?s)))
-            (at start (not (clear ?i)))
-            (at end (has ?p ?i))
-            (at end (empty ?s))
+            (not (nothing ?p))
+            (not (on ?i ?s))
+            (not (at ?i ?s))
+            (not (clear ?i))
+            (has ?p ?i)
+            (empty ?s)
         )
     )
 
-    (:durative-action unstack
+    (:action unstack
         :parameters (?p - player ?i1 - item ?i2 - item ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (nothing ?p))
-            (at start (clear ?i1))
-            (at start (atop ?i1 ?i2))
-            (at start (loc ?p ?s))
-            (at start (at ?i1 ?s))
-            (at start (at ?i2 ?s))
+        :precondition (and
+            (nothing ?p)
+            (clear ?i1)
+            (atop ?i1 ?i2)
+            (loc ?p ?s)
+            (at ?i1 ?s)
+            (at ?i2 ?s)
         )
         :effect (and
-            (at start (not (nothing ?p)))
-            (at start (not (clear ?i1)))
-            (at start (not (atop ?i1 ?i2)))
-            (at start (not (at ?i1 ?s)))
-            (at end (has ?p ?i1))
-            (at end (clear ?i2))
+            (not (nothing ?p))
+            (not (clear ?i1))
+            (not (atop ?i1 ?i2))
+            (not (at ?i1 ?s))
+            (has ?p ?i1)
+            (clear ?i2)
         )
     )
 
-    (:durative-action place
+    (:action place
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (has ?p ?i))
-            (at start (loc ?p ?s))
-            (at start (empty ?s))
+        :precondition (and
+            (has ?p ?i)
+            (loc ?p ?s)
+            (empty ?s)
         )
         :effect (and
-            (at start (not (has ?p ?i)))
-            (at start (not (empty ?s)))
-            (at end (nothing ?p))
-            (at end (at ?i ?s))
-            (at end (clear ?i))
-            (at end (on ?i ?s))
+            (not (has ?p ?i))
+            (not (empty ?s))
+            (nothing ?p)
+            (at ?i ?s)
+            (clear ?i)
+            (on ?i ?s)
         )
     )
 
-    (:durative-action stack
+    (:action stack
         :parameters (?p - player ?i1 - item ?i2 - item ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (has ?p ?i1))
-            (at start (clear ?i2))
-            (at start (loc ?p ?s))
-            (at start (at ?i2 ?s))
+        :precondition (and
+            (has ?p ?i1)
+            (clear ?i2)
+            (loc ?p ?s)
+            (at ?i2 ?s)
         )
         :effect (and
-            (at start (not (has ?p ?i1)))
-            (at start (not (clear ?i2)))
-            (at end (nothing ?p))
-            (at end (at ?i1 ?s))
-            (at end (atop ?i1 ?i2))
-            (at end (clear ?i1))
+            (not (has ?p ?i1))
+            (not (clear ?i2))
+            (nothing ?p)
+            (at ?i1 ?s)
+            (atop ?i1 ?i2)
+            (clear ?i1)
         )
     )
 
     ;; =====================================================================
-    ;; DURATIVE PROCESSING ACTIONS (async — robot starts, then can leave)
+    ;; PROCESSING ACTIONS
     ;; =====================================================================
 
-    ;; Cook on stove — robot must stay for entire duration
-    (:durative-action cook
+    (:action cook
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 3)
-        :condition (and
-            (at start (isstove ?s))
-            (at start (iscookable ?i))
-            (at start (on ?i ?s))
-            (at start (loc ?p ?s))
-            (at start (clear ?i))
-            (at start (station_free ?s))
-            (over all (on ?i ?s))
-            (over all (clear ?i))
-            (over all (loc ?p ?s))
+        :precondition (and
+            (isstove ?s)
+            (iscookable ?i)
+            (on ?i ?s)
+            (loc ?p ?s)
+            (clear ?i)
         )
-        :effect (and
-            (at start (not (station_free ?s)))
-            (at end (iscooked ?i))
-            (at end (station_free ?s))
-        )
+        :effect (iscooked ?i)
     )
 
-    ;; Cut on board — robot must stay for entire duration
-    (:durative-action cut
+    (:action cut
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 3)
-        :condition (and
-            (at start (isboard ?s))
-            (at start (iscuttable ?i))
-            (at start (on ?i ?s))
-            (at start (loc ?p ?s))
-            (at start (clear ?i))
-            (at start (station_free ?s))
-            (over all (on ?i ?s))
-            (over all (loc ?p ?s))
-            (over all (clear ?i))
+        :precondition (and
+            (isboard ?s)
+            (iscuttable ?i)
+            (on ?i ?s)
+            (loc ?p ?s)
+            (clear ?i)
         )
-        :effect (and
-            (at start (not (station_free ?s)))
-            (at end (iscut ?i))
-            (at end (station_free ?s))
-        )
+        :effect (iscut ?i)
     )
 
-    ;; Fry in fryer — robot must stay for entire duration
-    (:durative-action fry
+    (:action fry
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 3)
-        :condition (and
-            (at start (isfryer ?s))
-            (at start (isfryable ?i))
-            (at start (on ?i ?s))
-            (at start (loc ?p ?s))
-            (at start (clear ?i))
-            (at start (station_free ?s))
-            (over all (on ?i ?s))
-            (over all (clear ?i))
-            (over all (loc ?p ?s))
+        :precondition (and
+            (isfryer ?s)
+            (isfryable ?i)
+            (on ?i ?s)
+            (loc ?p ?s)
+            (clear ?i)
         )
-        :effect (and
-            (at start (not (station_free ?s)))
-            (at end (isfried ?i))
-            (at end (station_free ?s))
-        )
+        :effect (isfried ?i)
     )
 
-    ;; Fry an item that must be cut first (potato -> fries, onion -> rings)
-    (:durative-action fry_cut_item
+    (:action fry_cut_item
         :parameters (?p - player ?i - item ?s - station)
-        :duration (= ?duration 3)
-        :condition (and
-            (at start (isfryer ?s))
-            (at start (isfryableifcut ?i))
-            (at start (iscut ?i))
-            (at start (on ?i ?s))
-            (at start (loc ?p ?s))
-            (at start (clear ?i))
-            (at start (station_free ?s))
-            (over all (on ?i ?s))
-            (over all (clear ?i))
+        :precondition (and
+            (isfryer ?s)
+            (isfryableifcut ?i)
+            (iscut ?i)
+            (on ?i ?s)
+            (loc ?p ?s)
+            (clear ?i)
         )
-        :effect (and
-            (at start (not (station_free ?s)))
-            (at end (isfried ?i))
-            (at end (station_free ?s))
-        )
+        :effect (isfried ?i)
     )
 
     ;; =====================================================================
-    ;; CONTAINER ACTIONS (for soup scenarios)
+    ;; CONTAINER ACTIONS
     ;; =====================================================================
 
-    (:durative-action pick-up-container
+    (:action pick-up-container
         :parameters (?p - player ?c - container ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (nocontainer ?p))
-            (at start (nothing ?p))
-            (at start (container_at ?c ?s))
-            (at start (container_on_station ?c))
-            (at start (loc ?p ?s))
+        :precondition (and
+            (nocontainer ?p)
+            (nothing ?p)
+            (container_at ?c ?s)
+            (container_on_station ?c)
+            (loc ?p ?s)
         )
         :effect (and
-            (at start (not (nocontainer ?p)))
-            (at start (not (container_at ?c ?s)))
-            (at start (not (container_on_station ?c)))
-            (at end (has_container ?p ?c))
+            (not (nocontainer ?p))
+            (not (container_at ?c ?s))
+            (not (container_on_station ?c))
+            (has_container ?p ?c)
         )
     )
 
-    (:durative-action place-container
+    (:action place-container
         :parameters (?p - player ?c - container ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (has_container ?p ?c))
-            (at start (loc ?p ?s))
+        :precondition (and
+            (has_container ?p ?c)
+            (loc ?p ?s)
         )
         :effect (and
-            (at start (not (has_container ?p ?c)))
-            (at end (nocontainer ?p))
-            (at end (container_at ?c ?s))
-            (at end (container_on_station ?c))
+            (not (has_container ?p ?c))
+            (nocontainer ?p)
+            (container_at ?c ?s)
+            (container_on_station ?c)
         )
     )
 
-    ;; Fill pot with water at sink
-    (:durative-action fill
+    (:action fill
         :parameters (?p - player ?c - container ?w - water ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (issink ?s))
-            (at start (loc ?p ?s))
-            (at start (ispottype ?c))
-            (at start (container_at ?c ?s))
-            (at start (container_on_station ?c))
-            (at start (water_available ?w))
+        :precondition (and
+            (issink ?s)
+            (loc ?p ?s)
+            (ispottype ?c)
+            (container_at ?c ?s)
+            (container_on_station ?c)
+            (water_available ?w)
         )
         :effect (and
-            (at start (not (water_available ?w)))
-            (at end (has_water ?c ?w))
-            (at end (in ?w ?c))
+            (not (water_available ?w))
+            (has_water ?c ?w)
+            (in ?w ?c)
         )
     )
 
-    ;; Add an item to the pot (drop item into water)
-    (:durative-action add-to-pot
+    (:action add-to-pot
         :parameters (?p - player ?i - item ?c - container ?w - water ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (has ?p ?i))
-            (at start (loc ?p ?s))
-            (at start (container_at ?c ?s))
-            (at start (has_water ?c ?w))
-            (at start (ispottype ?c))
+        :precondition (and
+            (has ?p ?i)
+            (loc ?p ?s)
+            (container_at ?c ?s)
+            (has_water ?c ?w)
+            (ispottype ?c)
         )
         :effect (and
-            (at start (not (has ?p ?i)))
-            (at end (nothing ?p))
-            (at end (addedto ?i ?w))
+            (not (has ?p ?i))
+            (nothing ?p)
+            (addedto ?i ?w)
         )
     )
 
-    ;; Boil water in pot on stove — robot initiates, then free to leave
-    (:durative-action boil
+    (:action boil
         :parameters (?p - player ?c - container ?w - water ?s - station)
-        :duration (= ?duration 3)
-        :condition (and
-            (at start (isstove ?s))
-            (at start (loc ?p ?s))
-            (at start (container_at ?c ?s))
-            (at start (has_water ?c ?w))
-            (at start (ispottype ?c))
-            (at start (station_free ?s))
-            (over all (container_at ?c ?s))
+        :precondition (and
+            (isstove ?s)
+            (loc ?p ?s)
+            (container_at ?c ?s)
+            (has_water ?c ?w)
+            (ispottype ?c)
         )
-        :effect (and
-            (at start (not (station_free ?s)))
-            (at end (isboiling ?w))
-            (at end (station_free ?s))
-        )
+        :effect (isboiling ?w)
     )
 
-    ;; Pour from pot to bowl (both at same station)
-    (:durative-action pour
+    (:action pour
         :parameters (?p - player ?pot - container ?bowl - container ?w - water ?s - station)
-        :duration (= ?duration 1)
-        :condition (and
-            (at start (loc ?p ?s))
-            (at start (ispottype ?pot))
-            (at start (isbowltype ?bowl))
-            (at start (container_at ?pot ?s))
-            (at start (container_at ?bowl ?s))
-            (at start (has_water ?pot ?w))
-            (at start (in ?w ?pot))
+        :precondition (and
+            (loc ?p ?s)
+            (ispottype ?pot)
+            (isbowltype ?bowl)
+            (container_at ?pot ?s)
+            (container_at ?bowl ?s)
+            (has_water ?pot ?w)
+            (in ?w ?pot)
         )
         :effect (and
-            (at start (not (has_water ?pot ?w)))
-            (at start (not (in ?w ?pot)))
-            (at end (has_water ?bowl ?w))
-            (at end (in ?w ?bowl))
+            (not (has_water ?pot ?w))
+            (not (in ?w ?pot))
+            (has_water ?bowl ?w)
+            (in ?w ?bowl)
         )
     )
 )
