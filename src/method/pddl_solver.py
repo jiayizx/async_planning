@@ -1,7 +1,7 @@
-"""PDDL 2.1 temporal-planning solver via solver.planning.domains API.
+"""PDDL solver via solver.planning.domains API.
 
-Submits domain + problem PDDL to the OPTIC planner hosted at
-solver.planning.domains:5001 and polls for the result.
+Supports OPTIC (temporal planning) and LAMA-first (classical planning, faster).
+Submits domain + problem PDDL and polls for the result.
 """
 from __future__ import annotations
 
@@ -41,8 +41,13 @@ def solve(
     poll_interval: float = 1.0,
     timeout: Optional[float] = None,
     max_retries: int = 0,
+    solver: str = "optic",
 ) -> Optional[SolverResult]:
-    """Run OPTIC via the solver.planning.domains async API.
+    """Run a planner via the solver.planning.domains async API.
+
+    Args:
+        solver: Planner name, e.g. ``"optic"`` (temporal) or ``"lama-first"``
+                (classical STRIPS, faster for large grounding).
 
     Returns None if the API is unreachable, times out, or returns no plan.
     """
@@ -50,7 +55,7 @@ def solve(
     for attempt in range(max_retries + 1):
         if attempt > 0:
             time.sleep(5 * attempt)
-        last_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout)
+        last_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout, solver)
         if last_result.error and _is_retryable_error(last_result.error):
             continue
         return last_result
@@ -62,6 +67,7 @@ def _solve_once(
     problem_pddl: str,
     poll_interval: float,
     timeout: Optional[float],
+    solver: str = "optic",
 ) -> SolverResult:
     req_body = {
         "domain": domain_pddl,
@@ -71,7 +77,7 @@ def _solve_once(
     # Step 1: Submit the job (retry on network errors)
     for attempt in range(4):
         try:
-            resp = requests.post(f"{OPTIC_API_URL}/package/optic/solve", json=req_body, timeout=60)
+            resp = requests.post(f"{OPTIC_API_URL}/package/{solver}/solve", json=req_body, timeout=60)
             resp.raise_for_status()
             break
         except requests.RequestException as e:
@@ -136,12 +142,16 @@ def _extract_error(data: dict) -> str:
 
 
 def _extract_output(data: dict) -> str:
-    """Extract raw planner output from various API response shapes."""
+    """Extract raw planner output from various API response shapes.
+
+    Handles both OPTIC (``output.plan``) and LAMA-first (``output.sas_plan``).
+    """
     result = data.get("result", data)
     if isinstance(result, dict):
         output = result.get("output", "")
         if isinstance(output, dict):
-            return output.get("plan", "") or str(output)
+            # LAMA-first stores the plan in output.sas_plan
+            return output.get("sas_plan", "") or output.get("plan", "") or str(output)
         if isinstance(output, str):
             return output
         return result.get("stdout", "") or result.get("plan", "") or str(result)
@@ -149,24 +159,27 @@ def _extract_output(data: dict) -> str:
 
 
 def _parse_plan(output: str) -> Optional[SolverResult]:
-    """Parse the LAST plan block from OPTIC output.
+    """Parse a plan from planner output.
 
-    OPTIC may print multiple plan blocks (one per search phase, e.g. an
-    initial EHC plan followed by a WA* improvement).  Each plan block is
-    preceded by a line like:
+    Handles two formats:
 
-        ; Plan found with metric 15.021
+    **OPTIC** (temporal, with timestamps)::
 
-    We locate the LAST such header and parse only the actions that follow it,
-    giving us the best (shortest-makespan) plan.
+        0.000: (move robot_1 table_1 table_2) [0.001]
+
+    **LAMA-first** (classical, action per line, no timestamps)::
+
+        (move robot_1 table_1 table_2)
+        ; cost = 33 (unit cost)
+
+    Returns None if no actions are found.
     """
-    # ---- 1. Isolate the last plan block ----
+    # ---- Try OPTIC format first ----
     plan_header_re = re.compile(r";\s*Plan found with metric\s+[\d.]+")
     headers = list(plan_header_re.finditer(output))
     if headers:
         last_section = output[headers[-1].start():]
     else:
-        # Fallback: try other common markers from different planner versions
         last_section = output
         for marker in [";;;; Solution Found", "; Cost:"]:
             idx = output.rfind(marker)
@@ -174,34 +187,33 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
                 last_section = output[idx:]
                 break
 
-    # ---- 2. Extract actions ----
-    action_re = re.compile(r"(\d+\.?\d*)\s*:\s*\(([^)]+)\)\s*\[(\d+\.?\d*)\]")
+    temporal_re = re.compile(r"(\d+\.?\d*)\s*:\s*\(([^)]+)\)\s*\[(\d+\.?\d*)\]")
     plan: list[tuple[float, str, float]] = []
-    for m in action_re.finditer(last_section):
+    for m in temporal_re.finditer(last_section):
         plan.append((float(m.group(1)), m.group(2), float(m.group(3))))
 
-    if not plan:
-        return None
-
-    # ---- 3. Determine makespan ----
-    # Prefer OPTIC's reported cost over manually summing action timestamps.
-    # Large durations (e.g. millions of seconds) may overflow OPTIC's internal
-    # int32 millisecond counter, producing garbled negative values in plan
-    # action lines.  "; Cost: X" is most reliable; if missing (output was
-    # truncated before final summary), fall back to the last
-    # "; Plan found with metric X" line.
-    cost_match = re.search(r";\s*Cost:\s*([\d.]+)", last_section)
-    if cost_match:
-        makespan = float(cost_match.group(1))
-    else:
-        # Use the metric from the last plan header we already found
-        if headers:
+    if plan:
+        # Determine makespan from reported cost or timestamps
+        cost_match = re.search(r";\s*Cost:\s*([\d.]+)", last_section)
+        if cost_match:
+            makespan = float(cost_match.group(1))
+        elif headers:
             m = re.search(r"([\d.]+)", output[headers[-1].start() + len("; Plan found with metric"):])
-            makespan = float(m.group(1)) if m else max(start + dur for start, _, dur in plan)
+            makespan = float(m.group(1)) if m else max(s + d for s, _, d in plan)
         else:
-            makespan = max(start + dur for start, _, dur in plan)
+            makespan = max(s + d for s, _, d in plan)
+        return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
 
-    return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
+    # ---- Try LAMA/classical format (no timestamps) ----
+    classical_re = re.compile(r"^\(([^)]+)\)\s*$", re.MULTILINE)
+    actions = [m.group(1) for m in classical_re.finditer(output)]
+    if actions:
+        plan = [(i * 0.001, a, 0.001) for i, a in enumerate(actions)]
+        cost_match = re.search(r";\s*cost\s*=\s*(\d+)", output, re.IGNORECASE)
+        makespan = float(cost_match.group(1)) * 0.001 if cost_match else len(actions) * 0.001
+        return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
+
+    return None
 
 
 def batch_solve(
@@ -211,6 +223,7 @@ def batch_solve(
     timeout: Optional[float] = None,
     max_retries: int = 0,
     desc: str = "Solving PDDL",
+    solver: str = "optic",
 ) -> list[SolverResult]:
     """Solve multiple (domain, problem) pairs in parallel.
 
@@ -221,6 +234,7 @@ def batch_solve(
         timeout: Max seconds to wait for a single solve job before giving up.
         max_retries: Max retries for transient server errors (container failures, empty output).
         desc: Progress bar description.
+        solver: Planner name (``"optic"`` or ``"lama-first"``).
 
     Returns:
         List of SolverResult in the same order as *problems*.
@@ -229,7 +243,7 @@ def batch_solve(
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_idx = {
-            executor.submit(solve, domain, problem, poll_interval, timeout, max_retries): i
+            executor.submit(solve, domain, problem, poll_interval, timeout, max_retries, solver): i
             for i, (domain, problem) in enumerate(problems)
         }
 

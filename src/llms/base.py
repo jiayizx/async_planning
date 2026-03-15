@@ -39,9 +39,7 @@ class BaseLLM(ABC):
 
     def chat(self, messages: List[Dict[str, str]], schema: BaseModel = None) -> str:
         """Send a single conversation and return a single response string."""
-        if self.strict_json:
-            if schema is None:
-                raise ValueError("Schema is required for strict JSON mode.")
+        if self.strict_json and schema is not None:
             return self._chat_with_format(messages, schema)
         return self._chat(messages)
 

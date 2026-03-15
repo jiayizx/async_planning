@@ -25,14 +25,13 @@ import os
 import sys
 from pathlib import Path
 
-from tqdm import tqdm
 
 from dotenv import load_dotenv
 load_dotenv()
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 _ROBOTOUILLE_ROOT = _PROJECT_ROOT / "baselines" / "robotouille"
-_DOMAIN_PDDL_PATH = "src/experiments/robotouille/robotouille.pddl"
+_DOMAIN_PDDL_PATH = _ROBOTOUILLE_ROOT / "environments" / "robotouille.pddl"
 _DEFAULT_DATA_PATH = _PROJECT_ROOT / "data" / "robotouille_single_agent_async.json"
 
 for p in (_PROJECT_ROOT, _ROBOTOUILLE_ROOT):
@@ -47,6 +46,7 @@ from src.method.nl_to_pddl import (
     RobotouillePDDL,
     build_pddl_messages,
     build_robotouille_problem_messages,
+    build_robotouille_free_domain_messages,
     parse_pddl_response,
     parse_robotouille_problem_response,
     normalize_robotouille_problem_to_domain,
@@ -58,6 +58,7 @@ from src.evaluation.robotouille.eval import evaluate_record, summarize_eval
 
 _TRANSIENT_SOLVER_RETRIES = 2
 SOLVER_TIMEOUT = 120
+DEFAULT_SOLVER = "lama-first"  # faster than OPTIC for classical STRIPS domains
 
 
 # ── Data loading ─────────────────────────────────────────────────────────
@@ -70,6 +71,31 @@ def _load_records(data_path: Path) -> list[dict]:
     if not isinstance(records, list):
         raise ValueError(f"Expected JSON array, got {type(records).__name__}")
     return records
+
+
+def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
+    """Expand records by applying each seed, rebuilding natural_language."""
+    if not seeds:
+        return records
+    try:
+        from environments.env_generator.procedural_generator import randomize_environment
+    except ImportError as e:
+        raise ImportError(f"Cannot import randomize_environment: {e}")
+    from src.gen_data.robotouille.data_transform_regex import convert_task
+    import copy
+
+    expanded: list[dict] = []
+    for rec in records:
+        for seed in seeds:
+            new_rec = copy.deepcopy(rec)
+            new_rec["original_json"] = randomize_environment(
+                copy.deepcopy(rec["original_json"]), seed, noisy_randomization=False
+            )
+            new_rec["seed"] = seed
+            new_rec["id"] = f"{rec['id']}_seed{seed}"
+            new_rec["natural_language"] = convert_task(new_rec["original_json"])
+            expanded.append(new_rec)
+    return expanded
 
 
 def _format_nl(nl_dict: dict) -> str:
@@ -94,22 +120,14 @@ def _format_nl(nl_dict: dict) -> str:
 def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace):
     domain_pddl = Path(_DOMAIN_PDDL_PATH).read_text(encoding="utf-8") if not args.generate_domain else None
 
-    n = min(len(records), args.max_examples)
+    n = len(records) if args.max_examples < 0 else min(len(records), args.max_examples)
     records = records[:n]
 
-    questions: list[str] = []
     gold_data: list[dict] = []
 
-    for rec in tqdm(records, desc="Preparing NL questions"):
-        nl_raw = rec.get("natural_language") or rec.get("nl")
-        if isinstance(nl_raw, str):
-            nl_str = nl_raw
-        else:
-            nl_str = _format_nl(nl_raw or {})
-        questions.append(nl_str)
+    for rec in records:
         gold_data.append({
             "id": rec.get("id", "?"),
-            "nl": nl_str,
             "original_json": rec.get("original_json"),
         })
 
@@ -122,15 +140,21 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     error_types: list[str] = ["not_started"] * n
 
     if args.generate_domain:
+        # generate_domain mode: LLM freely designs STRIPS domain+problem from annotated JSON
         histories: list[list[dict]] = [
-            build_pddl_messages(q, effect_goal=args.effect_goal)
-            for q in questions
+            build_robotouille_free_domain_messages(
+                rec.get("original_json", {}), effect_goal=args.effect_goal
+            )
+            for rec in records
         ]
         schema = PDDLResponse
     else:
+        # problem-only mode: pass original_json directly (no NL conversion)
         histories: list[list[dict]] = [
-            build_robotouille_problem_messages(q, domain_pddl, effect_goal=args.effect_goal)
-            for q in questions
+            build_robotouille_problem_messages(
+                rec.get("original_json", {}), domain_pddl, effect_goal=args.effect_goal
+            )
+            for rec in records
         ]
         schema = RobotouillePDDL
         
@@ -198,6 +222,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 max_retries=_TRANSIENT_SOLVER_RETRIES,
                 timeout=SOLVER_TIMEOUT,
                 desc="Solving PDDL",
+                solver=args.solver,
             )
             for (i, _p), sr in zip(solvable, solve_outputs):
                 solver_results[i] = sr
@@ -213,6 +238,25 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 else:
                     errors[i] = ""
                     error_types[i] = ""
+
+    # ── formalizer+ pre-pass: get planning analysis, then ask for PDDL ─
+    if args.generate_domain and args.effect_goal:
+        print("Running planning analysis pre-pass (formalizer+ mode)...")
+        analysis_responses = llm_client.batch_chat(
+            [histories[i] for i in range(n)], schema=None,
+            desc="Planning analysis"
+        )
+        for i, resp in enumerate(analysis_responses):
+            if resp:
+                histories[i].append({"role": "assistant", "content": resp})
+                histories[i].append({
+                    "role": "user",
+                    "content": (
+                        "Good. Now based on your analysis, generate the STRIPS domain and "
+                        "problem PDDL.\n"
+                        'Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}'
+                    ),
+                })
 
     # ── Initial pass ────────────────────────────────────────────────
     _attempt(list(range(n)), desc="LLM translation (NL→PDDL)")
@@ -252,7 +296,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
 
             rec = {
                 "id": gold["id"],
-                "nl": gold["nl"],
+                "original_json": gold.get("original_json"),
                 "error_type": error_types[i],
                 "error": errors[i] if errors[i] else None,
                 "plan": plan,
@@ -386,6 +430,16 @@ def parse_args() -> argparse.Namespace:
         dest="effect_goal",
         help="(Only with --generate-domain) Use parameterless encoding with all at-end effects in :goal.",
     )
+    parser.add_argument(
+        "--seeds", type=int, nargs="*", default=[],
+        help="Seeds for procedural randomization. If omitted, use base layout only.",
+    )
+    parser.add_argument(
+        "--solver",
+        default=DEFAULT_SOLVER,
+        choices=["optic", "lama-first"],
+        help="PDDL solver to use. 'lama-first' is faster for classical STRIPS domains (default).",
+    )
     return parser.parse_args()
 
 
@@ -398,6 +452,10 @@ def main() -> None:
 
     records = _load_records(data_path)
     print(f"Loaded {len(records)} records from {data_path}")
+
+    if args.seeds:
+        records = _expand_with_seeds(records, args.seeds)
+        print(f"Expanded to {len(records)} records with seeds {args.seeds}")
 
     if args.generate_domain:
         print("Mode: LLM generates domain + problem PDDL")
