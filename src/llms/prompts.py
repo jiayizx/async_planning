@@ -190,7 +190,6 @@ RETRY_USER_TEMPLATE = SYNTAX_RETRY_TEMPLATE
 
 
 
-
 def _format_example_no_cot(example: dict, example_idx: int) -> str:
     question = clean_question(example["question"]) + "\n" + "Do NOT explain your reasoning. Output ONLY your final answer inside <answer></answer> tags (e.g. <answer>1 min</answer>)."
     golden_answer = parse_gold_seconds(example['answer'])
@@ -726,3 +725,569 @@ PDDL_FEW_SHOT_EXAMPLES = [
     "step_actions": ["light_grill", "warm_charcoal", "make_patties", "cook_burgers", "put_on_bun"],
    },
 ]
+
+
+# ── Robotouille problem-only formalizer prompt ─────────────────────────
+
+ROBOTOUILLE_SYSTEM_PROMPT_OLD = """\
+You are a PDDL expert.
+
+You will be given:
+1. A PDDL **domain** file that defines all types, predicates and actions.
+2. A **JSON** description of a Robotouille kitchen environment.
+
+Your job is to write ONLY the **problem PDDL** file that is compatible with the given domain.
+
+## JSON Schema
+
+```
+{
+  "stations": [{"name": str, "x": int, "y": int,
+                "pddl_name": str}],         // ← USE THIS as the PDDL object name
+  "items": [
+    {"name": str, "x": int, "y": int,
+     "predicates": ["iscookable", "iscuttable", ...],
+     "stack-level": int,
+     "pddl_name": str,                      // ← USE THIS as the PDDL object name
+     "station": str,                        // ← station pddl_name where this item starts
+     "atop": str | null,                    // ← pddl_name of item below (null if stack-level 0)
+     "held_by": str | null}                 // ← player pddl_name holding this item (null if on a station)
+  ],
+  "players": [{"name": str, "pddl_name": str,
+               "facing_station": str,       // ← station pddl_name the player faces at start
+               "holding": [str]}],          // ← list of item pddl_names the player is holding (empty = empty-handed)
+  "goal": [{"predicate": str, "args": [str], "ids": [int]}],
+  "goal_description": str
+}
+```
+
+The `pddl_name`, `station`, `atop`, `facing_station`, `held_by`, and `holding` fields are pre-computed for you.
+Use them directly — do NOT recompute from coordinates.
+
+## RULES
+
+1. Read the domain carefully — use ONLY the types, predicates and action names it defines.
+2. Declare all objects in `:objects` with their correct types, using each entity's `pddl_name`.
+3. In `:init`, set up ALL required predicates:
+   - Identity predicates for every object using its `pddl_name`
+     (e.g. `(istable table_1)`, `(isbread bread_1)`, `(isrobot robot_1)`).
+   - Player location: `(loc <player.pddl_name> <player.facing_station>)`.
+   - Capability flags from item `predicates` field (e.g. `(iscookable chicken_1)`).
+   - Spatial predicates — for items where `held_by` is null, use the pre-computed `station` and `atop` fields:
+       atop is null  (stack-level 0):  `(on item.pddl_name item.station)` AND `(at item.pddl_name item.station)`
+       atop is set   (stack-level > 0): `(atop item.pddl_name item.atop)` AND `(at item.pddl_name item.station)`
+                                         — do NOT emit `(on ...)` for stacked items
+   - For items where `held_by` is NOT null: the item is held by that player.
+     Use `(has player.pddl_name item.pddl_name)` (NOT `on` or `at`).
+   - `(clear item.pddl_name)` for every item that no other item's `atop` points to AND is not held.
+   - `(empty station.pddl_name)` for every station that no item's `station` field references with stack-level 0.
+   - `(vacant station.pddl_name)` for every station not occupied by a player.
+   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)` and `(nocontainer player.pddl_name)`.
+     If `player.holding` is non-empty → do NOT add `(nothing ...)` — the player is already holding items.
+4. In `:goal`, translate the `goal` array into PDDL predicates. The `predicate` field names the
+   condition; `args` names the entity types. Match args to your named objects using their type and
+   position in the JSON arrays.
+   - Use `(at ?i ?s)` for location goals ("item is at station") — NOT `(on ...)`.
+     `(on ...)` describes the initial surface placement; in goals, `(at ...)` is the correct predicate.
+   - Use `(iscooked ...)`, `(iscut ...)`, `(isfried ...)` for processing goals.
+   - Use `(atop ?i1 ?i2)` for stacking goals.
+   - Use `(clear ?i)` when the goal requires nothing on top of an item.
+   - Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
+5. The domain name in `(:domain ...)` must match the domain's `(define (domain ...))`.
+
+Return JSON with: {"problem_pddl": "<the full problem PDDL string>"}
+"""
+
+ROBOTOUILLE_SYSTEM_PROMPT = """\
+You are a PDDL expert.
+
+You will be given:
+1. A PDDL **domain** file that defines all types, predicates and actions.
+2. A **JSON** description of a Robotouille kitchen environment.
+
+Your job is to write ONLY the **problem PDDL** file that is compatible with the given domain.
+
+## JSON Schema
+
+```
+{
+  "stations": [{"name": str, "x": int, "y": int,
+                "pddl_name": str}],         // ← USE THIS as the PDDL object name
+  "items": [
+    {"name": str, "x": int, "y": int,
+     "predicates": ["iscookable", "iscuttable", ...],
+     "stack-level": int,
+     "pddl_name": str,                      // ← USE THIS as the PDDL object name
+     "station": str,                        // ← station pddl_name where this item starts
+     "atop": str | null,                    // ← pddl_name of item below (null if stack-level 0)
+     "held_by": str | null}                 // ← player pddl_name holding this item (null if on a station)
+  ],
+  "players": [{"name": str, "pddl_name": str,
+               "facing_station": str,       // ← station pddl_name the player faces at start
+               "holding": [str]}],          // ← list of item pddl_names the player is holding (empty = empty-handed)
+  "goal": [{"predicate": str, "args": [str], "ids": [int]}],
+  "goal_description": str
+}
+```
+
+The `pddl_name`, `station`, `atop`, `facing_station`, `held_by`, and `holding` fields are pre-computed for you.
+Use them directly — do NOT recompute from coordinates.
+
+## RULES
+
+1. Read the domain carefully — use ONLY the types, predicates and action names it defines.
+2. Declare all objects in `:objects` with their correct types, using each entity's `pddl_name`.
+3. In `:init`, set up ALL required predicates:
+   - Identity predicates for every object using its `pddl_name`
+     (e.g. `(istable table_1)`, `(isbread bread_1)`, `(isrobot robot_1)`).
+   - Player location: `(loc <player.pddl_name> <player.facing_station>)`.
+   - Capability flags from item `predicates` field (e.g. `(iscookable chicken_1)`).
+   - Spatial predicates — for items where `held_by` is null, use the pre-computed `station` and `atop` fields:
+       atop is null  (stack-level 0):  `(on item.pddl_name item.station)` AND `(at item.pddl_name item.station)`
+       atop is set   (stack-level > 0): `(atop item.pddl_name item.atop)` AND `(at item.pddl_name item.station)`
+                                         — do NOT emit `(on ...)` for stacked items
+   - For items where `held_by` is NOT null: the item is held by that player.
+     Use `(has player.pddl_name item.pddl_name)` (NOT `on` or `at`).
+   - `(clear item.pddl_name)` for every item that no other item's `atop` points to AND is not held.
+   - `(empty station.pddl_name)` for every station that no item's `station` field references with stack-level 0.
+   - `(vacant station.pddl_name)` for every station not occupied by a player.
+   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)` and `(nocontainer player.pddl_name)`.
+     If `player.holding` is non-empty → do NOT add `(nothing ...)` — the player is already holding items.
+4. In `:goal`, translate the `goal` array into PDDL predicates. The `predicate` field names the
+   condition; `args` names the entity types. Match args to your named objects using their type and
+   position in the JSON arrays.
+   - Use `(at ?i ?s)` for location goals ("item is at station") — NOT `(on ...)`.
+     `(on ...)` describes the initial surface placement; in goals, `(at ...)` is the correct predicate.
+   - Use `(iscooked ...)`, `(iscut ...)`, `(isfried ...)` for processing goals.
+   - Use `(atop ?i1 ?i2)` for stacking goals.
+   - Use `(clear ?i)` when the goal requires nothing on top of an item.
+   - Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
+5. The domain name in `(:domain ...)` must match the domain's `(define (domain ...))`.
+6. NEVER use `(not ...)` in the `:goal`.
+
+STEP-BY-STEP PROCEDURE for `:init`:
+A. Build a coordinate→station map: for each station, record (x,y)→station_name.
+B. For EACH item: check `held_by` field first.
+   - If `held_by` is NOT null: item is held by that player → emit `(has player item)`. Skip to next item.
+   - If `held_by` is null: look up (x,y) in the map to find its station.
+     - If stack-level == 0: emit `(on item station)` and `(at item station)`.
+     - If stack-level > 0: emit `(atop this_item atop_item)` and `(at this_item station)`. DO NOT emit `(on ...)`.
+C. `(clear item)` for each item that has NO other item with a higher stack-level at the same (x,y) AND is not held.
+D. `(empty station)` for each station that has NO item with stack-level 0 at its (x,y).
+E. `(vacant station)` for each station where no player stands.
+F. For each player: if `holding` is empty → emit `(nothing player)` and `(nocontainer player)`.
+   If `holding` is non-empty → do NOT emit `(nothing player)` — the player holds an item.
+
+DEPENDENCY ANALYSIS — do this mentally before writing the problem PDDL:
+For EACH goal predicate, ask: "What objects and initial predicates are needed to achieve this?"
+- Verify every object in `:goal` is declared in `:objects` and initialized in `:init`.
+- Check logical prerequisites: cannot cook without iscookable; cannot stack without both items existing.
+Missing even one predicate in `:init` can make the problem unsolvable or produce wrong plans.
+
+## Example
+
+### Input JSON
+```json
+{
+  "stations": [
+    {"name": "table", "x": 0, "y": 1},
+    {"name": "stove", "x": 3, "y": 1},
+    {"name": "table", "x": 1, "y": 3},
+    {"name": "table", "x": 2, "y": 3}
+  ],
+  "items": [
+    {"name": "bread",   "x": 0, "y": 1, "stack-level": 0},
+    {"name": "bread",   "x": 0, "y": 1, "stack-level": 1},
+    {"name": "chicken", "x": 1, "y": 3, "stack-level": 0, "predicates": ["iscookable"]},
+    {"name": "cheese",  "x": 2, "y": 3, "stack-level": 0}
+  ],
+  "players": [{"name": "robot", "x": 0, "y": 2, "direction": [0, -1]}],
+  "goal": [
+    {"predicate": "item_on",  "args": ["bread",   "table"], "ids": [1, 2]},
+    {"predicate": "iscooked", "args": ["chicken"],          "ids": [3]},
+    {"predicate": "item_at",  "args": ["chicken", "table"], "ids": [3, 2]},
+    {"predicate": "item_at",  "args": ["cheese",  "table"], "ids": [4, 2]},
+    {"predicate": "item_at",  "args": ["bread",   "table"], "ids": [5, 2]},
+    {"predicate": "clear",    "args": ["bread"],            "ids": [5]}
+  ]
+}
+```
+
+Naming: stations[0]=table_1, stations[1]=stove_1, stations[2]=table_2, stations[3]=table_3;
+items[0]=bread_1, items[1]=bread_2, items[2]=chicken_1, items[3]=cheese_1; players[0]=robot_1.
+Player direction [0,-1] → facing (0+0, 2-1)=(0,1) = table_1.
+bread_1 is at stack-level 0 (directly on table_1 surface); bread_2 is at stack-level 1 (atop bread_1).
+Goal: bread_1 is the bottom bun (on table surface); bread_2 is the top bun (clear).
+
+### Correct Problem PDDL
+```
+(define (problem cheese-chicken-sandwich)
+  (:domain robotouille)
+  (:objects
+    table_1 table_2 table_3 stove_1 - station
+    bread_1 bread_2 chicken_1 cheese_1 - item
+    robot_1 - player
+  )
+  (:init
+    ; Station identity
+    (istable table_1) (istable table_2) (istable table_3)
+    (isstove stove_1)
+    ; Item identity
+    (isbread bread_1) (isbread bread_2)
+    (ischicken chicken_1)
+    (ischeese cheese_1)
+    ; Player identity and state
+    (isrobot robot_1)
+    (loc robot_1 table_1)
+    (nothing robot_1)
+    (nocontainer robot_1)
+    ; Capability flags
+    (iscookable chicken_1)
+    ; bread_1: stack-level 0 → directly on table_1 surface
+    (on bread_1 table_1)
+    (at bread_1 table_1)
+    ; bread_2: stack-level 1 → atop bread_1, NOT on surface
+    (atop bread_2 bread_1)
+    (at bread_2 table_1)
+    ; chicken_1: stack-level 0 at table_2
+    (on chicken_1 table_2)
+    (at chicken_1 table_2)
+    ; cheese_1: stack-level 0 at table_3
+    (on cheese_1 table_3)
+    (at cheese_1 table_3)
+    ; Clear: topmost item at each occupied station
+    (clear bread_2)
+    (clear chicken_1)
+    (clear cheese_1)
+    ; Empty: stations with no items on surface
+    (empty stove_1)
+    ; Vacant: stations where no player stands
+    (vacant stove_1) (vacant table_2) (vacant table_3)
+  )
+  (:goal (and
+    (on bread_1 table_2)
+    (iscooked chicken_1)
+    (at chicken_1 table_2)
+    (at cheese_1 table_2)
+    (at bread_2 table_2)
+    (clear bread_2)
+  ))
+)
+```
+
+---
+
+### Example 2 — lettuce chicken sandwich (adds board + iscuttable)
+
+#### Input JSON
+```json
+{
+  "stations": [
+    {"name": "table", "x": 0, "y": 1},
+    {"name": "board", "x": 2, "y": 1},
+    {"name": "stove", "x": 3, "y": 1},
+    {"name": "table", "x": 1, "y": 3},
+    {"name": "table", "x": 2, "y": 3}
+  ],
+  "items": [
+    {"name": "bread",   "x": 0, "y": 1, "stack-level": 0},
+    {"name": "bread",   "x": 0, "y": 1, "stack-level": 1},
+    {"name": "chicken", "x": 1, "y": 3, "stack-level": 0, "predicates": ["iscookable"]},
+    {"name": "lettuce", "x": 2, "y": 3, "stack-level": 0, "predicates": ["iscuttable"]}
+  ],
+  "players": [{"name": "robot", "x": 0, "y": 2, "direction": [0, -1]}],
+  "goal": [
+    {"predicate": "item_on",  "args": ["bread",   "table"], "ids": [1, 2]},
+    {"predicate": "iscut",    "args": ["lettuce"],          "ids": [3]},
+    {"predicate": "item_at",  "args": ["lettuce", "table"], "ids": [3, 2]},
+    {"predicate": "iscooked", "args": ["chicken"],          "ids": [4]},
+    {"predicate": "item_at",  "args": ["chicken", "table"], "ids": [4, 2]},
+    {"predicate": "item_at",  "args": ["bread",   "table"], "ids": [5, 2]},
+    {"predicate": "clear",    "args": ["bread"],            "ids": [5]}
+  ]
+}
+```
+
+Naming: stations[0]=table_1, stations[1]=board_1, stations[2]=stove_1, stations[3]=table_2, stations[4]=table_3.
+items[0]=bread_1(stack-0), items[1]=bread_2(stack-1 atop bread_1), items[2]=chicken_1, items[3]=lettuce_1.
+Player at (0,2) facing [0,-1] → (0,1) = table_1.
+
+#### Correct Problem PDDL
+```
+(define (problem lettuce-chicken-sandwich)
+  (:domain robotouille)
+  (:objects
+    table_1 table_2 table_3 board_1 stove_1 - station
+    bread_1 bread_2 chicken_1 lettuce_1 - item
+    robot_1 - player
+  )
+  (:init
+    (istable table_1) (istable table_2) (istable table_3)
+    (isboard board_1) (isstove stove_1)
+    (isbread bread_1) (isbread bread_2)
+    (ischicken chicken_1) (islettuce lettuce_1)
+    (isrobot robot_1)
+    (loc robot_1 table_1)
+    (nothing robot_1) (nocontainer robot_1)
+    (iscookable chicken_1) (iscuttable lettuce_1)
+    (on bread_1 table_1) (at bread_1 table_1)
+    (atop bread_2 bread_1) (at bread_2 table_1)
+    (on chicken_1 table_2) (at chicken_1 table_2)
+    (on lettuce_1 table_3) (at lettuce_1 table_3)
+    (clear bread_2) (clear chicken_1) (clear lettuce_1)
+    (empty board_1) (empty stove_1)
+    (vacant board_1) (vacant stove_1) (vacant table_2) (vacant table_3)
+  )
+  (:goal (and
+    (on bread_1 table_2)
+    (iscut lettuce_1)
+    (at lettuce_1 table_2)
+    (iscooked chicken_1)
+    (at chicken_1 table_2)
+    (at bread_2 table_2)
+    (clear bread_2)
+  ))
+)
+```
+
+---
+
+### Example 3 — lettuce cheeseburger (distinct bottombun/topbun item types, 4 tables)
+
+#### Input JSON
+```json
+{
+  "stations": [
+    {"name": "table", "x": 0, "y": 1},
+    {"name": "table", "x": 2, "y": 3},
+    {"name": "stove", "x": 1, "y": 1},
+    {"name": "board", "x": 2, "y": 1},
+    {"name": "table", "x": 3, "y": 3},
+    {"name": "table", "x": 4, "y": 1}
+  ],
+  "items": [
+    {"name": "bottombun", "x": 0, "y": 1, "stack-level": 0},
+    {"name": "topbun",    "x": 0, "y": 1, "stack-level": 1},
+    {"name": "cheese",    "x": 2, "y": 3, "stack-level": 0},
+    {"name": "lettuce",   "x": 4, "y": 1, "stack-level": 0, "predicates": ["iscuttable"]},
+    {"name": "patty",     "x": 3, "y": 3, "stack-level": 0, "predicates": ["iscookable"]}
+  ],
+  "players": [{"name": "robot", "x": 0, "y": 2, "direction": [0, -1]}],
+  "goal": [
+    {"predicate": "item_on",  "args": ["bottombun", "table"], "ids": [1, 2]},
+    {"predicate": "iscooked", "args": ["patty"],              "ids": [3]},
+    {"predicate": "item_at",  "args": ["patty",     "table"], "ids": [3, 2]},
+    {"predicate": "iscut",    "args": ["lettuce"],            "ids": [4]},
+    {"predicate": "item_at",  "args": ["lettuce",   "table"], "ids": [4, 2]},
+    {"predicate": "item_at",  "args": ["cheese",    "table"], "ids": [5, 2]},
+    {"predicate": "item_at",  "args": ["topbun",    "table"], "ids": [6, 2]},
+    {"predicate": "clear",    "args": ["topbun"],             "ids": [6]}
+  ]
+}
+```
+
+Naming: stations[0]=table_1, stations[1]=table_2, stations[2]=stove_1, stations[3]=board_1, stations[4]=table_3, stations[5]=table_4.
+items[0]=bottombun_1(stack-0), items[1]=topbun_1(stack-1 atop bottombun_1), items[2]=cheese_1, items[3]=lettuce_1, items[4]=patty_1.
+Player at (0,2) facing [0,-1] → (0,1) = table_1.
+
+#### Correct Problem PDDL
+```
+(define (problem lettuce-cheeseburger)
+  (:domain robotouille)
+  (:objects
+    table_1 table_2 table_3 table_4 stove_1 board_1 - station
+    bottombun_1 topbun_1 cheese_1 lettuce_1 patty_1 - item
+    robot_1 - player
+  )
+  (:init
+    (istable table_1) (istable table_2) (istable table_3) (istable table_4)
+    (isstove stove_1) (isboard board_1)
+    (isbottombun bottombun_1) (istopbun topbun_1)
+    (ischeese cheese_1) (islettuce lettuce_1) (ispatty patty_1)
+    (isrobot robot_1)
+    (loc robot_1 table_1)
+    (nothing robot_1) (nocontainer robot_1)
+    (iscookable patty_1) (iscuttable lettuce_1)
+    (on bottombun_1 table_1) (at bottombun_1 table_1)
+    (atop topbun_1 bottombun_1) (at topbun_1 table_1)
+    (on cheese_1 table_2) (at cheese_1 table_2)
+    (on patty_1 table_3) (at patty_1 table_3)
+    (on lettuce_1 table_4) (at lettuce_1 table_4)
+    (clear topbun_1) (clear cheese_1) (clear patty_1) (clear lettuce_1)
+    (empty stove_1) (empty board_1)
+    (vacant stove_1) (vacant board_1) (vacant table_2) (vacant table_3) (vacant table_4)
+  )
+  (:goal (and
+    (on bottombun_1 table_2)
+    (iscooked patty_1)
+    (at patty_1 table_2)
+    (iscut lettuce_1)
+    (at lettuce_1 table_2)
+    (at cheese_1 table_2)
+    (at topbun_1 table_2)
+    (clear topbun_1)
+  ))
+)
+```
+
+Return JSON with: {"problem_pddl": "<the full problem PDDL string>"}
+"""
+
+
+ROBOTOUILLE_USER_TEMPLATE = """\
+## Domain PDDL
+
+```
+{domain_pddl}
+```
+
+## Environment JSON
+
+```json
+{original_json}
+```
+
+Generate the problem PDDL file that is compatible with the domain above.
+"""
+
+ROBOTOUILLE_USER_TEMPLATE_NL = """\
+## Domain PDDL
+
+```
+{domain_pddl}
+```
+
+## Problem Description
+
+{question}
+
+Generate the problem PDDL file that is compatible with the domain above.
+"""
+
+
+# ── Robotouille free-domain (generate domain+problem) prompt ─────────────
+
+ROBOTOUILLE_FREE_DOMAIN_SYSTEM_PROMPT = """\
+You are a PDDL expert. Given a Robotouille kitchen environment described as JSON, write a \
+STRIPS domain AND problem PDDL that a classical planner can solve.
+
+## Pre-annotated JSON Schema
+
+The JSON has pre-computed fields — use them directly:
+```
+{
+  "stations": [{"name": str, "pddl_name": str, "initial_empty": bool, ...}],
+  "items": [{"name": str, "pddl_name": str, "station": str,
+             "stack-level": int, "atop": str|null,
+             "held_by": str|null,           // ← player pddl_name holding this item (null if on a station)
+             "predicates": ["iscookable"|"iscuttable"|"isfryable"|"isfryableifcut"]}],
+  "players": [{"pddl_name": str, "facing_station": str,
+               "holding": [str]}],          // ← list of item pddl_names the player is holding (empty = empty-handed)
+  "goal": [{"predicate": str, "args": [str], "ids": [int]}],
+  "goal_description": str
+}
+```
+
+## Required action names
+
+Your domain MUST use EXACTLY these action names (the evaluator maps them to the game engine):
+
+| Action | Parameters | What it does |
+|--------|-----------|--------------|
+| `move` | player from_station to_station | robot moves between stations |
+| `pick-up` | player item station | robot picks up item (must be holding nothing) |
+| `place` | player item station | robot places item on empty station |
+| `stack` | player item_top item_bottom station | stack item on top of another (does NOT set `on-surface` for stacked item) |
+| `unstack` | player item_top item_bottom station | remove top item — MUST remove `(at item_top station)` and restore `(clear item_bottom)` |
+| `cook` | player item station | cook item on a stove (item must be ON the stove surface) |
+| `cut` | player item station | cut item on a board (item must be ON the board surface) |
+| `fry` | player item station | fry item on a fryer (item must be ON the fryer surface) |
+
+## RULES
+
+1. Use `:requirements :strips :typing`.
+2. Types: `station player item` (all objects use these three types).
+3. Design predicates freely — choose whatever makes the actions work logically.
+   Recommended predicates to include:
+   - Location: `(loc ?p - player ?s - station)`, `(at ?i - item ?s - station)`
+   - Holding: `(holding ?p - player ?i - item)`, `(handempty ?p - player)`
+   - Stacking: `(on ?i - item ?s - station)`, `(ontop ?i1 ?i2 - item)`, `(clear ?i - item)`
+   - Station state: `(empty ?s - station)`, `(vacant ?s - station)`
+   - Station type: `(isstove ?s - station)`, `(isboard ?s - station)`, `(isfryer ?s - station)` as needed
+   - Capability/state flags: `(cookable ?i - item)`, `(cooked ?i - item)`, `(cuttable ?i - item)`, `(iscut ?i - item)`, etc.
+   **IMPORTANT**: ALL predicate parameters MUST include type annotations (e.g. `?s - station`, not just `?s`).
+4. In `:init`, use the pre-annotated fields:
+   - For items where `held_by` is null (on a station): use `station` and `atop` fields:
+     - stack-level 0 (atop null): item is directly on station surface → `(on item station)`.
+     - stack-level > 0 (atop set): item is stacked on another item.
+   - For items where `held_by` is NOT null: item is held by that player → use your holding predicate
+     (e.g. `(holding player item)` or `(has player item)`). Do NOT emit `(on ...)` or `(at ...)` for held items.
+   - Player location: use `facing_station`.
+   - Player hand state: if `player.holding` is empty → add your empty-hand predicate (e.g. `(handempty player)`).
+     If `player.holding` is non-empty → do NOT add the empty-hand predicate.
+   - `(empty ?s)` for stations: each station has a pre-computed `initial_empty` field.
+     Set `(empty station)` in `:init` if and ONLY IF `initial_empty == true`.
+     **NEVER write `(not (...))` in `:init`** — STRIPS `:init` only lists TRUE facts; negations in init are illegal.
+5. **CRITICAL — cook/cut/fry require DIRECT surface contact AND nothing on top**:
+   The evaluator checks `item_on(item, station)` AND `clear(item)` for cook/cut/fry.
+   - `item_on` = item is directly on the station surface (not stacked on another item)
+   - `clear(item)` = nothing is stacked on top of the item
+   Model `item_on` with a dedicated predicate (e.g. `(on-surface ?i - item ?s - station)`):
+   - `place` sets: `(on-surface item station)` — item placed directly on station
+   - `stack` does NOT set: stacked items are NOT on the station surface
+   - `unstack` clears: `(not (on-surface top-item station))` after unstacking top item
+   - `cook`/`cut`/`fry` preconditions MUST include BOTH: `(on-surface item station)` AND `(clear item)`
+   This ensures cook/cut/fry only work on items directly on the station with nothing on top.
+6. **CRITICAL — cooking/cutting takes time (async)**:
+   The JSON includes `_timing.cook_time` (default 3) and `_timing.num_cuts` (default 3).
+   - After calling `cook`, the item is NOT immediately cooked. It takes `cook_time` more game steps.
+   - `cut` must be called `num_cuts` times for the item to become fully cut.
+   Model this with counter predicates, a `cook-tick` action, AND a guard predicate `(item-free ?i - item)`:
+   ```
+   ; In :predicates: (item-free ?i - item) (cooking-0 ?i - item) (cooking-1 ?i - item) (cooking-2 ?i - item) (cooked ?i - item)
+   ; In :init: (item-free item_1) (item-free item_2) ...  ← ALL items start free
+
+   (:action cook :parameters (?p - player ?i - item ?s - station)
+     :precondition (and (loc ?p ?s) (on-surface ?i ?s) (clear ?i) (isstove ?s - station) (cookable ?i) (handempty ?p) (item-free ?i))
+     :effect (and (not (item-free ?i)) (cooking-0 ?i)))
+   (:action cook-tick :parameters (?i - item)          ; null tick — no game-engine action
+     :precondition (cooking-0 ?i)
+     :effect (and (not (cooking-0 ?i)) (cooking-1 ?i)))
+   (:action cook-tick-2 :parameters (?i - item)        ; null tick
+     :precondition (cooking-1 ?i)
+     :effect (and (not (cooking-1 ?i)) (cooking-2 ?i)))
+   (:action cook-tick-3 :parameters (?i - item)        ; null tick — final tick restores item-free
+     :precondition (cooking-2 ?i)
+     :effect (and (not (cooking-2 ?i)) (cooked ?i) (item-free ?i)))
+   ```
+   - **CRITICAL**: `pick-up`, `stack`, `unstack` MUST include `(item-free ?i)` in preconditions.
+     This prevents the planner from scheduling pick-up/stack/unstack while cooking is in progress.
+   - `cook-tick`, `cook-tick-2`, `cook-tick-3` have NO game-engine equivalent — the evaluator
+     treats them as "null ticks" that just advance the game clock.
+   - Similarly for cutting: use `cut-tick`, `cut-tick-2`, etc. (also null ticks in the evaluator).
+   - For `num_cuts=3`, model cut analogously: `cut` → removes `item-free`, then 3 `cut-tick` calls → `iscut + item-free`.
+7. `:goal` — translate the JSON `goal` array using the pre-resolved `pddl_args` field.
+   Each goal predicate has a `pddl_args` field: **use these pddl_names directly** — do not
+   re-derive entity names from `ids`. Map the predicate name as follows:
+   - `item_on`  → your surface predicate (e.g. `on-surface`)
+   - `item_at`  → your location predicate (e.g. `at`)
+   - `iscooked` → your cooked state predicate
+   - `iscut`    → your cut state predicate
+   - `isfried`  → your fried state predicate
+   - `clear`    → your clear predicate
+   Translate ONLY the predicates in the `goal` array — do not add extras.
+   **ALL goal predicates that share the same `pddl_args` table/station must reference the SAME station pddl_name** (i.e., the sandwich must be assembled at ONE table).
+8. NEVER use `(not ...)` in `:goal`.
+
+Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
+"""
+
+ROBOTOUILLE_FREE_DOMAIN_USER_TEMPLATE = """\
+## Environment JSON
+
+```json
+{original_json}
+```
+
+Generate the STRIPS domain and problem PDDL for this Robotouille environment.
+"""

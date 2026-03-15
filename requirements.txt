@@ -8,3 +8,4 @@ transformers
 planutils
 python-dotenv
 google-genai
+gymnasium
