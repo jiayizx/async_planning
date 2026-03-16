@@ -139,12 +139,16 @@ def _estimate_max_tokens(n_steps: int, n_constraints: int) -> int:
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
+_MAX_REWRITE_RETRIES = 5
+
+
 def rewrite_dataset(
     samples: list[dict],
     model_name: str,
     temperature: float,
     max_tokens: int,
     num_workers: int,
+    max_retries: int = _MAX_REWRITE_RETRIES,
 ) -> list[dict]:
     import re as _re
     import concurrent.futures
@@ -165,7 +169,6 @@ def rewrite_dataset(
             if max_tokens > 0
             else _estimate_max_tokens(sample["n_steps"], n_constraints)
         )
-        # Temporarily override max_tokens for this call
         original_cfg = llm.config.copy()
         llm.config = {**original_cfg, "max_tokens": tok}
         try:
@@ -173,20 +176,48 @@ def rewrite_dataset(
         finally:
             llm.config = original_cfg
 
-    responses = []
+    def _batch_call(batch_samples: list[tuple[int, dict]]) -> dict[int, str | None]:
+        results_map: dict[int, str | None] = {}
+        with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as ex:
+            future_to_idx = {
+                ex.submit(_call_one, s): idx for idx, s in batch_samples
+            }
+            for fut in concurrent.futures.as_completed(future_to_idx):
+                idx = future_to_idx[fut]
+                try:
+                    results_map[idx] = fut.result()
+                except Exception:
+                    results_map[idx] = None
+        return results_map
+
+    # Initial pass
+    responses: list[str | None] = [None] * len(samples)
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as ex:
         future_to_idx = {ex.submit(_call_one, s): i for i, s in enumerate(samples)}
-        results_buf: list[str | None] = [None] * len(samples)
         with tqdm(total=len(samples), desc="Rewriting NL questions", unit="msg") as pbar:
             for fut in concurrent.futures.as_completed(future_to_idx):
                 idx = future_to_idx[fut]
                 try:
-                    results_buf[idx] = fut.result()
+                    responses[idx] = fut.result()
                 except Exception as e:
                     pbar.write(f"Error on sample {idx}: {e}")
-                    results_buf[idx] = None
+                    responses[idx] = None
                 pbar.update(1)
-    responses = results_buf
+
+    # Retry loop for failed validations
+    for retry in range(max_retries):
+        failed_indices = [
+            i for i, (sample, resp) in enumerate(zip(samples, responses))
+            if not _validate_rewrite(sample["question"], (resp or "").strip(), sample["n_steps"])
+        ]
+        if not failed_indices:
+            break
+        print(f"\nRetry {retry + 1}/{max_retries}: {len(failed_indices)} samples failed validation")
+        batch = [(i, samples[i]) for i in failed_indices]
+        retry_results = _batch_call(batch)
+        for idx, resp in retry_results.items():
+            if resp is not None:
+                responses[idx] = resp
 
     results = []
     n_ok = 0
@@ -201,16 +232,12 @@ def rewrite_dataset(
         ):
             new_sample["question"] = rewrite
             new_sample["question_abstract"] = sample["question"]
-            # Parse durations from the rewritten question and store in graph
             graph = new_sample.get("graph", {})
             if graph.get("step_to_node"):
                 durations = parse_node_durations(rewrite, graph)
                 if durations is not None:
                     graph["durations"] = durations
                     new_sample["answer"] = compute_gold_makespan(rewrite, graph)
-                    # Recompute time-weighted metrics now that real durations are known.
-                    # gen_dag.py uses duration=1 placeholders; par_ratio and cp_node_frac
-                    # only become meaningful once the LLM assigns actual step durations.
                     real_metrics = compute_metrics({
                         "n_steps":   new_sample["n_steps"],
                         "durations": durations,
@@ -220,7 +247,6 @@ def rewrite_dataset(
                     new_sample["cp_node_frac"] = real_metrics["cp_node_frac"]
             n_ok += 1
         else:
-            # Keep original question; mark for easy filtering
             new_sample["nl_rewrite_failed"] = True
             n_fallback += 1
 
@@ -248,6 +274,8 @@ def main():
                         help="Parallel LLM calls [8]")
     parser.add_argument("--limit", type=int, default=0,
                         help="Only process first N samples (0 = all)")
+    parser.add_argument("--max-retries", type=int, default=_MAX_REWRITE_RETRIES,
+                        help=f"Max retries for failed rewrites [{_MAX_REWRITE_RETRIES}]")
     args = parser.parse_args()
 
     in_path = Path(args.input)
@@ -268,6 +296,7 @@ def main():
         temperature=args.temperature,
         max_tokens=args.max_tokens,
         num_workers=args.workers,
+        max_retries=args.max_retries,
     )
 
     # Auto-name output

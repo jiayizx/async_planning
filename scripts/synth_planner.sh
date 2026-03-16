@@ -36,7 +36,8 @@ cd "$ROOT_DIR"
 DATA_DIR="data/async_planning"
 # DATA_DIR="data/async_planning/nodes50_n50_s42_nlrewrite_gemini-3-flash.json"
 # MODEL="gemini-3-flash"
-MODEL="openai/gpt-4.1"
+# MODEL="openai/gpt-4.1"
+MODEL="openai/gpt-5-mini"
 SAVE_DIR="results/gen-data-modified/baselines"
 MAX_EXAMPLES=400
 ICL_EXAMPLES=0
