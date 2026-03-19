@@ -265,13 +265,15 @@ def _annotate_robotouille_json(env: dict) -> dict:
         i["pddl_name"] = f"{i['name']}_{type_count[i['name']]}"
         coord_level_to_item[(i["x"], i["y"], i.get("stack-level", 0))] = i["pddl_name"]
 
-    # Track which station coordinates have items on their surface (stack-level=0)
+    # Track which station coordinates have items OR containers on their surface
     occupied_stations: set[tuple] = set()
     for i in env.get("items", []):
         if i.get("stack-level", 0) == 0:
             occupied_stations.add((i["x"], i["y"]))
+    for c in env.get("containers", []):
+        occupied_stations.add((c["x"], c["y"]))
 
-    # Mark each station as initial_empty based on whether any items are on its surface
+    # Mark each station as initial_empty based on whether any items/containers are on it
     for s in env.get("stations", []):
         s["initial_empty"] = (s["x"], s["y"]) not in occupied_stations
 

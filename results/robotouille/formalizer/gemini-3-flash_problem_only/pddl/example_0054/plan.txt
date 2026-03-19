@@ -1,0 +1,5 @@
+0.000: (move robot_1 stove_2 table_1) [0.001]
+0.001: (move robot_1 table_1 table_3) [0.001]
+0.002: (pick-up robot_1 potato_1 table_3) [0.001]
+0.003: (move robot_1 table_3 table_1) [0.001]
+0.004: (place robot_1 potato_1 table_1) [0.001]

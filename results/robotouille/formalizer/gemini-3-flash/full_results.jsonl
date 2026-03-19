@@ -1,0 +1,2130 @@
+{
+  "id": "0_cheese_chicken_sandwich",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 4 stations:\n- table_1 at (0, 1)\n- stove_1 at (3, 1)\n- table_2 at (1, 3)\n- table_3 at (2, 3)\n\nThere are 4 items:\n- bread_1 at (0, 1) on table_1\n- bread_2 at (0, 1) on table_1\n- chicken_1 at (1, 3) on table_2\n- cheese_1 at (2, 3) on table_3\n\nHere are some constraints on the items:\n- chicken_1 must be cooked, which will take 3 steps on a stove.\n- bread_1, chicken_1, cheese_1 must be stacked before bread_2\n\nNow you need to prepare a cheese chicken sandwich on a table To do so, you need to make sure:\n- bread_1 is on table\n- chicken is cooked\n- chicken is at table\n- cheese is at table\n- bread_2 is at table\n- bread_2 has nothing on top of it (clear)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "move robot_1 table_1 table_2",
+      1.0
+    ],
+    [
+      1.001,
+      "pick-up robot_1 chicken_1 table_2",
+      1.0
+    ],
+    [
+      1.002,
+      "move robot_1 table_2 stove_1",
+      1.0
+    ],
+    [
+      2.003,
+      "place robot_1 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      3.004,
+      "cook robot_1 chicken_1 stove_1",
+      3.0
+    ],
+    [
+      6.004,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      7.005,
+      "unstack robot_1 bread_2 bread_1 table_1",
+      1.0
+    ],
+    [
+      7.006,
+      "move robot_1 table_1 table_3",
+      1.0
+    ],
+    [
+      8.007,
+      "stack robot_1 bread_2 cheese_1 table_3",
+      1.0
+    ],
+    [
+      8.008,
+      "move robot_1 table_3 stove_1",
+      1.0
+    ],
+    [
+      9.009,
+      "pick-up robot_1 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      9.01,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      10.011,
+      "stack robot_1 chicken_1 bread_1 table_1",
+      1.0
+    ],
+    [
+      10.012,
+      "move robot_1 table_1 table_3",
+      1.0
+    ],
+    [
+      11.013,
+      "unstack robot_1 bread_2 cheese_1 table_3",
+      1.0
+    ],
+    [
+      11.014,
+      "move robot_1 table_3 stove_1",
+      1.0
+    ],
+    [
+      12.015,
+      "place robot_1 bread_2 stove_1",
+      1.0
+    ],
+    [
+      12.016,
+      "move robot_1 stove_1 table_3",
+      1.0
+    ],
+    [
+      13.017,
+      "pick-up robot_1 cheese_1 table_3",
+      1.0
+    ],
+    [
+      13.018,
+      "move robot_1 table_3 table_1",
+      1.0
+    ],
+    [
+      14.019,
+      "stack robot_1 cheese_1 chicken_1 table_1",
+      1.0
+    ],
+    [
+      14.02,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      15.021,
+      "pick-up robot_1 bread_2 stove_1",
+      1.0
+    ],
+    [
+      15.022,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      16.023,
+      "stack robot_1 bread_2 cheese_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 25,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 25,
+    "optimal_steps": 21,
+    "steps_ratio": 1.1904761904761905,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": true,
+    "env_simulation_error": "",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 6,
+    "pddl_goal_count": 10,
+    "object_count": {},
+    "gold_object_count": {
+      "stations": 4,
+      "items": 4,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 12,
+      "pick-up": 4,
+      "place": 2,
+      "cook": 1,
+      "unstack": 2,
+      "stack": 4
+    }
+  },
+  "problem_pddl": "(define (problem cheese-chicken-sandwich) (:domain robotouille-async) (:objects table_1 stove_1 table_2 table_3 - station robot_1 - player bread_1 bread_2 chicken_1 cheese_1 - item) (:init (istable table_1) (isstove stove_1) (istable table_2) (istable table_3) (isrobot robot_1) (isbread bread_1) (isbread bread_2) (ischicken chicken_1) (ischeese cheese_1) (iscookable chicken_1) (station_free stove_1) (loc robot_1 table_1) (vacant stove_1) (vacant table_2) (vacant table_3) (nothing robot_1) (nocontainer robot_1) (at bread_1 table_1) (on bread_1 table_1) (atop bread_2 bread_1) (at bread_2 table_1) (clear bread_2) (at chicken_1 table_2) (on chicken_1 table_2) (clear chicken_1) (at cheese_1 table_3) (on cheese_1 table_3) (clear cheese_1) (empty stove_1)) (:goal (and (iscooked chicken_1) (on bread_1 table_1) (atop chicken_1 bread_1) (atop cheese_1 chicken_1) (atop bread_2 cheese_1) (clear bread_2) (at bread_1 table_1) (at chicken_1 table_1) (at cheese_1 table_1) (at bread_2 table_1))))",
+  "llm_response": "{\"problem_pddl\": \"(define (problem cheese-chicken-sandwich) (:domain robotouille-async) (:objects table_1 stove_1 table_2 table_3 - station robot_1 - player bread_1 bread_2 chicken_1 cheese_1 - item) (:init (istable table_1) (isstove stove_1) (istable table_2) (istable table_3) (isrobot robot_1) (isbread bread_1) (isbread bread_2) (ischicken chicken_1) (ischeese cheese_1) (iscookable chicken_1) (station_free stove_1) (loc robot_1 table_1) (vacant stove_1) (vacant table_2) (vacant table_3) (nothing robot_1) (nocontainer robot_1) (at bread_1 table_1) (on bread_1 table_1) (atop bread_2 bread_1) (at bread_2 table_1) (clear bread_2) (at chicken_1 table_2) (on chicken_1 table_2) (clear chicken_1) (at cheese_1 table_3) (on cheese_1 table_3) (clear cheese_1) (empty stove_1)) (:goal (and (iscooked chicken_1) (on bread_1 table_1) (atop chicken_1 bread_1) (atop cheese_1 chicken_1) (atop bread_2 cheese_1) (clear bread_2) (at bread_1 table_1) (at chicken_1 table_1) (at cheese_1 table_1) (at bread_2 table_1))))\"}",
+  "raw_solver_output": "Number of literals: 68\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 12.000, admissible cost estimate 0.000\nb (11.000 | 2.001)b (10.000 | 4.004)b (9.000 | 10.008)b (8.000 | 11.011)b (7.000 | 13.013)\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (11.000 | 2.001)b (10.000 | 6.004)b (8.000 | 7.005)b (7.000 | 9.008)b (7.000 | 9.007)b (6.000 | 10.009)b (4.000 | 15.018)b (4.000 | 14.017)b (3.000 | 15.018)b (2.000 | 16.020)b (1.000 | 16.021)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 17.023\n; States evaluated so far: 695\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 0.49\n0.000: (move robot_1 table_1 table_2)  [1.000]\n1.001: (pick-up robot_1 chicken_1 table_2)  [1.000]\n1.002: (move robot_1 table_2 stove_1)  [1.000]\n2.003: (place robot_1 chicken_1 stove_1)  [1.000]\n3.004: (cook robot_1 chicken_1 stove_1)  [3.000]\n6.004: (move robot_1 stove_1 table_1)  [1.000]\n7.005: (unstack robot_1 bread_2 bread_1 table_1)  [1.000]\n7.006: (move robot_1 table_1 table_3)  [1.000]\n8.007: (stack robot_1 bread_2 cheese_1 table_3)  [1.000]\n8.008: (move robot_1 table_3 stove_1)  [1.000]\n9.009: (pick-up robot_1 chicken_1 stove_1)  [1.000]\n9.010: (move robot_1 stove_1 table_1)  [1.000]\n10.011: (stack robot_1 chicken_1 bread_1 table_1)  [1.000]\n10.012: (move robot_1 table_1 table_3)  [1.000]\n11.013: (unstack robot_1 bread_2 cheese_1 table_3)  [1.000]\n11.014: (move robot_1 table_3 stove_1)  [1.000]\n12.015: (place robot_1 bread_2 stove_1)  [1.000]\n12.016: (move robot_1 stove_1 table_3)  [1.000]\n13.017: (pick-up robot_1 cheese_1 table_3)  [1.000]\n13.018: (move robot_1 table_3 table_1)  [1.000]\n14.019: (stack robot_1 cheese_1 chicken_1 table_1)  [1.000]\n14.020: (move robot_1 table_1 stove_1)  [1.000]\n15.021: (pick-up robot_1 bread_2 stove_1)  [1.000]\n15.022: (move robot_1 stove_1 table_1)  [1.000]\n16.023: (stack robot_1 bread_2 cheese_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 17.023\nb (0.000 | 17.022)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)"
+}
+{
+  "id": "1_lettuce_chicken_sandwich",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 5 stations:\n- table_1 at (0, 1)\n- board_1 at (2, 1)\n- stove_1 at (3, 1)\n- table_2 at (1, 3)\n- table_3 at (2, 3)\n\nThere are 4 items:\n- bread_1 at (0, 1) on table_1\n- bread_2 at (0, 1) on table_1\n- chicken_1 at (1, 3) on table_2\n- lettuce_1 at (2, 3) on table_3\n\nHere are some constraints on the items:\n- chicken_1 must be cooked, which will take 3 steps on a stove.\n- lettuce_1 must be cut, which will take 3 cuts.\n- bread_1, chicken_1, lettuce_1 must be stacked before bread_2\n\nNow you need to prepare a lettuce chicken sandwich on a table To do so, you need to make sure:\n- bread_1 is on table\n- lettuce is cut\n- lettuce is at table\n- chicken is cooked\n- chicken is at table\n- bread_2 is at table\n- bread_2 has nothing on top of it (clear)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "unstack robot_1 bread_1 bread_2 table_1",
+      1.0
+    ],
+    [
+      0.001,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      1.002,
+      "place robot_1 bread_1 board_1",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 board_1 table_3",
+      1.0
+    ],
+    [
+      2.004,
+      "pick-up robot_1 lettuce_1 table_3",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 table_3 board_1",
+      1.0
+    ],
+    [
+      3.006,
+      "stack robot_1 lettuce_1 bread_1 board_1",
+      1.0
+    ],
+    [
+      3.007,
+      "move robot_1 board_1 table_2",
+      1.0
+    ],
+    [
+      4.008,
+      "pick-up robot_1 chicken_1 table_2",
+      1.0
+    ],
+    [
+      4.009,
+      "move robot_1 table_2 stove_1",
+      1.0
+    ],
+    [
+      5.01,
+      "place robot_1 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      6.011,
+      "cook robot_1 chicken_1 stove_1",
+      3.0
+    ],
+    [
+      9.011,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      10.012,
+      "pick-up robot_1 bread_2 table_1",
+      1.0
+    ],
+    [
+      10.013,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      11.014,
+      "stack robot_1 bread_2 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      11.015,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      12.016,
+      "unstack robot_1 lettuce_1 bread_1 board_1",
+      1.0
+    ],
+    [
+      12.017,
+      "move robot_1 board_1 stove_1",
+      1.0
+    ],
+    [
+      13.018,
+      "stack robot_1 lettuce_1 bread_2 stove_1",
+      1.0
+    ],
+    [
+      13.019,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      14.02,
+      "pick-up robot_1 bread_1 board_1",
+      1.0
+    ],
+    [
+      14.021,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      15.022,
+      "place robot_1 bread_1 table_1",
+      1.0
+    ],
+    [
+      15.023,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      16.024,
+      "unstack robot_1 lettuce_1 bread_2 stove_1",
+      1.0
+    ],
+    [
+      16.025,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      17.026,
+      "place robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      18.027,
+      "cut robot_1 lettuce_1 board_1",
+      3.0
+    ],
+    [
+      21.027,
+      "pick-up robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      21.028,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      22.029,
+      "stack robot_1 lettuce_1 bread_1 table_1",
+      1.0
+    ],
+    [
+      22.03,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      23.031,
+      "unstack robot_1 bread_2 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      23.032,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      24.033,
+      "place robot_1 bread_2 board_1",
+      1.0
+    ],
+    [
+      24.034,
+      "move robot_1 board_1 stove_1",
+      1.0
+    ],
+    [
+      25.035,
+      "pick-up robot_1 chicken_1 stove_1",
+      1.0
+    ],
+    [
+      25.036,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      26.037,
+      "stack robot_1 chicken_1 lettuce_1 table_1",
+      1.0
+    ],
+    [
+      26.038,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      27.039,
+      "pick-up robot_1 bread_2 board_1",
+      1.0
+    ],
+    [
+      27.04,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      28.041,
+      "stack robot_1 bread_2 chicken_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 44,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 44,
+    "optimal_steps": 27,
+    "steps_ratio": 1.6296296296296295,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 2 (place robot_1 bread_1 board_1): env action 'place-item' with args ['robot1', 'bread1', 'board1']: preconditions not met",
+    "goal_predicate_recall": 0.5714285714285714,
+    "goal_count_match": true,
+    "gold_goal_count": 7,
+    "pddl_goal_count": 7,
+    "object_count": {
+      "station": [
+        "table_1",
+        "board_1",
+        "stove_1",
+        "table_2",
+        "table_3"
+      ],
+      "player": [
+        "robot_1"
+      ],
+      "item": [
+        "bread_1",
+        "bread_2",
+        "chicken_1",
+        "lettuce_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 5,
+      "items": 4,
+      "players": 1
+    },
+    "plan_action_types": {
+      "unstack": 4,
+      "move": 20,
+      "place": 5,
+      "pick-up": 7,
+      "stack": 6,
+      "cook": 1,
+      "cut": 1
+    }
+  },
+  "problem_pddl": "(define (problem lettuce-chicken-sandwich)\n    (:domain robotouille-async)\n    (:objects\n        table_1 board_1 stove_1 table_2 table_3 - station\n        robot_1 - player\n        bread_1 bread_2 chicken_1 lettuce_1 - item\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1)\n        (isboard board_1)\n        (isstove stove_1)\n        (istable table_2)\n        (istable table_3)\n        (isbread bread_1)\n        (isbread bread_2)\n        (ischicken chicken_1)\n        (islettuce lettuce_1)\n        (iscookable chicken_1)\n        (iscuttable lettuce_1)\n        (station_free board_1)\n        (station_free stove_1)\n        (loc robot_1 table_1)\n        (vacant board_1)\n        (vacant stove_1)\n        (vacant table_2)\n        (vacant table_3)\n        (nothing robot_1)\n        (nocontainer robot_1)\n        (at bread_2 table_1)\n        (on bread_2 table_1)\n        (atop bread_1 bread_2)\n        (at bread_1 table_1)\n        (clear bread_1)\n        (at chicken_1 table_2)\n        (on chicken_1 table_2)\n        (clear chicken_1)\n        (at lettuce_1 table_3)\n        (on lettuce_1 table_3)\n        (clear lettuce_1)\n        (empty board_1)\n        (empty stove_1)\n    )\n    (:goal (and\n        (iscut lettuce_1)\n        (iscooked chicken_1)\n        (on bread_1 table_1)\n        (atop lettuce_1 bread_1)\n        (atop chicken_1 lettuce_1)\n        (atop bread_2 chicken_1)\n        (clear bread_2)\n    ))\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem lettuce-chicken-sandwich)\\n    (:domain robotouille-async)\\n    (:objects\\n        table_1 board_1 stove_1 table_2 table_3 - station\\n        robot_1 - player\\n        bread_1 bread_2 chicken_1 lettuce_1 - item\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1)\\n        (isboard board_1)\\n        (isstove stove_1)\\n        (istable table_2)\\n        (istable table_3)\\n        (isbread bread_1)\\n        (isbread bread_2)\\n        (ischicken chicken_1)\\n        (islettuce lettuce_1)\\n        (iscookable chicken_1)\\n        (iscuttable lettuce_1)\\n        (station_free board_1)\\n        (station_free stove_1)\\n        (loc robot_1 table_1)\\n        (vacant board_1)\\n        (vacant stove_1)\\n        (vacant table_2)\\n        (vacant table_3)\\n        (nothing robot_1)\\n        (nocontainer robot_1)\\n        (at bread_2 table_1)\\n        (on bread_2 table_1)\\n        (atop bread_1 bread_2)\\n        (at bread_1 table_1)\\n        (clear bread_1)\\n        (at chicken_1 table_2)\\n        (on chicken_1 table_2)\\n        (clear chicken_1)\\n        (at lettuce_1 table_3)\\n        (on lettuce_1 table_3)\\n        (clear lettuce_1)\\n        (empty board_1)\\n        (empty stove_1)\\n    )\\n    (:goal (and\\n        (iscut lettuce_1)\\n        (iscooked chicken_1)\\n        (on bread_1 table_1)\\n        (atop lettuce_1 bread_1)\\n        (atop chicken_1 lettuce_1)\\n        (atop bread_2 chicken_1)\\n        (clear bread_2)\\n    ))\\n)\"}",
+  "raw_solver_output": "Number of literals: 81\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 16.000, admissible cost estimate 0.000\nb (15.000 | 2.001)b (14.000 | 4.004)b (13.000 | 5.005)b (12.000 | 5.007)b (11.000 | 9.009)b (10.000 | 10.010)b (9.000 | 11.011)b (8.000 | 14.011)b (7.000 | 27.034)b (6.000 | 28.037)b (4.000 | 29.039)b (3.000 | 55.087)b (1.000 | 56.090)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 57.092\n; States evaluated so far: 1121\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 3.00\n0.000: (move robot_1 table_1 table_3)  [1.000]\n1.001: (pick-up robot_1 lettuce_1 table_3)  [1.000]\n1.002: (move robot_1 table_3 table_1)  [1.000]\n2.003: (move robot_1 table_1 board_1)  [1.000]\n3.004: (place robot_1 lettuce_1 board_1)  [1.000]\n3.005: (move robot_1 board_1 table_2)  [1.000]\n4.006: (pick-up robot_1 chicken_1 table_2)  [1.000]\n4.007: (move robot_1 table_2 stove_1)  [1.000]\n5.008: (place robot_1 chicken_1 stove_1)  [1.000]\n6.009: (cook robot_1 chicken_1 stove_1)  [3.000]\n9.009: (pick-up robot_1 chicken_1 stove_1)  [1.000]\n9.010: (move robot_1 stove_1 table_1)  [1.000]\n10.011: (move robot_1 table_1 board_1)  [1.000]\n11.012: (cut robot_1 lettuce_1 board_1)  [3.000]\n14.012: (move robot_1 board_1 table_1)  [1.000]\n15.013: (stack robot_1 chicken_1 bread_1 table_1)  [1.000]\n15.014: (move robot_1 table_1 board_1)  [1.000]\n16.015: (pick-up robot_1 lettuce_1 board_1)  [1.000]\n16.016: (move robot_1 board_1 table_1)  [1.000]\n17.017: (move robot_1 table_1 stove_1)  [1.000]\n18.018: (place robot_1 lettuce_1 stove_1)  [1.000]\n18.019: (move robot_1 stove_1 table_1)  [1.000]\n19.020: (unstack robot_1 chicken_1 bread_1 table_1)  [1.000]\n19.021: (move robot_1 table_1 board_1)  [1.000]\n20.022: (place robot_1 chicken_1 board_1)  [1.000]\n20.023: (move robot_1 board_1 table_1)  [1.000]\n21.024: (unstack robot_1 bread_1 bread_2 table_1)  [1.000]\n21.025: (move robot_1 table_1 stove_1)  [1.000]\n22.026: (stack robot_1 bread_1 lettuce_1 stove_1)  [1.000]\n22.027: (move robot_1 stove_1 table_1)  [1.000]\n23.028: (pick-up robot_1 bread_2 table_1)  [1.000]\n23.029: (move robot_1 table_1 board_1)  [1.000]\n24.030: (stack robot_1 bread_2 chicken_1 board_1)  [1.000]\n24.031: (move robot_1 board_1 stove_1)  [1.000]\n25.032: (unstack robot_1 bread_1 lettuce_1 stove_1)  [1.000]\n25.033: (move robot_1 stove_1 table_1)  [1.000]\n26.034: (place robot_1 bread_1 table_1)  [1.000]\n26.035: (move robot_1 table_1 stove_1)  [1.000]\n27.036: (pick-up robot_1 lettuce_1 stove_1)  [1.000]\n27.037: (move robot_1 stove_1 table_1)  [1.000]\n28.038: (stack robot_1 lettuce_1 bread_1 table_1)  [1.000]\n28.039: (move robot_1 table_1 board_1)  [1.000]\n29.040: (unstack robot_1 bread_2 chicken_1 board_1)  [1.000]\n29.041: (move robot_1 board_1 table_1)  [1.000]\n30.042: (stack robot_1 bread_2 lettuce_1 table_1)  [1.000]\n30.043: (move robot_1 table_1 board_1)  [1.000]\n31.044: (pick-up robot_1 chicken_1 board_1)  [1.000]\n31.045: (move robot_1 board_1 table_1)  [1.000]\n32.046: (move robot_1 table_1 stove_1)  [1.000]\n33.047: (place robot_1 chicken_1 stove_1)  [1.000]\n33.048: (move robot_1 stove_1 table_1)  [1.000]\n34.049: (unstack robot_1 bread_2 lettuce_1 table_1)  [1.000]\n34.050: (move robot_1 table_1 stove_1)  [1.000]\n35.051: (stack robot_1 bread_2 chicken_1 stove_1)  [1.000]\n35.052: (move robot_1 stove_1 table_1)  [1.000]\n36.053: (unstack robot_1 lettuce_1 bread_1 table_1)  [1.000]\n36.054: (move robot_1 table_1 board_1)  [1.000]\n37.055: (place robot_1 lettuce_1 board_1)  [1.000]\n37.056: (move robot_1 board_1 stove_1)  [1.000]\n38.057: (unstack robot_1 bread_2 chicken_1 stove_1)  [1.000]\n38.058: (move robot_1 stove_1 table_1)  [1.000]\n39.059: (stack robot_1 bread_2 bread_1 table_1)  [1.000]\n39.060: (move robot_1 table_1 stove_1)  [1.000]\n40.061: (pick-up robot_1 chicken_1 stove_1)  [1.000]\n40.062: (move robot_1 stove_1 table_1)  [1.000]\n41.063: (stack robot_1 chicken_1 bread_2 table_1)  [1.000]\n41.064: (move robot_1 table_1 board_1)  [1.000]\n42.065: (pick-up robot_1 lettuce_1 board_1)  [1.000]\n42.066: (move robot_1 board_1 table_1)  [1.000]\n43.067: (move robot_1 table_1 stove_1)  [1.000]\n44.068: (place robot_1 lettuce_1 stove_1)  [1.000]\n44.069: (move robot_1 stove_1 table_1)  [1.000]\n45.070: (unstack robot_1 chicken_1 bread_2 table_1)  [1.000]\n45.071: (move robot_1 table_1 stove_1)  [1.000]\n46.072: (stack robot_1 chicken_1 lettuce_1 stove_1)  [1.000]\n46.073: (move robot_1 stove_1 table_1)  [1.000]\n47.074: (unstack robot_1 bread_2 bread_1 table_1)  [1.000]\n47.075: (move robot_1 table_1 board_1)  [1.000]\n48.076: (place robot_1 bread_2 board_1)  [1.000]\n48.077: (move robot_1 board_1 stove_1)  [1.000]\n49.078: (unstack robot_1 chicken_1 lettuce_1 stove_1)  [1.000]\n49.079: (move robot_1 stove_1 board_1)  [1.000]\n50.080: (stack robot_1 chicken_1 bread_2 board_1)  [1.000]\n50.081: (move robot_1 board_1 stove_1)  [1.000]\n51.082: (pick-up robot_1 lettuce_1 stove_1)  [1.000]\n51.083: (move robot_1 stove_1 table_1)  [1.000]\n52.084: (stack robot_1 lettuce_1 bread_1 table_1)  [1.000]\n52.085: (move robot_1 table_1 board_1)  [1.000]\n53.086: (unstack robot_1 chicken_1 bread_2 board_1)  [1.000]\n53.087: (move robot_1 board_1 table_1)  [1.000]\n54.088: (stack robot_1 chicken_1 lettuce_1 table_1)  [1.000]\n54.089: (move robot_1 table_1 board_1)  [1.000]\n55.090: (pick-up robot_1 bread_2 board_1)  [1.000]\n55.091: (move robot_1 board_1 table_1)  [1.000]\n56.092: (stack robot_1 bread_2 chicken_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 57.092\n\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (15.000 | 3.004)b (14.000 | 3.004)b (13.000 | 5.008)b (12.000 | 5.009)b (11.000 | 9.011)b (10.000 | 10.011)b (9.000 | 10.011)b (8.000 | 12.015)b (7.000 | 21.026)b (4.000 | 23.030)b (3.000 | 27.037)b (1.000 | 28.040)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 29.041\n; States evaluated so far: 2587\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 4.34\n0.000: (unstack robot_1 bread_1 bread_2 table_1)  [1.000]\n0.001: (move robot_1 table_1 board_1)  [1.000]\n1.002: (place robot_1 bread_1 board_1)  [1.000]\n1.003: (move robot_1 board_1 table_3)  [1.000]\n2.004: (pick-up robot_1 lettuce_1 table_3)  [1.000]\n2.005: (move robot_1 table_3 board_1)  [1.000]\n3.006: (stack robot_1 lettuce_1 bread_1 board_1)  [1.000]\n3.007: (move robot_1 board_1 table_2)  [1.000]\n4.008: (pick-up robot_1 chicken_1 table_2)  [1.000]\n4.009: (move robot_1 table_2 stove_1)  [1.000]\n5.010: (place robot_1 chicken_1 stove_1)  [1.000]\n6.011: (cook robot_1 chicken_1 stove_1)  [3.000]\n9.011: (move robot_1 stove_1 table_1)  [1.000]\n10.012: (pick-up robot_1 bread_2 table_1)  [1.000]\n10.013: (move robot_1 table_1 stove_1)  [1.000]\n11.014: (stack robot_1 bread_2 chicken_1 stove_1)  [1.000]\n11.015: (move robot_1 stove_1 board_1)  [1.000]\n12.016: (unstack robot_1 lettuce_1 bread_1 board_1)  [1.000]\n12.017: (move robot_1 board_1 stove_1)  [1.000]\n13.018: (stack robot_1 lettuce_1 bread_2 stove_1)  [1.000]\n13.019: (move robot_1 stove_1 board_1)  [1.000]\n14.020: (pick-up robot_1 bread_1 board_1)  [1.000]\n14.021: (move robot_1 board_1 table_1)  [1.000]\n15.022: (place robot_1 bread_1 table_1)  [1.000]\n15.023: (move robot_1 table_1 stove_1)  [1.000]\n16.024: (unstack robot_1 lettuce_1 bread_2 stove_1)  [1.000]\n16.025: (move robot_1 stove_1 board_1)  [1.000]\n17.026: (place robot_1 lettuce_1 board_1)  [1.000]\n18.027: (cut robot_1 lettuce_1 board_1)  [3.000]\n21.027: (pick-up robot_1 lettuce_1 board_1)  [1.000]\n21.028: (move robot_1 board_1 table_1)  [1.000]\n22.029: (stack robot_1 lettuce_1 bread_1 table_1)  [1.000]\n22.030: (move robot_1 table_1 stove_1)  [1.000]\n23.031: (unstack robot_1 bread_2 chicken_1 stove_1)  [1.000]\n23.032: (move robot_1 stove_1 board_1)  [1.000]\n24.033: (place robot_1 bread_2 board_1)  [1.000]\n24.034: (move robot_1 board_1 stove_1)  [1.000]\n25.035: (pick-up robot_1 chicken_1 stove_1)  [1.000]\n25.036: (move robot_1 stove_1 table_1)  [1.000]\n26.037: (stack robot_1 chicken_1 lettuce_1 table_1)  [1.000]\n26.038: (move robot_1 table_1 board_1)  [1.000]\n27.039: (pick-up robot_1 bread_2 board_1)  [1.000]\n27.040: (move robot_1 board_1 table_1)  [1.000]\n28.041: (stack robot_1 bread_2 chicken_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 29.041\nb (0.000 | 29.041)"
+}
+{
+  "id": "2_lettuce_tomato_fried_chicken_sandwich",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 6 stations:\n- table_1 at (0, 1)\n- board_1 at (2, 1)\n- fryer_1 at (3, 1)\n- table_2 at (1, 3)\n- table_3 at (2, 3)\n- table_4 at (3, 3)\n\nThere are 5 items:\n- bread_1 at (0, 1) on table_1\n- bread_2 at (0, 1) on table_1\n- chicken_1 at (1, 3) on table_2\n- lettuce_1 at (2, 3) on table_3\n- tomato_1 at (3, 3) on table_4\n\nHere are some constraints on the items:\n- chicken_1 must be fried, which will take 3 steps on a fryer.\n- lettuce_1 must be cut, which will take 3 cuts.\n- tomato_1 must be cut, which will take 3 cuts.\n- bread_1, chicken_1, lettuce_1, tomato_1 must be stacked before bread_2\n\nNow you need to prepare a fried chicken sandwich with lettuce and tomato on a table To do so, you need to make sure:\n- bread_1 is on table\n- lettuce is cut\n- lettuce is at table\n- tomato is cut\n- tomato is at table\n- isfried(chicken)\n- chicken is at table\n- bread_2 is at table\n- bread_2 has nothing on top of it (clear)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "unstack robot_1 bread_2 bread_1 table_1",
+      1.0
+    ],
+    [
+      0.001,
+      "move robot_1 table_1 table_4",
+      1.0
+    ],
+    [
+      1.002,
+      "stack robot_1 bread_2 tomato_1 table_4",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 table_4 table_3",
+      1.0
+    ],
+    [
+      2.004,
+      "pick-up robot_1 lettuce_1 table_3",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 table_3 board_1",
+      1.0
+    ],
+    [
+      3.006,
+      "place robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      3.007,
+      "move robot_1 board_1 table_2",
+      1.0
+    ],
+    [
+      4.008,
+      "pick-up robot_1 chicken_1 table_2",
+      1.0
+    ],
+    [
+      4.009,
+      "move robot_1 table_2 fryer_1",
+      1.0
+    ],
+    [
+      5.01,
+      "place robot_1 chicken_1 fryer_1",
+      1.0
+    ],
+    [
+      6.011,
+      "fry robot_1 chicken_1 fryer_1",
+      3.0
+    ],
+    [
+      9.011,
+      "move robot_1 fryer_1 board_1",
+      1.0
+    ],
+    [
+      10.012,
+      "cut robot_1 lettuce_1 board_1",
+      3.0
+    ],
+    [
+      13.012,
+      "move robot_1 board_1 fryer_1",
+      1.0
+    ],
+    [
+      14.013,
+      "pick-up robot_1 chicken_1 fryer_1",
+      1.0
+    ],
+    [
+      14.014,
+      "move robot_1 fryer_1 table_1",
+      1.0
+    ],
+    [
+      15.015,
+      "stack robot_1 chicken_1 bread_1 table_1",
+      1.0
+    ],
+    [
+      15.016,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      16.017,
+      "pick-up robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      16.018,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      17.019,
+      "stack robot_1 lettuce_1 chicken_1 table_1",
+      1.0
+    ],
+    [
+      17.02,
+      "move robot_1 table_1 table_4",
+      1.0
+    ],
+    [
+      18.021,
+      "unstack robot_1 bread_2 tomato_1 table_4",
+      1.0
+    ],
+    [
+      18.022,
+      "move robot_1 table_4 table_1",
+      1.0
+    ],
+    [
+      19.023,
+      "stack robot_1 bread_2 lettuce_1 table_1",
+      1.0
+    ],
+    [
+      19.024,
+      "move robot_1 table_1 table_4",
+      1.0
+    ],
+    [
+      20.025,
+      "pick-up robot_1 tomato_1 table_4",
+      1.0
+    ],
+    [
+      20.026,
+      "move robot_1 table_4 board_1",
+      1.0
+    ],
+    [
+      21.027,
+      "place robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      22.028,
+      "cut robot_1 tomato_1 board_1",
+      3.0
+    ],
+    [
+      25.028,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      26.029,
+      "unstack robot_1 bread_2 lettuce_1 table_1",
+      1.0
+    ],
+    [
+      26.03,
+      "move robot_1 table_1 fryer_1",
+      1.0
+    ],
+    [
+      27.031,
+      "place robot_1 bread_2 fryer_1",
+      1.0
+    ],
+    [
+      27.032,
+      "move robot_1 fryer_1 board_1",
+      1.0
+    ],
+    [
+      28.033,
+      "pick-up robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      28.034,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      29.035,
+      "stack robot_1 tomato_1 lettuce_1 table_1",
+      1.0
+    ],
+    [
+      29.036,
+      "move robot_1 table_1 fryer_1",
+      1.0
+    ],
+    [
+      30.037,
+      "pick-up robot_1 bread_2 fryer_1",
+      1.0
+    ],
+    [
+      30.038,
+      "move robot_1 fryer_1 table_1",
+      1.0
+    ],
+    [
+      31.039,
+      "stack robot_1 bread_2 tomato_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 43,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 43,
+    "optimal_steps": 37,
+    "steps_ratio": 1.162162162162162,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Plan completed but goal not reached",
+    "goal_predicate_recall": 0.5555555555555556,
+    "goal_count_match": true,
+    "gold_goal_count": 9,
+    "pddl_goal_count": 9,
+    "object_count": {
+      "station": [
+        "table_1",
+        "board_1",
+        "fryer_1",
+        "table_2",
+        "table_3",
+        "table_4"
+      ],
+      "player": [
+        "robot_1"
+      ],
+      "item": [
+        "bread_1",
+        "bread_2",
+        "chicken_1",
+        "lettuce_1",
+        "tomato_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 6,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "unstack": 3,
+      "move": 20,
+      "stack": 6,
+      "pick-up": 7,
+      "place": 4,
+      "fry": 1,
+      "cut": 2
+    }
+  },
+  "problem_pddl": "(define (problem fried_chicken_sandwich)\n    (:domain robotouille-async)\n    (:objects\n        table_1 board_1 fryer_1 table_2 table_3 table_4 - station\n        robot_1 - player\n        bread_1 bread_2 chicken_1 lettuce_1 tomato_1 - item\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1)\n        (isboard board_1)\n        (isfryer fryer_1)\n        (istable table_2)\n        (istable table_3)\n        (istable table_4)\n        (isbread bread_1)\n        (isbread bread_2)\n        (ischicken chicken_1)\n        (islettuce lettuce_1)\n        (istomato tomato_1)\n        (isfryable chicken_1)\n        (iscuttable lettuce_1)\n        (iscuttable tomato_1)\n        (station_free board_1)\n        (station_free fryer_1)\n        (nothing robot_1)\n        (nocontainer robot_1)\n        (loc robot_1 table_1)\n        (vacant board_1)\n        (vacant fryer_1)\n        (vacant table_2)\n        (vacant table_3)\n        (vacant table_4)\n        (at bread_1 table_1)\n        (on bread_1 table_1)\n        (atop bread_2 bread_1)\n        (at bread_2 table_1)\n        (clear bread_2)\n        (at chicken_1 table_2)\n        (on chicken_1 table_2)\n        (clear chicken_1)\n        (at lettuce_1 table_3)\n        (on lettuce_1 table_3)\n        (clear lettuce_1)\n        (at tomato_1 table_4)\n        (on tomato_1 table_4)\n        (clear tomato_1)\n        (empty board_1)\n        (empty fryer_1)\n    )\n    (:goal\n        (and\n            (iscut lettuce_1)\n            (iscut tomato_1)\n            (isfried chicken_1)\n            (on bread_1 table_1)\n            (atop chicken_1 bread_1)\n            (atop lettuce_1 chicken_1)\n            (atop tomato_1 lettuce_1)\n            (atop bread_2 tomato_1)\n            (clear bread_2)\n        )\n    )\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem fried_chicken_sandwich)\\n    (:domain robotouille-async)\\n    (:objects\\n        table_1 board_1 fryer_1 table_2 table_3 table_4 - station\\n        robot_1 - player\\n        bread_1 bread_2 chicken_1 lettuce_1 tomato_1 - item\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1)\\n        (isboard board_1)\\n        (isfryer fryer_1)\\n        (istable table_2)\\n        (istable table_3)\\n        (istable table_4)\\n        (isbread bread_1)\\n        (isbread bread_2)\\n        (ischicken chicken_1)\\n        (islettuce lettuce_1)\\n        (istomato tomato_1)\\n        (isfryable chicken_1)\\n        (iscuttable lettuce_1)\\n        (iscuttable tomato_1)\\n        (station_free board_1)\\n        (station_free fryer_1)\\n        (nothing robot_1)\\n        (nocontainer robot_1)\\n        (loc robot_1 table_1)\\n        (vacant board_1)\\n        (vacant fryer_1)\\n        (vacant table_2)\\n        (vacant table_3)\\n        (vacant table_4)\\n        (at bread_1 table_1)\\n        (on bread_1 table_1)\\n        (atop bread_2 bread_1)\\n        (at bread_2 table_1)\\n        (clear bread_2)\\n        (at chicken_1 table_2)\\n        (on chicken_1 table_2)\\n        (clear chicken_1)\\n        (at lettuce_1 table_3)\\n        (on lettuce_1 table_3)\\n        (clear lettuce_1)\\n        (at tomato_1 table_4)\\n        (on tomato_1 table_4)\\n        (clear tomato_1)\\n        (empty board_1)\\n        (empty fryer_1)\\n    )\\n    (:goal\\n        (and\\n            (iscut lettuce_1)\\n            (iscut tomato_1)\\n            (isfried chicken_1)\\n            (on bread_1 table_1)\\n            (atop chicken_1 bread_1)\\n            (atop lettuce_1 chicken_1)\\n            (atop tomato_1 lettuce_1)\\n            (atop bread_2 tomato_1)\\n            (clear bread_2)\\n        )\\n    )\\n)\"}",
+  "raw_solver_output": "Number of literals: 115\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 19.000, admissible cost estimate 0.000\nb (18.000 | 1.000)b (17.000 | 3.003)b (16.000 | 3.004)b (15.000 | 8.007)b (14.000 | 10.009)b (13.000 | 11.010)b (12.000 | 13.015)b (11.000 | 16.021)b (10.000 | 20.023)b (9.000 | 22.025)\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (18.000 | 1.000)b (17.000 | 3.003)b (16.000 | 3.004)b (15.000 | 7.007)b (15.000 | 5.009)b (14.000 | 6.010)b (13.000 | 9.012)b (12.000 | 11.014)b (11.000 | 15.014)b (11.000 | 15.013)b (9.000 | 16.014)b (7.000 | 18.020)b (6.000 | 21.026)b (5.000 | 25.028)b (4.000 | 27.030)b (4.000 | 26.031)b (3.000 | 30.035)b (1.000 | 31.038)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 32.039\n; States evaluated so far: 1066\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 1.23\n0.000: (unstack robot_1 bread_2 bread_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 table_4)  [1.000]\n1.002: (stack robot_1 bread_2 tomato_1 table_4)  [1.000]\n1.003: (move robot_1 table_4 table_3)  [1.000]\n2.004: (pick-up robot_1 lettuce_1 table_3)  [1.000]\n2.005: (move robot_1 table_3 board_1)  [1.000]\n3.006: (place robot_1 lettuce_1 board_1)  [1.000]\n3.007: (move robot_1 board_1 table_2)  [1.000]\n4.008: (pick-up robot_1 chicken_1 table_2)  [1.000]\n4.009: (move robot_1 table_2 fryer_1)  [1.000]\n5.010: (place robot_1 chicken_1 fryer_1)  [1.000]\n6.011: (fry robot_1 chicken_1 fryer_1)  [3.000]\n9.011: (move robot_1 fryer_1 board_1)  [1.000]\n10.012: (cut robot_1 lettuce_1 board_1)  [3.000]\n13.012: (move robot_1 board_1 fryer_1)  [1.000]\n14.013: (pick-up robot_1 chicken_1 fryer_1)  [1.000]\n14.014: (move robot_1 fryer_1 table_1)  [1.000]\n15.015: (stack robot_1 chicken_1 bread_1 table_1)  [1.000]\n15.016: (move robot_1 table_1 board_1)  [1.000]\n16.017: (pick-up robot_1 lettuce_1 board_1)  [1.000]\n16.018: (move robot_1 board_1 table_1)  [1.000]\n17.019: (stack robot_1 lettuce_1 chicken_1 table_1)  [1.000]\n17.020: (move robot_1 table_1 table_4)  [1.000]\n18.021: (unstack robot_1 bread_2 tomato_1 table_4)  [1.000]\n18.022: (move robot_1 table_4 table_1)  [1.000]\n19.023: (stack robot_1 bread_2 lettuce_1 table_1)  [1.000]\n19.024: (move robot_1 table_1 table_4)  [1.000]\n20.025: (pick-up robot_1 tomato_1 table_4)  [1.000]\n20.026: (move robot_1 table_4 board_1)  [1.000]\n21.027: (place robot_1 tomato_1 board_1)  [1.000]\n22.028: (cut robot_1 tomato_1 board_1)  [3.000]\n25.028: (move robot_1 board_1 table_1)  [1.000]\n26.029: (unstack robot_1 bread_2 lettuce_1 table_1)  [1.000]\n26.030: (move robot_1 table_1 fryer_1)  [1.000]\n27.031: (place robot_1 bread_2 fryer_1)  [1.000]\n27.032: (move robot_1 fryer_1 board_1)  [1.000]\n28.033: (pick-up robot_1 tomato_1 board_1)  [1.000]\n28.034: (move robot_1 board_1 table_1)  [1.000]\n29.035: (stack robot_1 tomato_1 lettuce_1 table_1)  [1.000]\n29.036: (move robot_1 table_1 fryer_1)  [1.000]\n30.037: (pick-up robot_1 bread_2 fryer_1)  [1.000]\n30.038: (move robot_1 fryer_1 table_1)  [1.000]\n31.039: (stack robot_1 bread_2 tomato_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 32.039\nb (0.000 | 32.039)"
+}
+{
+  "id": "3.1_lettuce_cheeseburger",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 6 stations:\n- table_1 at (0, 1)\n- table_2 at (2, 3)\n- stove_1 at (1, 1)\n- board_1 at (2, 1)\n- table_3 at (3, 3)\n- table_4 at (4, 1)\n\nThere are 5 items:\n- bottombun_1 at (0, 1) on table_1\n- topbun_1 at (0, 1) on table_1\n- cheese_1 at (2, 3) on table_2\n- lettuce_1 at (4, 1) on table_4\n- patty_1 at (3, 3) on table_3\n\nHere are some constraints on the items:\n- lettuce_1 must be cut, which will take 3 cuts.\n- patty_1 must be cooked, which will take 3 steps on a stove.\n- bottombun_1, cheese_1, lettuce_1, patty_1 must be stacked before topbun_1\n\nNow you need to prepare a lettuce cheeseburger To do so, you need to make sure:\n- bottombun is on table\n- patty is cooked\n- patty is at table\n- lettuce is cut\n- lettuce is at table\n- cheese is at table\n- topbun is at table\n- topbun has nothing on top of it (clear)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "unstack robot_1 topbun_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      0.001,
+      "move robot_1 table_1 table_2",
+      1.0
+    ],
+    [
+      1.002,
+      "stack robot_1 topbun_1 cheese_1 table_2",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 table_2 table_4",
+      1.0
+    ],
+    [
+      2.004,
+      "pick-up robot_1 lettuce_1 table_4",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 table_4 board_1",
+      1.0
+    ],
+    [
+      3.006,
+      "place robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      3.007,
+      "move robot_1 board_1 table_3",
+      1.0
+    ],
+    [
+      4.008,
+      "pick-up robot_1 patty_1 table_3",
+      1.0
+    ],
+    [
+      4.009,
+      "move robot_1 table_3 stove_1",
+      1.0
+    ],
+    [
+      5.01,
+      "place robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      6.011,
+      "cook robot_1 patty_1 stove_1",
+      3.0
+    ],
+    [
+      9.011,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      10.012,
+      "cut robot_1 lettuce_1 board_1",
+      3.0
+    ],
+    [
+      13.012,
+      "move robot_1 board_1 stove_1",
+      1.0
+    ],
+    [
+      14.013,
+      "pick-up robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      14.014,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      15.015,
+      "stack robot_1 patty_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      15.016,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      16.017,
+      "pick-up robot_1 lettuce_1 board_1",
+      1.0
+    ],
+    [
+      16.018,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      17.019,
+      "stack robot_1 lettuce_1 patty_1 table_1",
+      1.0
+    ],
+    [
+      17.02,
+      "move robot_1 table_1 table_2",
+      1.0
+    ],
+    [
+      18.021,
+      "unstack robot_1 topbun_1 cheese_1 table_2",
+      1.0
+    ],
+    [
+      18.022,
+      "move robot_1 table_2 board_1",
+      1.0
+    ],
+    [
+      19.023,
+      "place robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      19.024,
+      "move robot_1 board_1 table_2",
+      1.0
+    ],
+    [
+      20.025,
+      "pick-up robot_1 cheese_1 table_2",
+      1.0
+    ],
+    [
+      20.026,
+      "move robot_1 table_2 table_1",
+      1.0
+    ],
+    [
+      21.027,
+      "stack robot_1 cheese_1 lettuce_1 table_1",
+      1.0
+    ],
+    [
+      21.028,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      22.029,
+      "pick-up robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      22.03,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      23.031,
+      "stack robot_1 topbun_1 cheese_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 34,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 34,
+    "optimal_steps": null,
+    "steps_ratio": null,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (unstack robot_1 topbun_1 bottombun_1 table_1): env step failed: isfryableifcut(tomato1,)",
+    "goal_predicate_recall": 0.5,
+    "goal_count_match": true,
+    "gold_goal_count": 8,
+    "pddl_goal_count": 8,
+    "object_count": {
+      "station": [
+        "table_1",
+        "table_2",
+        "table_3",
+        "table_4",
+        "stove_1",
+        "board_1"
+      ],
+      "player": [
+        "robot_1"
+      ],
+      "item": [
+        "bottombun_1",
+        "topbun_1",
+        "cheese_1",
+        "lettuce_1",
+        "patty_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 6,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "unstack": 2,
+      "move": 16,
+      "stack": 5,
+      "pick-up": 6,
+      "place": 3,
+      "cook": 1,
+      "cut": 1
+    }
+  },
+  "problem_pddl": "(define (problem lettuce-cheeseburger-prep)\n    (:domain robotouille-async)\n    (:objects\n        table_1 table_2 table_3 table_4 stove_1 board_1 - station\n        robot_1 - player\n        bottombun_1 topbun_1 cheese_1 lettuce_1 patty_1 - item\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1)\n        (istable table_2)\n        (istable table_3)\n        (istable table_4)\n        (isstove stove_1)\n        (isboard board_1)\n\n        (isbottombun bottombun_1)\n        (istopbun topbun_1)\n        (ischeese cheese_1)\n        (islettuce lettuce_1)\n        (ispatty patty_1)\n\n        (iscuttable lettuce_1)\n        (iscookable patty_1)\n\n        (station_free stove_1)\n        (station_free board_1)\n\n        (loc robot_1 table_1)\n        (vacant table_2)\n        (vacant table_3)\n        (vacant table_4)\n        (vacant stove_1)\n        (vacant board_1)\n\n        (nothing robot_1)\n        (nocontainer robot_1)\n\n        (at bottombun_1 table_1)\n        (on bottombun_1 table_1)\n        (at topbun_1 table_1)\n        (atop topbun_1 bottombun_1)\n        (clear topbun_1)\n\n        (at cheese_1 table_2)\n        (on cheese_1 table_2)\n        (clear cheese_1)\n\n        (at patty_1 table_3)\n        (on patty_1 table_3)\n        (clear patty_1)\n\n        (at lettuce_1 table_4)\n        (on lettuce_1 table_4)\n        (clear lettuce_1)\n\n        (empty stove_1)\n        (empty board_1)\n    )\n    (:goal (and\n        (on bottombun_1 table_1)\n        (iscooked patty_1)\n        (atop patty_1 bottombun_1)\n        (iscut lettuce_1)\n        (atop lettuce_1 patty_1)\n        (atop cheese_1 lettuce_1)\n        (atop topbun_1 cheese_1)\n        (clear topbun_1)\n    ))\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem lettuce-cheeseburger-prep)\\n    (:domain robotouille-async)\\n    (:objects\\n        table_1 table_2 table_3 table_4 stove_1 board_1 - station\\n        robot_1 - player\\n        bottombun_1 topbun_1 cheese_1 lettuce_1 patty_1 - item\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1)\\n        (istable table_2)\\n        (istable table_3)\\n        (istable table_4)\\n        (isstove stove_1)\\n        (isboard board_1)\\n\\n        (isbottombun bottombun_1)\\n        (istopbun topbun_1)\\n        (ischeese cheese_1)\\n        (islettuce lettuce_1)\\n        (ispatty patty_1)\\n\\n        (iscuttable lettuce_1)\\n        (iscookable patty_1)\\n\\n        (station_free stove_1)\\n        (station_free board_1)\\n\\n        (loc robot_1 table_1)\\n        (vacant table_2)\\n        (vacant table_3)\\n        (vacant table_4)\\n        (vacant stove_1)\\n        (vacant board_1)\\n\\n        (nothing robot_1)\\n        (nocontainer robot_1)\\n\\n        (at bottombun_1 table_1)\\n        (on bottombun_1 table_1)\\n        (at topbun_1 table_1)\\n        (atop topbun_1 bottombun_1)\\n        (clear topbun_1)\\n\\n        (at cheese_1 table_2)\\n        (on cheese_1 table_2)\\n        (clear cheese_1)\\n\\n        (at patty_1 table_3)\\n        (on patty_1 table_3)\\n        (clear patty_1)\\n\\n        (at lettuce_1 table_4)\\n        (on lettuce_1 table_4)\\n        (clear lettuce_1)\\n\\n        (empty stove_1)\\n        (empty board_1)\\n    )\\n    (:goal (and\\n        (on bottombun_1 table_1)\\n        (iscooked patty_1)\\n        (atop patty_1 bottombun_1)\\n        (iscut lettuce_1)\\n        (atop lettuce_1 patty_1)\\n        (atop cheese_1 lettuce_1)\\n        (atop topbun_1 cheese_1)\\n        (clear topbun_1)\\n    ))\\n)\"}",
+  "raw_solver_output": "Number of literals: 114\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 17.000, admissible cost estimate 0.000\nb (16.000 | 1.000)b (15.000 | 3.003)b (14.000 | 3.004)b (13.000 | 8.007)b (12.000 | 10.009)b (11.000 | 11.010)b (9.000 | 13.015)b (8.000 | 17.022)b (7.000 | 18.025)\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (16.000 | 1.000)b (15.000 | 3.003)b (14.000 | 3.004)b (13.000 | 7.007)b (13.000 | 5.009)b (12.000 | 6.010)b (11.000 | 9.012)b (9.000 | 11.014)b (8.000 | 15.014)b (7.000 | 16.014)b (4.000 | 18.020)b (3.000 | 22.027)b (1.000 | 23.030)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 24.031\n; States evaluated so far: 1093\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 1.23\n0.000: (unstack robot_1 topbun_1 bottombun_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 table_2)  [1.000]\n1.002: (stack robot_1 topbun_1 cheese_1 table_2)  [1.000]\n1.003: (move robot_1 table_2 table_4)  [1.000]\n2.004: (pick-up robot_1 lettuce_1 table_4)  [1.000]\n2.005: (move robot_1 table_4 board_1)  [1.000]\n3.006: (place robot_1 lettuce_1 board_1)  [1.000]\n3.007: (move robot_1 board_1 table_3)  [1.000]\n4.008: (pick-up robot_1 patty_1 table_3)  [1.000]\n4.009: (move robot_1 table_3 stove_1)  [1.000]\n5.010: (place robot_1 patty_1 stove_1)  [1.000]\n6.011: (cook robot_1 patty_1 stove_1)  [3.000]\n9.011: (move robot_1 stove_1 board_1)  [1.000]\n10.012: (cut robot_1 lettuce_1 board_1)  [3.000]\n13.012: (move robot_1 board_1 stove_1)  [1.000]\n14.013: (pick-up robot_1 patty_1 stove_1)  [1.000]\n14.014: (move robot_1 stove_1 table_1)  [1.000]\n15.015: (stack robot_1 patty_1 bottombun_1 table_1)  [1.000]\n15.016: (move robot_1 table_1 board_1)  [1.000]\n16.017: (pick-up robot_1 lettuce_1 board_1)  [1.000]\n16.018: (move robot_1 board_1 table_1)  [1.000]\n17.019: (stack robot_1 lettuce_1 patty_1 table_1)  [1.000]\n17.020: (move robot_1 table_1 table_2)  [1.000]\n18.021: (unstack robot_1 topbun_1 cheese_1 table_2)  [1.000]\n18.022: (move robot_1 table_2 board_1)  [1.000]\n19.023: (place robot_1 topbun_1 board_1)  [1.000]\n19.024: (move robot_1 board_1 table_2)  [1.000]\n20.025: (pick-up robot_1 cheese_1 table_2)  [1.000]\n20.026: (move robot_1 table_2 table_1)  [1.000]\n21.027: (stack robot_1 cheese_1 lettuce_1 table_1)  [1.000]\n21.028: (move robot_1 table_1 board_1)  [1.000]\n22.029: (pick-up robot_1 topbun_1 board_1)  [1.000]\n22.030: (move robot_1 board_1 table_1)  [1.000]\n23.031: (stack robot_1 topbun_1 cheese_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 24.031\nb (0.000 | 24.031)"
+}
+{
+  "id": "3_tomato_burger_and_fries",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 7 stations:\n- table_1 at (0, 1)\n- table_2 at (2, 3)\n- stove_1 at (1, 1)\n- board_1 at (2, 1)\n- table_3 at (3, 3)\n- fryer_1 at (3, 1)\n- table_4 at (4, 1)\n\nThere are 5 items:\n- bottombun_1 at (0, 1) on table_1\n- topbun_1 at (0, 1) on table_1\n- potato_1 at (2, 3) on table_2\n- tomato_1 at (4, 1) on table_4\n- patty_1 at (3, 3) on table_3\n\nHere are some constraints on the items:\n- potato_1 must be cut, which will take 3 cuts.\n- potato_1 must be fried, which will take 3 steps on a fryer.\n- potato_1 can only be fried after being cut, which will take 3 steps on a fryer.\n- tomato_1 must be cut, which will take 3 cuts.\n- patty_1 must be cooked, which will take 3 steps on a stove.\n- bottombun_1, potato_1, tomato_1, patty_1 must be stacked before topbun_1\n\nNow you need to prepare a tomato burger and fries on separate tables To do so, you need to make sure:\n- bottombun is on table_1\n- patty is cooked\n- patty is at table_1\n- tomato is cut\n- tomato is at table_1\n- topbun is at table_1\n- topbun has nothing on top of it (clear)\n- potato is cut\n- isfried(potato)\n- potato is on table_2",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "move robot_1 table_1 table_3",
+      1.0
+    ],
+    [
+      1.001,
+      "pick-up robot_1 patty_1 table_3",
+      1.0
+    ],
+    [
+      1.002,
+      "move robot_1 table_3 table_1",
+      1.0
+    ],
+    [
+      2.003,
+      "stack robot_1 patty_1 topbun_1 table_1",
+      1.0
+    ],
+    [
+      2.004,
+      "move robot_1 table_1 table_4",
+      1.0
+    ],
+    [
+      3.005,
+      "pick-up robot_1 tomato_1 table_4",
+      1.0
+    ],
+    [
+      3.006,
+      "move robot_1 table_4 board_1",
+      1.0
+    ],
+    [
+      4.007,
+      "place robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      5.008,
+      "cut robot_1 tomato_1 board_1",
+      3.0
+    ],
+    [
+      8.008,
+      "pick-up robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      8.009,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      9.01,
+      "stack robot_1 tomato_1 patty_1 table_1",
+      1.0
+    ],
+    [
+      9.011,
+      "move robot_1 table_1 table_2",
+      1.0
+    ],
+    [
+      10.012,
+      "pick-up robot_1 potato_1 table_2",
+      1.0
+    ],
+    [
+      10.013,
+      "move robot_1 table_2 board_1",
+      1.0
+    ],
+    [
+      11.014,
+      "place robot_1 potato_1 board_1",
+      1.0
+    ],
+    [
+      12.015,
+      "cut robot_1 potato_1 board_1",
+      3.0
+    ],
+    [
+      15.015,
+      "pick-up robot_1 potato_1 board_1",
+      1.0
+    ],
+    [
+      15.016,
+      "move robot_1 board_1 fryer_1",
+      1.0
+    ],
+    [
+      16.017,
+      "place robot_1 potato_1 fryer_1",
+      1.0
+    ],
+    [
+      17.018,
+      "fry_cut_item robot_1 potato_1 fryer_1",
+      3.0
+    ],
+    [
+      20.018,
+      "pick-up robot_1 potato_1 fryer_1",
+      1.0
+    ],
+    [
+      20.019,
+      "move robot_1 fryer_1 table_2",
+      1.0
+    ],
+    [
+      21.02,
+      "place robot_1 potato_1 table_2",
+      1.0
+    ],
+    [
+      21.021,
+      "move robot_1 table_2 table_1",
+      1.0
+    ],
+    [
+      22.022,
+      "unstack robot_1 tomato_1 patty_1 table_1",
+      1.0
+    ],
+    [
+      22.023,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      23.024,
+      "place robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      23.025,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      24.026,
+      "unstack robot_1 patty_1 topbun_1 table_1",
+      1.0
+    ],
+    [
+      24.027,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      25.028,
+      "place robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      26.029,
+      "cook robot_1 patty_1 stove_1",
+      3.0
+    ],
+    [
+      29.029,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      30.03,
+      "unstack robot_1 topbun_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      30.031,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      31.032,
+      "stack robot_1 topbun_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      31.033,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      32.034,
+      "pick-up robot_1 tomato_1 board_1",
+      1.0
+    ],
+    [
+      32.035,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      33.036,
+      "stack robot_1 tomato_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      33.037,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      34.038,
+      "unstack robot_1 topbun_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      34.039,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      35.04,
+      "place robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      35.041,
+      "move robot_1 board_1 stove_1",
+      1.0
+    ],
+    [
+      36.042,
+      "pick-up robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      36.043,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      37.044,
+      "stack robot_1 patty_1 tomato_1 table_1",
+      1.0
+    ],
+    [
+      37.045,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      38.046,
+      "pick-up robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      38.047,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      39.048,
+      "stack robot_1 topbun_1 patty_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 53,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 53,
+    "optimal_steps": 42,
+    "steps_ratio": 1.2619047619047619,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (move robot_1 table_1 table_3): env step failed: isfryableifcut(lettuce1,)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": true,
+    "gold_goal_count": 10,
+    "pddl_goal_count": 10,
+    "object_count": {},
+    "gold_object_count": {
+      "stations": 7,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 23,
+      "pick-up": 9,
+      "stack": 6,
+      "place": 7,
+      "cut": 2,
+      "fry_cut_item": 1,
+      "unstack": 4,
+      "cook": 1
+    }
+  },
+  "problem_pddl": "(define (problem burger-and-fries) (:domain robotouille-async) (:objects table_1 table_2 table_3 table_4 stove_1 board_1 fryer_1 - station robot_1 - player bottombun_1 topbun_1 potato_1 tomato_1 patty_1 - item) (:init (istable table_1) (istable table_2) (istable table_3) (istable table_4) (isstove stove_1) (isboard board_1) (isfryer fryer_1) (isrobot robot_1) (isbottombun bottombun_1) (istopbun topbun_1) (ispotato potato_1) (istomato tomato_1) (ispatty patty_1) (isfryableifcut potato_1) (iscuttable potato_1) (iscuttable tomato_1) (iscookable patty_1) (station_free stove_1) (station_free board_1) (station_free fryer_1) (loc robot_1 table_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant stove_1) (vacant board_1) (vacant fryer_1) (nothing robot_1) (nocontainer robot_1) (on bottombun_1 table_1) (at bottombun_1 table_1) (atop topbun_1 bottombun_1) (at topbun_1 table_1) (clear topbun_1) (on potato_1 table_2) (at potato_1 table_2) (clear potato_1) (on tomato_1 table_4) (at tomato_1 table_4) (clear tomato_1) (on patty_1 table_3) (at patty_1 table_3) (clear patty_1) (empty stove_1) (empty board_1) (empty fryer_1)) (:goal (and (on bottombun_1 table_1) (iscooked patty_1) (at patty_1 table_1) (iscut tomato_1) (at tomato_1 table_1) (at topbun_1 table_1) (clear topbun_1) (iscut potato_1) (isfried potato_1) (on potato_1 table_2))))",
+  "llm_response": "{\"problem_pddl\": \"(define (problem burger-and-fries) (:domain robotouille-async) (:objects table_1 table_2 table_3 table_4 stove_1 board_1 fryer_1 - station robot_1 - player bottombun_1 topbun_1 potato_1 tomato_1 patty_1 - item) (:init (istable table_1) (istable table_2) (istable table_3) (istable table_4) (isstove stove_1) (isboard board_1) (isfryer fryer_1) (isrobot robot_1) (isbottombun bottombun_1) (istopbun topbun_1) (ispotato potato_1) (istomato tomato_1) (ispatty patty_1) (isfryableifcut potato_1) (iscuttable potato_1) (iscuttable tomato_1) (iscookable patty_1) (station_free stove_1) (station_free board_1) (station_free fryer_1) (loc robot_1 table_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant stove_1) (vacant board_1) (vacant fryer_1) (nothing robot_1) (nocontainer robot_1) (on bottombun_1 table_1) (at bottombun_1 table_1) (atop topbun_1 bottombun_1) (at topbun_1 table_1) (clear topbun_1) (on potato_1 table_2) (at potato_1 table_2) (clear potato_1) (on tomato_1 table_4) (at tomato_1 table_4) (clear tomato_1) (on patty_1 table_3) (at patty_1 table_3) (clear patty_1) (empty stove_1) (empty board_1) (empty fryer_1)) (:goal (and (on bottombun_1 table_1) (iscooked patty_1) (at patty_1 table_1) (iscut tomato_1) (at tomato_1 table_1) (at topbun_1 table_1) (clear topbun_1) (iscut potato_1) (isfried potato_1) (on potato_1 table_2))))\"}",
+  "raw_solver_output": "Number of literals: 130\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 20.000, admissible cost estimate 0.000\nb (19.000 | 1.000)\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (19.000 | 1.000)b (18.000 | 2.001)b (17.000 | 2.001)b (16.000 | 4.005)b (15.000 | 4.005)b (14.000 | 8.007)b (13.000 | 9.008)b (12.000 | 15.014)b (10.000 | 16.015)b (9.000 | 20.017)b (7.000 | 21.019)b (6.000 | 22.020)b (5.000 | 22.021)b (4.000 | 31.031)b (2.000 | 33.035)b (2.000 | 32.034)b (1.000 | 37.042)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 40.048\n; States evaluated so far: 13592\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 22.83\n0.000: (move robot_1 table_1 table_3)  [1.000]\n1.001: (pick-up robot_1 patty_1 table_3)  [1.000]\n1.002: (move robot_1 table_3 table_1)  [1.000]\n2.003: (stack robot_1 patty_1 topbun_1 table_1)  [1.000]\n2.004: (move robot_1 table_1 table_4)  [1.000]\n3.005: (pick-up robot_1 tomato_1 table_4)  [1.000]\n3.006: (move robot_1 table_4 board_1)  [1.000]\n4.007: (place robot_1 tomato_1 board_1)  [1.000]\n5.008: (cut robot_1 tomato_1 board_1)  [3.000]\n8.008: (pick-up robot_1 tomato_1 board_1)  [1.000]\n8.009: (move robot_1 board_1 table_1)  [1.000]\n9.010: (stack robot_1 tomato_1 patty_1 table_1)  [1.000]\n9.011: (move robot_1 table_1 table_2)  [1.000]\n10.012: (pick-up robot_1 potato_1 table_2)  [1.000]\n10.013: (move robot_1 table_2 board_1)  [1.000]\n11.014: (place robot_1 potato_1 board_1)  [1.000]\n12.015: (cut robot_1 potato_1 board_1)  [3.000]\n15.015: (pick-up robot_1 potato_1 board_1)  [1.000]\n15.016: (move robot_1 board_1 fryer_1)  [1.000]\n16.017: (place robot_1 potato_1 fryer_1)  [1.000]\n17.018: (fry_cut_item robot_1 potato_1 fryer_1)  [3.000]\n20.018: (pick-up robot_1 potato_1 fryer_1)  [1.000]\n20.019: (move robot_1 fryer_1 table_2)  [1.000]\n21.020: (place robot_1 potato_1 table_2)  [1.000]\n21.021: (move robot_1 table_2 table_1)  [1.000]\n22.022: (unstack robot_1 tomato_1 patty_1 table_1)  [1.000]\n22.023: (move robot_1 table_1 board_1)  [1.000]\n23.024: (place robot_1 tomato_1 board_1)  [1.000]\n23.025: (move robot_1 board_1 table_1)  [1.000]\n24.026: (unstack robot_1 patty_1 topbun_1 table_1)  [1.000]\n24.027: (move robot_1 table_1 stove_1)  [1.000]\n25.028: (place robot_1 patty_1 stove_1)  [1.000]\n26.029: (cook robot_1 patty_1 stove_1)  [3.000]\n29.029: (move robot_1 stove_1 table_1)  [1.000]\n30.030: (unstack robot_1 topbun_1 bottombun_1 table_1)  [1.000]\n30.031: (move robot_1 table_1 stove_1)  [1.000]\n31.032: (stack robot_1 topbun_1 patty_1 stove_1)  [1.000]\n31.033: (move robot_1 stove_1 board_1)  [1.000]\n32.034: (pick-up robot_1 tomato_1 board_1)  [1.000]\n32.035: (move robot_1 board_1 table_1)  [1.000]\n33.036: (stack robot_1 tomato_1 bottombun_1 table_1)  [1.000]\n33.037: (move robot_1 table_1 stove_1)  [1.000]\n34.038: (unstack robot_1 topbun_1 patty_1 stove_1)  [1.000]\n34.039: (move robot_1 stove_1 board_1)  [1.000]\n35.040: (place robot_1 topbun_1 board_1)  [1.000]\n35.041: (move robot_1 board_1 stove_1)  [1.000]\n36.042: (pick-up robot_1 patty_1 stove_1)  [1.000]\n36.043: (move robot_1 stove_1 table_1)  [1.000]\n37.044: (stack robot_1 patty_1 tomato_1 table_1)  [1.000]\n37.045: (move robot_1 table_1 board_1)  [1.000]\n38.046: (pick-up robot_1 topbun_1 board_1)  [1.000]\n38.047: (move robot_1 board_1 table_1)  [1.000]\n39.048: (stack robot_1 topbun_1 patty_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 40.048\nb (0.000 | 40.047)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)"
+}
+{
+  "id": "4_onion_cheese_burger_and_fried_onion",
+  "nl": "You are a chef in a 5x5 kitchen. You are currently at (0, 2) facing up. You can either move up/down/left/right each step.\n\nThere are 8 stations:\n- table_1 at (0, 1)\n- table_2 at (2, 3)\n- stove_1 at (1, 1)\n- board_1 at (2, 1)\n- table_3 at (3, 3)\n- fryer_1 at (3, 1)\n- table_4 at (4, 1)\n- table_5 at (4, 3)\n\nThere are 6 items:\n- bottombun_1 at (0, 1) on table_1\n- topbun_1 at (0, 1) on table_1\n- onion_1 at (2, 3) on table_2\n- onion_2 at (4, 1) on table_4\n- patty_1 at (3, 3) on table_3\n- cheese_1 at (4, 3) on table_5\n\nHere are some constraints on the items:\n- onion_1 must be cut, which will take 3 cuts.\n- onion_1 must be fried, which will take 3 steps on a fryer.\n- onion_1 can only be fried after being cut, which will take 3 steps on a fryer.\n- onion_2 must be cut, which will take 3 cuts.\n- onion_2 must be fried, which will take 3 steps on a fryer.\n- onion_2 can only be fried after being cut, which will take 3 steps on a fryer.\n- patty_1 must be cooked, which will take 3 steps on a stove.\n- bottombun_1, onion_1, onion_2, patty_1, cheese_1 must be stacked before topbun_1\n\nNow you need to prepare an onion cheese burger and fried onion rings on separate tables To do so, you need to make sure:\n- bottombun is on table_1\n- patty is cooked\n- patty is at table_1\n- onion_1 is cut\n- onion_1 is at table_1\n- cheese is at table_1\n- topbun is at table_1\n- topbun has nothing on top of it (clear)\n- onion_2 is cut\n- isfried(onion_2)\n- onion_2 is on table_2",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "unstack robot_1 topbun_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      0.001,
+      "move robot_1 table_1 table_5",
+      1.0
+    ],
+    [
+      1.002,
+      "stack robot_1 topbun_1 cheese_1 table_5",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 table_5 table_4",
+      1.0
+    ],
+    [
+      2.004,
+      "pick-up robot_1 onion_2 table_4",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 table_4 board_1",
+      1.0
+    ],
+    [
+      3.006,
+      "place robot_1 onion_2 board_1",
+      1.0
+    ],
+    [
+      4.007,
+      "cut robot_1 onion_2 board_1",
+      3.0
+    ],
+    [
+      7.007,
+      "pick-up robot_1 onion_2 board_1",
+      1.0
+    ],
+    [
+      7.008,
+      "move robot_1 board_1 fryer_1",
+      1.0
+    ],
+    [
+      8.009,
+      "place robot_1 onion_2 fryer_1",
+      1.0
+    ],
+    [
+      9.01,
+      "fry_cut_item robot_1 onion_2 fryer_1",
+      3.0
+    ],
+    [
+      12.01,
+      "pick-up robot_1 onion_2 fryer_1",
+      1.0
+    ],
+    [
+      12.011,
+      "move robot_1 fryer_1 table_5",
+      1.0
+    ],
+    [
+      13.012,
+      "stack robot_1 onion_2 topbun_1 table_5",
+      1.0
+    ],
+    [
+      13.013,
+      "move robot_1 table_5 table_2",
+      1.0
+    ],
+    [
+      14.014,
+      "pick-up robot_1 onion_1 table_2",
+      1.0
+    ],
+    [
+      14.015,
+      "move robot_1 table_2 board_1",
+      1.0
+    ],
+    [
+      15.016,
+      "place robot_1 onion_1 board_1",
+      1.0
+    ],
+    [
+      16.017,
+      "cut robot_1 onion_1 board_1",
+      3.0
+    ],
+    [
+      19.017,
+      "move robot_1 board_1 table_5",
+      1.0
+    ],
+    [
+      20.018,
+      "unstack robot_1 onion_2 topbun_1 table_5",
+      1.0
+    ],
+    [
+      20.019,
+      "move robot_1 table_5 table_2",
+      1.0
+    ],
+    [
+      21.02,
+      "place robot_1 onion_2 table_2",
+      1.0
+    ],
+    [
+      21.021,
+      "move robot_1 table_2 table_3",
+      1.0
+    ],
+    [
+      22.022,
+      "pick-up robot_1 patty_1 table_3",
+      1.0
+    ],
+    [
+      22.023,
+      "move robot_1 table_3 stove_1",
+      1.0
+    ],
+    [
+      23.024,
+      "place robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      24.025,
+      "cook robot_1 patty_1 stove_1",
+      3.0
+    ],
+    [
+      27.025,
+      "pick-up robot_1 patty_1 stove_1",
+      1.0
+    ],
+    [
+      27.026,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      28.027,
+      "stack robot_1 patty_1 bottombun_1 table_1",
+      1.0
+    ],
+    [
+      28.028,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      29.029,
+      "pick-up robot_1 onion_1 board_1",
+      1.0
+    ],
+    [
+      29.03,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      30.031,
+      "stack robot_1 onion_1 patty_1 table_1",
+      1.0
+    ],
+    [
+      30.032,
+      "move robot_1 table_1 table_5",
+      1.0
+    ],
+    [
+      31.033,
+      "unstack robot_1 topbun_1 cheese_1 table_5",
+      1.0
+    ],
+    [
+      31.034,
+      "move robot_1 table_5 board_1",
+      1.0
+    ],
+    [
+      32.035,
+      "place robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      32.036,
+      "move robot_1 board_1 table_5",
+      1.0
+    ],
+    [
+      33.037,
+      "pick-up robot_1 cheese_1 table_5",
+      1.0
+    ],
+    [
+      33.038,
+      "move robot_1 table_5 table_1",
+      1.0
+    ],
+    [
+      34.039,
+      "stack robot_1 cheese_1 onion_1 table_1",
+      1.0
+    ],
+    [
+      34.04,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      35.041,
+      "pick-up robot_1 topbun_1 board_1",
+      1.0
+    ],
+    [
+      35.042,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      36.043,
+      "stack robot_1 topbun_1 cheese_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 48,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 48,
+    "optimal_steps": 46,
+    "steps_ratio": 1.0434782608695652,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (unstack robot_1 topbun_1 bottombun_1 table_1): env step failed: isfryableifcut(lettuce1,)",
+    "goal_predicate_recall": 0.6363636363636364,
+    "goal_count_match": false,
+    "gold_goal_count": 11,
+    "pddl_goal_count": 12,
+    "object_count": {
+      "player": [
+        "robot_1"
+      ],
+      "station": [
+        "table_1",
+        "table_2",
+        "table_3",
+        "table_4",
+        "table_5",
+        "stove_1",
+        "board_1",
+        "fryer_1"
+      ],
+      "item": [
+        "bottombun_1",
+        "topbun_1",
+        "onion_1",
+        "onion_2",
+        "patty_1",
+        "cheese_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 8,
+      "items": 6,
+      "players": 1
+    },
+    "plan_action_types": {
+      "unstack": 3,
+      "move": 20,
+      "stack": 6,
+      "pick-up": 9,
+      "place": 6,
+      "cut": 2,
+      "fry_cut_item": 1,
+      "cook": 1
+    }
+  },
+  "problem_pddl": "(define (problem onion-cheese-burger-rings)\n    (:domain robotouille-async)\n    (:objects\n        robot_1 - player\n        table_1 table_2 table_3 table_4 table_5 stove_1 board_1 fryer_1 - station\n        bottombun_1 topbun_1 onion_1 onion_2 patty_1 cheese_1 - item\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5)\n        (isstove stove_1) (isboard board_1) (isfryer fryer_1)\n        (isbottombun bottombun_1) (istopbun topbun_1) (isonion onion_1) (isonion onion_2) (ispatty patty_1) (ischeese cheese_1)\n        (iscuttable onion_1) (isfryableifcut onion_1)\n        (iscuttable onion_2) (isfryableifcut onion_2)\n        (iscookable patty_1)\n        (station_free stove_1) (station_free board_1) (station_free fryer_1)\n        (loc robot_1 table_1)\n        (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant stove_1) (vacant board_1) (vacant fryer_1)\n        (nothing robot_1) (nocontainer robot_1)\n        (at bottombun_1 table_1) (on bottombun_1 table_1)\n        (at topbun_1 table_1) (atop topbun_1 bottombun_1) (clear topbun_1)\n        (at onion_1 table_2) (on onion_1 table_2) (clear onion_1)\n        (at onion_2 table_4) (on onion_2 table_4) (clear onion_2)\n        (at patty_1 table_3) (on patty_1 table_3) (clear patty_1)\n        (at cheese_1 table_5) (on cheese_1 table_5) (clear cheese_1)\n        (empty stove_1) (empty board_1) (empty fryer_1)\n    )\n    (:goal (and\n        (on bottombun_1 table_1)\n        (atop patty_1 bottombun_1)\n        (iscooked patty_1)\n        (atop onion_1 patty_1)\n        (iscut onion_1)\n        (atop cheese_1 onion_1)\n        (atop topbun_1 cheese_1)\n        (clear topbun_1)\n        (on onion_2 table_2)\n        (iscut onion_2)\n        (isfried onion_2)\n        (clear onion_2)\n    ))\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem onion-cheese-burger-rings)\\n    (:domain robotouille-async)\\n    (:objects\\n        robot_1 - player\\n        table_1 table_2 table_3 table_4 table_5 stove_1 board_1 fryer_1 - station\\n        bottombun_1 topbun_1 onion_1 onion_2 patty_1 cheese_1 - item\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5)\\n        (isstove stove_1) (isboard board_1) (isfryer fryer_1)\\n        (isbottombun bottombun_1) (istopbun topbun_1) (isonion onion_1) (isonion onion_2) (ispatty patty_1) (ischeese cheese_1)\\n        (iscuttable onion_1) (isfryableifcut onion_1)\\n        (iscuttable onion_2) (isfryableifcut onion_2)\\n        (iscookable patty_1)\\n        (station_free stove_1) (station_free board_1) (station_free fryer_1)\\n        (loc robot_1 table_1)\\n        (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant stove_1) (vacant board_1) (vacant fryer_1)\\n        (nothing robot_1) (nocontainer robot_1)\\n        (at bottombun_1 table_1) (on bottombun_1 table_1)\\n        (at topbun_1 table_1) (atop topbun_1 bottombun_1) (clear topbun_1)\\n        (at onion_1 table_2) (on onion_1 table_2) (clear onion_1)\\n        (at onion_2 table_4) (on onion_2 table_4) (clear onion_2)\\n        (at patty_1 table_3) (on patty_1 table_3) (clear patty_1)\\n        (at cheese_1 table_5) (on cheese_1 table_5) (clear cheese_1)\\n        (empty stove_1) (empty board_1) (empty fryer_1)\\n    )\\n    (:goal (and\\n        (on bottombun_1 table_1)\\n        (atop patty_1 bottombun_1)\\n        (iscooked patty_1)\\n        (atop onion_1 patty_1)\\n        (iscut onion_1)\\n        (atop cheese_1 onion_1)\\n        (atop topbun_1 cheese_1)\\n        (clear topbun_1)\\n        (on onion_2 table_2)\\n        (iscut onion_2)\\n        (isfried onion_2)\\n        (clear onion_2)\\n    ))\\n)\"}",
+  "raw_solver_output": "Number of literals: 172\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 25.000, admissible cost estimate 0.000\nb (24.000 | 1.000)b (23.000 | 3.003)b (22.000 | 3.004)b (21.000 | 5.008)b (20.000 | 9.011)b (19.000 | 11.012)b (18.000 | 12.013)b (17.000 | 14.018)b (16.000 | 21.023)b (15.000 | 24.030)b (14.000 | 28.032)b (13.000 | 29.033)b (12.000 | 32.037)b (9.000 | 35.043)b (8.000 | 39.050)b (7.000 | 40.053)\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (24.000 | 1.000)b (23.000 | 3.003)b (22.000 | 3.004)b (21.000 | 7.007)b (20.000 | 8.007)b (19.000 | 12.010)b (18.000 | 13.011)b (17.000 | 15.014)b (16.000 | 19.017)b (15.000 | 21.019)b (14.000 | 22.020)b (13.000 | 22.021)b (12.000 | 23.023)b (11.000 | 24.024)b (10.000 | 27.025)b (8.000 | 30.029)b (7.000 | 29.027)b (4.000 | 31.032)b (3.000 | 35.038)b (1.000 | 36.041)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 37.043\n; States evaluated so far: 3097\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 5.74\n0.000: (unstack robot_1 topbun_1 bottombun_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 table_5)  [1.000]\n1.002: (stack robot_1 topbun_1 cheese_1 table_5)  [1.000]\n1.003: (move robot_1 table_5 table_4)  [1.000]\n2.004: (pick-up robot_1 onion_2 table_4)  [1.000]\n2.005: (move robot_1 table_4 board_1)  [1.000]\n3.006: (place robot_1 onion_2 board_1)  [1.000]\n4.007: (cut robot_1 onion_2 board_1)  [3.000]\n7.007: (pick-up robot_1 onion_2 board_1)  [1.000]\n7.008: (move robot_1 board_1 fryer_1)  [1.000]\n8.009: (place robot_1 onion_2 fryer_1)  [1.000]\n9.010: (fry_cut_item robot_1 onion_2 fryer_1)  [3.000]\n12.010: (pick-up robot_1 onion_2 fryer_1)  [1.000]\n12.011: (move robot_1 fryer_1 table_5)  [1.000]\n13.012: (stack robot_1 onion_2 topbun_1 table_5)  [1.000]\n13.013: (move robot_1 table_5 table_2)  [1.000]\n14.014: (pick-up robot_1 onion_1 table_2)  [1.000]\n14.015: (move robot_1 table_2 board_1)  [1.000]\n15.016: (place robot_1 onion_1 board_1)  [1.000]\n16.017: (cut robot_1 onion_1 board_1)  [3.000]\n19.017: (move robot_1 board_1 table_5)  [1.000]\n20.018: (unstack robot_1 onion_2 topbun_1 table_5)  [1.000]\n20.019: (move robot_1 table_5 table_2)  [1.000]\n21.020: (place robot_1 onion_2 table_2)  [1.000]\n21.021: (move robot_1 table_2 table_3)  [1.000]\n22.022: (pick-up robot_1 patty_1 table_3)  [1.000]\n22.023: (move robot_1 table_3 stove_1)  [1.000]\n23.024: (place robot_1 patty_1 stove_1)  [1.000]\n24.025: (cook robot_1 patty_1 stove_1)  [3.000]\n27.025: (pick-up robot_1 patty_1 stove_1)  [1.000]\n27.026: (move robot_1 stove_1 table_1)  [1.000]\n28.027: (stack robot_1 patty_1 bottombun_1 table_1)  [1.000]\n28.028: (move robot_1 table_1 board_1)  [1.000]\n29.029: (pick-up robot_1 onion_1 board_1)  [1.000]\n29.030: (move robot_1 board_1 table_1)  [1.000]\n30.031: (stack robot_1 onion_1 patty_1 table_1)  [1.000]\n30.032: (move robot_1 table_1 table_5)  [1.000]\n31.033: (unstack robot_1 topbun_1 cheese_1 table_5)  [1.000]\n31.034: (move robot_1 table_5 board_1)  [1.000]\n32.035: (place robot_1 topbun_1 board_1)  [1.000]\n32.036: (move robot_1 board_1 table_5)  [1.000]\n33.037: (pick-up robot_1 cheese_1 table_5)  [1.000]\n33.038: (move robot_1 table_5 table_1)  [1.000]\n34.039: (stack robot_1 cheese_1 onion_1 table_1)  [1.000]\n34.040: (move robot_1 table_1 board_1)  [1.000]\n35.041: (pick-up robot_1 topbun_1 board_1)  [1.000]\n35.042: (move robot_1 board_1 table_1)  [1.000]\n36.043: (stack robot_1 topbun_1 cheese_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 37.043\nb (0.000 | 37.042)(G)(G)(G)(G)(G)(G)(G)"
+}
+{
+  "id": "5_potato_soup",
+  "nl": "You are a chef in a 6x6 kitchen. You are currently at (0, 0) facing down. You can either move up/down/left/right each step.\n\nThere are 6 stations:\n- table_1 at (0, 1)\n- stove_1 at (1, 1)\n- table_2 at (2, 1)\n- board_1 at (3, 1)\n- sink_1 at (4, 1)\n- table_3 at (0, 3)\n\nThere are 1 items:\n- potato_1 at (0, 1) on table_1\n\nHere are some constraints on the items:\n- potato_1 must be cut, which will take 3 cuts.\n\nNow you need to make potato soup with a whole potato and serve into a bowl on a table. To do so, you need to make sure:\n- in(water, bowl)\n- addedto(potato, water)\n- isboiling(water)\n- container_at(bowl, table)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "move robot_1 table_1 sink_1",
+      1.0
+    ],
+    [
+      1.001,
+      "fill robot_1 pot_1 water_1 sink_1",
+      1.0
+    ],
+    [
+      1.002,
+      "pick-up-container robot_1 pot_1 sink_1",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 sink_1 stove_1",
+      1.0
+    ],
+    [
+      2.004,
+      "place-container robot_1 pot_1 stove_1",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 stove_1 table_2",
+      1.0
+    ],
+    [
+      3.006,
+      "pick-up-container robot_1 bowl_1 table_2",
+      1.0
+    ],
+    [
+      3.007,
+      "move robot_1 table_2 table_1",
+      1.0
+    ],
+    [
+      4.008,
+      "pick-up robot_1 potato_1 table_1",
+      1.0
+    ],
+    [
+      4.009,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      5.01,
+      "boil robot_1 pot_1 water_1 stove_1",
+      3.0
+    ],
+    [
+      5.01,
+      "add-to-pot robot_1 potato_1 pot_1 water_1 stove_1",
+      1.0
+    ],
+    [
+      5.01,
+      "place-container robot_1 bowl_1 stove_1",
+      1.0
+    ],
+    [
+      6.011,
+      "pour robot_1 pot_1 bowl_1 water_1 stove_1",
+      1.0
+    ],
+    [
+      6.012,
+      "pick-up-container robot_1 bowl_1 stove_1",
+      1.0
+    ],
+    [
+      6.013,
+      "move robot_1 stove_1 table_2",
+      1.0
+    ],
+    [
+      7.014,
+      "place-container robot_1 bowl_1 table_2",
+      1.0
+    ]
+  ],
+  "plan_length": 17,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 17,
+    "optimal_steps": 19,
+    "steps_ratio": 0.8947368421052632,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (move robot_1 table_1 sink_1): env step failed: isfryableifcut(lettuce1,)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 4,
+    "pddl_goal_count": 5,
+    "object_count": {},
+    "gold_object_count": {
+      "stations": 6,
+      "items": 1,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 6,
+      "fill": 1,
+      "pick-up-container": 3,
+      "place-container": 3,
+      "pick-up": 1,
+      "boil": 1,
+      "add-to-pot": 1,
+      "pour": 1
+    }
+  },
+  "problem_pddl": "(define (problem potato-soup-problem)(:domain robotouille-async)(:objects table_1 stove_1 table_2 board_1 sink_1 table_3 - station robot_1 - player potato_1 - item pot_1 bowl_1 - container water_1 - water)(:init (isrobot robot_1)(istable table_1)(isstove stove_1)(istable table_2)(isboard board_1)(issink sink_1)(istable table_3)(ispotato potato_1)(iscuttable potato_1)(ispottype pot_1)(isbowltype bowl_1)(loc robot_1 table_1)(vacant stove_1)(vacant table_2)(vacant board_1)(vacant sink_1)(vacant table_3)(nothing robot_1)(nocontainer robot_1)(at potato_1 table_1)(on potato_1 table_1)(clear potato_1)(container_at pot_1 sink_1)(container_on_station pot_1)(container_at bowl_1 table_2)(container_on_station bowl_1)(empty stove_1)(empty board_1)(empty table_3)(water_available water_1)(station_free stove_1)(station_free board_1)(station_free sink_1))(:goal (and (has_water bowl_1 water_1)(in water_1 bowl_1)(addedto potato_1 water_1)(isboiling water_1)(container_at bowl_1 table_2))))",
+  "llm_response": "{\"problem_pddl\": \"(define (problem potato-soup-problem)(:domain robotouille-async)(:objects table_1 stove_1 table_2 board_1 sink_1 table_3 - station robot_1 - player potato_1 - item pot_1 bowl_1 - container water_1 - water)(:init (isrobot robot_1)(istable table_1)(isstove stove_1)(istable table_2)(isboard board_1)(issink sink_1)(istable table_3)(ispotato potato_1)(iscuttable potato_1)(ispottype pot_1)(isbowltype bowl_1)(loc robot_1 table_1)(vacant stove_1)(vacant table_2)(vacant board_1)(vacant sink_1)(vacant table_3)(nothing robot_1)(nocontainer robot_1)(at potato_1 table_1)(on potato_1 table_1)(clear potato_1)(container_at pot_1 sink_1)(container_on_station pot_1)(container_at bowl_1 table_2)(container_on_station bowl_1)(empty stove_1)(empty board_1)(empty table_3)(water_available water_1)(station_free stove_1)(station_free board_1)(station_free sink_1))(:goal (and (has_water bowl_1 water_1)(in water_1 bowl_1)(addedto potato_1 water_1)(isboiling water_1)(container_at bowl_1 table_2))))\"}",
+  "raw_solver_output": "Number of literals: 61\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 75 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 76 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 77 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 78 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 79 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 80 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (has_water bowl_1 water_1)\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 12.000, admissible cost estimate 0.000\nb (11.000 | 1.000)b (10.000 | 1.000)b (8.000 | 3.002)b (7.000 | 4.003)b (6.000 | 5.005)b (5.000 | 5.006)b (4.000 | 10.009)b (3.000 | 11.009)b (2.000 | 11.010)b (1.000 | 12.011)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 13.012\n; States evaluated so far: 28\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 0.11\n0.000: (pick-up robot_1 potato_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 stove_1)  [1.000]\n1.002: (move robot_1 stove_1 sink_1)  [1.000]\n2.003: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n3.004: (add-to-pot robot_1 potato_1 pot_1 water_1 sink_1)  [1.000]\n4.005: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n4.006: (move robot_1 sink_1 table_2)  [1.000]\n5.007: (move robot_1 table_2 stove_1)  [1.000]\n6.008: (place-container robot_1 pot_1 stove_1)  [1.000]\n7.009: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n10.009: (pick-up-container robot_1 pot_1 stove_1)  [1.000]\n10.010: (move robot_1 stove_1 table_2)  [1.000]\n11.011: (place-container robot_1 pot_1 table_2)  [1.000]\n12.012: (pour robot_1 pot_1 bowl_1 water_1 table_2)  [1.000]\n\n * All goal deadlines now no later than 13.012\n\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (11.000 | 1.000)b (10.000 | 2.001)b (10.000 | 1.000)b (9.000 | 3.003)b (8.000 | 4.006)b (7.000 | 5.008)b (6.000 | 6.009)b (5.000 | 6.010)b (4.000 | 10.012)b (3.000 | 11.016)b (2.000 | 11.017)b (1.000 | 11.018)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 12.020\n; States evaluated so far: 194\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 0.18\n0.000: (pick-up robot_1 potato_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 stove_1)  [1.000]\n1.002: (place robot_1 potato_1 stove_1)  [1.000]\n1.003: (move robot_1 stove_1 sink_1)  [1.000]\n2.004: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n2.005: (move robot_1 sink_1 stove_1)  [1.000]\n3.006: (pick-up robot_1 potato_1 stove_1)  [1.000]\n3.007: (move robot_1 stove_1 sink_1)  [1.000]\n4.008: (add-to-pot robot_1 potato_1 pot_1 water_1 sink_1)  [1.000]\n5.009: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n5.010: (move robot_1 sink_1 stove_1)  [1.000]\n6.011: (place-container robot_1 pot_1 stove_1)  [1.000]\n7.012: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n7.013: (move robot_1 stove_1 table_2)  [1.000]\n8.014: (pick-up-container robot_1 bowl_1 table_2)  [1.000]\n8.015: (move robot_1 table_2 stove_1)  [1.000]\n9.016: (place-container robot_1 bowl_1 stove_1)  [1.000]\n10.017: (pour robot_1 pot_1 bowl_1 water_1 stove_1)  [1.000]\n10.018: (pick-up-container robot_1 bowl_1 stove_1)  [1.000]\n10.019: (move robot_1 stove_1 table_2)  [1.000]\n11.020: (place-container robot_1 bowl_1 table_2)  [1.000]\n\n * All goal deadlines now no later than 12.020\nb (0.000 | 12.019)(G)(G)(G)(G)(G)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 10.013\n; States evaluated so far: 581\n; States pruned based on pre-heuristic cost lower bound: 26\n; Time 0.35\n0.000: (pick-up robot_1 potato_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 stove_1)  [1.000]\n1.002: (place robot_1 potato_1 stove_1)  [1.000]\n1.003: (move robot_1 stove_1 sink_1)  [1.000]\n2.004: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n2.005: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n2.006: (move robot_1 sink_1 stove_1)  [1.000]\n3.007: (place-container robot_1 pot_1 stove_1)  [1.000]\n4.008: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n7.008: (pick-up-container robot_1 pot_1 stove_1)  [1.000]\n7.009: (pick-up robot_1 potato_1 stove_1)  [1.000]\n7.010: (move robot_1 stove_1 table_2)  [1.000]\n8.011: (place-container robot_1 pot_1 table_2)  [1.000]\n9.012: (add-to-pot robot_1 potato_1 pot_1 water_1 table_2)  [1.000]\n9.013: (pour robot_1 pot_1 bowl_1 water_1 table_2)  [1.000]\n\n * All goal deadlines now no later than 10.013\nb (0.000 | 10.012)(G)(G)(G)(G)(G)(G)(G)b (0.000 | 10.011)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 9.016\n; States evaluated so far: 5127\n; States pruned based on pre-heuristic cost lower bound: 1366\n; Time 2.21\n0.000: (pick-up robot_1 potato_1 table_1)  [1.000]\n0.001: (move robot_1 table_1 stove_1)  [1.000]\n1.002: (place robot_1 potato_1 stove_1)  [1.000]\n1.003: (move robot_1 stove_1 sink_1)  [1.000]\n2.004: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n2.005: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n2.006: (move robot_1 sink_1 stove_1)  [1.000]\n3.007: (place-container robot_1 pot_1 stove_1)  [1.000]\n3.007: (pick-up robot_1 potato_1 stove_1)  [1.000]\n4.008: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n4.008: (add-to-pot robot_1 potato_1 pot_1 water_1 stove_1)  [1.000]\n4.009: (move robot_1 stove_1 table_2)  [1.000]\n5.010: (pick-up-container robot_1 bowl_1 table_2)  [1.000]\n5.011: (move robot_1 table_2 stove_1)  [1.000]\n6.012: (place-container robot_1 bowl_1 stove_1)  [1.000]\n7.013: (pour robot_1 pot_1 bowl_1 water_1 stove_1)  [1.000]\n7.014: (pick-up-container robot_1 bowl_1 stove_1)  [1.000]\n7.015: (move robot_1 stove_1 table_2)  [1.000]\n8.016: (place-container robot_1 bowl_1 table_2)  [1.000]\n\n * All goal deadlines now no later than 9.016\nb (0.000 | 9.016)(G)(G)b (0.000 | 9.015)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)b (0.000 | 9.014)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)b (0.000 | 9.013)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 8.014\n; States evaluated so far: 47395\n; States pruned based on pre-heuristic cost lower bound: 25828\n; Time 24.89\n0.000: (move robot_1 table_1 sink_1)  [1.000]\n1.001: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n1.002: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n1.003: (move robot_1 sink_1 stove_1)  [1.000]\n2.004: (place-container robot_1 pot_1 stove_1)  [1.000]\n2.005: (move robot_1 stove_1 table_2)  [1.000]\n3.006: (pick-up-container robot_1 bowl_1 table_2)  [1.000]\n3.007: (move robot_1 table_2 table_1)  [1.000]\n4.008: (pick-up robot_1 potato_1 table_1)  [1.000]\n4.009: (move robot_1 table_1 stove_1)  [1.000]\n5.010: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n5.010: (add-to-pot robot_1 potato_1 pot_1 water_1 stove_1)  [1.000]\n5.010: (place-container robot_1 bowl_1 stove_1)  [1.000]\n6.011: (pour robot_1 pot_1 bowl_1 water_1 stove_1)  [1.000]\n6.012: (pick-up-container robot_1 bowl_1 stove_1)  [1.000]\n6.013: (move robot_1 stove_1 table_2)  [1.000]\n7.014: (place-container robot_1 bowl_1 table_2)  [1.000]\n\n * All goal deadlines now no later than 8.014\nb (0.000 | 8.013)(G)(G)(G)(G)(G)"
+}
+{
+  "id": "6_onion_soup",
+  "nl": "You are a chef in a 6x6 kitchen. You are currently at (0, 0) facing down. You can either move up/down/left/right each step.\n\nThere are 8 stations:\n- table_1 at (0, 1)\n- stove_1 at (1, 1)\n- table_2 at (2, 1)\n- board_1 at (3, 1)\n- sink_1 at (4, 1)\n- table_3 at (0, 3)\n- table_4 at (1, 3)\n- table_5 at (2, 3)\n\nThere are 3 items:\n- onion_1 at (0, 3) on table_3\n- onion_2 at (1, 3) on table_4\n- onion_3 at (2, 3) on table_5\n\nHere are some constraints on the items:\n- onion_1 must be cut, which will take 3 cuts.\n- onion_2 must be cut, which will take 3 cuts.\n- onion_3 must be cut, which will take 3 cuts.\n\nNow you need to make onion soup with 3 cut onions and serve into a bowl on a table. To do so, you need to make sure:\n- in(water, bowl)\n- isboiling(water)\n- onion_1 is cut\n- addedto(onion_1, water)\n- onion_2 is cut\n- addedto(onion_2, water)\n- onion_3 is cut\n- addedto(onion_3, water)\n- container_at(bowl, table)",
+  "error_type": "",
+  "error": null,
+  "plan": [
+    [
+      0.0,
+      "move robot_1 table_1 sink_1",
+      1.0
+    ],
+    [
+      1.001,
+      "fill robot_1 pot_1 water_1 sink_1",
+      1.0
+    ],
+    [
+      1.002,
+      "pick-up-container robot_1 pot_1 sink_1",
+      1.0
+    ],
+    [
+      1.003,
+      "move robot_1 sink_1 table_1",
+      1.0
+    ],
+    [
+      2.004,
+      "place-container robot_1 pot_1 table_1",
+      1.0
+    ],
+    [
+      2.005,
+      "move robot_1 table_1 table_5",
+      1.0
+    ],
+    [
+      3.006,
+      "pick-up robot_1 onion_3 table_5",
+      1.0
+    ],
+    [
+      3.007,
+      "move robot_1 table_5 board_1",
+      1.0
+    ],
+    [
+      4.008,
+      "place robot_1 onion_3 board_1",
+      1.0
+    ],
+    [
+      5.009,
+      "cut robot_1 onion_3 board_1",
+      3.0
+    ],
+    [
+      8.009,
+      "move robot_1 board_1 table_4",
+      1.0
+    ],
+    [
+      9.01,
+      "pick-up robot_1 onion_2 table_4",
+      1.0
+    ],
+    [
+      9.011,
+      "move robot_1 table_4 table_1",
+      1.0
+    ],
+    [
+      10.012,
+      "place robot_1 onion_2 table_1",
+      1.0
+    ],
+    [
+      10.013,
+      "move robot_1 table_1 table_3",
+      1.0
+    ],
+    [
+      11.014,
+      "pick-up robot_1 onion_1 table_3",
+      1.0
+    ],
+    [
+      11.015,
+      "move robot_1 table_3 stove_1",
+      1.0
+    ],
+    [
+      12.016,
+      "place robot_1 onion_1 stove_1",
+      1.0
+    ],
+    [
+      12.017,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      13.018,
+      "pick-up robot_1 onion_3 board_1",
+      1.0
+    ],
+    [
+      13.019,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      14.02,
+      "add-to-pot robot_1 onion_3 pot_1 water_1 table_1",
+      1.0
+    ],
+    [
+      15.021,
+      "pick-up robot_1 onion_2 table_1",
+      1.0
+    ],
+    [
+      15.022,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      16.023,
+      "place robot_1 onion_2 board_1",
+      1.0
+    ],
+    [
+      17.024,
+      "cut robot_1 onion_2 board_1",
+      3.0
+    ],
+    [
+      20.024,
+      "pick-up robot_1 onion_2 board_1",
+      1.0
+    ],
+    [
+      20.025,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      21.026,
+      "add-to-pot robot_1 onion_2 pot_1 water_1 table_1",
+      1.0
+    ],
+    [
+      22.027,
+      "pick-up-container robot_1 pot_1 table_1",
+      1.0
+    ],
+    [
+      22.028,
+      "move robot_1 table_1 stove_1",
+      1.0
+    ],
+    [
+      23.029,
+      "place-container robot_1 pot_1 stove_1",
+      1.0
+    ],
+    [
+      23.029,
+      "pick-up robot_1 onion_1 stove_1",
+      1.0
+    ],
+    [
+      24.03,
+      "boil robot_1 pot_1 water_1 stove_1",
+      3.0
+    ],
+    [
+      24.031,
+      "move robot_1 stove_1 board_1",
+      1.0
+    ],
+    [
+      25.032,
+      "place robot_1 onion_1 board_1",
+      1.0
+    ],
+    [
+      25.033,
+      "move robot_1 board_1 stove_1",
+      1.0
+    ],
+    [
+      27.03,
+      "pick-up-container robot_1 pot_1 stove_1",
+      1.0
+    ],
+    [
+      27.031,
+      "move robot_1 stove_1 table_1",
+      1.0
+    ],
+    [
+      28.032,
+      "place-container robot_1 pot_1 table_1",
+      1.0
+    ],
+    [
+      28.033,
+      "move robot_1 table_1 board_1",
+      1.0
+    ],
+    [
+      29.034,
+      "cut robot_1 onion_1 board_1",
+      3.0
+    ],
+    [
+      32.034,
+      "pick-up robot_1 onion_1 board_1",
+      1.0
+    ],
+    [
+      32.035,
+      "move robot_1 board_1 table_1",
+      1.0
+    ],
+    [
+      33.036,
+      "add-to-pot robot_1 onion_1 pot_1 water_1 table_1",
+      1.0
+    ],
+    [
+      33.037,
+      "pour robot_1 pot_1 bowl_1 water_1 table_1",
+      1.0
+    ]
+  ],
+  "plan_length": 46,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 46,
+    "optimal_steps": 42,
+    "steps_ratio": 1.0952380952380953,
+    "simulation_success": true,
+    "simulation_error": "",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (move robot_1 table_1 sink_1): env step failed: isfryableifcut(lettuce1,)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 9,
+    "pddl_goal_count": 10,
+    "object_count": {},
+    "gold_object_count": {
+      "stations": 8,
+      "items": 3,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 18,
+      "fill": 1,
+      "pick-up-container": 3,
+      "place-container": 3,
+      "pick-up": 8,
+      "place": 5,
+      "cut": 3,
+      "add-to-pot": 3,
+      "boil": 1,
+      "pour": 1
+    }
+  },
+  "problem_pddl": "(define (problem onion-soup-problem) (:domain robotouille-async) (:objects table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 - station robot_1 - player onion_1 onion_2 onion_3 - item pot_1 bowl_1 - container water_1 - water) (:init (isrobot robot_1) (loc robot_1 table_1) (vacant stove_1) (vacant table_2) (vacant board_1) (vacant sink_1) (vacant table_3) (vacant table_4) (vacant table_5) (nothing robot_1) (nocontainer robot_1) (istable table_1) (isstove stove_1) (istable table_2) (isboard board_1) (issink sink_1) (istable table_3) (istable table_4) (istable table_5) (isonion onion_1) (isonion onion_2) (isonion onion_3) (iscuttable onion_1) (iscuttable onion_2) (iscuttable onion_3) (at onion_1 table_3) (on onion_1 table_3) (clear onion_1) (at onion_2 table_4) (on onion_2 table_4) (clear onion_2) (at onion_3 table_5) (on onion_3 table_5) (clear onion_3) (empty table_1) (empty stove_1) (empty table_2) (empty board_1) (empty sink_1) (ispottype pot_1) (isbowltype bowl_1) (container_at pot_1 sink_1) (container_at bowl_1 table_1) (container_on_station pot_1) (container_on_station bowl_1) (water_available water_1) (station_free stove_1) (station_free board_1)) (:goal (and (has_water bowl_1 water_1) (in water_1 bowl_1) (isboiling water_1) (iscut onion_1) (addedto onion_1 water_1) (iscut onion_2) (addedto onion_2 water_1) (iscut onion_3) (addedto onion_3 water_1) (container_at bowl_1 table_1))))",
+  "llm_response": "{\"problem_pddl\": \"(define (problem onion-soup-problem) (:domain robotouille-async) (:objects table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 - station robot_1 - player onion_1 onion_2 onion_3 - item pot_1 bowl_1 - container water_1 - water) (:init (isrobot robot_1) (loc robot_1 table_1) (vacant stove_1) (vacant table_2) (vacant board_1) (vacant sink_1) (vacant table_3) (vacant table_4) (vacant table_5) (nothing robot_1) (nocontainer robot_1) (istable table_1) (isstove stove_1) (istable table_2) (isboard board_1) (issink sink_1) (istable table_3) (istable table_4) (istable table_5) (isonion onion_1) (isonion onion_2) (isonion onion_3) (iscuttable onion_1) (iscuttable onion_2) (iscuttable onion_3) (at onion_1 table_3) (on onion_1 table_3) (clear onion_1) (at onion_2 table_4) (on onion_2 table_4) (clear onion_2) (at onion_3 table_5) (on onion_3 table_5) (clear onion_3) (empty table_1) (empty stove_1) (empty table_2) (empty board_1) (empty sink_1) (ispottype pot_1) (isbowltype bowl_1) (container_at pot_1 sink_1) (container_at bowl_1 table_1) (container_on_station pot_1) (container_on_station bowl_1) (water_available water_1) (station_free stove_1) (station_free board_1)) (:goal (and (has_water bowl_1 water_1) (in water_1 bowl_1) (isboiling water_1) (iscut onion_1) (addedto onion_1 water_1) (iscut onion_2) (addedto onion_2 water_1) (iscut onion_3) (addedto onion_3 water_1) (container_at bowl_1 table_1))))\"}",
+  "raw_solver_output": "Number of literals: 120\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 261 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 262 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 263 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 264 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 265 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 266 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 267 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (has_water bowl_1 water_1)\nAction 268 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (has_water bowl_1 water_1)\nAll the ground actions in this problem are compression-safe\nInitial heuristic = 25.000, admissible cost estimate 0.000\nb (24.000 | 1.000)b (23.000 | 2.001)b (22.000 | 3.002)b (21.000 | 7.005)b (20.000 | 9.006)b (19.000 | 9.008)b (18.000 | 10.008)b (17.000 | 11.011)b (16.000 | 14.016)b (15.000 | 14.017)b (14.000 | 15.019)b (13.000 | 19.021)b (11.000 | 21.023)b (10.000 | 22.027)b (9.000 | 23.028)b (8.000 | 27.030)b (7.000 | 28.031)b (5.000 | 29.032)b (4.000 | 34.036)b (3.000 | 35.036)b (2.000 | 35.037)b (1.000 | 36.038)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 37.039\n; States evaluated so far: 173\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 0.26\n0.000: (move robot_1 table_1 table_5)  [1.000]\n1.001: (pick-up robot_1 onion_3 table_5)  [1.000]\n1.002: (move robot_1 table_5 table_4)  [1.000]\n2.003: (move robot_1 table_4 board_1)  [1.000]\n3.004: (place robot_1 onion_3 board_1)  [1.000]\n4.005: (cut robot_1 onion_3 board_1)  [3.000]\n7.005: (move robot_1 board_1 sink_1)  [1.000]\n8.006: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n8.007: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n8.008: (move robot_1 sink_1 table_1)  [1.000]\n9.009: (place-container robot_1 pot_1 table_1)  [1.000]\n9.010: (move robot_1 table_1 table_4)  [1.000]\n10.011: (pick-up robot_1 onion_2 table_4)  [1.000]\n10.012: (move robot_1 table_4 table_3)  [1.000]\n11.013: (stack robot_1 onion_2 onion_1 table_3)  [1.000]\n11.014: (move robot_1 table_3 board_1)  [1.000]\n12.015: (pick-up robot_1 onion_3 board_1)  [1.000]\n12.016: (move robot_1 board_1 table_1)  [1.000]\n13.017: (add-to-pot robot_1 onion_3 pot_1 water_1 table_1)  [1.000]\n13.018: (move robot_1 table_1 table_3)  [1.000]\n14.019: (unstack robot_1 onion_2 onion_1 table_3)  [1.000]\n14.020: (move robot_1 table_3 board_1)  [1.000]\n15.021: (place robot_1 onion_2 board_1)  [1.000]\n16.022: (cut robot_1 onion_2 board_1)  [3.000]\n19.022: (pick-up robot_1 onion_2 board_1)  [1.000]\n19.023: (move robot_1 board_1 table_1)  [1.000]\n20.024: (add-to-pot robot_1 onion_2 pot_1 water_1 table_1)  [1.000]\n20.025: (move robot_1 table_1 table_3)  [1.000]\n21.026: (pick-up robot_1 onion_1 table_3)  [1.000]\n21.027: (move robot_1 table_3 table_1)  [1.000]\n22.028: (move robot_1 table_1 board_1)  [1.000]\n23.029: (place robot_1 onion_1 board_1)  [1.000]\n24.030: (cut robot_1 onion_1 board_1)  [3.000]\n27.030: (pick-up robot_1 onion_1 board_1)  [1.000]\n27.031: (move robot_1 board_1 table_1)  [1.000]\n28.032: (add-to-pot robot_1 onion_1 pot_1 water_1 table_1)  [1.000]\n29.033: (pick-up-container robot_1 pot_1 table_1)  [1.000]\n29.034: (move robot_1 table_1 stove_1)  [1.000]\n30.035: (place-container robot_1 pot_1 stove_1)  [1.000]\n31.036: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n34.036: (pick-up-container robot_1 pot_1 stove_1)  [1.000]\n34.037: (move robot_1 stove_1 table_1)  [1.000]\n35.038: (place-container robot_1 pot_1 table_1)  [1.000]\n36.039: (pour robot_1 pot_1 bowl_1 water_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 37.039\n\nResorting to best-first search\nRunning WA* with W = 5.000, not restarting with goal states\nb (24.000 | 1.000)b (23.000 | 2.001)b (22.000 | 2.002)b (21.000 | 3.003)b (20.000 | 4.006)b (19.000 | 4.006)b (18.000 | 8.009)b (17.000 | 10.011)b (16.000 | 12.014)b (14.000 | 15.019)b (13.000 | 16.020)b (12.000 | 20.023)b (10.000 | 22.025)b (9.000 | 23.028)b (8.000 | 27.031)b (7.000 | 28.032)b (5.000 | 29.033)b (4.000 | 34.037)b (3.000 | 35.041)b (2.000 | 35.042)b (1.000 | 35.043)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 36.045\n; States evaluated so far: 1026\n; States pruned based on pre-heuristic cost lower bound: 0\n; Time 1.04\n0.000: (move robot_1 table_1 sink_1)  [1.000]\n1.001: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n1.002: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n1.003: (move robot_1 sink_1 table_1)  [1.000]\n2.004: (place-container robot_1 pot_1 table_1)  [1.000]\n2.005: (move robot_1 table_1 table_5)  [1.000]\n3.006: (pick-up robot_1 onion_3 table_5)  [1.000]\n3.007: (move robot_1 table_5 board_1)  [1.000]\n4.008: (place robot_1 onion_3 board_1)  [1.000]\n5.009: (cut robot_1 onion_3 board_1)  [3.000]\n8.009: (move robot_1 board_1 table_4)  [1.000]\n9.010: (pick-up robot_1 onion_2 table_4)  [1.000]\n9.011: (move robot_1 table_4 table_1)  [1.000]\n10.012: (place robot_1 onion_2 table_1)  [1.000]\n10.013: (move robot_1 table_1 table_3)  [1.000]\n11.014: (pick-up robot_1 onion_1 table_3)  [1.000]\n11.015: (move robot_1 table_3 stove_1)  [1.000]\n12.016: (place robot_1 onion_1 stove_1)  [1.000]\n12.017: (move robot_1 stove_1 board_1)  [1.000]\n13.018: (pick-up robot_1 onion_3 board_1)  [1.000]\n13.019: (move robot_1 board_1 table_1)  [1.000]\n14.020: (add-to-pot robot_1 onion_3 pot_1 water_1 table_1)  [1.000]\n15.021: (pick-up robot_1 onion_2 table_1)  [1.000]\n15.022: (move robot_1 table_1 board_1)  [1.000]\n16.023: (place robot_1 onion_2 board_1)  [1.000]\n17.024: (cut robot_1 onion_2 board_1)  [3.000]\n20.024: (pick-up robot_1 onion_2 board_1)  [1.000]\n20.025: (move robot_1 board_1 table_1)  [1.000]\n21.026: (add-to-pot robot_1 onion_2 pot_1 water_1 table_1)  [1.000]\n21.027: (move robot_1 table_1 stove_1)  [1.000]\n22.028: (pick-up robot_1 onion_1 stove_1)  [1.000]\n22.029: (move robot_1 stove_1 board_1)  [1.000]\n23.030: (place robot_1 onion_1 board_1)  [1.000]\n24.031: (cut robot_1 onion_1 board_1)  [3.000]\n27.031: (pick-up robot_1 onion_1 board_1)  [1.000]\n27.032: (move robot_1 board_1 table_1)  [1.000]\n28.033: (add-to-pot robot_1 onion_1 pot_1 water_1 table_1)  [1.000]\n29.034: (pick-up-container robot_1 pot_1 table_1)  [1.000]\n29.035: (move robot_1 table_1 stove_1)  [1.000]\n30.036: (place-container robot_1 pot_1 stove_1)  [1.000]\n31.037: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n31.038: (move robot_1 stove_1 table_1)  [1.000]\n32.039: (pick-up-container robot_1 bowl_1 table_1)  [1.000]\n32.040: (move robot_1 table_1 stove_1)  [1.000]\n33.041: (place-container robot_1 bowl_1 stove_1)  [1.000]\n34.042: (pour robot_1 pot_1 bowl_1 water_1 stove_1)  [1.000]\n34.043: (pick-up-container robot_1 bowl_1 stove_1)  [1.000]\n34.044: (move robot_1 stove_1 table_1)  [1.000]\n35.045: (place-container robot_1 bowl_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 36.045\nb (0.000 | 36.044)(G)(G)(G)(G)(G)(G)(G)(G)\n; No metric specified - using makespan\n\n; Plan found with metric 34.037\n; States evaluated so far: 3270\n; States pruned based on pre-heuristic cost lower bound: 50\n; Time 4.36\n0.000: (move robot_1 table_1 sink_1)  [1.000]\n1.001: (fill robot_1 pot_1 water_1 sink_1)  [1.000]\n1.002: (pick-up-container robot_1 pot_1 sink_1)  [1.000]\n1.003: (move robot_1 sink_1 table_1)  [1.000]\n2.004: (place-container robot_1 pot_1 table_1)  [1.000]\n2.005: (move robot_1 table_1 table_5)  [1.000]\n3.006: (pick-up robot_1 onion_3 table_5)  [1.000]\n3.007: (move robot_1 table_5 board_1)  [1.000]\n4.008: (place robot_1 onion_3 board_1)  [1.000]\n5.009: (cut robot_1 onion_3 board_1)  [3.000]\n8.009: (move robot_1 board_1 table_4)  [1.000]\n9.010: (pick-up robot_1 onion_2 table_4)  [1.000]\n9.011: (move robot_1 table_4 table_1)  [1.000]\n10.012: (place robot_1 onion_2 table_1)  [1.000]\n10.013: (move robot_1 table_1 table_3)  [1.000]\n11.014: (pick-up robot_1 onion_1 table_3)  [1.000]\n11.015: (move robot_1 table_3 stove_1)  [1.000]\n12.016: (place robot_1 onion_1 stove_1)  [1.000]\n12.017: (move robot_1 stove_1 board_1)  [1.000]\n13.018: (pick-up robot_1 onion_3 board_1)  [1.000]\n13.019: (move robot_1 board_1 table_1)  [1.000]\n14.020: (add-to-pot robot_1 onion_3 pot_1 water_1 table_1)  [1.000]\n15.021: (pick-up robot_1 onion_2 table_1)  [1.000]\n15.022: (move robot_1 table_1 board_1)  [1.000]\n16.023: (place robot_1 onion_2 board_1)  [1.000]\n17.024: (cut robot_1 onion_2 board_1)  [3.000]\n20.024: (pick-up robot_1 onion_2 board_1)  [1.000]\n20.025: (move robot_1 board_1 table_1)  [1.000]\n21.026: (add-to-pot robot_1 onion_2 pot_1 water_1 table_1)  [1.000]\n22.027: (pick-up-container robot_1 pot_1 table_1)  [1.000]\n22.028: (move robot_1 table_1 stove_1)  [1.000]\n23.029: (place-container robot_1 pot_1 stove_1)  [1.000]\n23.029: (pick-up robot_1 onion_1 stove_1)  [1.000]\n24.030: (boil robot_1 pot_1 water_1 stove_1)  [3.000]\n24.031: (move robot_1 stove_1 board_1)  [1.000]\n25.032: (place robot_1 onion_1 board_1)  [1.000]\n25.033: (move robot_1 board_1 stove_1)  [1.000]\n27.030: (pick-up-container robot_1 pot_1 stove_1)  [1.000]\n27.031: (move robot_1 stove_1 table_1)  [1.000]\n28.032: (place-container robot_1 pot_1 table_1)  [1.000]\n28.033: (move robot_1 table_1 board_1)  [1.000]\n29.034: (cut robot_1 onion_1 board_1)  [3.000]\n32.034: (pick-up robot_1 onion_1 board_1)  [1.000]\n32.035: (move robot_1 board_1 table_1)  [1.000]\n33.036: (add-to-pot robot_1 onion_1 pot_1 water_1 table_1)  [1.000]\n33.037: (pour robot_1 pot_1 bowl_1 water_1 table_1)  [1.000]\n\n * All goal deadlines now no later than 34.037\nb (0.000 | 34.036)(G)(G)(G)(G)(G)(G)(G)(G)"
+}
+{
+  "id": "7_tomato_soup_and_lettuce_chicken_sandwich",
+  "nl": "You are a chef in a 6x6 kitchen. You are currently at (0, 0) facing down. You can either move up/down/left/right each step.\n\nThere are 9 stations:\n- table_1 at (0, 1)\n- stove_1 at (1, 1)\n- table_2 at (2, 1)\n- board_1 at (3, 1)\n- sink_1 at (4, 1)\n- table_3 at (0, 3)\n- table_4 at (1, 3)\n- table_5 at (2, 3)\n- table_6 at (3, 3)\n\nThere are 5 items:\n- tomato_1 at (0, 3) on table_3\n- lettuce_1 at (1, 3) on table_4\n- chicken_1 at (2, 3) on table_5\n- bread_1 at (3, 3) on table_6\n- bread_2 at (3, 3) on table_6\n\nHere are some constraints on the items:\n- tomato_1 must be cut, which will take 3 cuts.\n- lettuce_1 must be cut, which will take 3 cuts.\n- chicken_1 must be cooked, which will take 3 steps on a stove.\n- tomato_1, lettuce_1, chicken_1, bread_1 must be stacked before bread_2\n\nNow you need to make tomato soup with a whole tomato served into a bowl on a table and a lettuce chicken sandwich on another table. To do so, you need to make sure:\n- in(water, bowl)\n- isboiling(water)\n- addedto(tomato, water)\n- container_at(bowl, table_1)\n- bread_1 is on table_2\n- chicken is cooked\n- chicken is at table_2\n- lettuce is cut\n- lettuce is at table_2\n- bread_2 is at table_2\n- bread_2 has nothing on top of it (clear)",
+  "error_type": "syntax_error",
+  "error": "Number of literals: 188\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 608 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 609 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 610 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 611 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 612 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 613 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 614 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 615 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 616 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.09",
+  "plan": null,
+  "plan_length": null,
+  "solved": false,
+  "eval": {
+    "done": false,
+    "steps": 0,
+    "optimal_steps": 46,
+    "steps_ratio": null,
+    "simulation_success": null,
+    "simulation_error": null,
+    "env_simulation_success": null,
+    "env_simulation_error": null,
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": true,
+    "gold_goal_count": 11,
+    "pddl_goal_count": 11,
+    "object_count": {
+      "station": [
+        "table_1",
+        "stove_1",
+        "table_2",
+        "board_1",
+        "sink_1",
+        "table_3",
+        "table_4",
+        "table_5",
+        "table_6"
+      ],
+      "player": [
+        "robot_1"
+      ],
+      "item": [
+        "tomato_1",
+        "lettuce_1",
+        "chicken_1",
+        "bread_1",
+        "bread_2"
+      ],
+      "container": [
+        "pot_1",
+        "bowl_1"
+      ],
+      "water": [
+        "water_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 9,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {}
+  },
+  "problem_pddl": "(define (problem robotouille-soup-sandwich)\n    (:domain robotouille-async)\n    (:objects\n        table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 table_6 - station\n        robot_1 - player\n        tomato_1 lettuce_1 chicken_1 bread_1 bread_2 - item\n        pot_1 bowl_1 - container\n        water_1 - water\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1)\n        (isstove stove_1)\n        (istable table_2)\n        (isboard board_1)\n        (issink sink_1)\n        (istable table_3)\n        (istable table_4)\n        (istable table_5)\n        (istable table_6)\n        (istomato tomato_1)\n        (islettuce lettuce_1)\n        (ischicken chicken_1)\n        (isbread bread_1)\n        (isbread bread_2)\n        (iscuttable tomato_1)\n        (iscuttable lettuce_1)\n        (iscookable chicken_1)\n        (ispottype pot_1)\n        (isbowltype bowl_1)\n        (loc robot_1 table_1)\n        (nothing robot_1)\n        (nocontainer robot_1)\n        (at tomato_1 table_3)\n        (on tomato_1 table_3)\n        (clear tomato_1)\n        (at lettuce_1 table_4)\n        (on lettuce_1 table_4)\n        (clear lettuce_1)\n        (at chicken_1 table_5)\n        (on chicken_1 table_5)\n        (clear chicken_1)\n        (at bread_2 table_6)\n        (on bread_2 table_6)\n        (at bread_1 table_6)\n        (atop bread_1 bread_2)\n        (clear bread_1)\n        (container_at pot_1 table_1)\n        (container_on_station pot_1)\n        (container_at bowl_1 table_1)\n        (container_on_station bowl_1)\n        (empty table_2)\n        (empty board_1)\n        (empty sink_1)\n        (vacant stove_1)\n        (vacant table_2)\n        (vacant board_1)\n        (vacant sink_1)\n        (vacant table_3)\n        (vacant table_4)\n        (vacant table_5)\n        (vacant table_6)\n        (water_available water_1)\n        (station_free stove_1)\n        (station_free board_1)\n        (station_free sink_1)\n    )\n    (:goal (and\n        (in water_1 bowl_1)\n        (isboiling water_1)\n        (addedto tomato_1 water_1)\n        (container_at bowl_1 table_1)\n        (on bread_1 table_2)\n        (iscooked chicken_1)\n        (at chicken_1 table_2)\n        (iscut lettuce_1)\n        (at lettuce_1 table_2)\n        (at bread_2 table_2)\n        (clear bread_2)\n    ))\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem robotouille-soup-sandwich)\\n    (:domain robotouille-async)\\n    (:objects\\n        table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 table_6 - station\\n        robot_1 - player\\n        tomato_1 lettuce_1 chicken_1 bread_1 bread_2 - item\\n        pot_1 bowl_1 - container\\n        water_1 - water\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1)\\n        (isstove stove_1)\\n        (istable table_2)\\n        (isboard board_1)\\n        (issink sink_1)\\n        (istable table_3)\\n        (istable table_4)\\n        (istable table_5)\\n        (istable table_6)\\n        (istomato tomato_1)\\n        (islettuce lettuce_1)\\n        (ischicken chicken_1)\\n        (isbread bread_1)\\n        (isbread bread_2)\\n        (iscuttable tomato_1)\\n        (iscuttable lettuce_1)\\n        (iscookable chicken_1)\\n        (ispottype pot_1)\\n        (isbowltype bowl_1)\\n        (loc robot_1 table_1)\\n        (nothing robot_1)\\n        (nocontainer robot_1)\\n        (at tomato_1 table_3)\\n        (on tomato_1 table_3)\\n        (clear tomato_1)\\n        (at lettuce_1 table_4)\\n        (on lettuce_1 table_4)\\n        (clear lettuce_1)\\n        (at chicken_1 table_5)\\n        (on chicken_1 table_5)\\n        (clear chicken_1)\\n        (at bread_2 table_6)\\n        (on bread_2 table_6)\\n        (at bread_1 table_6)\\n        (atop bread_1 bread_2)\\n        (clear bread_1)\\n        (container_at pot_1 table_1)\\n        (container_on_station pot_1)\\n        (container_at bowl_1 table_1)\\n        (container_on_station bowl_1)\\n        (empty table_2)\\n        (empty board_1)\\n        (empty sink_1)\\n        (vacant stove_1)\\n        (vacant table_2)\\n        (vacant board_1)\\n        (vacant sink_1)\\n        (vacant table_3)\\n        (vacant table_4)\\n        (vacant table_5)\\n        (vacant table_6)\\n        (water_available water_1)\\n        (station_free stove_1)\\n        (station_free board_1)\\n        (station_free sink_1)\\n    )\\n    (:goal (and\\n        (in water_1 bowl_1)\\n        (isboiling water_1)\\n        (addedto tomato_1 water_1)\\n        (container_at bowl_1 table_1)\\n        (on bread_1 table_2)\\n        (iscooked chicken_1)\\n        (at chicken_1 table_2)\\n        (iscut lettuce_1)\\n        (at lettuce_1 table_2)\\n        (at bread_2 table_2)\\n        (clear bread_2)\\n    ))\\n)\"}",
+  "raw_solver_output": "Number of literals: 188\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 608 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 609 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 610 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 611 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 612 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 613 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 614 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 615 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 616 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.09\n"
+}
+{
+  "id": "8_onion_tomato_soup_and_two_chicken_sandwich",
+  "nl": "You are a chef in a 6x6 kitchen. You are currently at (0, 0) facing down. You can either move up/down/left/right each step.\n\nThere are 11 stations:\n- table_1 at (0, 1)\n- stove_1 at (1, 1)\n- table_2 at (2, 1)\n- board_1 at (3, 1)\n- sink_1 at (4, 1)\n- table_3 at (0, 3)\n- table_4 at (1, 3)\n- table_5 at (2, 3)\n- table_6 at (3, 3)\n- table_7 at (4, 3)\n- table_8 at (5, 3)\n\nThere are 8 items:\n- tomato_1 at (0, 3) on table_3\n- onion_1 at (1, 3) on table_4\n- chicken_1 at (2, 3) on table_5\n- chicken_2 at (3, 3) on table_6\n- bread_1 at (4, 3) on table_7\n- bread_2 at (4, 3) on table_7\n- bread_3 at (5, 3) on table_8\n- bread_4 at (5, 3) on table_8\n\nHere are some constraints on the items:\n- tomato_1 must be cut, which will take 3 cuts.\n- onion_1 must be cut, which will take 3 cuts.\n- chicken_1 must be cooked, which will take 3 steps on a stove.\n- chicken_2 must be cooked, which will take 3 steps on a stove.\n- tomato_1, onion_1, chicken_1, chicken_2, bread_1, bread_3 must be stacked before bread_2, bread_4\n\nNow you need to make soup with a cut tomato and cut onion served into a bowl on a table and two chicken sandwiches on other tables. To do so, you need to make sure:\n- in(water, bowl)\n- isboiling(water)\n- tomato is cut\n- addedto(tomato, water)\n- onion is cut\n- addedto(onion, water)\n- container_at(bowl, table_1)\n- bread_1 is on table_2\n- chicken_1 is cooked\n- chicken_1 is at table_2\n- bread_2 is at table_2\n- bread_2 has nothing on top of it (clear)\n- bread_3 is on table_3\n- chicken_2 is cooked\n- chicken_2 is at table_3\n- bread_4 is at table_3\n- bread_4 has nothing on top of it (clear)",
+  "error_type": "syntax_error",
+  "error": "Number of literals: 330\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 1656 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1657 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1658 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1659 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1660 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1661 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1662 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1663 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1664 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1665 - (pour robot_1 pot_1 bowl_1 water_1 table_7) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1666 - (pour robot_1 pot_1 bowl_1 water_1 table_8) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.11",
+  "plan": null,
+  "plan_length": null,
+  "solved": false,
+  "eval": {
+    "done": false,
+    "steps": 0,
+    "optimal_steps": 68,
+    "steps_ratio": null,
+    "simulation_success": null,
+    "simulation_error": null,
+    "env_simulation_success": null,
+    "env_simulation_error": null,
+    "goal_predicate_recall": 0.7647058823529411,
+    "goal_count_match": true,
+    "gold_goal_count": 17,
+    "pddl_goal_count": 17,
+    "object_count": {
+      "station": [
+        "table_1",
+        "stove_1",
+        "table_2",
+        "board_1",
+        "sink_1",
+        "table_3",
+        "table_4",
+        "table_5",
+        "table_6",
+        "table_7",
+        "table_8"
+      ],
+      "player": [
+        "robot_1"
+      ],
+      "item": [
+        "tomato_1",
+        "onion_1",
+        "chicken_1",
+        "chicken_2",
+        "bread_1",
+        "bread_2",
+        "bread_3",
+        "bread_4"
+      ],
+      "container": [
+        "pot_1",
+        "bowl_1"
+      ],
+      "water": [
+        "water_1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 11,
+      "items": 8,
+      "players": 1
+    },
+    "plan_action_types": {}
+  },
+  "problem_pddl": "(define (problem robotouille-soup-and-sandwiches)\n    (:domain robotouille-async)\n    (:objects\n        table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 table_6 table_7 table_8 - station\n        robot_1 - player\n        tomato_1 onion_1 chicken_1 chicken_2 bread_1 bread_2 bread_3 bread_4 - item\n        pot_1 bowl_1 - container\n        water_1 - water\n    )\n    (:init\n        (isrobot robot_1)\n        (istable table_1) (isstove stove_1) (istable table_2) (isboard board_1) (issink sink_1)\n        (istable table_3) (istable table_4) (istable table_5) (istable table_6) (istable table_7) (istable table_8)\n        (istomato tomato_1) (isonion onion_1) (ischicken chicken_1) (ischicken chicken_2)\n        (isbread bread_1) (isbread bread_2) (isbread bread_3) (isbread bread_4)\n        (iscuttable tomato_1) (iscuttable onion_1)\n        (iscookable chicken_1) (iscookable chicken_2)\n        (ispottype pot_1) (isbowltype bowl_1)\n        (water_available water_1)\n        (station_free stove_1) (station_free board_1) (station_free sink_1)\n        (loc robot_1 table_1)\n        (vacant stove_1) (vacant table_2) (vacant board_1) (vacant sink_1) (vacant table_3) (vacant table_4) (vacant table_5) (vacant table_6) (vacant table_7) (vacant table_8)\n        (nothing robot_1) (nocontainer robot_1)\n        (at tomato_1 table_3) (on tomato_1 table_3) (clear tomato_1)\n        (at onion_1 table_4) (on onion_1 table_4) (clear onion_1)\n        (at chicken_1 table_5) (on chicken_1 table_5) (clear chicken_1)\n        (at chicken_2 table_6) (on chicken_2 table_6) (clear chicken_2)\n        (at bread_2 table_7) (on bread_2 table_7)\n        (at bread_1 table_7) (atop bread_1 bread_2) (clear bread_1)\n        (at bread_4 table_8) (on bread_4 table_8)\n        (at bread_3 table_8) (atop bread_3 bread_4) (clear bread_3)\n        (container_at pot_1 table_1) (container_on_station pot_1)\n        (container_at bowl_1 table_2) (container_on_station bowl_1)\n        (empty stove_1) (empty board_1) (empty sink_1)\n    )\n    (:goal (and\n        (in water_1 bowl_1)\n        (isboiling water_1)\n        (iscut tomato_1)\n        (addedto tomato_1 water_1)\n        (iscut onion_1)\n        (addedto onion_1 water_1)\n        (container_at bowl_1 table_1)\n        (on bread_1 table_2)\n        (iscooked chicken_1)\n        (atop chicken_1 bread_1)\n        (atop bread_2 chicken_1)\n        (clear bread_2)\n        (on bread_3 table_3)\n        (iscooked chicken_2)\n        (atop chicken_2 bread_3)\n        (atop bread_4 chicken_2)\n        (clear bread_4)\n    ))\n)",
+  "llm_response": "{\"problem_pddl\": \"(define (problem robotouille-soup-and-sandwiches)\\n    (:domain robotouille-async)\\n    (:objects\\n        table_1 stove_1 table_2 board_1 sink_1 table_3 table_4 table_5 table_6 table_7 table_8 - station\\n        robot_1 - player\\n        tomato_1 onion_1 chicken_1 chicken_2 bread_1 bread_2 bread_3 bread_4 - item\\n        pot_1 bowl_1 - container\\n        water_1 - water\\n    )\\n    (:init\\n        (isrobot robot_1)\\n        (istable table_1) (isstove stove_1) (istable table_2) (isboard board_1) (issink sink_1)\\n        (istable table_3) (istable table_4) (istable table_5) (istable table_6) (istable table_7) (istable table_8)\\n        (istomato tomato_1) (isonion onion_1) (ischicken chicken_1) (ischicken chicken_2)\\n        (isbread bread_1) (isbread bread_2) (isbread bread_3) (isbread bread_4)\\n        (iscuttable tomato_1) (iscuttable onion_1)\\n        (iscookable chicken_1) (iscookable chicken_2)\\n        (ispottype pot_1) (isbowltype bowl_1)\\n        (water_available water_1)\\n        (station_free stove_1) (station_free board_1) (station_free sink_1)\\n        (loc robot_1 table_1)\\n        (vacant stove_1) (vacant table_2) (vacant board_1) (vacant sink_1) (vacant table_3) (vacant table_4) (vacant table_5) (vacant table_6) (vacant table_7) (vacant table_8)\\n        (nothing robot_1) (nocontainer robot_1)\\n        (at tomato_1 table_3) (on tomato_1 table_3) (clear tomato_1)\\n        (at onion_1 table_4) (on onion_1 table_4) (clear onion_1)\\n        (at chicken_1 table_5) (on chicken_1 table_5) (clear chicken_1)\\n        (at chicken_2 table_6) (on chicken_2 table_6) (clear chicken_2)\\n        (at bread_2 table_7) (on bread_2 table_7)\\n        (at bread_1 table_7) (atop bread_1 bread_2) (clear bread_1)\\n        (at bread_4 table_8) (on bread_4 table_8)\\n        (at bread_3 table_8) (atop bread_3 bread_4) (clear bread_3)\\n        (container_at pot_1 table_1) (container_on_station pot_1)\\n        (container_at bowl_1 table_2) (container_on_station bowl_1)\\n        (empty stove_1) (empty board_1) (empty sink_1)\\n    )\\n    (:goal (and\\n        (in water_1 bowl_1)\\n        (isboiling water_1)\\n        (iscut tomato_1)\\n        (addedto tomato_1 water_1)\\n        (iscut onion_1)\\n        (addedto onion_1 water_1)\\n        (container_at bowl_1 table_1)\\n        (on bread_1 table_2)\\n        (iscooked chicken_1)\\n        (atop chicken_1 bread_1)\\n        (atop bread_2 chicken_1)\\n        (clear bread_2)\\n        (on bread_3 table_3)\\n        (iscooked chicken_2)\\n        (atop chicken_2 bread_3)\\n        (atop bread_4 chicken_2)\\n        (clear bread_4)\\n    ))\\n)\"}",
+  "raw_solver_output": "Number of literals: 330\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 1656 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1657 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1658 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1659 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1660 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1661 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1662 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1663 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1664 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1665 - (pour robot_1 pot_1 bowl_1 water_1 table_7) is uninteresting once we have fact (in water_1 bowl_1)\nAction 1666 - (pour robot_1 pot_1 bowl_1 water_1 table_8) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.11\n"
+}
+{
+  "id": "9_onion_potato_soup_and_fried_onion_ring_lettuce_burger_and_onion_cheese_sandwich",
+  "nl": "You are a chef in a 6x6 kitchen. You are currently at (0, 0) facing down. You can either move up/down/left/right each step.\n\nThere are 14 stations:\n- fryer_1 at (0, 1)\n- stove_1 at (1, 1)\n- table_1 at (2, 1)\n- board_1 at (3, 1)\n- sink_1 at (4, 1)\n- table_2 at (0, 3)\n- table_3 at (1, 3)\n- table_4 at (2, 3)\n- table_5 at (3, 3)\n- table_6 at (4, 3)\n- table_7 at (0, 5)\n- table_8 at (1, 5)\n- table_9 at (2, 5)\n- table_10 at (3, 5)\n\nThere are 10 items:\n- onion_1 at (0, 3) on table_2\n- potato_1 at (1, 3) on table_3\n- onion_2 at (2, 3) on table_4\n- lettuce_1 at (3, 3) on table_5\n- bottombun_1 at (4, 3) on table_6\n- topbun_1 at (4, 3) on table_6\n- bread_1 at (0, 5) on table_7\n- bread_2 at (0, 5) on table_7\n- onion_3 at (1, 5) on table_8\n- chicken_1 at (2, 5) on table_9\n\nHere are some constraints on the items:\n- onion_1 must be cut, which will take 3 cuts.\n- onion_1 must be fried, which will take 3 steps on a fryer.\n- onion_1 can only be fried after being cut, which will take 3 steps on a fryer.\n- potato_1 must be cut, which will take 3 cuts.\n- potato_1 must be fried, which will take 3 steps on a fryer.\n- potato_1 can only be fried after being cut, which will take 3 steps on a fryer.\n- onion_2 must be cut, which will take 3 cuts.\n- onion_2 must be fried, which will take 3 steps on a fryer.\n- onion_2 can only be fried after being cut, which will take 3 steps on a fryer.\n- lettuce_1 must be cut, which will take 3 cuts.\n- onion_3 must be cut, which will take 3 cuts.\n- onion_3 must be fried, which will take 3 steps on a fryer.\n- onion_3 can only be fried after being cut, which will take 3 steps on a fryer.\n- chicken_1 must be cooked, which will take 3 steps on a stove.\n- onion_1, potato_1, onion_2, lettuce_1, bottombun_1, bread_1, onion_3, chicken_1 must be stacked before topbun_1, bread_2\n\nNow you need to make soup with a whole onion and potato served into a bowl, a burger with lettuce and fried onion rings, and an onion chicken sandwich all on separate tables. To do so, you need to make sure:\n- in(water, bowl)\n- isboiling(water)\n- addedto(onion_1, water)\n- addedto(potato, water)\n- container_at(bowl, table_1)\n- bottombun is on table_2\n- lettuce is cut\n- lettuce is at table_2\n- onion_2 is cut\n- isfried(onion_2)\n- onion_2 is at table_2\n- topbun is at table_2\n- topbun has nothing on top of it (clear)\n- bread_1 is on table_3\n- chicken is cooked\n- chicken is at table_3\n- onion_3 is cut\n- onion_3 is at table_3\n- bread_2 is at table_3\n- bread_2 has nothing on top of it (clear)",
+  "error_type": "syntax_error",
+  "error": "Number of literals: 506\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 3190 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3191 - (pour robot_1 pot_1 bowl_1 water_1 fryer_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3192 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3193 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3194 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3195 - (pour robot_1 pot_1 bowl_1 water_1 table_10) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3196 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3197 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3198 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3199 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3200 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3201 - (pour robot_1 pot_1 bowl_1 water_1 table_7) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3202 - (pour robot_1 pot_1 bowl_1 water_1 table_8) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3203 - (pour robot_1 pot_1 bowl_1 water_1 table_9) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.18",
+  "plan": null,
+  "plan_length": null,
+  "solved": false,
+  "eval": {
+    "done": false,
+    "steps": 0,
+    "optimal_steps": 82,
+    "steps_ratio": null,
+    "simulation_success": null,
+    "simulation_error": null,
+    "env_simulation_success": null,
+    "env_simulation_error": null,
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": true,
+    "gold_goal_count": 20,
+    "pddl_goal_count": 20,
+    "object_count": {},
+    "gold_object_count": {
+      "stations": 14,
+      "items": 10,
+      "players": 1
+    },
+    "plan_action_types": {}
+  },
+  "problem_pddl": "(define (problem robotouille-kitchen) (:domain robotouille-async) (:objects fryer_1 stove_1 table_1 board_1 sink_1 table_2 table_3 table_4 table_5 table_6 table_7 table_8 table_9 table_10 - station robot_1 - player onion_1 potato_1 onion_2 lettuce_1 bottombun_1 topbun_1 bread_1 bread_2 onion_3 chicken_1 - item pot_1 bowl_1 - container water_1 - water) (:init (isfryer fryer_1) (isstove stove_1) (istable table_1) (isboard board_1) (issink sink_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5) (istable table_6) (istable table_7) (istable table_8) (istable table_9) (istable table_10) (isrobot robot_1) (isonion onion_1) (ispotato potato_1) (isonion onion_2) (islettuce lettuce_1) (isbottombun bottombun_1) (istopbun topbun_1) (isbread bread_1) (isbread bread_2) (isonion onion_3) (ischicken chicken_1) (iscuttable onion_1) (isfryableifcut onion_1) (iscuttable potato_1) (isfryableifcut potato_1) (iscuttable onion_2) (isfryableifcut onion_2) (iscuttable lettuce_1) (iscuttable onion_3) (isfryableifcut onion_3) (iscookable chicken_1) (ispottype pot_1) (isbowltype bowl_1) (loc robot_1 fryer_1) (vacant stove_1) (vacant table_1) (vacant board_1) (vacant sink_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant table_6) (vacant table_7) (vacant table_8) (vacant table_9) (vacant table_10) (nothing robot_1) (nocontainer robot_1) (at onion_1 table_2) (on onion_1 table_2) (clear onion_1) (at potato_1 table_3) (on potato_1 table_3) (clear potato_1) (at onion_2 table_4) (on onion_2 table_4) (clear onion_2) (at lettuce_1 table_5) (on lettuce_1 table_5) (clear lettuce_1) (at bottombun_1 table_6) (on bottombun_1 table_6) (at topbun_1 table_6) (atop topbun_1 bottombun_1) (clear topbun_1) (at bread_1 table_7) (on bread_1 table_7) (at bread_2 table_7) (atop bread_2 bread_1) (clear bread_2) (at onion_3 table_8) (on onion_3 table_8) (clear onion_3) (at chicken_1 table_9) (on chicken_1 table_9) (clear chicken_1) (empty table_1) (empty table_10) (container_at pot_1 table_10) (container_on_station pot_1) (container_at bowl_1 table_10) (container_on_station bowl_1) (water_available water_1) (station_free fryer_1) (station_free stove_1) (station_free board_1) (station_free sink_1) (station_free table_1) (station_free table_2) (station_free table_3) (station_free table_4) (station_free table_5) (station_free table_6) (station_free table_7) (station_free table_8) (station_free table_9) (station_free table_10)) (:goal (and (in water_1 bowl_1) (isboiling water_1) (addedto onion_1 water_1) (addedto potato_1 water_1) (container_at bowl_1 table_1) (on bottombun_1 table_2) (iscut lettuce_1) (at lettuce_1 table_2) (iscut onion_2) (isfried onion_2) (at onion_2 table_2) (at topbun_1 table_2) (clear topbun_1) (on bread_1 table_3) (iscooked chicken_1) (at chicken_1 table_3) (iscut onion_3) (at onion_3 table_3) (at bread_2 table_3) (clear bread_2))))",
+  "llm_response": "{\"problem_pddl\": \"(define (problem robotouille-kitchen) (:domain robotouille-async) (:objects fryer_1 stove_1 table_1 board_1 sink_1 table_2 table_3 table_4 table_5 table_6 table_7 table_8 table_9 table_10 - station robot_1 - player onion_1 potato_1 onion_2 lettuce_1 bottombun_1 topbun_1 bread_1 bread_2 onion_3 chicken_1 - item pot_1 bowl_1 - container water_1 - water) (:init (isfryer fryer_1) (isstove stove_1) (istable table_1) (isboard board_1) (issink sink_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5) (istable table_6) (istable table_7) (istable table_8) (istable table_9) (istable table_10) (isrobot robot_1) (isonion onion_1) (ispotato potato_1) (isonion onion_2) (islettuce lettuce_1) (isbottombun bottombun_1) (istopbun topbun_1) (isbread bread_1) (isbread bread_2) (isonion onion_3) (ischicken chicken_1) (iscuttable onion_1) (isfryableifcut onion_1) (iscuttable potato_1) (isfryableifcut potato_1) (iscuttable onion_2) (isfryableifcut onion_2) (iscuttable lettuce_1) (iscuttable onion_3) (isfryableifcut onion_3) (iscookable chicken_1) (ispottype pot_1) (isbowltype bowl_1) (loc robot_1 fryer_1) (vacant stove_1) (vacant table_1) (vacant board_1) (vacant sink_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant table_6) (vacant table_7) (vacant table_8) (vacant table_9) (vacant table_10) (nothing robot_1) (nocontainer robot_1) (at onion_1 table_2) (on onion_1 table_2) (clear onion_1) (at potato_1 table_3) (on potato_1 table_3) (clear potato_1) (at onion_2 table_4) (on onion_2 table_4) (clear onion_2) (at lettuce_1 table_5) (on lettuce_1 table_5) (clear lettuce_1) (at bottombun_1 table_6) (on bottombun_1 table_6) (at topbun_1 table_6) (atop topbun_1 bottombun_1) (clear topbun_1) (at bread_1 table_7) (on bread_1 table_7) (at bread_2 table_7) (atop bread_2 bread_1) (clear bread_2) (at onion_3 table_8) (on onion_3 table_8) (clear onion_3) (at chicken_1 table_9) (on chicken_1 table_9) (clear chicken_1) (empty table_1) (empty table_10) (container_at pot_1 table_10) (container_on_station pot_1) (container_at bowl_1 table_10) (container_on_station bowl_1) (water_available water_1) (station_free fryer_1) (station_free stove_1) (station_free board_1) (station_free sink_1) (station_free table_1) (station_free table_2) (station_free table_3) (station_free table_4) (station_free table_5) (station_free table_6) (station_free table_7) (station_free table_8) (station_free table_9) (station_free table_10)) (:goal (and (in water_1 bowl_1) (isboiling water_1) (addedto onion_1 water_1) (addedto potato_1 water_1) (container_at bowl_1 table_1) (on bottombun_1 table_2) (iscut lettuce_1) (at lettuce_1 table_2) (iscut onion_2) (isfried onion_2) (at onion_2 table_2) (at topbun_1 table_2) (clear topbun_1) (on bread_1 table_3) (iscooked chicken_1) (at chicken_1 table_3) (iscut onion_3) (at onion_3 table_3) (at bread_2 table_3) (clear bread_2))))\"}",
+  "raw_solver_output": "Number of literals: 506\nConstructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\nPost filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]\n\u001b[01;34mNo analytic limits found, not considering limit effects of goal-only operators\u001b[00m\nAction 3190 - (pour robot_1 pot_1 bowl_1 water_1 board_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3191 - (pour robot_1 pot_1 bowl_1 water_1 fryer_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3192 - (pour robot_1 pot_1 bowl_1 water_1 sink_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3193 - (pour robot_1 pot_1 bowl_1 water_1 stove_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3194 - (pour robot_1 pot_1 bowl_1 water_1 table_1) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3195 - (pour robot_1 pot_1 bowl_1 water_1 table_10) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3196 - (pour robot_1 pot_1 bowl_1 water_1 table_2) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3197 - (pour robot_1 pot_1 bowl_1 water_1 table_3) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3198 - (pour robot_1 pot_1 bowl_1 water_1 table_4) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3199 - (pour robot_1 pot_1 bowl_1 water_1 table_5) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3200 - (pour robot_1 pot_1 bowl_1 water_1 table_6) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3201 - (pour robot_1 pot_1 bowl_1 water_1 table_7) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3202 - (pour robot_1 pot_1 bowl_1 water_1 table_8) is uninteresting once we have fact (in water_1 bowl_1)\nAction 3203 - (pour robot_1 pot_1 bowl_1 water_1 table_9) is uninteresting once we have fact (in water_1 bowl_1)\nAll the ground actions in this problem are compression-safe\n; Goals unreachable from the initial state\n;; Problem unsolvable!\n; Time 0.18\n"
+}
