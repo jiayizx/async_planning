@@ -1,0 +1,115 @@
+(define (problem robotouille-problem)
+  (:domain robotouille)
+  (:objects
+    table_2 table_3 stove_1 sink_2 fryer_1 table_5 table_1 fryer_2 table_4 board_1 sink_1 - station
+    lettuce_1 topbun_2 bottombun_1 topbun_1 onion_2 onion_1 patty_1 cheese_1 - item
+    robot_1 - player
+  )
+  (:init
+    ;;; Station identity
+    (istable table_2)
+    (istable table_3)
+    (isstove stove_1)
+    (issink sink_2)
+    (isfryer fryer_1)
+    (istable table_5)
+    (istable table_1)
+    (isfryer fryer_2)
+    (istable table_4)
+    (isboard board_1)
+    (issink sink_1)
+
+    ;;; Player identity
+    (isrobot robot_1)
+
+    ;;; Item identity
+    (islettuce lettuce_1)
+    (istopbun topbun_2)
+    (isbottombun bottombun_1)
+    (istopbun topbun_1)
+    (isonion onion_2)
+    (isonion onion_1)
+    (ispatty patty_1)
+    (ischeese cheese_1)
+
+    ;;; Item capabilities
+    (iscuttable lettuce_1)
+    (iscuttable onion_2)
+    (isfryableifcut onion_2)
+    (iscuttable onion_1)
+    (isfryableifcut onion_1)
+    (iscookable patty_1)
+
+    ;;; Player location
+    (loc robot_1 table_2)
+
+    ;;; Player hand state
+    (has robot_1 patty_1)
+
+    ;;; Item locations (on/at/atop/has)
+    (at lettuce_1 fryer_2)
+    (on lettuce_1 fryer_2)
+    (at topbun_2 sink_2)
+    (on topbun_2 sink_2)
+    (at bottombun_1 table_2)
+    (on bottombun_1 table_2)
+    (at topbun_1 table_3)
+    (on topbun_1 table_3)
+    (at onion_2 board_1)
+    (on onion_2 board_1)
+    (at onion_1 stove_1)
+    (on onion_1 stove_1)
+    (at cheese_1 table_5)
+    (on cheese_1 table_5)
+
+    ;;; Clear predicates
+    (clear lettuce_1)
+    (clear topbun_2)
+    (clear bottombun_1)
+    (clear topbun_1)
+    (clear onion_2)
+    (clear onion_1)
+    (clear cheese_1)
+
+    ;;; Empty stations (no stack-level 0 item on them)
+    (empty fryer_1)
+    (empty table_1)
+    (empty table_4)
+    (empty sink_1)
+
+    ;;; Vacant stations (no player at them)
+    (vacant table_3)
+    (vacant stove_1)
+    (vacant sink_2)
+    (vacant fryer_1)
+    (vacant table_5)
+    (vacant table_1)
+    (vacant fryer_2)
+    (vacant table_4)
+    (vacant board_1)
+    (vacant sink_1)
+
+    ;;; All items start item-free
+    (item-free lettuce_1)
+    (item-free topbun_2)
+    (item-free bottombun_1)
+    (item-free topbun_1)
+    (item-free onion_2)
+    (item-free onion_1)
+    (item-free patty_1)
+    (item-free cheese_1)
+  )
+  (:goal (and
+    (on bottombun_1 table_1)
+    (iscooked patty_1)
+    (at patty_1 table_1)
+    (iscut onion_1)
+    (at onion_1 table_1)
+    (at cheese_1 table_1)
+    (at topbun_1 table_1)
+    (clear topbun_1)
+    (iscut onion_2)
+    (isfried onion_2)
+    (on onion_2 table_2)
+  ))
+)
