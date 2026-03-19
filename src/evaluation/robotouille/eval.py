@@ -324,6 +324,8 @@ _PDDL_TO_ENV_ACTION = {
     "place": "place-item",
     "cook": "cook",
     "cut": "cut",
+    "cut-continue": "cut",   # 2nd of 3 required cut actions (RepetitiveEffect)
+    "cut-finish": "cut",     # 3rd of 3 required cut actions (RepetitiveEffect)
     "fry": "fry",
     "fry_cut_item": "fry",
     "stack": "stack",
@@ -467,6 +469,9 @@ def simulate_with_env(
         )
         _, builder_env = builder.build_problem(copy.deepcopy(original_json))
         state = build_state_fn(domain_json, builder_env)
+        # Fix: State.initialize() uses mutable default arg `special_effects=[]`,
+        # so special effects leak across scenario runs. Reset to a clean list.
+        state.special_effects = []
     except Exception as e:
         return False, f"Failed to build env state: {e}"
 
@@ -496,6 +501,35 @@ def simulate_with_env(
 
         # Null actions (cooking-tick, wait, etc.) just advance the game clock
         if _is_null_pddl_action(pddl_action_name):
+            # cut-tick: the game engine's cut uses RepetitiveEffect (fires only when the
+            # cut action is performed, not on passive ticks).  Re-execute the game cut
+            # action with the item's current board binding so the repetition count advances.
+            if pddl_action_name.startswith("cut-tick") and pddl_args:
+                item_name = name_map.get(pddl_args[0], pddl_args[0].replace("_", ""))
+                cut_game_action = env_actions_by_name.get("cut")
+                if cut_game_action is not None:
+                    cut_bindings = state.actions.get(cut_game_action, [])
+                    executed = False
+                    for binding in cut_bindings:
+                        binding_obj_names = [v.name.lower() for v in binding.values()]
+                        if item_name in binding_obj_names and cut_game_action.is_valid(state, binding):
+                            try:
+                                done = state.step([(cut_game_action, binding)])
+                                if done:
+                                    return True, ""
+                            except Exception as e:
+                                return False, f"Step {step_idx} ({action_str}): cut re-execution failed: {e}"
+                            executed = True
+                            break
+                    if not executed:
+                        # Player has moved away or item was picked up; fall back to null tick
+                        try:
+                            done = state.step([])
+                            if done:
+                                return True, ""
+                        except Exception as e:
+                            return False, f"Step {step_idx} ({action_str}): null tick failed: {e}"
+                    continue
             try:
                 done = state.step([])
                 if done:

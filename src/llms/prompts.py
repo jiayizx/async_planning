@@ -782,17 +782,19 @@ Use them directly — do NOT recompute from coordinates.
    - `(clear item.pddl_name)` for every item that no other item's `atop` points to AND is not held.
    - `(empty station.pddl_name)` for every station that no item's `station` field references with stack-level 0.
    - `(vacant station.pddl_name)` for every station not occupied by a player.
-   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)` and `(nocontainer player.pddl_name)`.
+   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)`.
      If `player.holding` is non-empty → do NOT add `(nothing ...)` — the player is already holding items.
-4. In `:goal`, translate the `goal` array into PDDL predicates. The `predicate` field names the
-   condition; `args` names the entity types. Match args to your named objects using their type and
-   position in the JSON arrays.
-   - Use `(at ?i ?s)` for location goals ("item is at station") — NOT `(on ...)`.
-     `(on ...)` describes the initial surface placement; in goals, `(at ...)` is the correct predicate.
-   - Use `(iscooked ...)`, `(iscut ...)`, `(isfried ...)` for processing goals.
-   - Use `(atop ?i1 ?i2)` for stacking goals.
-   - Use `(clear ?i)` when the goal requires nothing on top of an item.
-   - Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
+   - `(item-free item.pddl_name)` for EVERY item — all items start free (not being cooked/cut/fried).
+4. In `:goal`, each goal predicate has a pre-resolved `pddl_args` field — USE THESE DIRECTLY as object names.
+   Map predicate names as follows:
+   - `item_on`  → `(on item station)`
+   - `item_at`  → `(at item station)`
+   - `iscooked` → `(iscooked item)`
+   - `iscut`    → `(iscut item)`
+   - `isfried`  → `(isfried item)`
+   - `clear`    → `(clear item)`
+   - `atop`     → `(atop item1 item2)`
+   Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
 5. The domain name in `(:domain ...)` must match the domain's `(define (domain ...))`.
 
 Return JSON with: {"problem_pddl": "<the full problem PDDL string>"}
@@ -851,17 +853,19 @@ Use them directly — do NOT recompute from coordinates.
    - `(clear item.pddl_name)` for every item that no other item's `atop` points to AND is not held.
    - `(empty station.pddl_name)` for every station that no item's `station` field references with stack-level 0.
    - `(vacant station.pddl_name)` for every station not occupied by a player.
-   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)` and `(nocontainer player.pddl_name)`.
+   - Player hand state: if `player.holding` is empty → `(nothing player.pddl_name)`.
      If `player.holding` is non-empty → do NOT add `(nothing ...)` — the player is already holding items.
-4. In `:goal`, translate the `goal` array into PDDL predicates. The `predicate` field names the
-   condition; `args` names the entity types. Match args to your named objects using their type and
-   position in the JSON arrays.
-   - Use `(at ?i ?s)` for location goals ("item is at station") — NOT `(on ...)`.
-     `(on ...)` describes the initial surface placement; in goals, `(at ...)` is the correct predicate.
-   - Use `(iscooked ...)`, `(iscut ...)`, `(isfried ...)` for processing goals.
-   - Use `(atop ?i1 ?i2)` for stacking goals.
-   - Use `(clear ?i)` when the goal requires nothing on top of an item.
-   - Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
+   - `(item-free item.pddl_name)` for EVERY item — all items start free (not being cooked/cut/fried).
+4. In `:goal`, each goal predicate has a pre-resolved `pddl_args` field — USE THESE DIRECTLY as object names.
+   Map predicate names as follows:
+   - `item_on`  → `(on item station)`
+   - `item_at`  → `(at item station)`
+   - `iscooked` → `(iscooked item)`
+   - `iscut`    → `(iscut item)`
+   - `isfried`  → `(isfried item)`
+   - `clear`    → `(clear item)`
+   - `atop`     → `(atop item1 item2)`
+   Translate ONLY the predicates listed in the JSON `goal` array — do not add extra predicates.
 5. The domain name in `(:domain ...)` must match the domain's `(define (domain ...))`.
 6. NEVER use `(not ...)` in the `:goal`.
 
@@ -875,8 +879,9 @@ B. For EACH item: check `held_by` field first.
 C. `(clear item)` for each item that has NO other item with a higher stack-level at the same (x,y) AND is not held.
 D. `(empty station)` for each station that has NO item with stack-level 0 at its (x,y).
 E. `(vacant station)` for each station where no player stands.
-F. For each player: if `holding` is empty → emit `(nothing player)` and `(nocontainer player)`.
+F. For each player: if `holding` is empty → emit `(nothing player)`.
    If `holding` is non-empty → do NOT emit `(nothing player)` — the player holds an item.
+G. Emit `(item-free item)` for EVERY item.
 
 DEPENDENCY ANALYSIS — do this mentally before writing the problem PDDL:
 For EACH goal predicate, ask: "What objects and initial predicates are needed to achieve this?"
@@ -940,7 +945,6 @@ Goal: bread_1 is the bottom bun (on table surface); bread_2 is the top bun (clea
     (isrobot robot_1)
     (loc robot_1 table_1)
     (nothing robot_1)
-    (nocontainer robot_1)
     ; Capability flags
     (iscookable chicken_1)
     ; bread_1: stack-level 0 → directly on table_1 surface
@@ -963,6 +967,8 @@ Goal: bread_1 is the bottom bun (on table surface); bread_2 is the top bun (clea
     (empty stove_1)
     ; Vacant: stations where no player stands
     (vacant stove_1) (vacant table_2) (vacant table_3)
+    ; item-free: all items start free (not being cooked/cut/fried)
+    (item-free bread_1) (item-free bread_2) (item-free chicken_1) (item-free cheese_1)
   )
   (:goal (and
     (on bread_1 table_2)
@@ -1028,7 +1034,7 @@ Player at (0,2) facing [0,-1] → (0,1) = table_1.
     (ischicken chicken_1) (islettuce lettuce_1)
     (isrobot robot_1)
     (loc robot_1 table_1)
-    (nothing robot_1) (nocontainer robot_1)
+    (nothing robot_1)
     (iscookable chicken_1) (iscuttable lettuce_1)
     (on bread_1 table_1) (at bread_1 table_1)
     (atop bread_2 bread_1) (at bread_2 table_1)
@@ -1037,6 +1043,7 @@ Player at (0,2) facing [0,-1] → (0,1) = table_1.
     (clear bread_2) (clear chicken_1) (clear lettuce_1)
     (empty board_1) (empty stove_1)
     (vacant board_1) (vacant stove_1) (vacant table_2) (vacant table_3)
+    (item-free bread_1) (item-free bread_2) (item-free chicken_1) (item-free lettuce_1)
   )
   (:goal (and
     (on bread_1 table_2)
@@ -1106,7 +1113,7 @@ Player at (0,2) facing [0,-1] → (0,1) = table_1.
     (ischeese cheese_1) (islettuce lettuce_1) (ispatty patty_1)
     (isrobot robot_1)
     (loc robot_1 table_1)
-    (nothing robot_1) (nocontainer robot_1)
+    (nothing robot_1)
     (iscookable patty_1) (iscuttable lettuce_1)
     (on bottombun_1 table_1) (at bottombun_1 table_1)
     (atop topbun_1 bottombun_1) (at topbun_1 table_1)
@@ -1116,6 +1123,7 @@ Player at (0,2) facing [0,-1] → (0,1) = table_1.
     (clear topbun_1) (clear cheese_1) (clear patty_1) (clear lettuce_1)
     (empty stove_1) (empty board_1)
     (vacant stove_1) (vacant board_1) (vacant table_2) (vacant table_3) (vacant table_4)
+    (item-free bottombun_1) (item-free topbun_1) (item-free cheese_1) (item-free lettuce_1) (item-free patty_1)
   )
   (:goal (and
     (on bottombun_1 table_2)

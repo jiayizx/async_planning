@@ -31,7 +31,7 @@ load_dotenv()
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 _ROBOTOUILLE_ROOT = _PROJECT_ROOT / "baselines" / "robotouille"
-_DOMAIN_PDDL_PATH = _ROBOTOUILLE_ROOT / "environments" / "robotouille.pddl"
+_DOMAIN_PDDL_PATH = _ROBOTOUILLE_ROOT / "environments" / "robotouille_async.pddl"
 _DEFAULT_DATA_PATH = _PROJECT_ROOT / "data" / "robotouille_single_agent_async.json"
 
 for p in (_PROJECT_ROOT, _ROBOTOUILLE_ROOT):
