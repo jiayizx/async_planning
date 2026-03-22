@@ -47,6 +47,7 @@ from src.method.nl_to_pddl import (
     build_pddl_messages,
     build_robotouille_problem_messages,
     build_robotouille_free_domain_messages,
+    build_robotouille_temporal_messages,
     parse_pddl_response,
     parse_robotouille_problem_response,
     normalize_robotouille_problem_to_domain,
@@ -140,13 +141,20 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     error_types: list[str] = ["not_started"] * n
 
     if args.generate_domain:
-        # generate_domain mode: LLM freely designs STRIPS domain+problem from annotated JSON
-        histories: list[list[dict]] = [
-            build_robotouille_free_domain_messages(
-                rec.get("original_json", {}), effect_goal=args.effect_goal
-            )
-            for rec in records
-        ]
+        if args.solver == "optic":
+            # PDDL 2.1 temporal path: LLM generates domain+problem with durative actions
+            histories: list[list[dict]] = [
+                build_robotouille_temporal_messages(rec.get("original_json", {}))
+                for rec in records
+            ]
+        else:
+            # STRIPS classical path: LLM freely designs STRIPS domain+problem
+            histories: list[list[dict]] = [
+                build_robotouille_free_domain_messages(
+                    rec.get("original_json", {}), effect_goal=args.effect_goal
+                )
+                for rec in records
+            ]
         schema = PDDLResponse
     else:
         # problem-only mode: pass original_json directly (no NL conversion)
@@ -283,6 +291,10 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
         for i, gold in enumerate(gold_data):
             sr = solver_results[i]
             plan = [(s, a, d) for s, a, d in sr.plan] if sr and not sr.error else None
+
+            if plan and args.solver == "optic" and args.generate_domain:
+                from src.method.linearize_optic_plan import linearize_optic_plan
+                plan = linearize_optic_plan(plan, gold.get("original_json") or {})
 
             ev = evaluate_record(
                 problem_pddl=problems[i],

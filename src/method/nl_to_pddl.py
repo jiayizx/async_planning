@@ -219,6 +219,8 @@ from src.llms.prompts import (
     ROBOTOUILLE_USER_TEMPLATE_NL,
     ROBOTOUILLE_FREE_DOMAIN_SYSTEM_PROMPT,
     ROBOTOUILLE_FREE_DOMAIN_USER_TEMPLATE,
+    ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT,
+    ROBOTOUILLE_TEMPORAL_USER_TEMPLATE,
 )
 
 
@@ -412,6 +414,29 @@ def build_robotouille_free_domain_messages(
             original_json=json_str,
         )})
 
+    return messages
+
+
+def build_robotouille_temporal_messages(
+    original_json: dict,
+) -> list[dict[str, str]]:
+    """Build chat messages for Robotouille PDDL 2.1 temporal (durative actions) generation.
+
+    Uses ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT and ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.
+    The LLM is asked to generate a PDDL 2.1 domain+problem with durative actions whose
+    durations match the game engine's step counts (cook_time, num_cuts, fry_time).
+    """
+    annotated = _annotate_robotouille_json(original_json)
+    config = original_json.get("config", {})
+    cook_time = config.get("cook_time", {}).get("default", 3)
+    num_cuts = config.get("num_cuts", {}).get("default", 3)
+    fry_time = config.get("fry_time", {}).get("default", 3)
+    annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
+    json_str = json.dumps(annotated, indent=2)
+    messages = [{"role": "system", "content": ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT}]
+    messages.append({"role": "user", "content": ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
+        original_json=json_str,
+    )})
     return messages
 
 

@@ -1299,3 +1299,143 @@ ROBOTOUILLE_FREE_DOMAIN_USER_TEMPLATE = """\
 
 Generate the STRIPS domain and problem PDDL for this Robotouille environment.
 """
+
+ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT = """\
+You are a PDDL 2.1 expert. Given a Robotouille kitchen environment described as JSON, write a \
+PDDL 2.1 domain AND problem with durative actions that a temporal planner (OPTIC) can solve.
+
+## Pre-annotated JSON Schema
+
+The JSON has pre-computed fields — use them directly:
+```
+{
+  "stations": [{"name": str, "pddl_name": str, "initial_empty": bool, ...}],
+  "items": [{"name": str, "pddl_name": str, "station": str,
+             "stack-level": int, "atop": str|null,
+             "held_by": str|null,           // ← player pddl_name holding this item (null if on a station)
+             "predicates": ["iscookable"|"iscuttable"|"isfryable"|"isfryableifcut"]}],
+  "players": [{"pddl_name": str, "facing_station": str,
+               "holding": [str]}],          // ← list of item pddl_names the player is holding (empty = empty-handed)
+  "goal": [{"predicate": str, "args": [str], "pddl_args": [str]}],
+  "goal_description": str,
+  "_timing": {"cook_time": int, "num_cuts": int, "fry_time": int}
+}
+```
+
+## Required action names
+
+Your domain MUST use EXACTLY these action names (the evaluator maps them to the game engine):
+
+| Action | Parameters | Duration | Notes |
+|--------|-----------|----------|-------|
+| `move` | ?p - player ?from - station ?to - station | 1 | robot moves between stations |
+| `pick-up` | ?p - player ?i - item ?s - station | 1 | robot picks up item |
+| `place` | ?p - player ?i - item ?s - station | 1 | robot places item on station |
+| `stack` | ?p - player ?itop - item ?ibot - item ?s - station | 1 | stack item on top of another |
+| `unstack` | ?p - player ?itop - item ?ibot - item ?s - station | 1 | remove top item |
+| `cook` | ?p - player ?i - item ?s - station | cook_time | cook item on stove; robot can leave immediately |
+| `cut` | ?p - player ?i - item ?s - station | num_cuts | cut item on board; robot must stay for full duration |
+| `fry` | ?p - player ?i - item ?s - station | fry_time | fry item on fryer; robot can leave immediately |
+
+Duration values come from `_timing` in the JSON:
+- `cook_time` = `_timing.cook_time` (default 3)
+- `num_cuts` = `_timing.num_cuts` (default 3)
+- `fry_time` = `_timing.fry_time` (default 3)
+
+## RULES
+
+1. Use `:requirements :durative-actions :typing`.
+2. Types: `station player item` (all objects use these three types).
+3. Design predicates freely. Recommended predicates:
+   - Location: `(loc ?p - player ?s - station)`, `(at ?i - item ?s - station)`
+   - Holding: `(holding ?p - player ?i - item)`, `(handempty ?p - player)`
+   - Stacking: `(on-surface ?i - item ?s - station)`, `(atop ?itop - item ?ibot - item)`, `(clear ?i - item)`
+   - Station state: `(empty ?s - station)`, `(vacant ?s - station)`
+   - Station type: `(isstove ?s - station)`, `(isboard ?s - station)`, `(isfryer ?s - station)`, `(istable ?s - station)`
+   - Item capability/state: `(iscookable ?i - item)`, `(iscooked ?i - item)`, `(iscuttable ?i - item)`, `(iscut ?i - item)`, `(isfryable ?i - item)`, `(isfried ?i - item)`
+   - Busy flag: `(item-free ?i - item)` — set in `:init` for ALL items; cleared during cook/cut/fry; restored when done
+   **IMPORTANT**: ALL predicate parameters MUST include type annotations (e.g. `?s - station`, not just `?s`).
+4. In `:init`, use the pre-annotated fields:
+   - For items where `held_by` is null (on a station): use `station` and `atop` fields:
+     - stack-level 0 (atop null): item is directly on station surface → `(on-surface item station)`.
+     - stack-level > 0 (atop set): item is stacked on another item → use `(atop itop ibot)`.
+   - For items where `held_by` is NOT null: item is held by that player → `(holding player item)`.
+     Do NOT emit `(on-surface ...)` or `(at ...)` for held items.
+   - Player location: use `facing_station`.
+   - Player hand state: if `player.holding` is empty → add `(handempty player)`.
+     If `player.holding` is non-empty → do NOT add `(handempty player)`.
+   - `(empty ?s)` for stations: each station has `initial_empty` field.
+     Set `(empty station)` in `:init` if and ONLY IF `initial_empty == true`.
+   - `(item-free item)` for ALL items in `:init`.
+   - **NEVER write `(not (...))` in `:init`**.
+5. **CRITICAL — cook/cut/fry require DIRECT surface contact AND nothing on top**:
+   - `(on-surface ?i ?s)` means item is directly on station surface (not stacked on another item).
+   - `(clear ?i)` means nothing is stacked on top of the item.
+   - `cook`/`cut`/`fry` preconditions MUST include BOTH `(at start (on-surface item station))` AND `(at start (clear item))`.
+   - `place` sets `(on-surface item station)` — item placed directly on station.
+   - `stack` does NOT set `(on-surface top-item station)`.
+   - `unstack` removes `(on-surface top-item station)` (at end).
+6. **CRITICAL — durative action structure**:
+   Each durative action has:
+   ```
+   (:durative-action <name>
+     :parameters (...)
+     :duration (= ?duration <value>)
+     :condition (and
+       <at start ...>
+       <over all ...>
+       <at end ...>)
+     :effect (and
+       <at start ...>
+       <at end ...>))
+   ```
+   Use EXACTLY ONE `:condition` and ONE `:effect` per action (use `(and ...)` for multiple).
+7. **CRITICAL — robot presence during cook/fry vs cut**:
+   - `cook` and `fry`: robot starts the action and can leave. Use ONLY `(at start ...)` conditions
+     for robot location and hand state. At start: clear robot's loc/handempty; at end: item is cooked/fried.
+     - At start conditions: `(loc ?p ?s)`, `(handempty ?p)`, `(on-surface ?i ?s)`, `(clear ?i)`, `(isstove ?s)`, `(iscookable ?i)`, `(item-free ?i)`
+     - At start effects: `(not (loc ?p ?s))`, `(not (handempty ?p))`, `(not (item-free ?i))`
+     - At end effects: `(loc ?p ?s)` restored (robot returns), `(handempty ?p)` restored, `(iscooked ?i)`, `(item-free ?i)`
+     Wait — actually for cook/fry, the robot leaves and does other things. Model as:
+     - At start: consume `(loc ?p ?s)` and `(handempty ?p)` (robot commits to starting the cook)
+     - No `over all` on robot location (robot is free to move away conceptually)
+     - At end: `(iscooked ?i)` and `(item-free ?i)` — item is done
+     SIMPLIFICATION: Since the game engine just counts steps, model cook/fry with robot presence
+     only `at start` and return presence `at end`. Do NOT use `over all (loc ?p ?s)` for cook/fry.
+   - `cut`: robot must stay for the entire duration (RepetitiveEffect requires active calls).
+     Use `(over all (loc ?p ?s))` for cut to keep robot at the station throughout.
+     - At start conditions: `(loc ?p ?s)`, `(handempty ?p)`, `(on-surface ?i ?s)`, `(clear ?i)`, `(isboard ?s)`, `(iscuttable ?i)`, `(item-free ?i)`
+     - At start effects: `(not (item-free ?i))`
+     - Over all: `(loc ?p ?s)` (robot must stay)
+     - At end effects: `(iscut ?i)`, `(item-free ?i)`
+8. **CRITICAL — cook/cut/fry require DIRECT surface contact AND nothing on top** (same as Rule 5):
+   The evaluator checks `item_on(item, station)` AND `clear(item)`.
+   - `pick-up`, `stack`, `unstack` MUST include `(at start (item-free ?i))` in preconditions to
+     prevent picking up items while they are being cooked/cut/fried.
+9. `:goal` — translate the JSON `goal` array using the pre-resolved `pddl_args` field.
+   Each goal predicate has a `pddl_args` field: **use these pddl_names directly**.
+   Map the predicate name as follows:
+   - `item_on`  → `(on-surface item station)` or your surface predicate
+   - `item_at`  → `(at item station)` or your location predicate
+   - `iscooked` → `(iscooked item)`
+   - `iscut`    → `(iscut item)`
+   - `isfried`  → `(isfried item)`
+   - `clear`    → `(clear item)`
+   Use `(and ...)` to wrap multiple goal predicates.
+   **NEVER use `(not ...)` in `:goal`**.
+10. NO tick actions needed — cook/fry complete automatically when the durative action's duration ends.
+    The OPTIC temporal plan will include start times and durations; the linearizer converts this to
+    game engine calls automatically.
+
+Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
+"""
+
+ROBOTOUILLE_TEMPORAL_USER_TEMPLATE = """\
+## Environment JSON
+
+```json
+{original_json}
+```
+
+Generate the PDDL 2.1 temporal (durative actions) domain and problem for this Robotouille environment.
+"""
