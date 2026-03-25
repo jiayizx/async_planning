@@ -26,13 +26,19 @@ class SolverResult:
     error: str = ""
 
 
-def _is_retryable_error(error: str) -> bool:
-    """Return True for transient server-side errors worth retrying."""
-    return (
-        "FATAL" in error
-        or "container" in error
-        or error == "Empty solver output"
-    )
+def _is_container_error(error: str) -> bool:
+    """Return True for transient Apptainer/container server failures worth retrying."""
+    return "FATAL" in error or "container" in error
+
+
+def _is_empty_output(error: str) -> bool:
+    """Return True for empty solver output (solver search timeout or transient)."""
+    return error == "Empty solver output"
+
+
+# Fallback solvers tried in order when lama-first returns empty output.
+# fd-ms uses merge-and-shrink heuristic and handles large grounding better.
+_LAMA_FALLBACKS = ["lama", "fd-ms"]
 
 
 def solve(
@@ -42,23 +48,45 @@ def solve(
     timeout: Optional[float] = None,
     max_retries: int = 0,
     solver: str = "optic",
+    fallback_solvers: list[str] | None = None,
 ) -> Optional[SolverResult]:
     """Run a planner via the solver.planning.domains async API.
 
     Args:
         solver: Planner name, e.g. ``"optic"`` (temporal) or ``"lama-first"``
                 (classical STRIPS, faster for large grounding).
+        fallback_solvers: If provided, these solvers are tried in order when
+                ``solver`` returns empty output (search timeout). Only used for
+                classical planners; OPTIC has no useful fallback.
 
     Returns None if the API is unreachable, times out, or returns no plan.
     """
+    # --- Phase 1: retry the primary solver for transient container errors ---
     last_result: Optional[SolverResult] = None
     for attempt in range(max_retries + 1):
         if attempt > 0:
-            time.sleep(5 * attempt)
+            time.sleep(10 * attempt)  # 10s, 20s, ... — give server time to recover
         last_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout, solver)
-        if last_result.error and _is_retryable_error(last_result.error):
-            continue
+        if last_result.error and _is_container_error(last_result.error):
+            continue  # transient server error — retry same solver
+        break  # got a real result (success, unsolvable, or empty output)
+
+    if last_result is None:
         return last_result
+
+    # --- Phase 2: if primary solver timed out, try fallback solvers ---
+    if last_result.error and _is_empty_output(last_result.error) and fallback_solvers:
+        for fb_solver in fallback_solvers:
+            fb_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout, fb_solver)
+            if not fb_result.error:
+                return fb_result  # fallback succeeded
+            if _is_container_error(fb_result.error):
+                # Transient on fallback too — one retry
+                time.sleep(10)
+                fb_result = _solve_once(domain_pddl, problem_pddl, poll_interval, timeout, fb_solver)
+                if not fb_result.error:
+                    return fb_result
+        # All fallbacks failed — return original empty-output result
     return last_result
 
 
@@ -179,6 +207,11 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
     headers = list(plan_header_re.finditer(output))
     if headers:
         last_section = output[headers[-1].start():]
+        # OPTIC sometimes re-outputs the final plan after ";;;; Solution Found";
+        # use only that final section to avoid duplicate action entries.
+        sol_idx = last_section.rfind(";;;; Solution Found")
+        if sol_idx != -1:
+            last_section = last_section[sol_idx:]
     else:
         last_section = output
         for marker in [";;;; Solution Found", "; Cost:"]:
@@ -205,6 +238,12 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
         return SolverResult(makespan_seconds=makespan, plan=plan, raw_output=output)
 
     # ---- Try LAMA/classical format (no timestamps) ----
+    # Skip if the output explicitly declares the problem unsolvable (OPTIC error messages
+    # can contain bare "(predicate args)" lines that the classical parser would misread).
+    _unsolvable_markers = ("problem has been deemed unsolvable", "Problem Unsolvable")
+    if any(m in output for m in _unsolvable_markers):
+        return None
+
     classical_re = re.compile(r"^\(([^)]+)\)\s*$", re.MULTILINE)
     actions = [m.group(1) for m in classical_re.finditer(output)]
     if actions:
@@ -224,6 +263,7 @@ def batch_solve(
     max_retries: int = 0,
     desc: str = "Solving PDDL",
     solver: str = "optic",
+    fallback_solvers: list[str] | None = None,
 ) -> list[SolverResult]:
     """Solve multiple (domain, problem) pairs in parallel.
 
@@ -232,9 +272,10 @@ def batch_solve(
         num_workers: Max concurrent solver requests.
         poll_interval: Polling interval passed to each ``solve`` call.
         timeout: Max seconds to wait for a single solve job before giving up.
-        max_retries: Max retries for transient server errors (container failures, empty output).
+        max_retries: Max retries for transient container errors (Apptainer failures).
         desc: Progress bar description.
         solver: Planner name (``"optic"`` or ``"lama-first"``).
+        fallback_solvers: Solvers tried in order when ``solver`` returns empty output.
 
     Returns:
         List of SolverResult in the same order as *problems*.
@@ -243,7 +284,7 @@ def batch_solve(
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_idx = {
-            executor.submit(solve, domain, problem, poll_interval, timeout, max_retries, solver): i
+            executor.submit(solve, domain, problem, poll_interval, timeout, max_retries, solver, fallback_solvers): i
             for i, (domain, problem) in enumerate(problems)
         }
 

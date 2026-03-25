@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Configuration ────────────────────────────────────────────────────────
-MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
+MODEL_NAME="${MODEL_NAME:-openai/gpt-4.1}"
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-32768}"
 BATCH="${BATCH:-16}"
@@ -17,13 +17,23 @@ DATA_PATH="${DATA_PATH:-data/robotouille_single_agent_async.json}"
 # Official testing seeds from Robotouille paper (10 seeds × 10 envs = 100 instances)
 # Leave empty to use base layout only: SEEDS=""
 SEEDS="${SEEDS:-42 84 126 168 210 252 294 336 378 420}"
-GENERATE_DOMAIN="${GENERATE_DOMAIN:-true}" # true = LLM generates domain+problem; false = problem-only
-EFFECT_GOAL="${EFFECT_GOAL:-f}" # improve on the plan correctness
-SOLVER="${SOLVER:-lama-first}"     # lama-first (fast classical) or optic (temporal)
-if [ "${EFFECT_GOAL}" = "true" ]; then
-    SAVE_PATH="${SAVE_PATH:-results/robotouille/formalizer+/$(echo ${MODEL_NAME//\//_})}"
+GENERATE_DOMAIN="${GENERATE_DOMAIN:-false}" # true = PDDL 2.1 + OPTIC; false = problem-only + LAMA
+EFFECT_GOAL="${EFFECT_GOAL:-f}" # true = parameter-less constraints + effect goal; false = parameterized constraints + initial state goal
+NUM_SHOTS="${NUM_SHOTS:-0}"     # few-shot examples in system prompt (problem-only mode only)
+# Solver is determined automatically by GENERATE_DOMAIN
+if [ "${GENERATE_DOMAIN}" = "true" ]; then
+    SOLVER="optic"
 else
-    SAVE_PATH="${SAVE_PATH:-results/robotouille/formalizer/$(echo ${MODEL_NAME//\//_})}"
+    SOLVER="lama-first"
+fi
+_MODEL_SLUG="$(echo ${MODEL_NAME//\//_})"
+if [ "${GENERATE_DOMAIN}" = "false" ]; then
+    _MODEL_SLUG="${_MODEL_SLUG}_problem_only"
+fi
+if [ "${EFFECT_GOAL}" = "true" ]; then
+    SAVE_PATH="${SAVE_PATH:-results/robotouille_new/formalizer+/${_MODEL_SLUG}}"
+else
+    SAVE_PATH="${SAVE_PATH:-results/robotouille_new/formalizer/${_MODEL_SLUG}}"
 fi
 
 EXTRA_ARGS=""
@@ -46,5 +56,6 @@ python -m src.experiments.robotouille.run_formalizer \
     --llm-retries "${LLM_RETRIES}" \
     --history-mode "${HISTORY_MODE}" \
     --solver "${SOLVER}" \
+    --num-shots "${NUM_SHOTS}" \
     ${SEEDS:+--seeds ${SEEDS}} \
     ${EXTRA_ARGS}
