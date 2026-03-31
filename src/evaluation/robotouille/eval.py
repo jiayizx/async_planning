@@ -695,7 +695,28 @@ def simulate_with_env(
 
         if matched_binding is None:
             if name_matched:
-                reason = "preconditions not met"
+                # Identify which specific preconditions failed for the closest binding
+                failed_precons: list[str] = []
+                for binding in valid_bindings:
+                    binding_obj_names = [v.name.lower() for v in binding.values()]
+                    if set(mapped_args) == set(binding_obj_names) and len(mapped_args) == len(binding_obj_names):
+                        try:
+                            from backend.predicate import Predicate as _Pred
+                            for precon, is_true in env_action.precons.items():
+                                pred_args = [binding[p.name] for p in precon.params]
+                                pred = _Pred().initialize(precon.name, precon.types, pred_args)
+                                actual = state.get_predicate_value(pred)
+                                if actual is not is_true:
+                                    arg_names = [a.name for a in pred_args]
+                                    expected = "" if is_true else "NOT "
+                                    failed_precons.append(f"{expected}({precon.name} {' '.join(arg_names)})")
+                        except Exception:
+                            pass
+                        break
+                if failed_precons:
+                    reason = "preconditions not met: " + ", ".join(failed_precons)
+                else:
+                    reason = "preconditions not met"
             else:
                 reason = "no matching object binding found"
             return False, (

@@ -203,9 +203,18 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
     Returns None if no actions are found.
     """
     # ---- Try OPTIC format first ----
+    # TFD outputs the plan multiple times during search; the authoritative copy
+    # follows "Solution with original makespan ... found".
+    tfd_final_re = re.compile(r"Solution with original makespan[\s\S]*?found[^\n]*\n")
+    tfd_matches = list(tfd_final_re.finditer(output))
+
     plan_header_re = re.compile(r";\s*Plan found with metric\s+[\d.]+")
     headers = list(plan_header_re.finditer(output))
-    if headers:
+
+    if tfd_matches:
+        # TFD format: use only the section after the last "Solution ... found" line
+        last_section = output[tfd_matches[-1].end():]
+    elif headers:
         last_section = output[headers[-1].start():]
         # OPTIC sometimes re-outputs the final plan after ";;;; Solution Found";
         # use only that final section to avoid duplicate action entries.
@@ -223,7 +232,13 @@ def _parse_plan(output: str) -> Optional[SolverResult]:
     temporal_re = re.compile(r"(\d+\.?\d*)\s*:\s*\(([^)]+)\)\s*\[(\d+\.?\d*)\]")
     plan: list[tuple[float, str, float]] = []
     for m in temporal_re.finditer(last_section):
-        plan.append((float(m.group(1)), m.group(2), float(m.group(3))))
+        action_str = m.group(2).strip()
+        # OPTIC outputs "(G) [duration]" when the goal is already satisfied in the
+        # initial state.  "G" is not a real action — filter it out so the plan is
+        # empty and the evaluator checks goal_reached directly.
+        if action_str.upper() == "G":
+            continue
+        plan.append((float(m.group(1)), action_str, float(m.group(3))))
 
     if plan:
         # Determine makespan from reported cost or timestamps

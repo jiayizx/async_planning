@@ -1290,20 +1290,25 @@ Duration values come from `_timing` in the JSON:
        (at end (empty table_1))))
    ```
 6. **CRITICAL — cook/fry vs cut robot presence**:
-   - `cook` and `fry`: consume `(loc robot station)` and `(nothing robot)` at start; restore at end.
-     Do NOT use `over all` on robot location — robot can leave.
+   - `cook` and `fry`: robot initiates the action then LEAVES immediately. The action only touches `(item-free ?i)` and the cooked/fried state.
+     **NEVER add `(not (loc ...))` or `(not (nothing ...))` to cook/fry effects.** The robot is free to move away.
    - `cut`: use `(over all (loc robot station))` — robot MUST stay the full duration.
      At start effect: `(not (item-free item))`. At end effects: `(iscut item)`, `(item-free item)`.
 7. **CRITICAL — `place` and `pick-up` MUST maintain both `at` and `on`**:
    - `place`: at end adds BOTH `(at item station)` AND `(on item station)`.
-   - `pick-up`: at start removes BOTH `(at item station)` AND `(on item station)`.
+   - `pick-up`: at start removes BOTH `(at item station)` AND `(on item station)`; at end sets `(empty station)`.
    - `cook`/`cut`/`fry` require BOTH `(at start (on item station))` AND `(at start (clear item))`.
    - `pick-up`, `stack`, `unstack` require `(at start (item-free item))`.
+   - **`unstack` MUST NOT set `(empty station)`** — the bottom item is still on the station after unstacking.
+     Setting `(empty station)` in `unstack` is WRONG and causes the planner to place items on an occupied station.
 8. `:init`:
    - Initial kitchen state (locations, holdings, surface predicates, capability flags, item-free for ALL items).
    - ALL `{action_name}_pending` predicates — one per action in the domain.
    - Use the pre-annotated JSON fields (station, atop, held_by, holding, facing_station, initial_empty).
    - **NEVER write `(not (...))` in `:init`**.
+   - **NEVER write natural language, comments, or JSON field names as PDDL facts** (e.g.
+     `(stack-level 0 -> on-surface and at)` or `(no atop relations present)` are ILLEGAL).
+     Every fact in `:init` must be a valid ground predicate of the form `(predicate arg1 arg2 ...)`.
 9. `:goal` — translate the JSON `goal` array using `pddl_args`:
    - `item_on` → `(on item station)`
    - `item_at` → `(at item station)`
@@ -1363,36 +1368,83 @@ Duration values come from `_timing` in the JSON:
 
 1. Use `:requirements :durative-actions :typing`.
 2. Types: `station player item` (all objects use these three types).
-3. Design predicates freely. Recommended predicates:
+3. Use EXACTLY these predicate names from the reference domain — do NOT rename them:
    - Location: `(loc ?p - player ?s - station)`, `(at ?i - item ?s - station)`
-   - Holding: `(holding ?p - player ?i - item)`, `(handempty ?p - player)`
-   - Stacking: `(on-surface ?i - item ?s - station)`, `(atop ?itop - item ?ibot - item)`, `(clear ?i - item)`
+   - Holding/hand: `(has ?p - player ?i - item)`, `(nothing ?p - player)`
+   - Surface/stacking: `(on ?i - item ?s - station)`, `(atop ?itop - item ?ibot - item)`, `(clear ?i - item)`
    - Station state: `(empty ?s - station)`, `(vacant ?s - station)`
-   - Station type: `(isstove ?s - station)`, `(isboard ?s - station)`, `(isfryer ?s - station)`, `(istable ?s - station)`
+   - Station type: `(isstove ?s - station)`, `(isboard ?s - station)`, `(isfryer ?s - station)`, `(istable ?s - station)`, `(issink ?s - station)`
    - Item capability/state: `(iscookable ?i - item)`, `(iscooked ?i - item)`, `(iscuttable ?i - item)`, `(iscut ?i - item)`, `(isfryable ?i - item)`, `(isfried ?i - item)`
    - Busy flag: `(item-free ?i - item)` — set in `:init` for ALL items; cleared during cook/cut/fry; restored when done
    **IMPORTANT**: ALL predicate parameters MUST include type annotations (e.g. `?s - station`, not just `?s`).
 4. In `:init`, use the pre-annotated fields:
    - For items where `held_by` is null (on a station): use `station` and `atop` fields:
-     - stack-level 0 (atop null): item is directly on station surface → `(on-surface item station)`.
-     - stack-level > 0 (atop set): item is stacked on another item → use `(atop itop ibot)`.
-   - For items where `held_by` is NOT null: item is held by that player → `(holding player item)`.
-     Do NOT emit `(on-surface ...)` or `(at ...)` for held items.
+     - stack-level 0 (atop null): item is directly on station surface → `(on item station)` AND `(at item station)`.
+     - stack-level > 0 (atop set): item is stacked on another item → use `(atop itop ibot)` AND `(at itop station)`.
+   - For items where `held_by` is NOT null: item is held by that player → `(has player item)`.
+     Do NOT emit `(on ...)` or `(at ...)` for held items.
    - Player location: use `facing_station`.
-   - Player hand state: if `player.holding` is empty → add `(handempty player)`.
-     If `player.holding` is non-empty → do NOT add `(handempty player)`.
+   - Player hand state: if `player.holding` is empty → add `(nothing player)`.
+     If `player.holding` is non-empty → do NOT add `(nothing player)`.
    - `(empty ?s)` for stations: each station has `initial_empty` field.
      Set `(empty station)` in `:init` if and ONLY IF `initial_empty == true`.
+   - `(vacant station)` for stations: add `(vacant station_N)` for **every** station
+     that has NO player standing on it (i.e. every station except the robot's starting station).
+     The `move` action requires `(vacant ?to)` — omitting this makes most stations unreachable.
    - `(item-free item)` for ALL items in `:init`.
    - **NEVER write `(not (...))` in `:init`**.
-5. **CRITICAL — cook/cut/fry require DIRECT surface contact AND nothing on top**:
-   - `(on-surface ?i ?s)` means item is directly on station surface (not stacked on another item).
-   - `(clear ?i)` means nothing is stacked on top of the item.
-   - `cook`/`cut`/`fry` preconditions MUST include BOTH `(at start (on-surface item station))` AND `(at start (clear item))`.
-   - `place` MUST add BOTH `(on-surface item station)` AND `(at item station)` at end.
-   - `pick-up` MUST remove BOTH `(on-surface item station)` AND `(at item station)` at start.
-   - `stack` does NOT set `(on-surface top-item station)`.
-   - `unstack` removes `(on-surface top-item station)` (at end).
+   - **NEVER write natural language, comments, or JSON field names as PDDL facts** (e.g.
+     `(stack-level 0 -> on and at)` or `(no atop relations present)` are ILLEGAL).
+     Every fact in `:init` must be a valid ground predicate of the form `(predicate arg1 arg2 ...)`.
+5. **CRITICAL — exact preconditions and effects for every action** (copy these verbatim, using the reference domain predicate names):
+
+   **`pick-up`** (duration 1):
+   - Preconditions `at start`: `(nothing ?p)`, `(on ?i ?s)`, `(at ?i ?s)`, `(clear ?i)`, `(item-free ?i)`, `(loc ?p ?s)`
+   - Effects `at start`: `(not (nothing ?p))`, `(not (on ?i ?s))`, `(not (at ?i ?s))`
+   - Effects `at end`: `(has ?p ?i)`, `(empty ?s)`, `(not (clear ?i))`
+   - **`(empty ?s)` at end is MANDATORY** — picking up an item frees the station; without it the planner cannot place anything there afterwards.
+
+   **`place`** (duration 1):
+   - Preconditions `at start`: `(has ?p ?i)`, `(loc ?p ?s)`, `(empty ?s)`
+   - Effects `at start`: `(not (has ?p ?i))`, `(not (empty ?s))`
+   - Effects `at end`: `(nothing ?p)`, `(on ?i ?s)`, `(at ?i ?s)`, `(clear ?i)`
+   - **`(empty ?s)` precondition is MANDATORY** — without it the planner will place items on occupied stations.
+
+   **`move`** (duration 1):
+   - Preconditions `at start`: `(loc ?p ?from)`, `(vacant ?to)`
+   - Effects `at start`: `(not (loc ?p ?from))`, `(loc ?p ?to)`, `(vacant ?from)`, `(not (vacant ?to))`
+
+   **`stack`** (duration 1, place `?itop` on top of `?ibot`):
+   - Preconditions `at start`: `(has ?p ?itop)`, `(clear ?ibot)`, `(loc ?p ?s)`, `(at ?ibot ?s)`, `(item-free ?itop)`
+   - Effects `at start`: `(not (has ?p ?itop))`
+   - Effects `at end`: `(nothing ?p)`, `(at ?itop ?s)`, `(atop ?itop ?ibot)`, `(clear ?itop)`, `(not (clear ?ibot))`
+   - **`(nothing ?p)` at end is MANDATORY** — after stacking, robot's hand is empty and must pick up the next item.
+
+   **`unstack`** (duration 1, take `?itop` off `?ibot`):
+   - Preconditions `at start`: `(nothing ?p)`, `(clear ?itop)`, `(atop ?itop ?ibot)`, `(loc ?p ?s)`, `(at ?itop ?s)`, `(at ?ibot ?s)`, `(item-free ?itop)`
+   - Effects `at start`: `(not (nothing ?p))`, `(not (at ?itop ?s))`, `(not (atop ?itop ?ibot))`
+   - Effects `at end`: `(has ?p ?itop)`, `(clear ?ibot)`, `(not (clear ?itop))`
+   - **DO NOT set `(empty ?s)`** — `?ibot` is still on the station after unstacking. Setting `(empty ?s)` here is WRONG and causes the planner to place items on an occupied station.
+
+   **`cook`** (duration = `cook_time`):
+   - Preconditions `at start`: `(loc ?p ?s)`, `(nothing ?p)`, `(on ?i ?s)`, `(clear ?i)`, `(isstove ?s)`, `(iscookable ?i)`, `(item-free ?i)`
+   - Effects `at start`: `(not (item-free ?i))`
+   - Effects `at end`: `(iscooked ?i)`, `(item-free ?i)`
+   - **NO `(loc)` or `(nothing)` in effects** — robot walks away immediately after starting cook; do NOT consume or restore robot position.
+   - NO `over all` — robot can leave during cooking.
+
+   **`cut`** (duration = `num_cuts`):
+   - Preconditions `at start`: `(loc ?p ?s)`, `(nothing ?p)`, `(on ?i ?s)`, `(clear ?i)`, `(isboard ?s)`, `(iscuttable ?i)`, `(item-free ?i)`
+   - Over all: `(loc ?p ?s)` — robot MUST stay.
+   - Effects `at start`: `(not (item-free ?i))`
+   - Effects `at end`: `(iscut ?i)`, `(item-free ?i)`
+
+   **`fry`** (duration = `fry_time`):
+   - Preconditions `at start`: `(loc ?p ?s)`, `(nothing ?p)`, `(on ?i ?s)`, `(clear ?i)`, `(isfryer ?s)`, `(isfryable ?i)`, `(item-free ?i)`
+   - Effects `at start`: `(not (item-free ?i))`
+   - Effects `at end`: `(isfried ?i)`, `(item-free ?i)`
+   - **NO `(loc)` or `(nothing)` in effects** — robot walks away immediately after starting fry; do NOT consume or restore robot position.
+   - NO `over all` — robot can leave during frying.
 6. **CRITICAL — durative action structure**:
    Each durative action has:
    ```
@@ -1408,41 +1460,19 @@ Duration values come from `_timing` in the JSON:
        <at end ...>))
    ```
    Use EXACTLY ONE `:condition` and ONE `:effect` per action (use `(and ...)` for multiple).
-7. **CRITICAL — robot presence during cook/fry vs cut**:
-   - `cook` and `fry`: robot starts the action and can leave. Use ONLY `(at start ...)` conditions
-     for robot location and hand state. At start: clear robot's loc/handempty; at end: item is cooked/fried.
-     - At start conditions: `(loc ?p ?s)`, `(handempty ?p)`, `(on-surface ?i ?s)`, `(clear ?i)`, `(isstove ?s)`, `(iscookable ?i)`, `(item-free ?i)`
-     - At start effects: `(not (loc ?p ?s))`, `(not (handempty ?p))`, `(not (item-free ?i))`
-     - At end effects: `(loc ?p ?s)` restored (robot returns), `(handempty ?p)` restored, `(iscooked ?i)`, `(item-free ?i)`
-     Wait — actually for cook/fry, the robot leaves and does other things. Model as:
-     - At start: consume `(loc ?p ?s)` and `(handempty ?p)` (robot commits to starting the cook)
-     - No `over all` on robot location (robot is free to move away conceptually)
-     - At end: `(iscooked ?i)` and `(item-free ?i)` — item is done
-     SIMPLIFICATION: Since the game engine just counts steps, model cook/fry with robot presence
-     only `at start` and return presence `at end`. Do NOT use `over all (loc ?p ?s)` for cook/fry.
-   - `cut`: robot must stay for the entire duration (RepetitiveEffect requires active calls).
-     Use `(over all (loc ?p ?s))` for cut to keep robot at the station throughout.
-     - At start conditions: `(loc ?p ?s)`, `(handempty ?p)`, `(on-surface ?i ?s)`, `(clear ?i)`, `(isboard ?s)`, `(iscuttable ?i)`, `(item-free ?i)`
-     - At start effects: `(not (item-free ?i))`
-     - Over all: `(loc ?p ?s)` (robot must stay)
-     - At end effects: `(iscut ?i)`, `(item-free ?i)`
-8. **CRITICAL — cook/cut/fry require DIRECT surface contact AND nothing on top** (same as Rule 5):
-   The evaluator checks `item_on(item, station)` AND `clear(item)`.
-   - `pick-up`, `stack`, `unstack` MUST include `(at start (item-free ?i))` in preconditions to
-     prevent picking up items while they are being cooked/cut/fried.
-9. `:goal` — translate the JSON `goal` array using the pre-resolved `pddl_args` field.
+7. `:goal` — translate the JSON `goal` array using the pre-resolved `pddl_args` field.
    Each goal predicate has a `pddl_args` field: **use these pddl_names directly**.
    Map the predicate name as follows:
-   - `item_on`  → `(on-surface item station)` — achievable via `place` (which also sets `(at item station)`)
+   - `item_on`  → `(on item station)` — achievable via `place` (which also sets `(at item station)`)
    - `item_at`  → `(at item station)` — achievable via `place` or `stack`
    - `iscooked` → `(iscooked item)`
    - `iscut`    → `(iscut item)`
    - `isfried`  → `(isfried item)`
    - `clear`    → `(clear item)`
    Use `(and ...)` to wrap multiple goal predicates.
-10. NO tick actions needed — cook/fry complete automatically when the durative action's duration ends.
-    The OPTIC temporal plan will include start times and durations; the linearizer converts this to
-    game engine calls automatically.
+8. NO tick actions needed — cook/fry complete automatically when the durative action's duration ends.
+   The OPTIC temporal plan will include start times and durations; the linearizer converts this to
+   game engine calls automatically.
 
 Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
 """

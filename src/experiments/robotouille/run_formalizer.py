@@ -66,261 +66,46 @@ DEFAULT_SOLVER = "lama-first"  # faster than OPTIC for classical STRIPS domains
 _LAMA_FALLBACKS = ["lama", "fd-ms"]
 
 
-# ── PDDL problem pruning ─────────────────────────────────────────────────
-
 import re as _re
 
-def _prune_irrelevant_items(problem_pddl: str) -> str:
-    """Remove items not in the goal and redundant stoves/boards from the problem.
 
-    In GENERATE_DOMAIN mode the LLM includes every item and station present in
-    the scenario, even those not needed for the goal.  Each extra item/stove
-    multiplies the grounding of pick-up/place/cook/stack actions and can push
-    OPTIC over the timeout.
+def _normalize_predicate_names(domain_pddl: str, problem_pddl: str) -> tuple[str, str]:
+    """Rewrite LLM predicate aliases to match the reference domain vocabulary.
 
-    Algorithm:
-      1. Collect all object names that appear in :goal.
-      2. Remove item-typed objects absent from the goal.
-      3. After removing irrelevant items, stoves/boards that now have no items
-         on them and are not mentioned in the goal are redundant.  Keep only
-         one stove (if cooking is needed) and one board (if cutting is needed);
-         remove the rest.
-      4. Strip every :init fact that mentions a removed object.
+    The LLM often generates synonymous predicate names that differ from what
+    the game engine's reference domain uses, causing env simulation failures:
+
+      LLM name        →  reference domain name
+      ─────────────────────────────────────────
+      handempty       →  nothing
+      holding         →  has
+      on-surface      →  on
+      fry-cut-item    →  fry (alias used in plan_action_types but not game engine)
+
+    This rewrite is applied to both the domain and problem PDDL so the OPTIC
+    planner still sees a consistent pair, and the linearized plan will contain
+    the correct action/predicate names for the game engine.
+
+    Only rewrites when the LLM predicate is present AND the reference name is
+    absent (avoids double-rewriting a domain that already uses correct names).
     """
-    pat_obj = r'\b([a-z][a-z_]*_\d+)\b'
-
-    # ── 1. Collect goal objects ──────────────────────────────────────────
-    goal_m = _re.search(r'\(:goal\b(.*)', problem_pddl, _re.DOTALL)
-    if not goal_m:
-        return problem_pddl
-    goal_text = goal_m.group(1)
-    goal_objects: set[str] = set(_re.findall(pat_obj, goal_text))
-
-    # ── 2. Parse typed :objects section ──────────────────────────────────
-    obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
-    if not obj_m:
-        return problem_pddl
-
-    groups: list[tuple[list[str], str]] = []  # (names, type)
-    segments = _re.split(r'\s*-\s*(\w+)', obj_m.group(1))
-    for names_raw, type_name in zip(segments[0::2], segments[1::2]):
-        names = names_raw.split()
-        if names:
-            groups.append((names, type_name.strip()))
-
-    # ── 3. Remove irrelevant items ────────────────────────────────────────
-    removed: set[str] = set()
-    new_groups: list[tuple[list[str], str]] = []
-    for names, type_name in groups:
-        if type_name == "item":
-            kept = [n for n in names if n in goal_objects]
-            removed.update(n for n in names if n not in goal_objects)
-            if kept:
-                new_groups.append((kept, type_name))
-        else:
-            new_groups.append((names, type_name))
-
-    # ── 4. Find which stoves/boards still have an item on them ────────────
-    # Work with the current init (before station pruning) to decide which
-    # stoves/boards remain occupied after item removal.
-    init_m0 = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
-    init_text0 = init_m0.group(1) if init_m0 else ""
-
-    def _stations_with_items(init_text: str, removed_items: set[str]) -> set[str]:
-        """Return station names that still have at least one (remaining) item."""
-        occupied: set[str] = set()
-        for fact in _re.findall(r'\([^()]+\)', init_text):
-            tokens = _re.findall(pat_obj, fact)
-            if len(tokens) < 2:
-                continue
-            if tokens[0] in removed_items:
-                continue  # this item was removed
-            # Predicate like (at item station) — last token is likely the station
-            occupied.add(tokens[-1])
-        return occupied
-
-    occupied_stations = _stations_with_items(init_text0, removed)
-
-    # Determine which stations are stoves vs boards from init
-    all_stoves: list[str] = []
-    all_boards: list[str] = []
-    for fact in _re.findall(r'\([^()]+\)', init_text0):
-        m_s = _re.match(r'\(isstove\s+(\S+)\s*\)', fact)
-        m_b = _re.match(r'\(isboard\s+(\S+)\s*\)', fact)
-        if m_s:
-            all_stoves.append(m_s.group(1))
-        if m_b:
-            all_boards.append(m_b.group(1))
-
-    # For each type, keep stoves/boards that still have items;
-    # if none do, keep one as a placeholder (cooking still needs a stove).
-    def _choose_to_keep(candidates: list[str], occupied: set[str],
-                        goal_objs: set[str]) -> tuple[set[str], set[str]]:
-        """Return (keep_set, remove_set) for a list of candidate stations."""
-        # Always keep stations explicitly in the goal
-        in_goal = [s for s in candidates if s in goal_objs]
-        # Prefer stations that still have items on them
-        has_items = [s for s in candidates if s in occupied and s not in goal_objs]
-        # We want at least 1 kept total
-        keep: list[str] = in_goal[:]
-        if not keep:
-            if has_items:
-                keep.append(has_items[0])
-            elif candidates:
-                keep.append(candidates[0])
-        remove_set = set(candidates) - set(keep)
-        return set(keep), remove_set
-
-    removed_stoves: set[str] = set()
-    removed_boards: set[str] = set()
-    if len(all_stoves) > 1:
-        _, removed_stoves = _choose_to_keep(all_stoves, occupied_stations, goal_objects)
-    if len(all_boards) > 1:
-        _, removed_boards = _choose_to_keep(all_boards, occupied_stations, goal_objects)
-
-    removed_stations = removed_stoves | removed_boards
-
-    # Remove pruned stoves/boards from :objects groups
-    if removed_stations:
-        pruned_groups: list[tuple[list[str], str]] = []
-        for names, type_name in new_groups:
-            if type_name == "station":
-                kept_s = [n for n in names if n not in removed_stations]
-                removed.update(n for n in names if n in removed_stations)
-                if kept_s:
-                    pruned_groups.append((kept_s, type_name))
-            else:
-                pruned_groups.append((names, type_name))
-        new_groups = pruned_groups
-
-    # ── 4b. Remove vacant tables not referenced by any remaining item ────────
-    # A table that has no goal item on it (neither as source nor goal station)
-    # and is not the robot's initial station is pure overhead for OPTIC's move
-    # grounding.  We keep: robot start, tables with remaining items, goal tables.
-    goal_stations = goal_objects  # already computed above
-    robot_start: str | None = None
-    for fact in _re.findall(r'\([^()]+\)', init_text0):
-        m_loc = _re.match(r'\(loc\s+\S+\s+(\S+)\s*\)', fact)
-        if m_loc:
-            robot_start = m_loc.group(1)
-            break
-
-    # Tables with at least one remaining item on them
-    tables_with_items: set[str] = set()
-    for fact in _re.findall(r'\([^()]+\)', init_text0):
-        tokens = _re.findall(pat_obj, fact)
-        if len(tokens) < 2:
+    rewrites = [
+        # (llm_name, ref_name) — word-boundary safe substitution
+        ("handempty", "nothing"),
+        ("holding",   "has"),
+        ("on-surface", "on"),
+    ]
+    for llm_name, ref_name in rewrites:
+        # Skip if the reference name already appears in the domain (already correct)
+        if ref_name in domain_pddl:
             continue
-        item_tok = tokens[0]
-        station_tok = tokens[-1]
-        if item_tok in removed:
-            continue  # item was removed
-        # Check this token looks like a table (heuristic: not stove/board/sink)
-        if station_tok.startswith("table"):
-            tables_with_items.add(station_tok)
-
-    # Collect all tables in :objects
-    all_tables: list[str] = []
-    for names, type_name in groups:
-        if type_name == "station":
-            for n in names:
-                if n.startswith("table"):
-                    all_tables.append(n)
-
-    redundant_tables: set[str] = set()
-    for t in all_tables:
-        if t in goal_stations:
+        if llm_name not in domain_pddl and llm_name not in problem_pddl:
             continue
-        if t == robot_start:
-            continue
-        if t in tables_with_items:
-            continue
-        # Truly vacant and unreferenced — safe to remove
-        redundant_tables.add(t)
-
-    if redundant_tables:
-        pruned_groups2: list[tuple[list[str], str]] = []
-        for names, type_name in new_groups:
-            if type_name == "station":
-                kept_t = [n for n in names if n not in redundant_tables]
-                removed.update(n for n in names if n in redundant_tables)
-                if kept_t:
-                    pruned_groups2.append((kept_t, type_name))
-            else:
-                pruned_groups2.append((names, type_name))
-        new_groups = pruned_groups2
-
-    if not removed:
-        return problem_pddl  # nothing to prune
-
-    # ── 5. Rebuild :objects section ──────────────────────────────────────
-    new_obj_body = " ".join(
-        " ".join(names) + " - " + type_name
-        for names, type_name in new_groups
-    )
-    new_obj_section = "(:objects " + new_obj_body + ")"
-    problem_pddl = problem_pddl[:obj_m.start()] + new_obj_section + problem_pddl[obj_m.end():]
-
-    # ── 6. Strip :init facts that mention a removed object ────────────────
-    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
-    if not init_m:
-        return problem_pddl
-
-    kept_facts: list[str] = []
-    for fact in _re.findall(r'\([^()]+\)', init_m.group(1)):
-        tokens = set(_re.findall(pat_obj, fact))
-        if tokens & removed:
-            continue
-        kept_facts.append(fact)
-
-    new_init_section = "(:init " + " ".join(kept_facts) + ")"
-    problem_pddl = (
-        problem_pddl[:init_m.start()]
-        + new_init_section
-        + problem_pddl[init_m.end():]
-    )
-    return problem_pddl
-
-
-def _fix_domain_requirements(domain_pddl: str) -> str:
-    """Simplify (or ...) in action conditions that OPTIC cannot handle.
-
-    OPTIC does not support (or ...) in temporal ``at start`` conditions of
-    durative actions — it treats them as statically-false even when
-    :disjunctive-preconditions is declared.  When the pattern
-    ``(or (isfryable ?i) ...)`` appears we replace the entire ``(or ...)``
-    expression with just ``(isfryable ?i)``, because the second branch
-    (isfryableifcut + iscut) is already covered by the ``fry_cut_item`` action.
-    """
-    if "(or " not in domain_pddl:
-        return domain_pddl
-
-    # Find and replace balanced (or (isfryable ?VAR) ...) with (isfryable ?VAR)
-    result = list(domain_pddl)
-    i = 0
-    while i < len(domain_pddl):
-        # Look for "(or (isfryable " pattern
-        m = _re.search(r'\(or\s+\(isfryable\s+(\?\w+)\)', domain_pddl[i:])
-        if not m:
-            break
-        start = i + m.start()
-        var = m.group(1)
-        # Find the matching closing paren by counting depth
-        depth = 0
-        end = start
-        for j in range(start, len(domain_pddl)):
-            if domain_pddl[j] == "(":
-                depth += 1
-            elif domain_pddl[j] == ")":
-                depth -= 1
-                if depth == 0:
-                    end = j + 1
-                    break
-        replacement = f"(isfryable {var})"
-        domain_pddl = domain_pddl[:start] + replacement + domain_pddl[end:]
-        i = start + len(replacement)
-
-    return domain_pddl
+        # Replace in both — use word-boundary-like pattern to avoid partial matches
+        pat = _re.compile(r'\b' + _re.escape(llm_name) + r'\b')
+        domain_pddl = pat.sub(ref_name, domain_pddl)
+        problem_pddl = pat.sub(ref_name, problem_pddl)
+    return domain_pddl, problem_pddl
 
 
 def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
@@ -330,8 +115,6 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
     often forget to initialise this for stations that have no items (e.g. the
     stove, spare tables).  Without it the planner can never place items,
     making goals unreachable.
-
-    Applies whenever the domain uses an ``empty`` predicate.
     """
     if "(empty " not in domain_pddl:
         return problem_pddl
@@ -344,7 +127,6 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
     init_text = init_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
 
-    # Collect all station names from :objects
     obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
     if not obj_m:
         return problem_pddl
@@ -354,94 +136,44 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
         if type_name.strip() == "station":
             stations.update(names_raw.split())
 
-    # Stations that already have an item on them (via 'at' or 'on-surface')
     occupied: set[str] = set()
     for fact in facts:
         toks = _re.findall(pat_obj, fact)
-        if len(toks) >= 2 and (fact.strip().startswith("(at ") or "on-surface" in fact):
+        stripped = fact.strip()
+        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ")):
             occupied.add(toks[-1])
 
-    # Stations that already have (empty X) in init
     already_empty: set[str] = set()
     for fact in facts:
         m = _re.match(r'\(empty\s+(\S+)\s*\)', fact.strip())
         if m:
             already_empty.add(m.group(1))
 
-    # Inject (empty station) for stations with no items and no existing empty fact
     to_inject = stations - occupied - already_empty
     if not to_inject:
         return problem_pddl
 
     new_facts = list(facts) + [f"(empty {s})" for s in sorted(to_inject)]
     new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[:init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
-def _fix_handempty(domain_pddl: str, problem_pddl: str) -> str:
-    """Inject (handempty player) if pick-up requires it but it's missing from :init.
+def _fix_vacant_predicate(domain_pddl: str, problem_pddl: str) -> str:
+    """Inject missing (vacant station) facts for stations not occupied by a player.
 
-    LLM-generated problems sometimes omit ``(handempty robot_1)`` in :init.
-    Without it the robot can never pick up anything, making all goals unreachable.
-    """
-    if "(handempty " not in domain_pddl:
-        return problem_pddl
-
-    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
-    if not init_m:
-        return problem_pddl
-    init_text = init_m.group(1)
-
-    # Already present — nothing to do
-    if _re.search(r'\(handempty\s+\S+\)', init_text):
-        return problem_pddl
-
-    # Collect player names from :objects
-    obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
-    if not obj_m:
-        return problem_pddl
-    players: list[str] = []
-    segments = _re.split(r'\s*-\s*(\w+)', obj_m.group(1))
-    for names_raw, type_name in zip(segments[0::2], segments[1::2]):
-        if type_name.strip() == "player":
-            players.extend(names_raw.split())
-    if not players:
-        return problem_pddl
-
-    facts = _re.findall(r'\([^()]+\)', init_text)
-    new_facts = list(facts) + [f"(handempty {p})" for p in players]
-    new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[:init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
-
-
-def _fix_vacant(domain_pddl: str, problem_pddl: str) -> str:
-    """Inject missing (vacant station) facts for stations that have no player.
-
-    The ``move`` action requires ``(vacant ?to)`` at start.  LLM-generated
-    problems sometimes forget to mark destination stations as vacant, making
-    them unreachable.  We inject ``(vacant station)`` for every station that
-    has no player on it and no existing ``(vacant station)`` fact.
+    The ``move`` action requires ``(vacant ?to)`` but LLM-generated problems
+    frequently omit this for most stations, making the robot unable to move
+    anywhere and causing 'Goals unreachable'.
     """
     if "(vacant " not in domain_pddl:
         return problem_pddl
 
-    pat_obj = r'\b([a-z][a-z_]*_\d+)\b'
-
     init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
     if not init_m:
         return problem_pddl
     init_text = init_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
 
-    # Collect all station names from :objects
     obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
     if not obj_m:
         return problem_pddl
@@ -451,14 +183,13 @@ def _fix_vacant(domain_pddl: str, problem_pddl: str) -> str:
         if type_name.strip() == "station":
             stations.update(names_raw.split())
 
-    # Stations occupied by a player (via 'loc')
+    # Stations occupied by a player (via loc or at-start location facts)
     player_occupied: set[str] = set()
     for fact in facts:
         m = _re.match(r'\(loc\s+\S+\s+(\S+)\s*\)', fact.strip())
         if m:
             player_occupied.add(m.group(1))
 
-    # Stations already declared vacant
     already_vacant: set[str] = set()
     for fact in facts:
         m = _re.match(r'\(vacant\s+(\S+)\s*\)', fact.strip())
@@ -471,22 +202,312 @@ def _fix_vacant(domain_pddl: str, problem_pddl: str) -> str:
 
     new_facts = list(facts) + [f"(vacant {s})" for s in sorted(to_inject)]
     new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[:init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
+
+
+def _strip_undeclared_init_facts(domain_pddl: str, problem_pddl: str) -> str:
+    """Remove :init facts whose predicate name is not declared in the domain.
+
+    LLMs sometimes embed natural language comments as PDDL facts, e.g.
+    ``(robot starts empty-handed)`` or ``(no items placed there)``.
+    These cause OPTIC to abort with "Undeclared symbol" errors.
+    This function removes any fact whose first token is not a known
+    predicate name from the domain's :predicates block.
+    """
+    # Extract declared predicate names from domain (handle nested parens correctly)
+    pred_start = domain_pddl.find("(:predicates")
+    if pred_start == -1:
+        return problem_pddl
+    depth = 0
+    pred_end = pred_start
+    for idx, ch in enumerate(domain_pddl[pred_start:], pred_start):
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+            if depth == 0:
+                pred_end = idx
+                break
+    pred_block = domain_pddl[pred_start:pred_end + 1]
+    # Build predicate → arity map from the predicates block
+    # Each entry: (predname ?arg1 - type1 ?arg2 - type2 ...) or (predname) for nullary
+    pred_arity: dict[str, int] = {}
+    for decl in _re.findall(r'\(([^()]+)\)', pred_block):
+        tokens = decl.split()
+        if not tokens:
+            continue
+        pred_name = tokens[0]
+        # Count args (tokens starting with ?) — type annotations don't count
+        arity = sum(1 for t in tokens[1:] if t.startswith('?'))
+        pred_arity[pred_name] = arity
+
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+    facts = _re.findall(r'\([^()]+\)', init_text)
+
+    # Keep only facts whose predicate name is declared AND arg count matches arity
+    clean = []
+    for fact in facts:
+        stripped = fact.strip().lstrip('(').rstrip(')')
+        tokens = stripped.split()
+        if not tokens:
+            continue
+        pred_name = tokens[0]
+        n_args = len(tokens) - 1
+        # Accept _pending predicates (parameterless/nullary, parameterless mode)
+        if pred_name.endswith('_pending'):
+            clean.append(fact)
+            continue
+        if pred_name not in pred_arity:
+            continue  # undeclared predicate → strip NL fact
+        if n_args != pred_arity[pred_name]:
+            continue  # wrong arity → strip NL fact like "(nothing stacked on top...)"
+        clean.append(fact)
+
+    if len(clean) == len(facts):
+        return problem_pddl
+    new_init = "(:init " + " ".join(clean) + ")"
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
+
+
+def _fix_move_effects(domain_pddl: str) -> str:
+    """Convert move action from all-at-start effects to at-start(neg) + at-end(pos).
+
+    LLMs often generate:
+        :effect (and (at start (not (loc ?p ?from))) (at start (loc ?p ?to))
+                     (at start (vacant ?from)) (at start (not (vacant ?to))))
+
+    This is semantically wrong: the robot arrives at the destination AFTER travel.
+    All-at-start effects also cause very low compression-safe percentage in OPTIC
+    (typically 12-16%), causing search explosion on larger problems.
+
+    Correct temporal semantics:
+        :effect (and (at start (not (loc ?p ?from))) (at start (not (vacant ?to)))
+                     (at end   (loc ?p ?to))         (at end   (vacant ?from)))
+    """
+    # Find the move durative-action block
+    mv_m = _re.search(
+        r'(:durative-action\s+move\b.*?)(?=\s*:durative-action|\s*\)\s*$)',
+        domain_pddl, _re.DOTALL | _re.IGNORECASE,
     )
+    if not mv_m:
+        return domain_pddl
+    block = mv_m.group(1)
+    # Already using at-end additions? Leave it.
+    if _re.search(r'at\s+end\s+\(loc\b', block) or _re.search(r'at\s+end\s+\(vacant\b', block):
+        return domain_pddl
+    # Find :effect section by locating it after :condition ends
+    eff_start = block.find(':effect')
+    if eff_start == -1:
+        return domain_pddl
+    eff_text = block[eff_start:]
+    # Convert positive additions from at-start to at-end (leave negations at start)
+    def _promote_to_end(m: _re.Match) -> str:
+        inner = m.group(1)  # e.g. "(loc ?p ?to)" or "(vacant ?from)"
+        if inner.strip().startswith('not'):
+            return m.group(0)
+        return f'(at end {inner})'
+    fixed_eff = _re.sub(r'\(at\s+start\s+(\([^()]+\))\)', _promote_to_end, eff_text)
+    if fixed_eff == eff_text:
+        return domain_pddl
+    fixed_block = block[:eff_start] + fixed_eff
+    return domain_pddl[:mv_m.start(1)] + fixed_block + domain_pddl[mv_m.end(1):]
+
+
+def _fix_nothing_predicate(domain_pddl: str, problem_pddl: str) -> str:
+    """Inject missing (nothing robot_N) in :init when robot starts empty-handed.
+
+    The ``pick-up`` action requires ``(nothing ?p)`` (or ``handempty ?p``) but LLMs
+    sometimes forget to add it when the player starts with an empty hand.
+    Without it, the robot can never pick up any item → Goals unreachable.
+    """
+    # Detect which hand-empty predicate the domain uses
+    hand_pred = None
+    if _re.search(r'\(nothing\b', domain_pddl):
+        hand_pred = 'nothing'
+    elif _re.search(r'\(handempty\b', domain_pddl):
+        hand_pred = 'handempty'
+    if not hand_pred:
+        return problem_pddl
+
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+    facts = _re.findall(r'\([^()]+\)', init_text)
+
+    # Already has hand-empty fact?
+    if any(_re.match(rf'\({hand_pred}\s+\S+\)', f.strip()) for f in facts):
+        return problem_pddl
+    # Any holding / has fact means robot is not empty-handed — leave it
+    if any(_re.match(r'\((holding|has)\s+\S+\s+\S+\)', f.strip()) for f in facts):
+        return problem_pddl
+
+    # Find player name from (:objects ...)
+    obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
+    if not obj_m:
+        return problem_pddl
+    players: list[str] = []
+    for seg in _re.finditer(r'((?:\w[\w-]*\s+)+)-\s*player', obj_m.group(1)):
+        players.extend(seg.group(1).split())
+    if not players:
+        return problem_pddl
+
+    new_facts = list(facts) + [f'({hand_pred} {p})' for p in players]
+    new_init = '(:init ' + ' '.join(new_facts) + ')'
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
+
+
+def _fix_unstack_empty_effect(domain_pddl: str) -> str:
+    """Remove incorrect (empty ?s) / (at end (empty ...)) from unstack action effects.
+
+    LLMs consistently add ``(at end (empty ?s))`` to ``unstack``, but this is
+    semantically wrong: the bottom item is still on the station after unstacking.
+    The bug causes the planner to think a station is free and plan a ``place``
+    there, which the game engine then rejects with 'station_empty' not met.
+    """
+    # Find the unstack durative-action block
+    un_m = _re.search(
+        r'(:durative-action\s+unstack\b.*?)(?=\s*:durative-action|\s*\)\s*$)',
+        domain_pddl, _re.DOTALL | _re.IGNORECASE,
+    )
+    if not un_m:
+        return domain_pddl
+    unstack_block = un_m.group(1)
+    # Remove any "(at end (empty ...))" or "(empty ...)" inside the :effect of unstack
+    fixed = _re.sub(r'\(at\s+end\s+\(empty\s+[^)]+\)\s*\)', '', unstack_block)
+    fixed = _re.sub(r'\(empty\s+[^)]+\)', '', fixed)  # bare (empty x) too
+    if fixed == unstack_block:
+        return domain_pddl
+    return domain_pddl[:un_m.start(1)] + fixed + domain_pddl[un_m.end(1):]
+
+
+def _fix_duration1_to_atstart(domain_pddl: str) -> str:
+    """Convert all (at end ...) effects of duration-1 actions to (at start ...).
+
+    Duration-1 actions (move, pick-up, place, stack, unstack) that have mixed
+    at-start/at-end effects are almost never compression-safe in OPTIC: their
+    at-end ADD effects produce facts that the NEXT action needs at-start, so OPTIC
+    can't compress them together and the search space explodes.
+
+    Converting to all-at-start makes these actions semantically instantaneous —
+    which is correct for the game engine (linearizer serializes everything anyway).
+    Only duration>1 actions (cook, fry, cut) keep the at-start/at-end split.
+    """
+    import re as _re2
+    result = domain_pddl
+
+    # Find all durative-action blocks with their spans
+    action_pat = _re2.compile(
+        r'(:durative-action\b.*?)(?=\s*:durative-action\b|\s*\)\s*$)',
+        _re2.DOTALL | _re2.IGNORECASE,
+    )
+
+    # Process actions in reverse order to preserve string offsets
+    matches = list(action_pat.finditer(result))
+    for m in reversed(matches):
+        block = m.group(1)
+        # Check duration
+        dur_m = _re2.search(r':duration\s*\(=\s*\?duration\s+(\d+)', block)
+        if not dur_m or int(dur_m.group(1)) != 1:
+            continue
+        # Find :effect section
+        eff_idx = block.find(':effect')
+        if eff_idx == -1:
+            continue
+        eff_section = block[eff_idx:]
+        # Replace (at end ...) with (at start ...) in the effect section
+        fixed_eff = _re2.sub(r'\(at\s+end\s+', '(at start ', eff_section)
+        if fixed_eff == eff_section:
+            continue
+        fixed_block = block[:eff_idx] + fixed_eff
+        result = result[:m.start(1)] + fixed_block + result[m.end(1):]
+
+    return result
+
+
+def _fix_cook_fry_effects(domain_pddl: str) -> str:
+    """Remove robot-position lock/restore pattern from cook and fry actions.
+
+    LLMs follow the (incorrect) pattern:
+      at start: (not (loc ?p ?s)), (not (nothing ?p))
+      at end:   (loc ?p ?s), (nothing ?p)
+    This makes cook/fry non-compression-safe and causes OPTIC search explosion.
+    The correct semantics (matching robotouille_async.pddl): robot leaves immediately
+    after initiating cook/fry — only (item-free ?i), (iscooked ?i), (isfried ?i) change.
+    """
+    result = domain_pddl
+    for action_name in ("cook", "fry"):
+        pat = _re.compile(
+            r'(:durative-action\s+' + action_name + r'\b.*?)(?=\s*:durative-action|\s*\)\s*$)',
+            _re.DOTALL | _re.IGNORECASE,
+        )
+        m = pat.search(result)
+        if not m:
+            continue
+        block = m.group(1)
+        # Remove (at start (not (loc ...))) and (at start (not (nothing ...)))
+        fixed = _re.sub(r'\(at\s+start\s+\(not\s+\(loc\s+[^)]+\)\s*\)\s*\)', '', block)
+        fixed = _re.sub(r'\(at\s+start\s+\(not\s+\(nothing\s+[^)]+\)\s*\)\s*\)', '', fixed)
+        # Remove (at end (loc ...)) and (at end (nothing ...)) — bare positive restores
+        fixed = _re.sub(r'\(at\s+end\s+\(loc\s+[^)]+\)\s*\)', '', fixed)
+        fixed = _re.sub(r'\(at\s+end\s+\(nothing\s+[^)]+\)\s*\)', '', fixed)
+        if fixed != block:
+            result = result[:m.start(1)] + fixed + result[m.end(1):]
+    return result
+
+
+def _fix_clear_predicate(domain_pddl: str, problem_pddl: str) -> str:
+    """Inject (clear item) for items on stations that are missing the clear fact.
+
+    LLMs occasionally omit (clear ?i) for items that are directly on a station
+    (not stacked on another item).  Without this, pick-up/cook/cut/fry all have
+    unreachable at-start conditions, causing OPTIC to declare the problem unsolvable.
+    """
+    if "(clear " not in domain_pddl:
+        return problem_pddl
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+    facts = _re.findall(r'\([^()]+\)', init_text)
+
+    # Items that already have (clear item) in init
+    items_with_clear: set[str] = set()
+    for fact in facts:
+        m = _re.match(r'\(clear\s+(\S+)\s*\)', fact.strip())
+        if m:
+            items_with_clear.add(m.group(1))
+
+    # Items that are on a station at ground level (have 'on' fact, not 'atop')
+    items_on_station: set[str] = set()
+    for fact in facts:
+        m = _re.match(r'\(on\s+(\S+)\s+\S+\)', fact.strip())
+        if not m:
+            m = _re.match(r'\(on-surface\s+(\S+)\s+\S+\)', fact.strip())
+        if m:
+            items_on_station.add(m.group(1))
+
+    # Items stacked on another item (atop) are NOT clear unless nothing is on top of them;
+    # for simplicity, add clear to all items that have 'on/on-surface' but no 'clear'.
+    to_inject = items_on_station - items_with_clear
+    if not to_inject:
+        return problem_pddl
+
+    new_facts = list(facts) + [f"(clear {item})" for item in sorted(to_inject)]
+    new_init = "(:init " + " ".join(new_facts) + ")"
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
 def _fix_holding_contradiction(domain_pddl: str, problem_pddl: str) -> str:
-    """Convert (holding robot item) in :init to handempty + at item station.
+    """Remove (nothing robot) and (item-free item) that contradict (has robot item) in :init.
 
-    LLMs sometimes initialise the robot as already holding an item.  Without
-    ``(handempty robot)`` the robot can never pick up anything else, making
-    most goals unreachable.  We remove the holding fact and instead:
-      - add ``(handempty player)``
-      - add ``(at item station)`` / ``(on-surface item station)`` / ``(clear item)``
-        placing the item at the player's starting station.
+    When the robot starts holding an item, (has robot item) is in :init but LLMs
+    sometimes also add (nothing robot) and (item-free item), creating a contradiction.
+    OPTIC ignores it and plans incorrectly; the game engine correctly treats (has ...) as
+    the robot holding the item so (nothing) is false at step 0.
     """
     init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
     if not init_m:
@@ -494,134 +515,194 @@ def _fix_holding_contradiction(domain_pddl: str, problem_pddl: str) -> str:
     init_text = init_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
 
-    # Find (holding player item) facts
-    holding: list[tuple[str, str, str]] = []  # (fact_str, player, item)
+    # Find which robots are holding something
+    holding_robots: set[str] = set()
+    held_items: set[str] = set()
     for fact in facts:
-        m = _re.match(r'\(holding\s+(\S+)\s+(\S+)\)', fact.strip())
+        m = _re.match(r'\((?:has|holding)\s+(\S+)\s+(\S+)\)', fact.strip())
         if m:
-            holding.append((fact, m.group(1), m.group(2)))
+            holding_robots.add(m.group(1))
+            held_items.add(m.group(2))
 
-    if not holding:
+    if not holding_robots:
         return problem_pddl
 
-    # Only fix if handempty is completely absent (genuine contradiction)
-    if _re.search(r'\(handempty\s+\S+\)', init_text):
-        return problem_pddl
-
-    # Find each player's starting station from (loc player station)
-    player_station: dict[str, str] = {}
+    clean = []
     for fact in facts:
-        m = _re.match(r'\(loc\s+(\S+)\s+(\S+)\)', fact.strip())
-        if m:
-            player_station[m.group(1)] = m.group(2)
+        stripped = fact.strip()
+        # Remove (nothing robot) for robots that are holding something
+        m_nothing = _re.match(r'\(nothing\s+(\S+)\)', stripped)
+        if m_nothing and m_nothing.group(1) in holding_robots:
+            continue
+        # Remove (item-free item) for items being held
+        m_free = _re.match(r'\(item-free\s+(\S+)\)', stripped)
+        if m_free and m_free.group(1) in held_items:
+            continue
+        clean.append(fact)
 
-    # Build new facts: remove holding, add handempty + relocate held items
-    holding_strs = {hf for hf, _, _ in holding}
-    new_facts = [f for f in facts if f not in holding_strs]
-
-    players_fixed: set[str] = set()
-    for _, player, item in holding:
-        if player not in players_fixed:
-            new_facts.append(f"(handempty {player})")
-            players_fixed.add(player)
-        station = player_station.get(player)
-        if station:
-            new_facts.append(f"(at {item} {station})")
-            new_facts.append(f"(on-surface {item} {station})")
-            if not any(_re.match(rf'\(clear\s+{_re.escape(item)}\s*\)', f.strip()) for f in new_facts):
-                new_facts.append(f"(clear {item})")
-            if "(item-free " in domain_pddl:
-                if not any(_re.match(rf'\(item-free\s+{_re.escape(item)}\s*\)', f.strip()) for f in new_facts):
-                    new_facts.append(f"(item-free {item})")
-
-    new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[: init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
+    if len(clean) == len(facts):
+        return problem_pddl
+    new_init = "(:init " + " ".join(clean) + ")"
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
-def _fix_on_surface(domain_pddl: str, problem_pddl: str) -> str:
-    """Inject missing (on-surface item station) for items that have (at item station) but lack (on-surface).
+def _fix_robot_held_items(
+    domain_pddl: str,
+    problem_pddl: str,
+    original_json: dict | None = None,
+) -> str:
+    """Fix :init when items are co-located with the robot in original_json.
 
-    LLMs sometimes write (at item station) without the accompanying (on-surface)
-    fact.  Without (on-surface), pick-up cannot be applied (it requires on-surface),
-    so the item is permanently inaccessible.
+    The game engine treats items at the same (x,y) as a player as being held
+    (predicate ``has_item``), so ``(nothing robot)`` is false at step 0.
+    The LLM typically places such items on a station in the PDDL init, making
+    the plan fail at step 1 because the robot is already holding the item.
+
+    This fixer:
+    1. Finds items whose (x,y) matches the robot's (x,y) in original_json.
+    2. For each such item, removes the ``(on/at item station)`` fact and adds
+       ``(has robot item)`` (removing the conflicting ``(nothing robot)``).
+    3. Uses the type-based PDDL naming convention: item type_N, player type_1.
     """
+    if not original_json:
+        return problem_pddl
+
+    players = original_json.get("players", [])
+    items = original_json.get("items", [])
+    if not players or not items:
+        return problem_pddl
+
+    # Find items co-located with any player
+    from collections import defaultdict as _dd
+    held: list[tuple[str, str]] = []  # (player_pddl_name, item_pddl_name)
+
+    # Build PDDL names using the same convention as _annotate_robotouille_json
+    type_count: dict[str, int] = _dd(int)
+    sorted_stations = sorted(original_json.get("stations", []), key=lambda s: (s["x"], s["y"]))
+    for s in sorted_stations:
+        type_count[s["name"]] += 1
+
+    type_count2: dict[str, int] = _dd(int)
+    item_pddl: dict[int, str] = {}  # index → pddl_name
+    sorted_items = sorted(items, key=lambda i: (i["x"], i["y"], i.get("stack-level", 0)))
+    for idx, it in enumerate(sorted_items):
+        type_count2[it["name"]] += 1
+        item_pddl[idx] = f"{it['name']}_{type_count2[it['name']]}".lower()
+
+    type_count3: dict[str, int] = _dd(int)
+    player_pddl: dict[int, str] = {}
+    for idx, pl in enumerate(players):
+        type_count3[pl["name"]] += 1
+        player_pddl[idx] = f"{pl['name']}_{type_count3[pl['name']]}".lower()
+
+    for pidx, pl in enumerate(players):
+        for iidx, it in enumerate(sorted_items):
+            if pl["x"] == it["x"] and pl["y"] == it["y"]:
+                held.append((player_pddl[pidx], item_pddl[iidx]))
+                break  # each player holds at most one item
+
+    if not held:
+        return problem_pddl
+
     init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
     if not init_m:
         return problem_pddl
     init_text = init_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
 
-    # Build at-locations and on-surface locations for items
-    at_locs: dict[str, str] = {}
-    on_surface_items: set[str] = set()
+    # Determine which hand/holding predicate this domain uses
+    has_pred = "has" if _re.search(r'\(has\b', domain_pddl) else None
+    if not has_pred:
+        return problem_pddl  # domain doesn't use (has ...) — skip
+
+    # Only fix pairs where (has player item) is not already in the PDDL.
+    # If (has) already exists but (nothing) also exists, that's a different contradiction
+    # handled elsewhere — removing (nothing) alone breaks TFD parsing.
+    already_has: set[str] = set()
     for fact in facts:
-        m = _re.match(r'\(at\s+(\S+)\s+(\S+)\)', fact.strip())
+        m = _re.match(r'\((?:has|holding)\s+(\S+)\s+(\S+)\)', fact.strip())
         if m:
-            at_locs[m.group(1)] = m.group(2)
-        m = _re.match(r'\(on-surface\s+(\S+)\s+', fact.strip())
-        if m:
-            on_surface_items.add(m.group(1))
+            already_has.add(f"{m.group(1)}_{m.group(2)}")
 
-    missing = [(item, station) for item, station in at_locs.items()
-               if item not in on_surface_items]
-    if not missing:
+    held = [(player, item) for player, item in held if f"{player}_{item}" not in already_has]
+    if not held:
         return problem_pddl
 
-    new_facts = list(facts) + [f"(on-surface {item} {station})" for item, station in missing]
+    new_facts = []
+    held_items = {item for _, item in held}
+    holding_players = {player for player, _ in held}
+    added_has: set[str] = set()
+    freed_stations: set[str] = set()  # stations that become empty after removing held items
+
+    for fact in facts:
+        stripped = fact.strip()
+        # Remove (nothing player) for players that should be holding something
+        m = _re.match(r'\(nothing\s+(\S+)\)', stripped)
+        if m and m.group(1) in holding_players:
+            continue
+        # Remove (item-free item) for held items
+        m = _re.match(r'\(item-free\s+(\S+)\)', stripped)
+        if m and m.group(1) in held_items:
+            continue
+        # Remove (on/at item station) for held items — they're in the robot's hand
+        toks = _re.findall(r'\b(\S+)\b', stripped.strip('()'))
+        if len(toks) >= 3 and toks[0].lower() in ('on', 'at', 'on-surface') and toks[1] in held_items:
+            freed_stations.add(toks[2])  # this station is now empty
+            continue
+        new_facts.append(fact)
+
+    # Add (has player item) for each newly-held pair
+    for player, item in held:
+        key = f"{player}_{item}"
+        if key not in added_has:
+            new_facts.append(f"({has_pred} {player} {item})")
+            added_has.add(key)
+
+    # Add (empty station) for stations freed by removing held items
+    # (only if no other item remains on the station)
+    items_on_station: set[str] = set()
+    for fact in new_facts:
+        toks = _re.findall(r'\b(\S+)\b', fact.strip('()'))
+        if len(toks) >= 3 and toks[0].lower() in ('on', 'at', 'on-surface'):
+            items_on_station.add(toks[2])
+    if "empty " in domain_pddl:
+        for st in freed_stations:
+            if st not in items_on_station:
+                # Only add if (empty st) not already present
+                already_empty = any(_re.match(rf'\(empty\s+{_re.escape(st)}\)', f.strip()) for f in new_facts)
+                if not already_empty:
+                    new_facts.append(f"(empty {st})")
+
+    if new_facts == facts:
+        return problem_pddl
+
     new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[: init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
-def _fix_fryable(domain_pddl: str, problem_pddl: str) -> str:
-    """Inject (isfryable item) for items that the goal requires to be (isfried) but lack fryability.
-
-    If the goal contains (isfried item) and the init lacks both (isfryable item)
-    and (isfryableifcut item), the fry action can never fire.  We inject
-    (isfryable item) as a structural fix so OPTIC can find a plan.
-    """
-    if "(isfryable " not in domain_pddl and "(isfried " not in domain_pddl:
+def _fix_empty_contradiction(domain_pddl: str, problem_pddl: str) -> str:
+    """Remove (empty station) facts that contradict (at item station) in :init."""
+    if "(empty " not in domain_pddl:
         return problem_pddl
-
     init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
-    goal_m = _re.search(r'\(:goal(.*)', problem_pddl, _re.DOTALL)
-    if not init_m or not goal_m:
+    if not init_m:
         return problem_pddl
-
     init_text = init_m.group(1)
-    goal_text = goal_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
-
-    # Items that must be fried (in goal)
-    goal_fried: set[str] = set()
-    for m in _re.finditer(r'\(isfried\s+(\S+)\s*\)', goal_text):
-        goal_fried.add(m.group(1))
-
-    # Items already marked fryable
-    already_fryable: set[str] = set()
+    occupied: set[str] = set()
     for fact in facts:
-        m = _re.match(r'\((?:isfryable|isfryableifcut)\s+(\S+)\s*\)', fact.strip())
-        if m:
-            already_fryable.add(m.group(1))
-
-    to_fix = goal_fried - already_fryable
-    if not to_fix:
+        stripped = fact.strip()
+        if not any(stripped.startswith(p) for p in ("(at ", "(on ", "(on-surface ")):
+            continue
+        toks = _re.findall(r'\b([a-z][a-z_]*_\d+)\b', stripped)
+        if len(toks) >= 2:
+            occupied.add(toks[-1])
+    clean = [f for f in facts if not _re.match(r'\(empty\s+(\S+?)\)', f.strip())
+             or _re.match(r'\(empty\s+(\S+?)\)', f.strip()).group(1) not in occupied]
+    if len(clean) == len(facts):
         return problem_pddl
-
-    new_facts = list(facts) + [f"(isfryable {item})" for item in sorted(to_fix)]
-    new_init = "(:init " + " ".join(new_facts) + ")"
-    return (
-        problem_pddl[: init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
+    new_init = "(:init " + " ".join(clean) + ")"
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
 def _fix_item_locations(
@@ -629,16 +710,9 @@ def _fix_item_locations(
     problem_pddl: str,
     original_json: dict | None = None,
 ) -> str:
-    """Inject (at/on-surface item station) for items that have no initial location.
+    """Inject (at/on item station) for items that have no initial location.
 
-    Uses ``original_json`` to determine each item's correct starting station:
-      1. Match PDDL item name (e.g. ``chicken_1``) to the Nth game item of that
-         type (sorted by x,y) to obtain its actual (x,y) position.
-      2. Build a position→PDDL-station map by anchoring from the ``(at item
-         station)`` facts already present in :init for other items.
-      3. Inject ``(at/on-surface/clear/item-free item station)`` for each item
-         whose station could be resolved.
-
+    Uses ``original_json`` to determine each item's correct starting station.
     Items whose station cannot be resolved are left for the LLM retry.
     """
     init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
@@ -647,13 +721,10 @@ def _fix_item_locations(
     init_text = init_m.group(1)
     facts = _re.findall(r'\([^()]+\)', init_text)
 
-    # Parse items from :objects
     obj_m = _re.search(r'\(:objects(.*?)\)', problem_pddl, _re.DOTALL)
     if not obj_m:
         return problem_pddl
     obj_text = obj_m.group(1)
-    # Collect all type names to avoid misidentifying them as object names
-    # (the greedy regex can include "station"/"player" when the group spans type separators)
     _type_names = set(_re.findall(r'-\s*(\w[\w-]*)', obj_text))
     pddl_items: list[str] = []
     for seg in _re.finditer(r'((?:\w[\w-]*\s+)+)-\s*item', obj_text):
@@ -661,8 +732,6 @@ def _fix_item_locations(
     if not pddl_items:
         return problem_pddl
 
-    # Parse station names from :objects grouped by type prefix
-    # Used as fallback when the item's exact game station isn't in game_to_pddl
     from collections import defaultdict as _dd
     pddl_stations_by_type: dict[str, list[str]] = _dd(list)
     for seg in _re.finditer(r'((?:\w[\w-]*\s+)+)-\s*station', obj_text):
@@ -671,21 +740,19 @@ def _fix_item_locations(
                 st_type = _re.sub(r"_\d+$", "", st).lower()
                 pddl_stations_by_type[st_type].append(st)
 
-    # Items that already have a location (at/on-surface or being held)
     items_with_loc: set[str] = set()
     for fact in facts:
-        m = _re.match(r'\((at|on-surface)\s+(\S+)\s+\S+\)', fact.strip())
+        m = _re.match(r'\((at|on-surface|on)\s+(\S+)\s+\S+\)', fact.strip())
         if m:
             items_with_loc.add(m.group(2))
-        m = _re.match(r'\(holding\s+\S+\s+(\S+)\)', fact.strip())
+        m = _re.match(r'\((holding|has)\s+\S+\s+(\S+)\)', fact.strip())
         if m:
-            items_with_loc.add(m.group(1))
+            items_with_loc.add(m.group(2))
 
     missing_loc = [item for item in pddl_items if item not in items_with_loc]
     if not missing_loc or original_json is None:
         return problem_pddl
 
-    # ── Build game item positions: base_type → [(x,y), ...] sorted by (x,y) ─
     game_items_by_type: dict[str, list[tuple[int, int]]] = _dd(list)
     for item in sorted(
         original_json.get("items", []),
@@ -693,15 +760,12 @@ def _fix_item_locations(
     ):
         game_items_by_type[item["name"].lower()].append((item["x"], item["y"]))
 
-    # ── Build (x,y) → game station name (e.g. "table1") ─────────────────
     xy_to_game_station: dict[tuple[int, int], str] = {}
     _type_cnt: dict[str, int] = _dd(int)
     for s in sorted(original_json.get("stations", []), key=lambda s: (s["x"], s["y"])):
         _type_cnt[s["name"].lower()] += 1
         xy_to_game_station[(s["x"], s["y"])] = f"{s['name'].lower()}{_type_cnt[s['name'].lower()]}"
 
-    # ── Anchor: game station name → PDDL station name ────────────────────
-    # Use existing (at pddl_item pddl_station) facts to map game positions → PDDL names.
     pddl_item_set = set(pddl_items)
     game_to_pddl: dict[str, str] = {}
     for fact in facts:
@@ -724,7 +788,6 @@ def _fix_item_locations(
         if game_st and game_st not in game_to_pddl:
             game_to_pddl[game_st] = pddl_station
 
-    # ── Inject facts for items without a location ─────────────────────────
     new_facts_to_add: list[str] = []
     for pddl_item in missing_loc:
         item_base = _re.sub(r"_\d+$", "", pddl_item).lower()
@@ -741,10 +804,7 @@ def _fix_item_locations(
             continue
         pddl_station = game_to_pddl.get(game_st)
         if not pddl_station:
-            # Fallback: the LLM may have declared fewer stations than the game has.
-            # Use any PDDL station of the same type (e.g., if game has board2 but PDDL
-            # only declared board_1, place the item at board_1).
-            game_st_type = _re.sub(r"\d+$", "", game_st)  # "board2" → "board"
+            game_st_type = _re.sub(r"\d+$", "", game_st)
             candidates = pddl_stations_by_type.get(game_st_type, [])
             if not candidates:
                 continue
@@ -753,8 +813,10 @@ def _fix_item_locations(
         esc = _re.escape(pddl_item)
         if not any(_re.match(rf'\(at\s+{esc}\s+', f.strip()) for f in facts):
             new_facts_to_add.append(f"(at {pddl_item} {pddl_station})")
-        if not any(_re.match(rf'\(on-surface\s+{esc}\s+', f.strip()) for f in facts):
-            new_facts_to_add.append(f"(on-surface {pddl_item} {pddl_station})")
+        uses_on_surface = "(on-surface " in domain_pddl
+        on_pred = "on-surface" if uses_on_surface else "on"
+        if not any(_re.match(rf'\(({on_pred}|on)\s+{esc}\s+', f.strip()) for f in facts):
+            new_facts_to_add.append(f"({on_pred} {pddl_item} {pddl_station})")
         if not any(_re.match(rf'\(clear\s+{esc}\s*\)', f.strip()) for f in facts):
             new_facts_to_add.append(f"(clear {pddl_item})")
         if "(item-free " in domain_pddl:
@@ -765,11 +827,7 @@ def _fix_item_locations(
         return problem_pddl
 
     new_init = "(:init " + " ".join(list(facts) + new_facts_to_add) + ")"
-    return (
-        problem_pddl[: init_m.start()]
-        + new_init
-        + problem_pddl[init_m.end():]
-    )
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
 def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
@@ -805,7 +863,8 @@ def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
     items_with_loc: set[str] = set()
     for fact in facts:
         toks = _re.findall(pat_obj, fact)
-        if len(toks) >= 2 and (fact.strip().startswith("(at ") or "on-surface" in fact):
+        stripped = fact.strip()
+        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ")):
             if toks[0] in items:
                 items_with_loc.add(toks[0])
     missing_loc = items - items_with_loc
@@ -813,28 +872,36 @@ def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
         issues.append(
             f"Items missing initial location (no (at item station) in :init): "
             f"{sorted(missing_loc)}.  Every item must have an (at item_N station_N) "
-            f"and (on-surface item_N station_N) fact."
+            f"and (on item_N station_N) fact."
         )
 
-    # Check for holding contradiction (robot holds item but no handempty)
-    holding_facts = [f for f in facts if _re.match(r'\(holding\s+\S+\s+\S+\)', f.strip())]
-    has_handempty_f = any(_re.match(r'\(handempty\s+\S+\)', f.strip()) for f in facts)
+    # Check for holding/has contradiction (robot holds item but no nothing/handempty)
+    holding_facts = [f for f in facts if _re.match(r'\((holding|has)\s+\S+\s+\S+\)', f.strip())]
+    hand_empty_preds = ["nothing", "handempty"]
+    has_handempty_f = any(
+        any(_re.match(rf'\({p}\s+\S+\)', f.strip()) for p in hand_empty_preds)
+        for f in facts
+    )
     if holding_facts and not has_handempty_f:
-        held = [_re.match(r'\(holding\s+\S+\s+(\S+)\)', f.strip()).group(1)
+        held = [_re.match(r'\((holding|has)\s+\S+\s+(\S+)\)', f.strip()).group(2)
                 for f in holding_facts]
         issues.append(
-            f"Robot is initialised as (holding player item) but has no (handempty player) — "
+            f"Robot is initialised as (has/holding player item) but has no (nothing/handempty player) — "
             f"this makes it impossible to pick up other items.  Remove the holding fact and "
             f"instead place the item at the robot's starting station: {held}."
         )
 
-    # Check for missing handempty
-    if "(handempty " in domain_pddl:
-        has_handempty = any(_re.match(r'\(handempty\s+\S+\)', f.strip()) for f in facts)
+    # Check for missing nothing/handempty
+    has_nothing_pred = any(p in domain_pddl for p in ["(nothing ", "(handempty "])
+    if has_nothing_pred:
+        has_handempty = any(
+            any(_re.match(rf'\({p}\s+\S+\)', f.strip()) for p in hand_empty_preds)
+            for f in facts
+        )
         if not has_handempty and not holding_facts:
             issues.append(
-                f"Robot has no (handempty player_N) in :init — the robot cannot "
-                f"pick up any item until this is set."
+                f"Robot has no (nothing robot_N) or (handempty robot_N) in :init — "
+                f"the robot cannot pick up any item until this is set."
             )
 
     # Check for stations missing empty
@@ -842,7 +909,8 @@ def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
         occupied: set[str] = set()
         for fact in facts:
             toks = _re.findall(pat_obj, fact)
-            if len(toks) >= 2 and (fact.strip().startswith("(at ") or "on-surface" in fact):
+            stripped = fact.strip()
+            if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ")):
                 occupied.add(toks[-1])
         already_empty = {
             _re.match(r'\(empty\s+(\S+)\s*\)', f.strip()).group(1)
@@ -883,7 +951,7 @@ def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
     return (
         "The PDDL planner reports 'Goals unreachable from the initial state'. "
         "Check that all items have initial locations, the robot starts with "
-        "(handempty robot_N), stations that should be empty have (empty station_N), "
+        "(nothing robot_N), stations that should be empty have (empty station_N), "
         "and reachable stations have (vacant station_N) in :init."
     )
 
@@ -1024,8 +1092,17 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     })
                 else:
                     d, p, _sa = pair
-                    if args.solver == "optic":
-                        p = _prune_irrelevant_items(p)
+                    d, p = _normalize_predicate_names(d, p)
+                    d = _fix_move_effects(d)
+                    d = _fix_unstack_empty_effect(d)
+                    d = _fix_cook_fry_effects(d)
+                    p = _strip_undeclared_init_facts(d, p)
+                    p = _fix_nothing_predicate(d, p)
+                    p = _fix_item_locations(d, p, original_json=gold_data[i].get("original_json"))
+                    p = _fix_empty_contradiction(d, p)
+                    p = _fix_empty_predicate(d, p)
+                    p = _fix_vacant_predicate(d, p)
+                    p = _fix_clear_predicate(d, p)
                     domains[i] = d
                     problems[i] = p
                     solvable.append((i, p))
@@ -1058,42 +1135,37 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 solver=args.solver,
                 fallback_solvers=_LAMA_FALLBACKS if args.solver != "optic" else None,
             )
+            needs_refix: list[tuple[int, str, str]] = []
             for (i, _p), sr in zip(solvable, solve_outputs):
                 solver_results[i] = sr
                 if sr.error:
                     errors[i] = sr.error
-                    error_types[i] = "syntax_error"
+                    _e = sr.error.lower()
+                    if "unreachable" in _e or "unsolvable" in _e:
+                        error_types[i] = "planning_failure"
+                    elif "timeout" in _e or "timed out" in _e or "empty solver" in _e:
+                        error_types[i] = "solver_error"
+                    else:
+                        error_types[i] = "syntax_error"
                     if "unreachable" in sr.error.lower() and args.generate_domain:
-                        # Apply structural fixes and immediately re-solve before LLM retry
-                        d_orig = domains[i] or ""
-                        d = _fix_domain_requirements(d_orig)
-                        if d != d_orig:
-                            domains[i] = d
+                        d = domains[i] or ""
                         p_fixed = problems[i] or ""
-                        orig_json = gold_data[i].get("original_json")
-                        p_fixed = _fix_holding_contradiction(d, p_fixed)
-                        p_fixed = _fix_handempty(d, p_fixed)
+                        d, p_fixed = _normalize_predicate_names(d, p_fixed)
+                        d = _fix_move_effects(d)
+                        d = _fix_unstack_empty_effect(d)
+                        d = _fix_cook_fry_effects(d)
+                        p_fixed = _strip_undeclared_init_facts(d, p_fixed)
+                        p_fixed = _fix_nothing_predicate(d, p_fixed)
+                        p_fixed = _fix_item_locations(d, p_fixed, original_json=gold_data[i].get("original_json"))
+                        p_fixed = _fix_empty_contradiction(d, p_fixed)
                         p_fixed = _fix_empty_predicate(d, p_fixed)
-                        p_fixed = _fix_vacant(d, p_fixed)
-                        p_fixed = _fix_item_locations(d, p_fixed, original_json=orig_json)
-                        p_fixed = _fix_on_surface(d, p_fixed)
-                        p_fixed = _fix_fryable(d, p_fixed)
-                        if p_fixed != problems[i] or d != d_orig:
-                            # Re-solve with fixed problem; use fallbacks for classical solvers
-                            sr2 = solve(
-                                d, p_fixed, solver=args.solver, timeout=SOLVER_TIMEOUT,
-                                max_retries=_TRANSIENT_SOLVER_RETRIES,
-                                fallback_solvers=_LAMA_FALLBACKS if args.solver != "optic" else None,
-                            )
-                            if not sr2.error:
-                                solver_results[i] = sr2
-                                problems[i] = p_fixed
-                                errors[i] = ""
-                                error_types[i] = ""
-                                continue
-                        # Structural fix didn't help — give LLM targeted diagnostics
-                        hint = _diagnose_unreachable(d, p_fixed)
-                        histories[i].append({"role": "user", "content": hint})
+                        p_fixed = _fix_vacant_predicate(d, p_fixed)
+                        p_fixed = _fix_clear_predicate(d, p_fixed)
+                        if p_fixed != problems[i]:
+                            needs_refix.append((i, d, p_fixed))
+                        else:
+                            hint = _diagnose_unreachable(d, p_fixed)
+                            histories[i].append({"role": "user", "content": hint})
                     else:
                         histories[i].append({
                             "role": "user",
@@ -1104,6 +1176,57 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 else:
                     errors[i] = ""
                     error_types[i] = ""
+
+            if needs_refix:
+                refix_outputs = batch_solve(
+                    [(d, p) for _, d, p in needs_refix],
+                    num_workers=args.batch,
+                    max_retries=_TRANSIENT_SOLVER_RETRIES,
+                    timeout=SOLVER_TIMEOUT,
+                    desc="Re-solving fixed PDDL",
+                    solver=args.solver,
+                    fallback_solvers=_LAMA_FALLBACKS if args.solver != "optic" else None,
+                )
+                for (i, d, p_fixed), sr2 in zip(needs_refix, refix_outputs):
+                    if not sr2.error:
+                        solver_results[i] = sr2
+                        problems[i] = p_fixed
+                        errors[i] = ""
+                        error_types[i] = ""
+                    else:
+                        hint = _diagnose_unreachable(d, p_fixed)
+                        histories[i].append({"role": "user", "content": hint})
+
+        # ── TFD fallback for OPTIC planning failures ───────────────────────
+        # OPTIC times out on complex temporal problems (low compression-safe %).
+        # TFD (Temporal Fast Downward) uses different search algorithms and
+        # can solve many cases that OPTIC cannot within the time limit.
+        if args.solver == "optic" and args.generate_domain:
+            tfd_candidates = [
+                i for i in range(n)
+                if error_types[i] == "planning_failure"
+                and domains[i] and problems[i]
+            ]
+            if tfd_candidates:
+                # Apply clear fix before submitting to TFD
+                tfd_pairs: list[tuple[str, str]] = []
+                for i in tfd_candidates:
+                    p_tfd = _fix_clear_predicate(domains[i], problems[i])
+                    tfd_pairs.append((domains[i], p_tfd))
+                tfd_outputs = batch_solve(
+                    tfd_pairs,
+                    num_workers=args.batch,
+                    max_retries=_TRANSIENT_SOLVER_RETRIES,
+                    timeout=SOLVER_TIMEOUT,
+                    desc="TFD fallback for planning failures",
+                    solver="tfd",
+                )
+                for idx, (i, sr_tfd) in enumerate(zip(tfd_candidates, tfd_outputs)):
+                    if not sr_tfd.error:
+                        solver_results[i] = sr_tfd
+                        problems[i] = tfd_pairs[idx][1]
+                        errors[i] = ""
+                        error_types[i] = ""
 
     # ── formalizer+ pre-pass: get planning analysis, then ask for PDDL ─
     if args.generate_domain and args.effect_goal:
@@ -1130,10 +1253,11 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     # ── Retry loop ──────────────────────────────────────────────────
     for retry in range(args.llm_retries):
         n_syntax = sum(1 for t in error_types if t == "syntax_error")
+        n_pf = sum(1 for t in error_types if t == "planning_failure")
         failed = [i for i in range(n) if errors[i]]
         if not failed:
             break
-        print(f"\nRetry {retry + 1}/{args.llm_retries}: {len(failed)} failed ({n_syntax} syntax)")
+        print(f"\nRetry {retry + 1}/{args.llm_retries}: {len(failed)} failed ({n_syntax} syntax, {n_pf} planning)")
         _attempt(failed, desc=f"LLM retry {retry + 1}")
 
     # ── Assemble records & save ─────────────────────────────────────
@@ -1226,6 +1350,8 @@ def _save_summary(
     n = len(records)
 
     n_syntax = sum(1 for r in records if r.get("error_type") == "syntax_error")
+    n_planning_failure = sum(1 for r in records if r.get("error_type") == "planning_failure")
+    n_solver_error = sum(1 for r in records if r.get("error_type") == "solver_error")
 
     eval_summary = summarize_eval(eval_results)
 
@@ -1236,6 +1362,8 @@ def _save_summary(
         "effect_goal": args.effect_goal,
         "num_examples": n,
         "num_syntax_errors": n_syntax,
+        "num_planning_failures": n_planning_failure,
+        "num_solver_errors": n_solver_error,
         **eval_summary,
     }
     with (save_path / "summary_results.json").open("w", encoding="utf-8") as f:
@@ -1259,6 +1387,8 @@ def _save_summary(
     print(f"\nResults saved to {save_path}  (mode: {mode})")
     print(f"Accuracy (done)       : {acc:.4f} ({n_done}/{n})")
     print(f"Syntax errors         : {n_syntax}/{n}")
+    print(f"Planning failures     : {n_planning_failure}/{n}")
+    print(f"Solver errors         : {n_solver_error}/{n}")
     print(f"Average steps (done)  : {avg_steps:.1f}")
     if avg_ratio is not None:
         print(f"Avg steps ratio       : {avg_ratio:.2f}x optimal")
@@ -1316,6 +1446,12 @@ def parse_args() -> argparse.Namespace:
         help="Seeds for procedural randomization. If omitted, use base layout only.",
     )
     parser.add_argument(
+        "--exclude-envs", type=str, nargs="*", default=[],
+        dest="exclude_envs",
+        help="Env ID prefixes to exclude (e.g. '5_potato_soup 6_onion_soup'). "
+             "Any record whose id starts with one of these prefixes is skipped.",
+    )
+    parser.add_argument(
         "--num-shots",
         type=int,
         default=0,
@@ -1344,6 +1480,11 @@ def main() -> None:
     if args.seeds:
         records = _expand_with_seeds(records, args.seeds)
         print(f"Expanded to {len(records)} records with seeds {args.seeds}")
+
+    if args.exclude_envs:
+        before = len(records)
+        records = [r for r in records if not any(r["id"].startswith(p) for p in args.exclude_envs)]
+        print(f"Excluded {before - len(records)} records matching prefixes {args.exclude_envs} ({len(records)} remaining)")
 
     if args.generate_domain:
         print("Mode: LLM generates domain + problem PDDL")

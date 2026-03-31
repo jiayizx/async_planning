@@ -203,6 +203,20 @@ def linearize_optic_plan(
     # Sort by start_time (stable sort preserves order for simultaneous starts)
     sorted_plan = sorted(optic_plan, key=lambda x: x[0])
 
+    # Detect TFD plan format: TFD uses real simulation time (durations ≥ 1.0 seconds
+    # for all actions, including instant ones) whereas OPTIC uses 0.001-scaled steps.
+    # Normalize TFD timestamps to OPTIC-compatible sequential 0.001 increments so the
+    # main loop below works correctly without inserting spurious waits.
+    if sorted_plan and max(d for _, _, d in sorted_plan) >= 0.5:
+        # TFD format: convert to sequential 0.001-scaled timestamps but keep the
+        # original integer duration (unscaled) so the cook/fry min_next_game_step
+        # logic below (which uses int(round(duration))) works correctly.
+        normalized: list[tuple[float, str, float]] = []
+        for step_idx, (_, action, dur) in enumerate(sorted_plan, start=1):
+            int_dur = max(1, round(dur))
+            normalized.append((step_idx * 0.001, action, float(int_dur)))
+        sorted_plan = normalized
+
     sequential: list[tuple[float, str, float]] = []
     game_step: int = 0
     _EPS = 1e-6
