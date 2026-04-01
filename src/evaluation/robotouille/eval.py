@@ -333,6 +333,13 @@ _PDDL_TO_ENV_ACTION = {
     "fry_cut_item": "fry",
     "stack": "stack",
     "unstack": "unstack",
+    # Soup / container actions
+    "pick-up-container": "pick-up-container",
+    "place-container": "place-container",
+    "fill-pot": "fill-pot",      # special: meal arg is dropped (water created dynamically)
+    "boil-water": "boil-water",
+    "add-to": "add-to",
+    "fill-bowl": "fill-bowl",
 }
 
 # PDDL actions that map to a "null" game engine step (just advance the clock).
@@ -341,6 +348,7 @@ _PDDL_TO_ENV_ACTION = {
 _NULL_PDDL_ACTION_PREFIXES: tuple[str, ...] = (
     "cook-tick", "cut-tick", "fry-tick", "wait",
     "cook-step", "cut-step", "fry-step",
+    "fill-pot-tick", "boil-water-tick",
 )
 
 
@@ -477,6 +485,22 @@ def _build_name_map(
             if game_item is None:
                 continue
             xy = game_obj_xy.get(game_item)
+            if xy is None:
+                continue
+            game_station = xy_to_station.get(xy)
+            if game_station:
+                name_map[pddl_station] = game_station
+
+    # Also anchor via (container_at container_X station_Y) — same logic as items.
+    for atom in llm_init:
+        if atom[0] == "container_at" and len(atom) == 3:
+            pddl_container, pddl_station = atom[1], atom[2]
+            if pddl_station in name_map:
+                continue
+            game_container = name_map.get(pddl_container)
+            if game_container is None:
+                continue
+            xy = game_obj_xy.get(game_container)
             if xy is None:
                 continue
             game_station = xy_to_station.get(xy)
@@ -680,6 +704,63 @@ def simulate_with_env(
         # Map PDDL arg names to builder object names
         # Fallback: strip underscores (chicken_1 → chicken1)
         mapped_args = [name_map.get(a, a.replace("_", "")) for a in pddl_args]
+
+        # fill-pot: game action takes (player, container, station) — no meal arg.
+        # PDDL models it as (player, container, meal, station); drop index 2 (meal).
+        if pddl_action_name == "fill-pot" and len(mapped_args) == 4:
+            mapped_args = [mapped_args[0], mapped_args[1], mapped_args[3]]
+
+        # For actions that use a water/meal arg (boil-water, add-to, fill-bowl),
+        # resolve the PDDL meal name just-in-time every call.  Water is created
+        # dynamically by fill-pot and may change across cycles (water1→water2…).
+        # We always re-look up the meal currently inside the relevant container.
+        if pddl_action_name in ("boil-water", "add-to", "fill-bowl"):
+            # Refresh env_objects_by_name with any new dynamic objects
+            for obj in state.objects:
+                env_objects_by_name[obj.name.lower()] = obj
+
+            # Index of the pot container in mapped_args:
+            #   boil-water(p, c_pot, m, s)      → pot at idx 1, meal at idx 2
+            #   add-to(p, i, m, c_pot, s)        → pot at idx 3, meal at idx 2
+            #   fill-bowl(p, c_bowl, c_pot, m, s)→ pot at idx 2, meal at idx 3
+            if pddl_action_name == "boil-water":
+                pot_arg_idx, meal_arg_idx = 1, 2
+            elif pddl_action_name == "add-to":
+                pot_arg_idx, meal_arg_idx = 3, 2
+            else:  # fill-bowl
+                pot_arg_idx, meal_arg_idx = 2, 3
+
+            if meal_arg_idx < len(mapped_args) and pot_arg_idx < len(mapped_args):
+                pot_game_name = mapped_args[pot_arg_idx]
+                pot_game_obj = env_objects_by_name.get(pot_game_name)
+                pddl_meal_arg = pddl_args[meal_arg_idx]
+
+                resolved = None
+                if pot_game_obj is not None:
+                    # Find meal currently in(meal, pot) from state
+                    try:
+                        from backend.predicate import Predicate as _P
+                        in_pred_defs = [p for p in state.domain.predicates if p.name == "in"]
+                        if in_pred_defs:
+                            for obj in state.objects:
+                                if getattr(getattr(obj, "type", None), "name", "") != "meal":
+                                    continue
+                                in_pred = _P().initialize("in", in_pred_defs[0].types, [obj, pot_game_obj])
+                                if state.get_predicate_value(in_pred):
+                                    resolved = obj.name.lower()
+                                    break
+                    except Exception:
+                        pass
+                if resolved is None:
+                    # Fallback: any meal object in state
+                    for obj in state.objects:
+                        if getattr(getattr(obj, "type", None), "name", "") == "meal":
+                            resolved = obj.name.lower()
+                            break
+                if resolved is not None:
+                    # Always update: meal may have changed since last fill-pot cycle
+                    name_map[pddl_meal_arg] = resolved
+                    mapped_args[meal_arg_idx] = resolved
 
         # Find matching valid action binding
         valid_bindings = state.actions.get(env_action, [])

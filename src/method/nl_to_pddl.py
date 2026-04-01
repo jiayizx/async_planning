@@ -287,6 +287,19 @@ def _annotate_robotouille_json(env: dict) -> dict:
             i["atop"] = None
         i["held_by"] = None  # will be filled in player loop below
 
+    # Assign PDDL names to containers sorted by (x, y) — matches builder ordering.
+    type_count.clear()
+    for c in sorted(env.get("containers", []), key=lambda c: (c["x"], c["y"])):
+        type_count[c["name"]] += 1
+        c["pddl_name"] = f"{c['name']}_{type_count[c['name']]}"
+        c["station"] = coord_to_station.get((c["x"], c["y"]), f"unknown_{c['x']}_{c['y']}")
+
+    # Assign PDDL names to meals (usually empty at start; water is created dynamically).
+    type_count.clear()
+    for m in sorted(env.get("meals", []), key=lambda m: (m.get("x", 0), m.get("y", 0))):
+        type_count[m["name"]] += 1
+        m["pddl_name"] = f"{m['name']}_{type_count[m['name']]}"
+
     # Build player PDDL names and detect held items
     type_count.clear()
     player_coord: dict[tuple, str] = {}  # (x,y) → player pddl_name
@@ -318,7 +331,7 @@ def _annotate_robotouille_json(env: dict) -> dict:
     # For each entity type referenced, sort the unique IDs numerically and map
     # the i-th ID to the i-th pddl entity of that type (sorted by pddl_name).
     _type_to_pddl: dict[str, list[str]] = {}
-    for field, etype in (("stations", None), ("items", None), ("players", None)):
+    for field in ("stations", "items", "players", "containers", "meals"):
         for entity in env.get(field, []):
             name_base = re.sub(r"_\d+$", "", entity.get("pddl_name", ""))
             if name_base:

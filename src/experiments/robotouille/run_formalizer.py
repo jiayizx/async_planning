@@ -158,6 +158,43 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
     return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
+def _fix_container_empty_conflict(problem_pddl: str) -> str:
+    """Remove (empty station) facts that conflict with (container_at container station).
+
+    The game engine treats container placement as occupying a station (station_empty=False),
+    so a station cannot simultaneously have container_at AND be empty for items.
+    LLMs frequently initialise both, which makes planning impossible: the planner
+    thinks the station is free for items while the game engine rejects the action.
+
+    Fix: for every (container_at ?c ?s) in :init, remove (empty ?s) from :init.
+    """
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+
+    # Collect stations occupied by containers
+    container_stations: set[str] = set()
+    for m in _re.finditer(r'\(container_at\s+\S+\s+(\S+)\s*\)', init_text):
+        container_stations.add(m.group(1))
+
+    if not container_stations:
+        return problem_pddl
+
+    # Remove (empty station) for those stations
+    def _remove_empty(text: str, stations: set[str]) -> str:
+        for s in stations:
+            text = _re.sub(r'\(\s*empty\s+' + _re.escape(s) + r'\s*\)', '', text)
+        return text
+
+    new_init_text = _remove_empty(init_text, container_stations)
+    if new_init_text == init_text:
+        return problem_pddl
+
+    new_init = "(:init" + new_init_text + ")"
+    return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
+
+
 def _fix_vacant_predicate(domain_pddl: str, problem_pddl: str) -> str:
     """Inject missing (vacant station) facts for stations not occupied by a player.
 
@@ -1100,6 +1137,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     p = _fix_nothing_predicate(d, p)
                     p = _fix_item_locations(d, p, original_json=gold_data[i].get("original_json"))
                     p = _fix_empty_contradiction(d, p)
+                    p = _fix_container_empty_conflict(p)
                     p = _fix_empty_predicate(d, p)
                     p = _fix_vacant_predicate(d, p)
                     p = _fix_clear_predicate(d, p)
@@ -1158,6 +1196,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                         p_fixed = _fix_nothing_predicate(d, p_fixed)
                         p_fixed = _fix_item_locations(d, p_fixed, original_json=gold_data[i].get("original_json"))
                         p_fixed = _fix_empty_contradiction(d, p_fixed)
+                        p_fixed = _fix_container_empty_conflict(p_fixed)
                         p_fixed = _fix_empty_predicate(d, p_fixed)
                         p_fixed = _fix_vacant_predicate(d, p_fixed)
                         p_fixed = _fix_clear_predicate(d, p_fixed)

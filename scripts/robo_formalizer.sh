@@ -19,9 +19,10 @@ DATA_PATH="${DATA_PATH:-data/robotouille_single_agent_async.json}"
 # Leave empty to use base layout only: SEEDS=""
 SEEDS="${SEEDS:-42 84 126 168 210 252 294 336 378 420}"
 GENERATE_DOMAIN="${GENERATE_DOMAIN:-true}" # true = PDDL 2.1 + OPTIC (with TFD fallback); false = problem-only + LAMA
-# Set EXCLUDE_SOUP=true to skip soup tasks (envs 5/6/7/8/9) that require container mechanics
-# not covered by robotouille_async.pddl (in, addedto, isboiling, container_at, fill-bowl, etc.)
+# Set EXCLUDE_SOUP=true to skip soup tasks (envs 5/6/7/8/9)
 EXCLUDE_SOUP="${EXCLUDE_SOUP:-false}"
+# Set SOUP_ONLY=true to run ONLY soup tasks (envs 5/6/7/8/9); overrides EXCLUDE_SOUP
+SOUP_ONLY="${SOUP_ONLY:-true}"
 EFFECT_GOAL="${EFFECT_GOAL:-f}" # true = parameter-less constraints + effect goal; false = parameterized constraints + initial state goal
 NUM_SHOTS="${NUM_SHOTS:-0}"     # few-shot examples in system prompt (problem-only mode only)
 # Solver is determined automatically by GENERATE_DOMAIN
@@ -33,6 +34,11 @@ fi
 _MODEL_SLUG="$(echo ${MODEL_NAME//\//_})"
 if [ "${GENERATE_DOMAIN}" = "false" ]; then
     _MODEL_SLUG="${_MODEL_SLUG}_problem_only"
+fi
+if [ "${SOUP_ONLY}" = "true" ]; then
+    _MODEL_SLUG="${_MODEL_SLUG}_soup_only"
+elif [ "${EXCLUDE_SOUP}" = "true" ]; then
+    _MODEL_SLUG="${_MODEL_SLUG}_nosoup"
 fi
 if [ "${EFFECT_GOAL}" = "true" ]; then
     SAVE_PATH="${SAVE_PATH:-results/robotouille/formalizer+/${_MODEL_SLUG}}"
@@ -47,8 +53,10 @@ fi
 if [ "${EFFECT_GOAL}" = "true" ]; then
     EXTRA_ARGS="${EXTRA_ARGS} --effect-goal"
 fi
-if [ "${EXCLUDE_SOUP}" = "true" ]; then
-    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 5_potato_soup 6_onion_soup 7_tomato_soup 8_onion_tomato_soup 9_onion_potato_soup"
+if [ "${SOUP_ONLY}" = "true" ]; then
+    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 0_ 1_ 2_ 3_ 4_"
+elif [ "${EXCLUDE_SOUP}" = "true" ]; then
+    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 5_ 6_ 7_ 8_ 9_"
 fi
 python -m src.experiments.robotouille.run_formalizer \
     --model-name "${MODEL_NAME}" \

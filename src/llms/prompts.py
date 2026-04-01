@@ -1184,11 +1184,16 @@ The JSON has pre-computed fields — use them directly:
              "held_by": str|null,
              "predicates": ["iscookable"|"iscuttable"|"isfryable"|"isfryableifcut"]}],
   "players": [{"pddl_name": str, "facing_station": str, "holding": [str]}],
+  "containers": [{"name": str, "pddl_name": str, "station": str}],
+  "meals": [],
   "goal": [{"predicate": str, "args": [str], "pddl_args": [str]}],
   "goal_description": str,
   "_timing": {"cook_time": int, "num_cuts": int, "fry_time": int}
 }
 ```
+
+`containers` holds pot and bowl. `meals` is always empty at start — `water` is created
+dynamically when fill-pot completes. Use `water_1` as the PDDL name for the first water object.
 
 ## Action naming convention (CRITICAL — the evaluator parses these names)
 
@@ -1204,11 +1209,19 @@ Name each action as: `{base_op}_{arg1}_{arg2}...` **without** the player name (p
 | `fry` | item, station | `fry_patty_1_fryer_1` |
 | `stack` | top-item, bot-item, station | `stack_bread_2_bread_1_table_2` |
 | `unstack` | top-item, bot-item, station | `unstack_bread_2_bread_1_table_1` |
+| `pick-up-container` | container, station | `pick-up-container_pot_1_sink_1` |
+| `place-container` | container, station | `place-container_pot_1_stove_1` |
+| `fill-pot` | container, meal, station | `fill-pot_pot_1_water_1_sink_1` |
+| `boil-water` | container, meal, station | `boil-water_pot_1_water_1_stove_1` |
+| `add-to` | item, meal, container, station | `add-to_potato_1_water_1_pot_1_sink_1` |
+| `fill-bowl` | bowl, pot, meal, station | `fill-bowl_bowl_1_pot_1_water_1_table_1` |
 
 Duration values come from `_timing` in the JSON:
 - `cook` duration = `_timing.cook_time` (default 3)
 - `cut` duration = `_timing.num_cuts` (default 3)
 - `fry` duration = `_timing.fry_time` (default 3)
+- `fill-pot` duration = `_timing.cook_time` (default 3) — treated as same async timer
+- `boil-water` duration = `_timing.cook_time` (default 3)
 - all other actions: duration = 1
 
 ## RULES
@@ -1225,6 +1238,10 @@ Duration values come from `_timing` in the JSON:
    - `(empty ?s)`, `(vacant ?s)`, `(isstove ?s)`, `(isboard ?s)`, `(isfryer ?s)`, `(istable ?s)`, `(issink ?s)`
    - `(iscookable ?i)`, `(iscooked ?i)`, `(iscuttable ?i)`, `(iscut ?i)`, `(isfryable ?i)`, `(isfried ?i)`
    - `(item-free ?i)`
+   - **Soup predicates** (only include if soup tasks are present):
+     `(ispot ?c)`, `(isbowl ?c)`, `(iswater ?m)`
+     `(container_at ?c ?s)`, `(container_empty ?c)`, `(has_container ?p ?c)`, `(container-free ?c)`
+     `(in ?m ?c)`, `(addedto ?i ?m)`, `(isboiling ?m)`
    - One nullary pending predicate per action: `({action_name}_pending)` with NO parameters.
      Example: `(cook_chicken_1_stove_1_pending)`, `(move_table_1_stove_1_pending)`.
 5. Each durative action has `:parameters ()`. All object references in `:condition` and `:effect`
@@ -1289,6 +1306,86 @@ Duration values come from `_timing` in the JSON:
        (at end (has robot_1 chicken_1))
        (at end (empty table_1))))
    ```
+   Soup action examples (fill-pot is async like cook; add-to is instantaneous like place):
+   ```
+   (:durative-action fill-pot_pot_1_water_1_sink_1
+     :parameters ()
+     :duration (= ?duration 3)
+     :condition (and
+       (at start (fill-pot_pot_1_water_1_sink_1_pending))
+       (at start (ispot pot_1))
+       (at start (issink sink_1))
+       (at start (loc robot_1 sink_1))
+       (at start (container_at pot_1 sink_1))
+       (at start (container_empty pot_1))
+       (at start (nothing robot_1))
+       (at start (container-free pot_1))
+       (at start (iswater water_1)))
+     :effect (and
+       (at start (not (fill-pot_pot_1_water_1_sink_1_pending)))
+       (at start (not (container-free pot_1)))
+       (at start (not (nothing robot_1)))
+       (at end (in water_1 pot_1))
+       (at end (not (container_empty pot_1)))
+       (at end (container-free pot_1))
+       (at end (nothing robot_1))))
+
+   (:durative-action boil-water_pot_1_water_1_stove_1
+     :parameters ()
+     :duration (= ?duration 3)
+     :condition (and
+       (at start (boil-water_pot_1_water_1_stove_1_pending))
+       (at start (ispot pot_1))
+       (at start (isstove stove_1))
+       (at start (loc robot_1 stove_1))
+       (at start (container_at pot_1 stove_1))
+       (at start (in water_1 pot_1))
+       (at start (iswater water_1))
+       (at start (nothing robot_1))
+       (at start (container-free pot_1)))
+     :effect (and
+       (at start (not (boil-water_pot_1_water_1_stove_1_pending)))
+       (at start (not (container-free pot_1)))
+       (at start (not (nothing robot_1)))
+       (at end (isboiling water_1))
+       (at end (container-free pot_1))
+       (at end (nothing robot_1))))
+
+   (:durative-action add-to_potato_1_water_1_pot_1_sink_1
+     :parameters ()
+     :duration (= ?duration 1)
+     :condition (and
+       (at start (add-to_potato_1_water_1_pot_1_sink_1_pending))
+       (at start (has robot_1 potato_1))
+       (at start (ispot pot_1))
+       (at start (container_at pot_1 sink_1))
+       (at start (loc robot_1 sink_1))
+       (at start (in water_1 pot_1)))
+     :effect (and
+       (at start (not (add-to_potato_1_water_1_pot_1_sink_1_pending)))
+       (at start (not (has robot_1 potato_1)))
+       (at end (addedto potato_1 water_1))
+       (at end (nothing robot_1))))
+
+   (:durative-action fill-bowl_bowl_1_pot_1_water_1_table_1
+     :parameters ()
+     :duration (= ?duration 1)
+     :condition (and
+       (at start (fill-bowl_bowl_1_pot_1_water_1_table_1_pending))
+       (at start (isbowl bowl_1))
+       (at start (ispot pot_1))
+       (at start (container_at bowl_1 table_1))
+       (at start (loc robot_1 table_1))
+       (at start (container_empty bowl_1))
+       (at start (has_container robot_1 pot_1))
+       (at start (in water_1 pot_1)))
+     :effect (and
+       (at start (not (fill-bowl_bowl_1_pot_1_water_1_table_1_pending)))
+       (at end (in water_1 bowl_1))
+       (at end (not (in water_1 pot_1)))
+       (at end (not (container_empty bowl_1)))
+       (at end (container_empty pot_1))))
+   ```
 6. **CRITICAL — cook/fry vs cut robot presence**:
    - `cook` and `fry`: robot initiates the action then LEAVES immediately. The action only touches `(item-free ?i)` and the cooked/fried state.
      **NEVER add `(not (loc ...))` or `(not (nothing ...))` to cook/fry effects.** The robot is free to move away.
@@ -1309,6 +1406,15 @@ Duration values come from `_timing` in the JSON:
    - **NEVER write natural language, comments, or JSON field names as PDDL facts** (e.g.
      `(stack-level 0 -> on-surface and at)` or `(no atop relations present)` are ILLEGAL).
      Every fact in `:init` must be a valid ground predicate of the form `(predicate arg1 arg2 ...)`.
+   - **SOUP INIT RULES** (when containers are present):
+     - For each container c at station s: write `(container_at c s)`, `(container_empty c)`, `(container-free c)`.
+     - Write `(ispot pot_1)` / `(isbowl bowl_1)` identity facts.
+     - Write `(iswater water_1)` — water exists as a named object even though it is created at runtime.
+     - **CRITICAL**: A station that has a container on it is NOT empty for items.
+       If `(container_at pot_1 sink_1)` is in :init, **do NOT write `(empty sink_1)`**.
+       Only write `(empty s)` for stations with `initial_empty: true` in the JSON AND no container on them.
+     - `water_1` is a pre-declared object in `:objects` (type meal). Even though it doesn't exist
+       physically at the start, it must be declared so OPTIC can reason about it.
 9. `:goal` — translate the JSON `goal` array using `pddl_args`:
    - `item_on` → `(on item station)`
    - `item_at` → `(at item station)`
@@ -1316,8 +1422,24 @@ Duration values come from `_timing` in the JSON:
    - `iscut` → `(iscut item)`
    - `isfried` → `(isfried item)`
    - `clear` → `(clear item)`
+   - **SOUP GOALS** — translate ALL soup predicates, do NOT omit them:
+     - `in` → `(in water_1 bowl_1)` — water is inside the bowl
+     - `addedto` → `(addedto potato_1 water_1)` — ingredient added to water
+     - `isboiling` → `(isboiling water_1)` — water is boiling
+     - `container_at` → `(container_at bowl_1 table_1)` — bowl is on a table
    Use `(and ...)` for multiple goals. **NEVER use `(not ...)` in `:goal`**.
 10. NO tick actions. The OPTIC temporal plan's start times and durations are handled by the linearizer.
+11. **SOUP ACTION SEMANTICS** (CRITICAL — wrong ordering causes planning failure):
+    - `fill-pot`: pot must be placed at a **sink** first (`container_at pot sink`). Robot initiates fill,
+      then the water appears after `fill_time` steps. **The pot MUST remain at the sink for the full
+      duration** — do NOT pick it up until fill-pot finishes. Model as async (robot leaves after start).
+    - `boil-water`: pot with water must be placed at a **stove** (`container_at pot stove`).
+      Robot initiates boil, then water becomes isboiling after `cook_time` steps. Async — robot leaves.
+    - `add-to`: player holds an item and adds it to water inside the pot. The pot must be at some station.
+      Ingredient is removed from player; `addedto(item, water)` is set. Instantaneous.
+    - `fill-bowl`: player holds the pot and pours its water into the bowl at the current station.
+      `in(water, bowl)` is set; `in(water, pot)` is cleared. Instantaneous.
+    - Correct soup workflow: fill-pot at sink → boil-water at stove → add-to ingredients → fill-bowl.
 
 Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
 """
