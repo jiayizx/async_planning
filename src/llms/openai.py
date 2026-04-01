@@ -48,6 +48,12 @@ class OpenAILLM(BaseLLM):
                 self.config["reasoning_effort"] = "low"
 
 
+    @staticmethod
+    def _is_quota_exceeded(e: openai.RateLimitError) -> bool:
+        """Return True if the error is a permanent quota/billing failure (not a transient rate limit)."""
+        body = getattr(e, "body", {}) or {}
+        return body.get("code") == "insufficient_quota"
+
     def _chat(self, messages: List[Dict[str, str]]) -> str:
         wait = 5
         for attempt in range(6):
@@ -58,7 +64,12 @@ class OpenAILLM(BaseLLM):
                     **self.config,
                 )
                 return response.choices[0].message.content
-            except openai.RateLimitError:
+            except openai.RateLimitError as e:
+                if self._is_quota_exceeded(e):
+                    raise RuntimeError(
+                        "OpenAI quota exceeded (insufficient_quota). "
+                        "Please check your billing at https://platform.openai.com/billing"
+                    ) from e
                 if attempt == 5:
                     raise
                 time.sleep(wait)
@@ -76,7 +87,12 @@ class OpenAILLM(BaseLLM):
                     **self.config,
                 )
                 return completion.choices[0].message.content
-            except openai.RateLimitError:
+            except openai.RateLimitError as e:
+                if self._is_quota_exceeded(e):
+                    raise RuntimeError(
+                        "OpenAI quota exceeded (insufficient_quota). "
+                        "Please check your billing at https://platform.openai.com/billing"
+                    ) from e
                 if attempt == 5:
                     raise
                 time.sleep(wait)

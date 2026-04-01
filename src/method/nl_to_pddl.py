@@ -215,10 +215,11 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
 from src.llms.prompts import (
     ROBOTOUILLE_SYSTEM_PROMPT,
     ROBOTOUILLE_SYSTEM_PROMPT_OLD,
+    ROBOTOUILLE_PROBLEM_EXAMPLES,
     ROBOTOUILLE_USER_TEMPLATE,
-    ROBOTOUILLE_USER_TEMPLATE_NL,
-    ROBOTOUILLE_FREE_DOMAIN_SYSTEM_PROMPT,
-    ROBOTOUILLE_FREE_DOMAIN_USER_TEMPLATE,
+    ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT,
+    ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD,
+    ROBOTOUILLE_TEMPORAL_USER_TEMPLATE,
 )
 
 
@@ -286,6 +287,19 @@ def _annotate_robotouille_json(env: dict) -> dict:
             i["atop"] = None
         i["held_by"] = None  # will be filled in player loop below
 
+    # Assign PDDL names to containers sorted by (x, y) — matches builder ordering.
+    type_count.clear()
+    for c in sorted(env.get("containers", []), key=lambda c: (c["x"], c["y"])):
+        type_count[c["name"]] += 1
+        c["pddl_name"] = f"{c['name']}_{type_count[c['name']]}"
+        c["station"] = coord_to_station.get((c["x"], c["y"]), f"unknown_{c['x']}_{c['y']}")
+
+    # Assign PDDL names to meals (usually empty at start; water is created dynamically).
+    type_count.clear()
+    for m in sorted(env.get("meals", []), key=lambda m: (m.get("x", 0), m.get("y", 0))):
+        type_count[m["name"]] += 1
+        m["pddl_name"] = f"{m['name']}_{type_count[m['name']]}"
+
     # Build player PDDL names and detect held items
     type_count.clear()
     player_coord: dict[tuple, str] = {}  # (x,y) → player pddl_name
@@ -317,7 +331,7 @@ def _annotate_robotouille_json(env: dict) -> dict:
     # For each entity type referenced, sort the unique IDs numerically and map
     # the i-th ID to the i-th pddl entity of that type (sorted by pddl_name).
     _type_to_pddl: dict[str, list[str]] = {}
-    for field, etype in (("stations", None), ("items", None), ("players", None)):
+    for field in ("stations", "items", "players", "containers", "meals"):
         for entity in env.get(field, []):
             name_base = re.sub(r"_\d+$", "", entity.get("pddl_name", ""))
             if name_base:
@@ -350,69 +364,58 @@ def _annotate_robotouille_json(env: dict) -> dict:
 
 
 def build_robotouille_problem_messages(
-    question: str | dict,
+    original_json: dict,
+    domain_pddl: str,
+    effect_goal: bool = False,
+    num_shots: int = 0,
+) -> list[dict[str, str]]:
+    """Build chat messages for Robotouille problem-only PDDL generation (GENERATE_DOMAIN=false).
+
+    Uses the fixed domain PDDL + annotated JSON to ask the LLM to generate only the problem.
+    effect_goal=True  → ROBOTOUILLE_SYSTEM_PROMPT (improved prompt)
+    effect_goal=False → ROBOTOUILLE_SYSTEM_PROMPT_OLD
+    num_shots > 0     → append ROBOTOUILLE_PROBLEM_EXAMPLES to system prompt
+    """
+    system_prompt = ROBOTOUILLE_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_SYSTEM_PROMPT_OLD
+    if num_shots > 0:
+        system_prompt = system_prompt + ROBOTOUILLE_PROBLEM_EXAMPLES
+    annotated = _annotate_robotouille_json(original_json)
+    user_content = ROBOTOUILLE_USER_TEMPLATE.format(
+        domain_pddl=domain_pddl,
+        original_json=json.dumps(annotated, indent=2),
+    )
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_content},
+    ]
+
+
+def build_robotouille_temporal_messages(
+    original_json: dict,
     domain_pddl: str,
     effect_goal: bool = False,
 ) -> list[dict[str, str]]:
-    """Build chat messages for Robotouille problem-only PDDL generation.
+    """Build chat messages for Robotouille PDDL 2.1 temporal (durative actions) generation.
 
-    question can be:
-      - dict: raw original_json → annotated then sent as JSON (preferred)
-      - str:  natural language description → uses NL template
+    effect_goal=True  → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT (parameterless, no :typing)
+    effect_goal=False → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD (parameterized, :typing)
+    domain_pddl       → reference STRIPS domain shown in the user message
     """
-    system_prompt = ROBOTOUILLE_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_SYSTEM_PROMPT_OLD
-    messages = [{"role": "system", "content": system_prompt}]
-    if isinstance(question, dict):
-        annotated = _annotate_robotouille_json(question)
-        user_content = ROBOTOUILLE_USER_TEMPLATE.format(
-            domain_pddl=domain_pddl,
-            original_json=json.dumps(annotated, indent=2),
-        )
-    else:
-        user_content = ROBOTOUILLE_USER_TEMPLATE_NL.format(
-            domain_pddl=domain_pddl,
-            question=question,
-        )
-    messages.append({"role": "user", "content": user_content})
-    return messages
-
-
-def build_robotouille_free_domain_messages(
-    original_json: dict,
-    effect_goal: bool = False,
-) -> list[dict[str, str]]:
-    """Build chat messages for Robotouille free-domain generation (domain+problem).
-
-    effect_goal=False (formalizer):  single-turn, generate domain+problem directly.
-    effect_goal=True  (formalizer+): prepend a planning analysis step asking the LLM
-                                     to reason about action sequences before writing PDDL.
-    """
+    system_prompt = ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD
     annotated = _annotate_robotouille_json(original_json)
-    # Extract timing constants to surface in prompt
     config = original_json.get("config", {})
     cook_time = config.get("cook_time", {}).get("default", 3)
     num_cuts = config.get("num_cuts", {}).get("default", 3)
-    annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts}
+    fry_time = config.get("fry_time", {}).get("default", 3)
+    annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
     json_str = json.dumps(annotated, indent=2)
-    messages = [{"role": "system", "content": ROBOTOUILLE_FREE_DOMAIN_SYSTEM_PROMPT}]
-
-    if effect_goal:
-        # formalizer+: first ask for planning analysis, then generate PDDL
-        analysis_prompt = (
-            "## Environment JSON\n\n```json\n" + json_str + "\n```\n\n"
-            "Before writing PDDL, do a planning analysis:\n"
-            "1. List each goal predicate and identify which action sequence achieves it.\n"
-            "2. For each action, list what predicates must be true beforehand and what changes.\n"
-            "3. Identify which predicates are needed in :init and :goal.\n"
-            "Write your analysis in plain text (no PDDL yet)."
-        )
-        messages.append({"role": "user", "content": analysis_prompt})
-    else:
-        messages.append({"role": "user", "content": ROBOTOUILLE_FREE_DOMAIN_USER_TEMPLATE.format(
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
+            domain_pddl=domain_pddl,
             original_json=json_str,
-        )})
-
-    return messages
+        )},
+    ]
 
 
 def parse_robotouille_problem_response(response: str) -> Optional[str]:

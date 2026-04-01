@@ -80,6 +80,10 @@ class BaseLLM(ABC):
                     try:
                         results[index] = future.result()
                         pbar.set_postfix({"completed": f"#{index}"})
+                    except RuntimeError as e:
+                        # Unrecoverable errors (e.g. quota exceeded) — abort immediately
+                        pbar.write(f"Fatal error: {e}")
+                        raise
                     except Exception as e:
                         pbar.write(f"Error processing message {index}: {e}")
                         results[index] = None

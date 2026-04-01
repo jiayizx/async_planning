@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Any, Dict, List
 
 from google import genai
@@ -77,16 +78,32 @@ class GeminiLLM(BaseLLM):
                 )
         return system_text, contents
 
+    def _call_with_retry(self, fn, max_retries: int = 5, base_wait: float = 5.0):
+        """Call fn(), retrying on 503/429 with exponential backoff."""
+        wait = base_wait
+        for attempt in range(max_retries):
+            try:
+                return fn()
+            except Exception as e:
+                msg = str(e)
+                is_retryable = "503" in msg or "UNAVAILABLE" in msg or "429" in msg or "RESOURCE_EXHAUSTED" in msg
+                if is_retryable and attempt < max_retries - 1:
+                    print(f"  [gemini retry {attempt+1}/{max_retries-1}] {msg[:80]} — waiting {wait:.0f}s")
+                    time.sleep(wait)
+                    wait = min(wait * 2, 60.0)
+                else:
+                    raise
+
     def _chat(self, messages: List[Dict[str, str]]) -> str:
         system_text, contents = self._build_contents(messages)
         extra = {"system_instruction": system_text} if system_text else {}
         config = self._build_gemini_config(extra)
 
-        response = self.client.models.generate_content(
+        response = self._call_with_retry(lambda: self.client.models.generate_content(
             model=self.model_name,
             contents=contents,
             config=config,
-        )
+        ))
         # self._log_usage(response)
         return response.text
 
@@ -104,10 +121,10 @@ class GeminiLLM(BaseLLM):
             extra["system_instruction"] = system_text
         config = self._build_gemini_config(extra)
 
-        response = self.client.models.generate_content(
+        response = self._call_with_retry(lambda: self.client.models.generate_content(
             model=self.model_name,
             contents=contents,
             config=config,
-        )
+        ))
         # self._log_usage(response)
         return response.text
