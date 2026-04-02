@@ -15,6 +15,7 @@ GPT_MODELS_MAPPING = {
     "openai/gpt-4.1-mini": "gpt-4.1-mini",  # gpt-4.1-mini-2025-04-14
     "openai/gpt-4.1": "gpt-4.1",  # gpt-4.1-2025-04-14
     "openai/gpt-5-mini": "gpt-5-mini",
+    "openai/gpt-5": "gpt-5",
 
     # OpenAI reasoning models
     "openai/o1-mini": "o1-mini",
@@ -37,16 +38,26 @@ class OpenAILLM(BaseLLM):
 
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-        # Handle o3/o4 models that don't support temperature and top_p
-        if "o3" in self.model_name or "o4" in self.model_name or "gpt-5" in self.model_name:
-            # Remove temperature and top_p for o3/o4 models
+        # Track models that require max_completion_tokens (not max_tokens)
+        self._use_max_completion_tokens = any(
+            x in self.model_name for x in ("o3", "o4", "gpt-5")
+        )
+        if self._use_max_completion_tokens:
+            # Remove temperature and top_p for these models
             self.config.pop("temperature", None)
             self.config.pop("top_p", None)
+            # Map max_tokens → max_completion_tokens at init
             if "max_tokens" in self.config:
-                self.config.update({"max_completion_tokens": self.config.pop("max_tokens")})
+                self.config["max_completion_tokens"] = self.config.pop("max_tokens")
             if "reasoning_effort" not in self.config:
                 self.config["reasoning_effort"] = "low"
 
+    def _api_kwargs(self) -> Dict[str, Any]:
+        """Config for API calls. Converts max_tokens → max_completion_tokens at call time."""
+        kwargs = dict(self.config)
+        if self._use_max_completion_tokens and "max_tokens" in kwargs:
+            kwargs["max_completion_tokens"] = kwargs.pop("max_tokens")
+        return kwargs
 
     @staticmethod
     def _is_quota_exceeded(e: openai.RateLimitError) -> bool:
@@ -61,7 +72,7 @@ class OpenAILLM(BaseLLM):
                 response = self.client.chat.completions.create(
                     model=self.model_name,
                     messages=messages,
-                    **self.config,
+                    **self._api_kwargs(),
                 )
                 return response.choices[0].message.content
             except openai.RateLimitError as e:
@@ -84,7 +95,7 @@ class OpenAILLM(BaseLLM):
                     model=self.model_name,
                     messages=messages,
                     response_format=schema,
-                    **self.config,
+                    **self._api_kwargs(),
                 )
                 return completion.choices[0].message.content
             except openai.RateLimitError as e:
