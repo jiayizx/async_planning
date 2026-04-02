@@ -1,0 +1,35 @@
+(define (problem robotouille_problem)
+    (:domain robotouille)
+    (:objects
+        table_2 board_1 table_6 stove_1 stove_3 stove_4 table_5 table_4 sink_2 table_3 sink_1 stove_2 table_1 table_7 - station
+        chicken_1 bread_3 bread_2 cheese_1 bread_1 tomato_2 tomato_1 lettuce_1 - item
+        robot_1 - player
+    )
+    (:init
+        (istable table_2) (isboard board_1) (istable table_6) (isstove stove_1) (isstove stove_3) (isstove stove_4) (istable table_5) (istable table_4) (issink sink_2) (istable table_3) (issink sink_1) (isstove stove_2) (istable table_1) (istable table_7)
+        (isrobot robot_1)
+        (ischicken chicken_1) (isbread bread_3) (isbread bread_2) (ischeese cheese_1) (isbread bread_1) (istomato tomato_2) (istomato tomato_1) (islettuce lettuce_1)
+        (iscookable chicken_1) (iscuttable tomato_2) (iscuttable tomato_1) (iscuttable lettuce_1)
+        (item-free chicken_1) (item-free bread_3) (item-free bread_2) (item-free cheese_1) (item-free bread_1) (item-free tomato_2) (item-free tomato_1) (item-free lettuce_1)
+        (loc robot_1 table_2)
+        (has robot_1 bread_1)
+        (on chicken_1 board_1) (at chicken_1 board_1) (clear chicken_1)
+        (on bread_3 table_6) (at bread_3 table_6) (clear bread_3)
+        (on bread_2 stove_3) (at bread_2 stove_3) (clear bread_2)
+        (on cheese_1 sink_1) (at cheese_1 sink_1) (clear cheese_1)
+        (on tomato_2 sink_2) (at tomato_2 sink_2) (clear tomato_2)
+        (on tomato_1 stove_1) (at tomato_1 stove_1) (clear tomato_1)
+        (on lettuce_1 table_2) (at lettuce_1 table_2) (clear lettuce_1)
+        (vacant board_1) (vacant table_6) (vacant stove_1) (vacant stove_3) (vacant stove_4) (vacant table_5) (vacant table_4) (vacant sink_2) (vacant table_3) (vacant sink_1) (vacant stove_2) (vacant table_1) (vacant table_7)
+        (empty table_5) (empty table_4) (empty table_3) (empty stove_2) (empty table_1) (empty table_7)
+    )
+    (:goal (and
+        (on bread_1 table_2)
+        (iscooked chicken_1)
+        (at chicken_1 table_2)
+        (iscut lettuce_1)
+        (at lettuce_1 table_2)
+        (at bread_2 table_2)
+        (clear bread_2)
+    ))
+)

@@ -235,6 +235,9 @@ def simulate_plan(
         args = tokens[1:]
         schema = actions.get(action_name)
         if schema is None:
+            # wait / noop ticks inserted by the linearizer have no PDDL schema — skip
+            if action_name in ("wait", "noop", "no-op"):
+                continue
             return False, f"Step {step_idx}: unknown action '{action_name}'"
         if len(args) != len(schema.params):
             return False, (
@@ -324,10 +327,19 @@ _PDDL_TO_ENV_ACTION = {
     "place": "place-item",
     "cook": "cook",
     "cut": "cut",
+    "cut-continue": "cut",   # 2nd of 3 required cut actions (RepetitiveEffect)
+    "cut-finish": "cut",     # 3rd of 3 required cut actions (RepetitiveEffect)
     "fry": "fry",
     "fry_cut_item": "fry",
     "stack": "stack",
     "unstack": "unstack",
+    # Soup / container actions
+    "pick-up-container": "pick-up-container",
+    "place-container": "place-container",
+    "fill-pot": "fill-pot",      # special: meal arg is dropped (water created dynamically)
+    "boil-water": "boil-water",
+    "add-to": "add-to",
+    "fill-bowl": "fill-bowl",
 }
 
 # PDDL actions that map to a "null" game engine step (just advance the clock).
@@ -336,6 +348,7 @@ _PDDL_TO_ENV_ACTION = {
 _NULL_PDDL_ACTION_PREFIXES: tuple[str, ...] = (
     "cook-tick", "cut-tick", "fry-tick", "wait",
     "cook-step", "cut-step", "fry-step",
+    "fill-pot-tick", "boil-water-tick",
 )
 
 
@@ -356,16 +369,29 @@ def _build_name_map(
 ) -> dict[str, str]:
     """Build a mapping from LLM's PDDL object names to builder's object names.
 
-    Uses identity predicates (istable, isbread, etc.) to match entities
-    of the same sub-type, then aligns by order within each sub-type.
+    Two-phase approach:
+      1. Map non-station objects (items, players) by order within subtype —
+         reliable because LLM usually models all items and in the right count.
+      2. Map stations semantically: use (at item station) facts in :init to
+         anchor each PDDL station to the game station co-located with the
+         item we already resolved in phase 1.  This avoids the order-based
+         mismatch that occurs when the LLM models fewer stations than the game
+         has (e.g. 1 stove out of 4), causing the name_map to point to the
+         wrong physical station.
+      3. Fall back to order-based for any stations still unmapped.
     """
-    # Builder: group names by base type (strip digits)
+    # Builder: group names by base type (strip digits), sorted by (x, y)
     builder_by_subtype: dict[str, list[str]] = {}
     for field in ("stations", "items", "players", "containers", "meals"):
         for entity in sorted(builder_env.get(field, []),
                              key=lambda e: (e.get("x", 0), e.get("y", 0))):
             base = _strip_digits(entity["name"].lower())
             builder_by_subtype.setdefault(base, []).append(entity["name"].lower())
+
+    # Station subtypes present in this scenario (e.g. {table, stove, board, sink})
+    station_subtypes: set[str] = {
+        _strip_digits(e["name"].lower()) for e in builder_env.get("stations", [])
+    }
 
     # Capability predicates that look like identity predicates but aren't
     _CAPABILITY_SUBTYPES = {
@@ -378,16 +404,16 @@ def _build_name_map(
     llm_by_subtype: dict[str, list[str]] = {}
     all_llm_names: set[str] = set()
 
-    # Collect all LLM object names from (:objects)
+    # Collect all LLM object names from (:objects).
+    # Handles both multi-line ("name - type\n") and single-line formats
+    # ("name1 name2 - type1 name3 - type2") by scanning for "words - word" groups.
     obj_match = re.search(r"\(:objects\s+(.*?)\)", problem_pddl, re.DOTALL | re.IGNORECASE)
     if obj_match:
-        for line in obj_match.group(1).splitlines():
-            line = line.strip().rstrip(";").strip()
-            if not line or line.startswith(";"):
-                continue
-            parts = re.split(r"\s*-\s*", line)
-            if len(parts) == 2:
-                for n in parts[0].split():
+        obj_text = obj_match.group(1)
+        for seg in re.finditer(r"((?:\w[\w-]*\s+)+)-\s*\w[\w-]*", obj_text):
+            for n in seg.group(1).split():
+                n = n.strip().rstrip(";")
+                if n and not n.startswith(";"):
                     all_llm_names.add(n.lower())
 
     def _num_suffix(name: str) -> int:
@@ -404,17 +430,148 @@ def _build_name_map(
             if obj_name in all_llm_names:
                 llm_by_subtype.setdefault(subtype, []).append(obj_name)
 
-    # Sort both sides by numeric suffix for stable alignment
+    # ── Spatial lookups ──────────────────────────────────────────────────
+    # (x, y) → game station name
+    xy_to_station: dict[tuple[int, int], str] = {
+        (e["x"], e["y"]): e["name"].lower()
+        for e in builder_env.get("stations", [])
+    }
+    # game station name → (x, y)
+    station_to_xy: dict[str, tuple[int, int]] = {
+        e["name"].lower(): (e["x"], e["y"])
+        for e in builder_env.get("stations", [])
+    }
+    # game item/container name → (x, y)
+    game_obj_xy: dict[str, tuple[int, int]] = {}
+    for field in ("items", "containers"):
+        for e in builder_env.get(field, []):
+            game_obj_xy[e["name"].lower()] = (e["x"], e["y"])
+    # positions occupied by items in the real game
+    occupied_positions: set[tuple[int, int]] = set(game_obj_xy.values())
+
+    # ── Phase 1: map items/players via stripped-name direct match ────────
+    # Items don't have is<type> identity predicates, so use the reliable
+    # stripped-name approach: chicken_1 → chicken1 (removes underscore).
     name_map: dict[str, str] = {}
+    for llm_name in sorted(all_llm_names):
+        stripped = llm_name.replace("_", "")
+        for field in ("items", "players", "containers", "meals"):
+            for entity in builder_env.get(field, []):
+                if entity["name"].lower() == stripped:
+                    name_map[llm_name] = entity["name"].lower()
+                    break
+            if llm_name in name_map:
+                break
+
+    # Also map any non-station subtypes found via is<type> predicates (order-based)
     for subtype, llm_names in llm_by_subtype.items():
+        if subtype in station_subtypes:
+            continue
         llm_sorted = sorted(llm_names, key=_num_suffix)
         builder_sorted = sorted(builder_by_subtype.get(subtype, []), key=_num_suffix)
         for i, llm_name in enumerate(llm_sorted):
-            if i < len(builder_sorted):
+            if llm_name not in name_map and i < len(builder_sorted):
                 name_map[llm_name] = builder_sorted[i]
-            # Don't map to self here; let the fallback handle unmatched names
 
-    # Fallback: any unmapped LLM names, try direct match or stripped match
+    # ── Phase 2: map stations via item-position anchoring ────────────────
+    # If PDDL :init says (at item_X station_Y), and we know where item_X is
+    # in the game, then station_Y must be the game station at that location.
+    for atom in llm_init:
+        if atom[0] in ("at", "on-surface") and len(atom) == 3:
+            pddl_item, pddl_station = atom[1], atom[2]
+            if pddl_station in name_map:
+                continue  # already anchored
+            game_item = name_map.get(pddl_item)
+            if game_item is None:
+                continue
+            xy = game_obj_xy.get(game_item)
+            if xy is None:
+                continue
+            game_station = xy_to_station.get(xy)
+            if game_station:
+                name_map[pddl_station] = game_station
+
+    # Also anchor via (container_at container_X station_Y) — same logic as items.
+    for atom in llm_init:
+        if atom[0] == "container_at" and len(atom) == 3:
+            pddl_container, pddl_station = atom[1], atom[2]
+            if pddl_station in name_map:
+                continue
+            game_container = name_map.get(pddl_container)
+            if game_container is None:
+                continue
+            xy = game_obj_xy.get(game_container)
+            if xy is None:
+                continue
+            game_station = xy_to_station.get(xy)
+            if game_station:
+                name_map[pddl_station] = game_station
+
+    # Also anchor from (loc player_N station_N) in :init.
+    # The player's xy in builder_env may not exactly match a station cell, so
+    # we pick the nearest game station to the player's recorded position.
+    player_xy_map: dict[str, tuple[int, int]] = {
+        e["name"].lower(): (e["x"], e["y"])
+        for e in builder_env.get("players", [])
+    }
+    for atom in llm_init:
+        if atom[0] == "loc" and len(atom) == 3:
+            pddl_player, pddl_station = atom[1], atom[2]
+            if pddl_station in name_map:
+                continue
+            game_player = name_map.get(pddl_player)
+            if game_player is None:
+                continue
+            pxy = player_xy_map.get(game_player)
+            if pxy is None:
+                continue
+            stations = builder_env.get("stations", [])
+            if not stations:
+                continue
+            nearest = min(
+                stations,
+                key=lambda s: (s["x"] - pxy[0]) ** 2 + (s["y"] - pxy[1]) ** 2,
+            )
+            candidate = nearest["name"].lower()
+            # Only use this anchor if the station isn't already mapped to another
+            if candidate not in name_map.values():
+                name_map[pddl_station] = candidate
+
+    # ── Phase 3: smart fallback for unmapped stations ────────────────────
+    # For stations the LLM marks as (empty ...) in :init, prefer available
+    # game stations that are actually empty (no item at their position).
+    # For the rest, fall back to numeric-order alignment.
+    pddl_empty_stations: set[str] = {
+        atom[1] for atom in llm_init
+        if atom[0] == "empty" and len(atom) == 2
+    }
+
+    for subtype in station_subtypes:
+        llm_names = llm_by_subtype.get(subtype, [])
+        unmapped = [n for n in llm_names if n not in name_map]
+        if not unmapped:
+            continue
+        used = set(name_map.values())
+        available: list[str] = [
+            n for n in sorted(builder_by_subtype.get(subtype, []), key=_num_suffix)
+            if n not in used
+        ]
+        for llm_name in sorted(unmapped, key=_num_suffix):
+            if not available:
+                break
+            if llm_name in pddl_empty_stations:
+                # Prefer a game station that has no item on it
+                truly_empty = [
+                    n for n in available
+                    if station_to_xy.get(n) not in occupied_positions
+                ]
+                chosen = truly_empty[0] if truly_empty else available[0]
+            else:
+                chosen = available[0]
+            name_map[llm_name] = chosen
+            available.remove(chosen)
+
+    # ── Fallback: direct / stripped-name match for anything still unmapped
     for llm_name in all_llm_names:
         if llm_name not in name_map:
             stripped = llm_name.replace("_", "")
@@ -467,6 +624,9 @@ def simulate_with_env(
         )
         _, builder_env = builder.build_problem(copy.deepcopy(original_json))
         state = build_state_fn(domain_json, builder_env)
+        # Fix: State.initialize() uses mutable default arg `special_effects=[]`,
+        # so special effects leak across scenario runs. Reset to a clean list.
+        state.special_effects = []
     except Exception as e:
         return False, f"Failed to build env state: {e}"
 
@@ -496,6 +656,35 @@ def simulate_with_env(
 
         # Null actions (cooking-tick, wait, etc.) just advance the game clock
         if _is_null_pddl_action(pddl_action_name):
+            # cut-tick: the game engine's cut uses RepetitiveEffect (fires only when the
+            # cut action is performed, not on passive ticks).  Re-execute the game cut
+            # action with the item's current board binding so the repetition count advances.
+            if pddl_action_name.startswith("cut-tick") and pddl_args:
+                item_name = name_map.get(pddl_args[0], pddl_args[0].replace("_", ""))
+                cut_game_action = env_actions_by_name.get("cut")
+                if cut_game_action is not None:
+                    cut_bindings = state.actions.get(cut_game_action, [])
+                    executed = False
+                    for binding in cut_bindings:
+                        binding_obj_names = [v.name.lower() for v in binding.values()]
+                        if item_name in binding_obj_names and cut_game_action.is_valid(state, binding):
+                            try:
+                                done = state.step([(cut_game_action, binding)])
+                                if done:
+                                    return True, ""
+                            except Exception as e:
+                                return False, f"Step {step_idx} ({action_str}): cut re-execution failed: {e}"
+                            executed = True
+                            break
+                    if not executed:
+                        # Player has moved away or item was picked up; fall back to null tick
+                        try:
+                            done = state.step([])
+                            if done:
+                                return True, ""
+                        except Exception as e:
+                            return False, f"Step {step_idx} ({action_str}): null tick failed: {e}"
+                    continue
             try:
                 done = state.step([])
                 if done:
@@ -516,6 +705,63 @@ def simulate_with_env(
         # Fallback: strip underscores (chicken_1 → chicken1)
         mapped_args = [name_map.get(a, a.replace("_", "")) for a in pddl_args]
 
+        # fill-pot: game action takes (player, container, station) — no meal arg.
+        # PDDL models it as (player, container, meal, station); drop index 2 (meal).
+        if pddl_action_name == "fill-pot" and len(mapped_args) == 4:
+            mapped_args = [mapped_args[0], mapped_args[1], mapped_args[3]]
+
+        # For actions that use a water/meal arg (boil-water, add-to, fill-bowl),
+        # resolve the PDDL meal name just-in-time every call.  Water is created
+        # dynamically by fill-pot and may change across cycles (water1→water2…).
+        # We always re-look up the meal currently inside the relevant container.
+        if pddl_action_name in ("boil-water", "add-to", "fill-bowl"):
+            # Refresh env_objects_by_name with any new dynamic objects
+            for obj in state.objects:
+                env_objects_by_name[obj.name.lower()] = obj
+
+            # Index of the pot container in mapped_args:
+            #   boil-water(p, c_pot, m, s)      → pot at idx 1, meal at idx 2
+            #   add-to(p, i, m, c_pot, s)        → pot at idx 3, meal at idx 2
+            #   fill-bowl(p, c_bowl, c_pot, m, s)→ pot at idx 2, meal at idx 3
+            if pddl_action_name == "boil-water":
+                pot_arg_idx, meal_arg_idx = 1, 2
+            elif pddl_action_name == "add-to":
+                pot_arg_idx, meal_arg_idx = 3, 2
+            else:  # fill-bowl
+                pot_arg_idx, meal_arg_idx = 2, 3
+
+            if meal_arg_idx < len(mapped_args) and pot_arg_idx < len(mapped_args):
+                pot_game_name = mapped_args[pot_arg_idx]
+                pot_game_obj = env_objects_by_name.get(pot_game_name)
+                pddl_meal_arg = pddl_args[meal_arg_idx]
+
+                resolved = None
+                if pot_game_obj is not None:
+                    # Find meal currently in(meal, pot) from state
+                    try:
+                        from backend.predicate import Predicate as _P
+                        in_pred_defs = [p for p in state.domain.predicates if p.name == "in"]
+                        if in_pred_defs:
+                            for obj in state.objects:
+                                if getattr(getattr(obj, "type", None), "name", "") != "meal":
+                                    continue
+                                in_pred = _P().initialize("in", in_pred_defs[0].types, [obj, pot_game_obj])
+                                if state.get_predicate_value(in_pred):
+                                    resolved = obj.name.lower()
+                                    break
+                    except Exception:
+                        pass
+                if resolved is None:
+                    # Fallback: any meal object in state
+                    for obj in state.objects:
+                        if getattr(getattr(obj, "type", None), "name", "") == "meal":
+                            resolved = obj.name.lower()
+                            break
+                if resolved is not None:
+                    # Always update: meal may have changed since last fill-pot cycle
+                    name_map[pddl_meal_arg] = resolved
+                    mapped_args[meal_arg_idx] = resolved
+
         # Find matching valid action binding
         valid_bindings = state.actions.get(env_action, [])
         matched_binding = None
@@ -530,7 +776,28 @@ def simulate_with_env(
 
         if matched_binding is None:
             if name_matched:
-                reason = "preconditions not met"
+                # Identify which specific preconditions failed for the closest binding
+                failed_precons: list[str] = []
+                for binding in valid_bindings:
+                    binding_obj_names = [v.name.lower() for v in binding.values()]
+                    if set(mapped_args) == set(binding_obj_names) and len(mapped_args) == len(binding_obj_names):
+                        try:
+                            from backend.predicate import Predicate as _Pred
+                            for precon, is_true in env_action.precons.items():
+                                pred_args = [binding[p.name] for p in precon.params]
+                                pred = _Pred().initialize(precon.name, precon.types, pred_args)
+                                actual = state.get_predicate_value(pred)
+                                if actual is not is_true:
+                                    arg_names = [a.name for a in pred_args]
+                                    expected = "" if is_true else "NOT "
+                                    failed_precons.append(f"{expected}({precon.name} {' '.join(arg_names)})")
+                        except Exception:
+                            pass
+                        break
+                if failed_precons:
+                    reason = "preconditions not met: " + ", ".join(failed_precons)
+                else:
+                    reason = "preconditions not met"
             else:
                 reason = "no matching object binding found"
             return False, (
