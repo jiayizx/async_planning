@@ -24,7 +24,11 @@ def direction_to_str(d: list | tuple) -> str:
     return DIRECTION_MAP.get(tuple(d), str(d))
 
 
-def convert_task(task: dict) -> str:
+def convert_task(task: dict, *, include_coordinates: bool = True) -> str:
+    """Build NL from a task dict (or env under original_json).
+
+    If include_coordinates is False, omit grid (x, y) from player, stations, and items.
+    """
     data = task.get("original_json", task)
 
     w = data["width"]
@@ -39,10 +43,14 @@ def convert_task(task: dict) -> str:
     pdir = direction_to_str(player.get("direction", [0, -1]))
 
     lines = []
+    if include_coordinates:
+        pos_clause = f"You are currently at ({px}, {py}) facing {pdir}."
+    else:
+        pos_clause = f"You are at your starting position facing {pdir}."
     lines.append(
-        f"You are a chef in a {w}x{h} kitchen. "
-        f"You are currently at ({px}, {py}) facing {pdir}. "
-        f"You can either move up/down/left/right each step."
+        f"You are a robot in a kitchen environment. The objects in the kitchen and your goal are described. "
+        f"You are currently in a {w}x{h} kitchen. "
+        f"{pos_clause} "
     )
     lines.append("")
 
@@ -61,7 +69,10 @@ def convert_task(task: dict) -> str:
 
     lines.append(f"There are {len(stations)} stations:")
     for s, label in zip(stations, station_labels):
-        lines.append(f"- {label} at ({s['x']}, {s['y']})")
+        if include_coordinates:
+            lines.append(f"- {label} at ({s['x']}, {s['y']})")
+        else:
+            lines.append(f"- {label}")
     lines.append("")
 
     # --- Items ---
@@ -76,7 +87,13 @@ def convert_task(task: dict) -> str:
     lines.append(f"There are {len(items)} items:")
     for item, label in zip(items, item_labels):
         loc_label = station_at.get((item["x"], item["y"]), f'({item["x"]}, {item["y"]})')
-        lines.append(f"- {label} at ({item['x']}, {item['y']}) on {loc_label}")
+        if include_coordinates:
+            lines.append(f"- {label} at ({item['x']}, {item['y']}) on {loc_label}")
+        else:
+            if str(loc_label).startswith("("):
+                lines.append(f"- {label} (location unspecified)")
+            else:
+                lines.append(f"- {label} on {loc_label}")
     lines.append("")
 
     # --- Requirements ---
@@ -211,7 +228,13 @@ def main():
         default="data/robotouille_single_agent_async.json",
         help="Output JSON file path",
     )
+    parser.add_argument(
+        "--no-coordinates",
+        default=True,
+        help="Omit grid (x, y) coordinates from the NL; use station names only",
+    )
     args = parser.parse_args()
+    include_coordinates = not args.no_coordinates # default is True
 
     path = Path(args.env_json_path)
     if not path.is_absolute():
@@ -237,7 +260,7 @@ def main():
     results = []
     for idx, task in enumerate(tasks):
         tid = task.get("id", "unknown")
-        nl = convert_task(task)
+        nl = convert_task(task, include_coordinates=include_coordinates)
         results.append({"id": tid, "original_json": task.get("original_json", task), "natural_language": nl})
         print(f"=== {idx} / {len(tasks)} ===")
         print(nl)
