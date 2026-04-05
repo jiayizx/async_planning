@@ -178,7 +178,12 @@ def _load_records(data_path: Path) -> list[dict]:
     return records
 
 
-def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
+def _expand_with_seeds(
+    records: list[dict],
+    seeds: list[int],
+    *,
+    include_coordinates: bool = True,
+) -> list[dict]:
     """Expand records by applying each seed via randomize_environment.
 
     Each (record, seed) pair produces one entry. If seeds is empty, returns
@@ -203,7 +208,9 @@ def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
             new_rec["id"] = f"{rec['id']}_seed{seed}"
             # Rebuild NL prompt from randomized env
             from src.gen_data.robotouille.data_transform_regex import convert_task
-            new_rec["natural_language"] = convert_task(new_rec["original_json"])
+            new_rec["natural_language"] = convert_task(
+                new_rec["original_json"], include_coordinates=include_coordinates
+            )
             expanded.append(new_rec)
     return expanded
 
@@ -843,6 +850,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--llm-retries", type=int, default=2)
     parser.add_argument("--seeds", type=int, nargs="*", default=[],
                         help="Seeds for procedural randomization. If omitted, use base layout only.")
+    parser.add_argument(
+        "--no-coordinates",
+        action="store_true",
+        help="When using --seeds, omit grid (x, y) from regenerated natural_language.",
+    )
     return parser.parse_args()
 
 
@@ -857,7 +869,11 @@ def main() -> None:
     print(f"Loaded {len(records)} records from {data_path}")
 
     if args.seeds:
-        records = _expand_with_seeds(records, args.seeds)
+        records = _expand_with_seeds(
+            records,
+            args.seeds,
+            include_coordinates=not args.no_coordinates,
+        )
         print(f"Expanded to {len(records)} records with seeds {args.seeds}")
 
     os.makedirs(args.save_path, exist_ok=True)

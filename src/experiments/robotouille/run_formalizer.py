@@ -1005,7 +1005,12 @@ def _load_records(data_path: Path) -> list[dict]:
     return records
 
 
-def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
+def _expand_with_seeds(
+    records: list[dict],
+    seeds: list[int],
+    *,
+    include_coordinates: bool = True,
+) -> list[dict]:
     """Expand records by applying each seed, rebuilding natural_language."""
     if not seeds:
         return records
@@ -1025,7 +1030,9 @@ def _expand_with_seeds(records: list[dict], seeds: list[int]) -> list[dict]:
             )
             new_rec["seed"] = seed
             new_rec["id"] = f"{rec['id']}_seed{seed}"
-            new_rec["natural_language"] = convert_task(new_rec["original_json"])
+            new_rec["natural_language"] = convert_task(
+                new_rec["original_json"], include_coordinates=include_coordinates
+            )
             expanded.append(new_rec)
     return expanded
 
@@ -1485,6 +1492,11 @@ def parse_args() -> argparse.Namespace:
         help="Seeds for procedural randomization. If omitted, use base layout only.",
     )
     parser.add_argument(
+        "--no-coordinates",
+        action="store_true",
+        help="When using --seeds, omit grid (x, y) from regenerated natural_language.",
+    )
+    parser.add_argument(
         "--exclude-envs", type=str, nargs="*", default=[],
         dest="exclude_envs",
         help="Env ID prefixes to exclude (e.g. '5_potato_soup 6_onion_soup'). "
@@ -1517,7 +1529,11 @@ def main() -> None:
     print(f"Loaded {len(records)} records from {data_path}")
 
     if args.seeds:
-        records = _expand_with_seeds(records, args.seeds)
+        records = _expand_with_seeds(
+            records,
+            args.seeds,
+            include_coordinates=not args.no_coordinates,
+        )
         print(f"Expanded to {len(records)} records with seeds {args.seeds}")
 
     if args.exclude_envs:
