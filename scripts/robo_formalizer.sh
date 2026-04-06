@@ -22,9 +22,10 @@ GENERATE_DOMAIN="${GENERATE_DOMAIN:-true}" # true = PDDL 2.1 + OPTIC (with TFD f
 # Set EXCLUDE_SOUP=true to skip soup tasks (envs 5/6/7/8/9)
 EXCLUDE_SOUP="${EXCLUDE_SOUP:-false}"
 # Set SOUP_ONLY=true to run ONLY soup tasks (envs 5/6/7/8/9); overrides EXCLUDE_SOUP
-SOUP_ONLY="${SOUP_ONLY:-true}"
+SOUP_ONLY="${SOUP_ONLY:-false}"
 EFFECT_GOAL="${EFFECT_GOAL:-f}" # true = parameter-less constraints + effect goal; false = parameterized constraints + initial state goal
 NUM_SHOTS="${NUM_SHOTS:-0}"     # few-shot examples in system prompt (problem-only mode only)
+INPUT_MODE="${INPUT_MODE:-robo}" # json = annotated JSON + domain PDDL; nl = natural language + domain PDDL; robo = io-cot prompt + annotated JSON (no domain PDDL)
 # Solver is determined automatically by GENERATE_DOMAIN
 if [ "${GENERATE_DOMAIN}" = "true" ]; then
     SOLVER="optic"
@@ -45,6 +46,8 @@ if [ "${EFFECT_GOAL}" = "true" ]; then
 else
     SAVE_PATH="${SAVE_PATH:-results/robotouille/formalizer/${_MODEL_SLUG}}"
 fi
+# Append input mode suffix
+SAVE_PATH="${SAVE_PATH}_${INPUT_MODE}"
 
 EXTRA_ARGS=""
 if [ "${GENERATE_DOMAIN}" = "true" ]; then
@@ -54,9 +57,11 @@ if [ "${EFFECT_GOAL}" = "true" ]; then
     EXTRA_ARGS="${EXTRA_ARGS} --effect-goal"
 fi
 if [ "${SOUP_ONLY}" = "true" ]; then
-    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 0_ 1_ 2_ 3_ 4_"
+    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 3.1_ 0_ 1_ 2_ 3_ 4_"
 elif [ "${EXCLUDE_SOUP}" = "true" ]; then
-    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 5_ 6_ 7_ 8_ 9_"
+    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 3.1_ 5_ 6_ 7_ 8_ 9_"
+else
+    EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 3.1_"
 fi
 python -m src.experiments.robotouille.run_formalizer \
     --model-name "${MODEL_NAME}" \
@@ -71,5 +76,6 @@ python -m src.experiments.robotouille.run_formalizer \
     --history-mode "${HISTORY_MODE}" \
     --solver "${SOLVER}" \
     --num-shots "${NUM_SHOTS}" \
+    --input-mode "${INPUT_MODE}" \
     ${SEEDS:+--seeds ${SEEDS}} \
     ${EXTRA_ARGS}

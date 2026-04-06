@@ -208,14 +208,14 @@ def _build_prompt(
     facing = _direction_word(d)
     if include_coordinates:
         intro = (
-            f"You are a chef in a {width}x{height} kitchen. "
+            f"You are {player_name}, a chef in a {width}x{height} kitchen. "
             f"You are currently at ({player_entity['x']}, {player_entity['y']}) "
             f"facing {facing}. "
             f"You can move up/down/left/right one grid each step."
         )
     else:
         intro = (
-            f"You are a chef in a {width}x{height} kitchen. "
+            f"You are {player_name}, a chef in a {width}x{height} kitchen. "
             f"You are at your starting position facing {facing}. "
             f"You can move up/down/left/right one grid each step."
         )

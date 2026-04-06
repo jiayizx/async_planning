@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import Path
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -220,6 +221,7 @@ from src.llms.prompts import (
     ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT,
     ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD,
     ROBOTOUILLE_TEMPORAL_USER_TEMPLATE,
+    ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO,
 )
 
 
@@ -390,31 +392,116 @@ def build_robotouille_problem_messages(
     ]
 
 
+_ROBO_PROMPT_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "baselines" / "robotouille" / "agents" / "prompt_builder" / "prompts" / "IO" / "1.1.0-io-cot.yml"
+)
+_DOMAIN_JSON_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "baselines" / "robotouille" / "domain" / "robotouille.json"
+)
+
+
+def _load_domain_json_summary() -> str:
+    """Return a compact summary of domain/robotouille.json.
+
+    Includes: object types, all predicate signatures + language descriptors,
+    and all action language descriptions.  This tells the LLM the complete
+    type system (station/item/player/container/meal) and vocabulary so it
+    can generate correct PDDL objects and predicates for every task including
+    soup (container/meal types).
+    """
+    data = json.loads(_DOMAIN_JSON_PATH.read_text())
+    lines = []
+    lines.append(f"Object types: {', '.join(data['object_types'])}")
+    lines.append("")
+    lines.append("Predicates (name(param_types) → natural language meaning):")
+    for p in data["predicate_defs"]:
+        sig = f"{p['name']}({', '.join(p['param_types'])})"
+        descs = " | ".join(p["language_descriptors"].values())
+        lines.append(f"  {sig}: {descs}")
+    lines.append("")
+    lines.append("Actions (natural language description):")
+    for a in data["action_defs"]:
+        lines.append(f"  {a['language_description']}")
+    return "\n".join(lines)
+
+
+def _load_robo_instructions() -> str:
+    """Load system + instructions text from the Robotouille io-cot prompt YAML."""
+    try:
+        import yaml
+        data = yaml.safe_load(_ROBO_PROMPT_PATH.read_text())
+        parts = []
+        if data.get("system"):
+            parts.append(data["system"].strip())
+        if data.get("instructions"):
+            parts.append(data["instructions"].strip())
+        return "\n\n".join(parts)
+    except Exception:
+        # Fallback: read as plain text if yaml not available
+        return _ROBO_PROMPT_PATH.read_text()
+
+
 def build_robotouille_temporal_messages(
     original_json: dict,
     domain_pddl: str,
     effect_goal: bool = False,
+    input_mode: str = "json",
+    natural_language: str = "",
 ) -> list[dict[str, str]]:
     """Build chat messages for Robotouille PDDL 2.1 temporal (durative actions) generation.
 
-    effect_goal=True  → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT (parameterless, no :typing)
-    effect_goal=False → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD (parameterized, :typing)
-    domain_pddl       → reference STRIPS domain shown in the user message
+    effect_goal=True   → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT (parameterless, no :typing)
+    effect_goal=False  → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD (parameterized, :typing)
+    domain_pddl        → reference STRIPS domain shown in the user message (unused in 'robo' mode)
+    input_mode         → 'json': annotated JSON + domain PDDL reference;
+                         'nl': natural_language + domain PDDL reference;
+                         'robo': io-cot.yml instructions + annotated JSON (no domain PDDL)
+    natural_language   → NL description from dataset 'natural_language' field (used when input_mode='nl')
     """
     system_prompt = ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD
-    annotated = _annotate_robotouille_json(original_json)
     config = original_json.get("config", {})
     cook_time = config.get("cook_time", {}).get("default", 3)
     num_cuts = config.get("num_cuts", {}).get("default", 3)
     fry_time = config.get("fry_time", {}).get("default", 3)
-    annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
-    json_str = json.dumps(annotated, indent=2)
+
+    domain_json_section = _load_domain_json_summary()
+
+    if input_mode == "robo":
+        robo_instructions = _load_robo_instructions()
+        timing_note = f"Timing: cook_time={cook_time} steps per cook/fry, num_cuts={num_cuts} cuts required."
+        annotated = _annotate_robotouille_json(original_json)
+        annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
+        env_str = json.dumps(annotated, indent=2)
+        user_content = ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO.format(
+            robo_instructions=robo_instructions + "\n\n" + timing_note,
+            domain_json_section=domain_json_section,
+            original_json=env_str,
+        )
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content},
+        ]
+
+    if input_mode == "nl":
+        nl_section = f"## Natural Language Description\n\n{natural_language or '(no natural language description provided)'}\n\n"
+        env_str = f"cook_time={cook_time}, num_cuts={num_cuts}, fry_time={fry_time}"
+    else:  # json
+        nl_section = ""
+        annotated = _annotate_robotouille_json(original_json)
+        annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
+        env_str = json.dumps(annotated, indent=2)
+
+    user_content = ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
+        domain_pddl=domain_pddl,
+        domain_json_section=domain_json_section,
+        nl_section=nl_section,
+        original_json=env_str,
+    )
     return [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
-            domain_pddl=domain_pddl,
-            original_json=json_str,
-        )},
+        {"role": "user", "content": user_content},
     ]
 
 

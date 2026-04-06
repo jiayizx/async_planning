@@ -54,6 +54,7 @@ from src.method.nl_to_pddl import (
     parse_robotouille_problem_response,
     normalize_robotouille_problem_to_domain,
     _truncate_solver_error,
+    _annotate_robotouille_json,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 from src.evaluation.robotouille.eval import evaluate_record, summarize_eval
@@ -140,7 +141,7 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
     for fact in facts:
         toks = _re.findall(pat_obj, fact)
         stripped = fact.strip()
-        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ")):
+        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ") or stripped.startswith("(container_at ")):
             occupied.add(toks[-1])
 
     already_empty: set[str] = set()
@@ -1068,9 +1069,14 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     gold_data: list[dict] = []
 
     for rec in records:
+        orig = rec.get("original_json")
+        # annotated_json = original_json with pddl_name/station/atop/held_by/facing_station
+        # fields pre-computed by _annotate_robotouille_json (same as what JSON-mode sends to LLM)
         gold_data.append({
             "id": rec.get("id", "?"),
-            "original_json": rec.get("original_json"),
+            "original_json": orig,
+            "annotated_json": _annotate_robotouille_json(orig) if orig else None,
+            "natural_language": rec.get("natural_language"),
         })
 
     # Per-example mutable state
@@ -1086,7 +1092,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     if args.generate_domain:
         # PDDL 2.1 temporal path: LLM generates domain+problem with durative actions → OPTIC
         histories: list[list[dict]] = [
-            build_robotouille_temporal_messages(rec.get("original_json", {}), domain_pddl, effect_goal=args.effect_goal)
+            build_robotouille_temporal_messages(
+                rec.get("original_json", {}), domain_pddl,
+                effect_goal=args.effect_goal,
+                input_mode=args.input_mode,
+                natural_language=rec.get("natural_language", ""),
+            )
             for rec in records
         ]
         schema = PDDLResponse
@@ -1188,7 +1199,11 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     _e = sr.error.lower()
                     if "unreachable" in _e or "unsolvable" in _e:
                         error_types[i] = "planning_failure"
-                    elif "timeout" in _e or "timed out" in _e or "empty solver" in _e:
+                    elif (
+                        "timeout" in _e or "timed out" in _e or "empty solver" in _e
+                        # OPTIC search-progress output truncated = timeout (no "Solution Found")
+                        or ("solution found" not in _e and "b (" in sr.error)
+                    ):
                         error_types[i] = "solver_error"
                     else:
                         error_types[i] = "syntax_error"
@@ -1331,6 +1346,8 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
         rec = {
             "id": gold["id"],
             "original_json": gold.get("original_json"),
+            "annotated_json": gold.get("annotated_json"),
+            "natural_language": gold.get("natural_language"),
             "error_type": error_types[i],
             "error": errors[i] if errors[i] else None,
             "plan": plan,
@@ -1514,6 +1531,16 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_SOLVER,
         choices=["optic", "lama-first"],
         help="PDDL solver to use. 'lama-first' is faster for classical STRIPS domains (default).",
+    )
+    parser.add_argument(
+        "--input-mode",
+        default="json",
+        choices=["json", "nl", "robo"],
+        help=(
+            "Input representation: 'json' passes the annotated environment JSON + domain PDDL reference; "
+            "'nl' passes the natural_language field + domain PDDL reference; "
+            "'robo' replaces the domain PDDL with the Robotouille io-cot prompt + annotated JSON."
+        ),
     )
     return parser.parse_args()
 

@@ -1595,7 +1595,6 @@ Duration values come from `_timing` in the JSON:
 8. NO tick actions needed — cook/fry complete automatically when the durative action's duration ends.
    The OPTIC temporal plan will include start times and durations; the linearizer converts this to
    game engine calls automatically.
-
 Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
 """
 
@@ -1609,7 +1608,36 @@ Convert it to PDDL 2.1 temporal (durative actions) format as described in the ru
 {domain_pddl}
 ```
 
-## Environment JSON
+## Robotouille Type System and Vocabulary
+
+{domain_json_section}
+
+{nl_section}\
+## Environment
+
+```
+{original_json}
+```
+
+Generate the PDDL 2.1 temporal (durative actions) domain and problem for this Robotouille environment.
+"""
+
+ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO = """\
+## Robotouille Environment Description
+
+The following describes the Robotouille kitchen environment, its rules, and available actions. \
+Use this as the reference for generating valid PDDL 2.1 temporal (durative actions) domain and problem files.
+
+{robo_instructions}
+
+## Robotouille Type System and Vocabulary
+
+{domain_json_section}
+
+## Environment (JSON)
+
+The following JSON describes the specific kitchen instance to formalize. \
+Each entity has a `pddl_name` field — use these exact names as PDDL objects.
 
 ```json
 {original_json}
