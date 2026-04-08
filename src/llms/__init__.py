@@ -31,10 +31,16 @@ def get_model(
 ) -> BaseLLM:
     """Get a model instance."""
     if "claude" in model_name:
-        if os.environ.get("ANTHROPIC_API_KEY") is None:
-            print("ANTHROPIC_API_KEY is not set, falling back to openrouter")
-        else:
+        has_anthropic_key = os.environ.get("ANTHROPIC_API_KEY") is not None
+        has_bedrock_bearer = bool(os.environ.get("AWS_BEARER_TOKEN_BEDROCK"))
+        if has_anthropic_key or has_bedrock_bearer:
             model_class = LLM_REGISTRY["claude"]
+        else:
+            print(
+                "ANTHROPIC_API_KEY and AWS_BEARER_TOKEN_BEDROCK are not set, "
+                "falling back to openrouter"
+            )
+            model_class = LLM_REGISTRY["openrouter"]
     elif "openai" in model_name:
         model_class = LLM_REGISTRY["openai"]
     elif "gemini" in model_name:

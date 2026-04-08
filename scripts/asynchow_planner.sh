@@ -24,7 +24,8 @@ MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 # done
 
 
-MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+# MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-claude-haiku-4-5}"
 python -m src.experiments.run_baselines \
     --model-name $MODEL_NAME \
     --temperature $TEMPERATURE \
