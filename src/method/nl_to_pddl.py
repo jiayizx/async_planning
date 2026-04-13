@@ -443,6 +443,119 @@ def _load_robo_instructions() -> str:
         return _ROBO_PROMPT_PATH.read_text()
 
 
+def _compute_required_objects(annotated: dict) -> dict:
+    """Compute the minimal set of stations and items needed to solve the task.
+
+    Returns a dict with keys:
+      "stations": list of pddl_name strings
+      "items":    list of pddl_name strings
+      "containers": list of pddl_name strings (soup tasks)
+      "meals":    list of pddl_name strings (soup tasks)
+
+    Strategy:
+      Items   = goal items + robot-held items (needed to complete the task)
+      Stations = robot start + each required item's start station + goal destination
+                 stations + action-type stations (stove/board/fryer/sink as needed)
+                 + 2 empty staging tables (for intermediate placement)
+    """
+    goal = annotated.get("goal", [])
+    players = annotated.get("players", [])
+    items = annotated.get("items", [])
+    stations = annotated.get("stations", [])
+    containers = annotated.get("containers", [])
+
+    # --- Required items ---
+    goal_item_names: set[str] = set()
+    goal_station_names: set[str] = set()
+    for g in goal:
+        pddl_args = g.get("pddl_args", [])
+        pred = g.get("predicate", "")
+        # item predicates: first arg is item
+        if pred in ("item_on", "item_at", "iscooked", "iscut", "isfried", "clear", "addedto"):
+            if pddl_args:
+                goal_item_names.add(pddl_args[0])
+        # station predicates: second arg is station for item_on/item_at
+        if pred in ("item_on", "item_at"):
+            if len(pddl_args) >= 2:
+                goal_station_names.add(pddl_args[1])
+        # container_at: second arg is station
+        if pred == "container_at":
+            if len(pddl_args) >= 2:
+                goal_station_names.add(pddl_args[1])
+
+    # robot-held items
+    held_item_names: set[str] = set()
+    for p in players:
+        for h in p.get("holding", []):
+            held_item_names.add(h)
+
+    required_item_names = goal_item_names | held_item_names
+
+    # --- Required stations ---
+    required_station_names: set[str] = set()
+
+    # robot start stations
+    for p in players:
+        required_station_names.add(p.get("facing_station", ""))
+
+    # each required item's start station
+    item_map = {i["pddl_name"]: i for i in items}
+    for iname in required_item_names:
+        item = item_map.get(iname)
+        if item and not item.get("held_by"):
+            required_station_names.add(item.get("station", ""))
+
+    # goal destination stations
+    required_station_names |= goal_station_names
+
+    # determine which action-type stations are needed
+    needs_cook  = any(g.get("predicate") == "iscooked" for g in goal)
+    needs_cut   = any(g.get("predicate") == "iscut"    for g in goal)
+    needs_fry   = any(g.get("predicate") == "isfried"  for g in goal)
+    needs_soup  = bool(containers)  # soup task
+
+    station_map  = {s["pddl_name"]: s for s in stations}
+    stove_names  = [s["pddl_name"] for s in stations if s["name"] == "stove"]
+    board_names  = [s["pddl_name"] for s in stations if s["name"] == "board"]
+    fryer_names  = [s["pddl_name"] for s in stations if s["name"] == "fryer"]
+    sink_names   = [s["pddl_name"] for s in stations if s["name"] == "sink"]
+
+    if needs_cook and not any(s in required_station_names for s in stove_names):
+        if stove_names:
+            required_station_names.add(stove_names[0])
+    if needs_cut and not any(s in required_station_names for s in board_names):
+        if board_names:
+            required_station_names.add(board_names[0])
+    if needs_fry and not any(s in required_station_names for s in fryer_names):
+        if fryer_names:
+            required_station_names.add(fryer_names[0])
+    if needs_soup and not any(s in required_station_names for s in sink_names):
+        if sink_names:
+            required_station_names.add(sink_names[0])
+
+    # add 2 empty staging tables not already in required set
+    empty_tables = [
+        s["pddl_name"] for s in stations
+        if s["name"] == "table" and s.get("initial_empty") and s["pddl_name"] not in required_station_names
+    ]
+    for t in empty_tables[:2]:
+        required_station_names.add(t)
+
+    # filter to only valid pddl_names
+    required_station_names.discard("")
+    required_stations = [s["pddl_name"] for s in stations if s["pddl_name"] in required_station_names]
+    required_items    = [i["pddl_name"] for i in items    if i["pddl_name"] in required_item_names]
+    required_containers = [c["pddl_name"] for c in containers]
+    required_meals    = ["water_1"] if needs_soup else []
+
+    return {
+        "stations":   required_stations,
+        "items":      required_items,
+        "containers": required_containers,
+        "meals":      required_meals,
+    }
+
+
 def build_robotouille_temporal_messages(
     original_json: dict,
     domain_pddl: str,
@@ -487,17 +600,37 @@ def build_robotouille_temporal_messages(
     if input_mode == "nl":
         nl_section = f"## Natural Language Description\n\n{natural_language or '(no natural language description provided)'}\n\n"
         env_str = f"cook_time={cook_time}, num_cuts={num_cuts}, fry_time={fry_time}"
+        required_objects_section = ""
     else:  # json
         nl_section = ""
         annotated = _annotate_robotouille_json(original_json)
         annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
         env_str = json.dumps(annotated, indent=2)
 
+        # Compute the minimal required objects and inject as a hard constraint
+        req_obj = _compute_required_objects(annotated)
+        _req_lines = []
+        if req_obj["stations"]:
+            _req_lines.append(f"  stations: {' '.join(req_obj['stations'])}")
+        if req_obj["items"]:
+            _req_lines.append(f"  items:    {' '.join(req_obj['items'])}")
+        if req_obj["containers"]:
+            _req_lines.append(f"  containers: {' '.join(req_obj['containers'])}")
+        if req_obj["meals"]:
+            _req_lines.append(f"  meals:    {' '.join(req_obj['meals'])}")
+        required_objects_section = (
+            "## Required Objects\n\n"
+            "Use **exactly** these objects in `:objects` — no more, no fewer:\n\n"
+            + "\n".join(_req_lines)
+            + "\n\n"
+        )
+
     user_content = ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
         domain_pddl=domain_pddl,
         domain_json_section=domain_json_section,
         nl_section=nl_section,
         original_json=env_str,
+        required_objects_section=required_objects_section,
     )
     return [
         {"role": "system", "content": system_prompt},

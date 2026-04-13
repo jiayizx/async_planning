@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Configuration ────────────────────────────────────────────────────────
-MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
 # MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-32768}"
@@ -16,8 +16,13 @@ LLM_RETRIES="${LLM_RETRIES:-3}"
 HISTORY_MODE="${HISTORY_MODE:-cumulative}" # cumulative | single-turn
 DATA_PATH="${DATA_PATH:-data/robotouille_single_agent_async.json}"
 # Official testing seeds from Robotouille paper (10 seeds × 10 envs = 100 instances)
-# Leave empty to use base layout only: SEEDS=""
-SEEDS="${SEEDS:-42 84 126 168 210 252 294 336 378 420}"
+# Set BASE_LAYOUT=true to run base layout only (no seeds, no distractors)
+BASE_LAYOUT="${BASE_LAYOUT:-true}"
+if [ "${BASE_LAYOUT}" = "true" ]; then
+    SEEDS=""
+else
+    SEEDS="${SEEDS:-42 84 126 168 210 252 294 336 378 420}"
+fi
 GENERATE_DOMAIN="${GENERATE_DOMAIN:-true}" # true = PDDL 2.1 + OPTIC (with TFD fallback); false = problem-only + LAMA
 # Set EXCLUDE_SOUP=true to skip soup tasks (envs 5/6/7/8/9)
 EXCLUDE_SOUP="${EXCLUDE_SOUP:-false}"
@@ -25,7 +30,7 @@ EXCLUDE_SOUP="${EXCLUDE_SOUP:-false}"
 SOUP_ONLY="${SOUP_ONLY:-false}"
 EFFECT_GOAL="${EFFECT_GOAL:-f}" # true = parameter-less constraints + effect goal; false = parameterized constraints + initial state goal
 NUM_SHOTS="${NUM_SHOTS:-0}"     # few-shot examples in system prompt (problem-only mode only)
-INPUT_MODE="${INPUT_MODE:-robo}" # json = annotated JSON + domain PDDL; nl = natural language + domain PDDL; robo = io-cot prompt + annotated JSON (no domain PDDL)
+INPUT_MODE="${INPUT_MODE:-json}" # json = annotated JSON + domain PDDL; nl = natural language + domain PDDL; robo = io-cot prompt + annotated JSON (no domain PDDL)
 # Solver is determined automatically by GENERATE_DOMAIN
 if [ "${GENERATE_DOMAIN}" = "true" ]; then
     SOLVER="optic"
@@ -48,6 +53,9 @@ else
 fi
 # Append input mode suffix
 SAVE_PATH="${SAVE_PATH}_${INPUT_MODE}"
+if [ "${BASE_LAYOUT}" = "true" ]; then
+    SAVE_PATH="${SAVE_PATH}_base"
+fi
 
 EXTRA_ARGS=""
 if [ "${GENERATE_DOMAIN}" = "true" ]; then
