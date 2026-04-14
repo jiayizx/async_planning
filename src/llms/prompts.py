@@ -1439,7 +1439,13 @@ Duration values come from `_timing` in the JSON:
       Ingredient is removed from player; `addedto(item, water)` is set. Instantaneous.
     - `fill-bowl`: player holds the pot and pours its water into the bowl at the current station.
       `in(water, bowl)` is set; `in(water, pot)` is cleared. Instantaneous.
-    - Correct soup workflow: fill-pot at sink → boil-water at stove → add-to ingredients → fill-bowl.
+      After `fill-bowl` completes, robot is in `nothing` state (pot placed at station).
+    - **CRITICAL — Correct soup workflow order** (NEVER reverse this sequence):
+      1. `fill-pot` at sink → water fills into pot (async)
+      2. Move pot to stove; `boil-water` at stove → water becomes `isboiling` (async)
+      3. `add-to` ingredients (requires `in water pot`) → after boil-water
+      4. `fill-bowl` → ONLY after boil-water completes; requires robot holding pot
+      **NEVER** plan `fill-bowl` before `boil-water`. **NEVER** plan `boil-water` before `fill-pot`.
 
 Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
 """
@@ -1488,8 +1494,18 @@ Duration values come from `_timing` in the JSON:
 
 ## RULES
 
-1. Use `:requirements :durative-actions :typing`.
-2. Types: `station player item` (all objects use these three types).
+1. Use `:requirements :durative-actions :typing`. **NEVER add `:adl`, `:negative-preconditions`, `:disjunctive-preconditions`, or `:conditional-effects`** — OPTIC does not support ADL. Never use `forall`, `exists`, `when`, or `imply` in action definitions.
+2. Types: `station player item` for non-soup tasks. For soup tasks (when `containers` is non-empty): use `station player item container meal` — add `container meal` to `:types` and declare pots/bowls as `container`, `water_1` as `meal`.
+   **CRITICAL — minimize `:objects`**: Only include stations and items that are strictly needed.
+   - Include a station if: (a) an item starts on it, (b) the robot starts there,
+     (c) an action must happen there (cook→stove, cut→board, fry→fryer, fill→sink),
+     or (d) it is a goal destination for an item.
+   - **Staging rule**: Always include at least 2 extra empty stations (spare tables) as staging areas.
+     Items frequently need to be set down temporarily while the robot fetches or processes other items.
+     Without spare staging stations, multi-item tasks become unsolvable even when all required action
+     stations are present. Pick the 2 emptiest tables from the JSON (`initial_empty == true`).
+   - Similarly, only include items that appear in the goal or are needed to achieve it.
+   Fewer objects = fewer grounded actions = faster planning.
 3. Use EXACTLY these predicate names from the reference domain — do NOT rename them:
    - Location: `(loc ?p - player ?s - station)`, `(at ?i - item ?s - station)`
    - Holding/hand: `(has ?p - player ?i - item)`, `(nothing ?p - player)`
@@ -1508,12 +1524,17 @@ Duration values come from `_timing` in the JSON:
    - Player location: use `facing_station`.
    - Player hand state: if `player.holding` is empty → add `(nothing player)`.
      If `player.holding` is non-empty → do NOT add `(nothing player)`.
+     **NEVER write both `(nothing player)` and `(has player item)` for the same player — they are mutually exclusive.**
    - `(empty ?s)` for stations: each station has `initial_empty` field.
      Set `(empty station)` in `:init` if and ONLY IF `initial_empty == true`.
    - `(vacant station)` for stations: add `(vacant station_N)` for **every** station
      that has NO player standing on it (i.e. every station except the robot's starting station).
      The `move` action requires `(vacant ?to)` — omitting this makes most stations unreachable.
    - `(item-free item)` for ALL items in `:init`.
+   - **Capability predicates**: set these based on the JSON `properties` field of each item:
+     - `(iscookable item)` if the item can be cooked (e.g. patty, chicken)
+     - `(iscuttable item)` if the item can be cut (e.g. tomato, lettuce, potato)
+     - `(isfryable item)` if the item can be fried (e.g. potato, onion) — **CRITICAL**: if the goal contains `(isfried X)`, you MUST add `(isfryable X)` to `:init` or the fry action can never fire.
    - **NEVER write `(not (...))` in `:init`**.
    - **NEVER write natural language, comments, or JSON field names as PDDL facts** (e.g.
      `(stack-level 0 -> on and at)` or `(no atop relations present)` are ILLEGAL).
@@ -1567,6 +1588,73 @@ Duration values come from `_timing` in the JSON:
    - Effects `at end`: `(isfried ?i)`, `(item-free ?i)`
    - **NO `(loc)` or `(nothing)` in effects** — robot walks away immediately after starting fry; do NOT consume or restore robot position.
    - NO `over all` — robot can leave during frying.
+   - **THERE IS NO `fry-cut-item` or `fry_cut_item` action** — this does not exist. Use `fry` to fry and `cut` to cut, as two separate actions.
+
+   **Soup tasks only** — include these actions when `containers` is non-empty in the JSON.
+   Use types `container` and `meal` in `:types`; add them to `:objects`.
+   The `water` meal object (`water_1`) does NOT exist at start — it is created by `fill-pot` and must be declared in `:objects` but NOT in `:init`.
+
+   **CRITICAL — soup action parameter order** (must match exactly for game engine compatibility):
+   - `pick-up-container`: `(?p - player ?c - container ?s - station)`
+   - `place-container`:   `(?p - player ?c - container ?s - station)`
+   - `fill-pot`:          `(?p - player ?c - container ?m - meal ?s - station)` ← meal BEFORE station
+   - `boil-water`:        `(?p - player ?c - container ?m - meal ?s - station)` ← meal BEFORE station
+   - `add-to`:            `(?p - player ?i - item ?m - meal ?c - container ?s - station)`
+   - `fill-bowl`:         `(?p - player ?cbowl - container ?cpot - container ?m - meal ?s - station)`
+
+   **`pick-up-container`** (duration 1):
+   - Preconditions `at start`: `(nothing ?p)`, `(container_at ?c ?s)`, `(loc ?p ?s)`, `(container-free ?c)`
+   - Effects `at start`: `(not (nothing ?p))`, `(not (container_at ?c ?s))`
+   - Effects `at end`: `(has_container ?p ?c)`, `(empty ?s)`
+
+   **`place-container`** (duration 1):
+   - Preconditions `at start`: `(has_container ?p ?c)`, `(loc ?p ?s)`, `(empty ?s)`
+   - Effects `at start`: `(not (has_container ?p ?c))`, `(not (empty ?s))`
+   - Effects `at end`: `(nothing ?p)`, `(container_at ?c ?s)`
+
+   **`fill-pot`** (duration = `cook_time`, robot can leave immediately like `cook`):
+   - Preconditions `at start`: `(ispot ?c)`, `(issink ?s)`, `(loc ?p ?s)`, `(container_at ?c ?s)`, `(container_empty ?c)`, `(nothing ?p)`, `(container-free ?c)`, `(iswater ?m)`
+   - Effects `at start`: `(not (container-free ?c))`
+   - Effects `at end`: `(not (container_empty ?c))`, `(container-free ?c)`, `(in ?m ?c)`
+   - NO `over all` — robot can leave.
+
+   **`boil-water`** (duration = `cook_time`, robot can leave immediately):
+   - Preconditions `at start`: `(ispot ?c)`, `(isstove ?s)`, `(loc ?p ?s)`, `(container_at ?c ?s)`, `(in ?m ?c)`, `(iswater ?m)`, `(nothing ?p)`, `(container-free ?c)`
+   - Effects `at start`: `(not (container-free ?c))`
+   - Effects `at end`: `(isboiling ?m)`, `(container-free ?c)`
+   - NO `over all` — robot can leave.
+
+   **`add-to`** (duration 1, instantaneous like `place`):
+   - Preconditions `at start`: `(has ?p ?i)`, `(ispot ?c)`, `(container_at ?c ?s)`, `(loc ?p ?s)`, `(in ?m ?c)`
+   - Effects `at start`: `(not (has ?p ?i))`
+   - Effects `at end`: `(nothing ?p)`, `(addedto ?i ?m)`
+
+   **`fill-bowl`** (duration 1):
+   - Preconditions `at start`: `(isbowl ?cbowl)`, `(container_at ?cbowl ?s)`, `(loc ?p ?s)`, `(container_empty ?cbowl)`, `(has_container ?p ?cpot)`, `(in ?m ?cpot)`
+   - Effects `at start`: `(not (has_container ?p ?cpot))`, `(not (container_empty ?cbowl))`
+   - Effects `at end`: `(nothing ?p)`, `(container_at ?cpot ?s)`, `(in ?m ?cbowl)`, `(container_empty ?cpot)`
+   - **After `fill-bowl` completes**: robot is in `(nothing ?p)` state — the pot is placed at the station,
+     robot is no longer holding anything. The NEXT action can be `pick-up`, `move`, etc. without needing
+     to drop anything first.
+
+   **CRITICAL — Correct soup workflow order (MUST follow this exact sequence)**:
+   1. `place-container pot sink` — place pot at sink
+   2. `fill-pot pot water sink` — water fills into pot (async, robot may leave)
+   3. `pick-up-container pot sink` — pick up pot (ONLY after fill-pot completes)
+   4. `move robot sink stove` — move to stove
+   5. `place-container pot stove` — place pot at stove
+   6. `boil-water pot water stove` — water starts boiling (async, robot may leave)
+   7. `add-to` each ingredient while boiling (or after — requires pot to be at station)
+   8. `pick-up-container pot stove` — pick up pot (ONLY after boil-water completes)
+   9. `fill-bowl bowl pot water table` — pour soup into bowl
+   **NEVER** schedule `fill-bowl` before `boil-water` completes.
+   **NEVER** schedule `boil-water` before `fill-pot` completes (requires `(in water pot)`).
+
+   **Soup `:init`** — add these facts for soup tasks:
+   - For each container: `(container_at container station)`, `(container_empty container)` (if empty at start), `(container-free container)`, `(ispot container)` or `(isbowl container)`
+   - Water meal: `(iswater water_1)` — declare `water_1` in `:objects` as `meal` type but do NOT add any location fact for it in `:init`
+   - `(empty sink_1)` if pot is not at sink initially (pot needs to be placed there)
+
 6. **CRITICAL — durative action structure**:
    Each durative action has:
    ```
@@ -1584,18 +1672,30 @@ Duration values come from `_timing` in the JSON:
    Use EXACTLY ONE `:condition` and ONE `:effect` per action (use `(and ...)` for multiple).
 7. `:goal` — translate the JSON `goal` array using the pre-resolved `pddl_args` field.
    Each goal predicate has a `pddl_args` field: **use these pddl_names directly**.
-   Map the predicate name as follows:
-   - `item_on`  → `(on item station)` — achievable via `place` (which also sets `(at item station)`)
-   - `item_at`  → `(at item station)` — achievable via `place` or `stack`
-   - `iscooked` → `(iscooked item)`
-   - `iscut`    → `(iscut item)`
-   - `isfried`  → `(isfried item)`
-   - `clear`    → `(clear item)`
+   Map the predicate name as follows (use EXACTLY these PDDL predicate names — the game engine
+   checks these exact names when evaluating whether the goal is achieved):
+   - `item_on`      → `(on item station)` — item resting directly on station surface (set by `place`)
+   - `item_at`      → `(at item station)` — item located at station (set by `place` or `stack`)
+   - `iscooked`     → `(iscooked item)`
+   - `iscut`        → `(iscut item)`
+   - `isfried`      → `(isfried item)`
+   - `clear`        → `(clear item)` — nothing on top of item
+   - `in`           → `(in meal container)` — meal inside container (soup tasks)
+   - `addedto`      → `(addedto item meal)` — ingredient added to meal (soup tasks)
+   - `isboiling`    → `(isboiling meal)` — meal is boiling (soup tasks)
+   - `container_at` → `(container_at container station)` — container at station (soup tasks)
    Use `(and ...)` to wrap multiple goal predicates.
+   **CRITICAL**: Include EVERY predicate from the `goal` array — missing any one will cause "goal not reached".
 8. NO tick actions needed — cook/fry complete automatically when the durative action's duration ends.
    The OPTIC temporal plan will include start times and durations; the linearizer converts this to
    game engine calls automatically.
-
+9. **Station type constraints** — NEVER use the wrong station type:
+   - `cut` REQUIRES `(isboard ?s)` — cutting boards ONLY. Using a table or fryer will fail.
+   - `fry` REQUIRES `(isfryer ?s)` — fryers ONLY. Using a stove or table will fail.
+   - `cook` REQUIRES `(isstove ?s)` — stoves ONLY.
+   - `fill-pot` / `boil-water` REQUIRE `(issink ?s)` / `(isstove ?s)` respectively.
+   Check the `station` field of each item in the JSON to see which station it is on, and verify
+   the station type before writing any action.
 Return JSON: {"domain_pddl": "...", "problem_pddl": "..."}
 """
 
@@ -1609,7 +1709,37 @@ Convert it to PDDL 2.1 temporal (durative actions) format as described in the ru
 {domain_pddl}
 ```
 
-## Environment JSON
+## Robotouille Type System and Vocabulary
+
+{domain_json_section}
+
+{nl_section}\
+## Environment
+
+```
+{original_json}
+```
+
+{required_objects_section}\
+Generate the PDDL 2.1 temporal (durative actions) domain and problem for this Robotouille environment.
+"""
+
+ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO = """\
+## Robotouille Environment Description
+
+The following describes the Robotouille kitchen environment, its rules, and available actions. \
+Use this as the reference for generating valid PDDL 2.1 temporal (durative actions) domain and problem files.
+
+{robo_instructions}
+
+## Robotouille Type System and Vocabulary
+
+{domain_json_section}
+
+## Environment (JSON)
+
+The following JSON describes the specific kitchen instance to formalize. \
+Each entity has a `pddl_name` field — use these exact names as PDDL objects.
 
 ```json
 {original_json}
