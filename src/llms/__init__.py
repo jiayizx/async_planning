@@ -30,7 +30,10 @@ def get_model(
     strict_json: bool = False,
 ) -> BaseLLM:
     """Get a model instance."""
-    if "claude" in model_name:
+    if model_name.startswith("openrouter/"):
+        model_name = model_name[len("openrouter/"):]
+        model_class = LLM_REGISTRY["openrouter"]
+    elif "claude" in model_name:
         if os.environ.get("ANTHROPIC_API_KEY") is None:
             print("ANTHROPIC_API_KEY is not set, falling back to openrouter")
         else:

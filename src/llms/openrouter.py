@@ -12,22 +12,30 @@ T = TypeVar("T")
 
 OPENROUTER_MODELS_MAPPING = {
     # Gemini models
-    "gemini-2.0-flash": "google/gemini-2.0-flash-001",
-    "gemini-2.5-flash": "google/gemini-2.5-flash",
-    "gemini-2.5-pro": "google/gemini-2.5-pro",
+    "gemini-3-flash":             "google/gemini-3-flash-preview",
+    "openrouter/gemini-3-flash":  "google/gemini-3-flash-preview",
+    "gemini-2.0-flash":           "google/gemini-2.0-flash-001",
+    "openrouter/gemini-2.0-flash":"google/gemini-2.0-flash-001",
+    "gemini-2.5-flash":           "google/gemini-2.5-flash",
+    "openrouter/gemini-2.5-flash":"google/gemini-2.5-flash",
+    "gemini-2.5-pro":             "google/gemini-2.5-pro",
+    "openrouter/gemini-2.5-pro":  "google/gemini-2.5-pro",
 
     # OpenAI models
     # "gpt-4.1-mini": "openai/gpt-4.1-mini",
     # "gpt-4.1": "openai/gpt-4.1",
 
     # meta-llama models
-    "llama-3.1-70b-instruct": "meta-llama/llama-3.1-70b-instruct",
+    "llama-3.1-70b-instruct":            "meta-llama/llama-3.1-70b-instruct",
+    "openrouter/llama-3.1-70b-instruct": "meta-llama/llama-3.1-70b-instruct",
 
     # DeepSeek models
-    "deepseek-r1": "deepseek/deepseek-r1-0528",
+    "deepseek-r1":            "deepseek/deepseek-r1-0528",
+    "openrouter/deepseek-r1": "deepseek/deepseek-r1-0528",
 
     # Qwen models
-    "qwen3-235b": "qwen/qwen3-235b-a22b-2507",
+    "qwen3-235b":            "qwen/qwen3-235b-a22b-2507",
+    "openrouter/qwen3-235b": "qwen/qwen3-235b-a22b-2507",
 }
 
 
@@ -77,10 +85,7 @@ class OpenRouterLLM(BaseLLM):
 
         try:
             response = self.client.chat.completions.create(**params)
-            response = response.choices[0].message.content
-            if response:
-                response = response.replace("\n", "")
-            return response
+            return response.choices[0].message.content
         except Exception as e:
             print(f"Error in OpenRouter chat: {e}")
             return ""
