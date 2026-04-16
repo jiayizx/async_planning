@@ -30,6 +30,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from src.experiments.utils import build_llm_client
+from src.experiments.robo_async.tag_filter import parse_tag_arg, tag_filter_match
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 from src.envs.robo_async.engine import Task, evaluate_from_text
 from src.envs.robo_async.nl_generator import task_to_nl
@@ -251,7 +252,9 @@ def run_task(task: Task, task_dict: dict, llm, solver_timeout: float) -> dict:
 
 def run(model_name: str, out_dir: str, task_dir: str,
         solver_timeout: float, max_tasks: int | None,
-        num_workers: int = 8, batch: int = 8, implicit: bool = False):
+        num_workers: int = 8, batch: int = 8, implicit: bool = False,
+        include_tags: set[str] | None = None,
+        exclude_tags: set[str] | None = None):
 
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -261,6 +264,11 @@ def run(model_name: str, out_dir: str, task_dir: str,
         json.loads(p.read_text())
         for p in sorted(Path(task_dir).glob("*.json"))
     ]
+    if include_tags or exclude_tags:
+        task_dicts = [
+            td for td in task_dicts
+            if tag_filter_match(td, include_tags or set(), exclude_tags or set())
+        ]
     if max_tasks:
         task_dicts = task_dicts[:max_tasks]
 
@@ -422,6 +430,8 @@ def main():
     parser.add_argument("--num-workers", type=int,   default=8,    help="parallel LLM workers (batch_chat)")
     parser.add_argument("--batch",       type=int,   default=8,    help="parallel OPTIC solver workers")
     parser.add_argument("--implicit",    action="store_true", help="hide dependency hints in NL (implicit mode)")
+    parser.add_argument("--include-tags", default="", help="comma-separated challenge tags to include")
+    parser.add_argument("--exclude-tags", default="", help="comma-separated challenge tags to exclude")
     args = parser.parse_args()
 
     mode = "implicit" if args.implicit else "explicit"
@@ -433,6 +443,10 @@ def main():
     print(f"Timeout:     {args.timeout}s")
     print(f"LLM workers: {args.num_workers}")
     print(f"Batch:       {args.batch}")
+    if args.include_tags:
+        print(f"Include tags:{args.include_tags}")
+    if args.exclude_tags:
+        print(f"Exclude tags:{args.exclude_tags}")
     print()
 
     run(
@@ -444,6 +458,8 @@ def main():
         num_workers=args.num_workers,
         batch=args.batch,
         implicit=args.implicit,
+        include_tags=parse_tag_arg(args.include_tags),
+        exclude_tags=parse_tag_arg(args.exclude_tags),
     )
 
 
