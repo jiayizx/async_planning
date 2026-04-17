@@ -12,6 +12,7 @@ experiments where the target representation is a scheduling model.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import re
 import sys
@@ -26,7 +27,11 @@ if str(_ROOT) not in sys.path:
 
 from src.envs.robo_async.engine import ACTION_STATION, Task, evaluate_from_text
 from src.envs.robo_async.nl_generator import task_to_nl
-from src.experiments.robo_async.tag_filter import parse_tag_arg, tag_filter_match
+from src.experiments.robo_async.tag_filter import (
+    parse_tag_arg,
+    summarize_by_tag,
+    tag_filter_match,
+)
 from src.method.cpsat_scheduler import (
     parse_schedule_spec,
     solve_schedule,
@@ -40,8 +45,9 @@ You are an expert temporal scheduling formalizer. Translate a natural language \
 cooking task into a structured scheduling JSON model for a CP-SAT solver.
 
 The solver supports fixed-duration interval actions, precedence dependencies, \
-and station capacity constraints. It does NOT infer cooking semantics. Your JSON \
-must include every required action and every required dependency.
+station capacity constraints, and optional robot assignment constraints. It does \
+NOT infer cooking semantics. Your JSON must include every required action and \
+every required dependency.
 
 Allowed base actions:
 - grill, cut, fry, boil, toast, marinate, mash, stack
@@ -76,13 +82,22 @@ Important rules:
 8. Do not include redundant actions.
 9. Every dependency must reference existing action ids from the actions list. Never use
    null, None, an empty string, or an id you did not define.
-10. Before output, verify this checklist:
+10. If the task states a temporal waiting constraint, include it as a dependency
+   with "min_lag" equal to the required wait in seconds. Example:
+   {"before": "grill_patty", "after": "stack_patty", "min_lag": 3}
+11. If the task lists robots, every action requires one robot. Put
+   "eligible_robots": ["robot1", "robot2"] on each action unless the task
+   explicitly restricts an action to a smaller robot set. Do not put robot names
+   in the item field or action id.
+12. Before output, verify this checklist:
    - every dependency.before appears exactly as an actions[].id
    - every dependency.after appears exactly as an actions[].id
+   - every action has eligible_robots when robots are listed in the task
    - every marinate action has a cut-before-marinate dependency for the same item
    - every fry action for an item marked "must be cut before frying" has a cut-before-fry dependency
    - every mash action has a boil-before-mash dependency for the same item
    - no stack action exists for an item absent from the stack order
+   - every stated temporal wait appears as a dependency with the correct min_lag
 
 Common mistakes to avoid:
 - Do NOT write {"before": "mash_yam", "after": null}. If yam is not in the
@@ -92,14 +107,18 @@ Common mistakes to avoid:
 - Do NOT start marinate from raw. Add cut_item -> marinate_item.
 
 Output ONLY valid JSON with this shape:
+
+For ordinary scheduling tasks:
 {
+  "mode": "schedule",
   "actions": [
     {
       "id": "short_unique_id",
       "action": "cut",
       "item": "potato",
       "duration": 3,
-      "station": "cutting_board"
+      "station": "cutting_board",
+      "eligible_robots": ["robot1", "robot2"]
     },
     {
       "id": "stack_potato",
@@ -110,7 +129,26 @@ Output ONLY valid JSON with this shape:
     }
   ],
   "dependencies": [
-    {"before": "cut_potato", "after": "fry_potato"}
+    {"before": "cut_potato", "after": "fry_potato"},
+    {"before": "grill_patty", "after": "stack_patty", "min_lag": 3}
+  ]
+}
+
+For optimization tasks with candidate rewards, output an optimization model
+instead of listing all candidate actions as mandatory:
+{
+  "mode": "optimize",
+  "objective": "maximize_reward_under_deadline",
+  "deadline": 24,
+  "inventory_limits": {"protein": 2, "fryer_oil": 2},
+  "candidate_goals": [
+    {
+      "id": "grilled_main",
+      "item": "patty",
+      "state": "grilled",
+      "reward": 9,
+      "cost": {"protein": 1}
+    }
   ]
 }
 """
@@ -132,6 +170,14 @@ Important:
   dependencies.
 - If an item must be cut before frying or marinating, include the cut action and
   the dependency from cut to fry/marinate.
+- If the task includes temporal wait constraints, copy each wait as a dependency
+  with a numeric "min_lag" in seconds.
+- If the task includes robots, include an "eligible_robots" list for every
+  action. Use only the exact robot identifiers listed in the task.
+- If the task asks to maximize reward by a deadline, do NOT output mandatory
+  actions for every candidate reward. Output mode="optimize" with deadline,
+  inventory_limits, and candidate_goals. The CP-SAT backend will choose the
+  best subset.
 
 Return only the JSON object.
 """
@@ -171,16 +217,10 @@ def _normalize_id(action: str, item: str) -> str:
     return f"{action}_{item}"
 
 
-def oracle_schedule_spec(task_dict: dict) -> dict:
-    """Compile a gold Robo-Async task JSON into the scheduling JSON shape.
-
-    This is only for smoke tests and solver validation. The LLM formalizer path
-    does not use the gold task internals beyond item names and NL text.
-    """
+def _schedule_spec_for_goal(task_dict: dict, required_states: dict, stack_order: list[str]) -> dict:
     durations = task_dict["action_durations"]
     items = task_dict["items"]
-    required_states = task_dict["goal"].get("required_states", {})
-    stack_order = task_dict["goal"].get("stack_order", [])
+    robots = task_dict.get("robots", [])
 
     actions: list[dict] = []
     dependencies: list[dict] = []
@@ -188,13 +228,16 @@ def oracle_schedule_spec(task_dict: dict) -> dict:
 
     def add_action(action: str, item: str) -> str:
         action_id = _normalize_id(action, item)
-        actions.append({
+        action_obj = {
             "id": action_id,
             "action": action,
             "item": item,
             "duration": durations[action],
             "station": ACTION_STATION.get(action),
-        })
+        }
+        if robots:
+            action_obj["eligible_robots"] = list(robots)
+        actions.append(action_obj)
         return action_id
 
     for item, state in required_states.items():
@@ -227,20 +270,194 @@ def oracle_schedule_spec(task_dict: dict) -> dict:
     prev_stack_id = None
     for item in stack_order:
         stack_id = _normalize_id("stack", item)
-        actions.append({
+        action_obj = {
             "id": stack_id,
             "action": "stack",
             "item": item,
             "duration": durations["stack"],
             "station": None,
-        })
+        }
+        if robots:
+            action_obj["eligible_robots"] = list(robots)
+        actions.append(action_obj)
         if item in last_for_item:
             dependencies.append({"before": last_for_item[item], "after": stack_id})
         if prev_stack_id:
             dependencies.append({"before": prev_stack_id, "after": stack_id})
         prev_stack_id = stack_id
 
+    for constraint in task_dict.get("temporal_constraints", []):
+        before = constraint.get("before", {})
+        after = constraint.get("after", {})
+        before_id = _normalize_id(before.get("action", ""), before.get("item", ""))
+        after_id = _normalize_id(after.get("action", ""), after.get("item", ""))
+        dep = {"before": before_id, "after": after_id}
+        if constraint.get("min_lag", 0):
+            dep["min_lag"] = constraint["min_lag"]
+        dependencies.append(dep)
+
     return {"actions": actions, "dependencies": dependencies}
+
+
+def oracle_schedule_spec(task_dict: dict) -> dict:
+    """Compile a gold Robo-Async task JSON into a structured solver spec.
+
+    This is only for smoke tests and solver validation. The LLM formalizer path
+    does not use the gold task internals beyond item names and NL text.
+    """
+    if task_dict.get("objective_type") == "maximize_reward_under_deadline":
+        return {
+            "mode": "optimize",
+            "objective": "maximize_reward_under_deadline",
+            "deadline": task_dict["deadline"],
+            "inventory_limits": task_dict.get("inventory_limits", {}),
+            "candidate_goals": task_dict.get("candidate_goals", []),
+        }
+    return {
+        "mode": "schedule",
+        **_schedule_spec_for_goal(
+            task_dict,
+            task_dict["goal"].get("required_states", {}),
+            task_dict["goal"].get("stack_order", []),
+        ),
+    }
+
+
+def _coerce_deadline(value) -> float:
+    if isinstance(value, str):
+        value = value.strip().lower().replace("seconds", "").replace("second", "").strip()
+    deadline = float(value)
+    if deadline < 0:
+        raise ValueError(f"deadline must be nonnegative, got {value!r}")
+    return deadline
+
+
+def _validate_optimization_spec(spec: dict, task_dict: dict) -> dict:
+    if not isinstance(spec, dict):
+        raise ValueError("optimization spec must be a JSON object")
+    deadline = _coerce_deadline(spec.get("deadline", task_dict.get("deadline")))
+    raw_limits = spec.get("inventory_limits", {})
+    if not isinstance(raw_limits, dict):
+        raise ValueError("inventory_limits must be an object")
+    inventory_limits = {str(k): int(v) for k, v in raw_limits.items()}
+
+    raw_candidates = spec.get("candidate_goals", [])
+    if not isinstance(raw_candidates, list) or not raw_candidates:
+        raise ValueError("optimization spec must contain candidate_goals")
+
+    candidates = []
+    seen = set()
+    valid_items = set(task_dict["items"])
+    for raw in raw_candidates:
+        if not isinstance(raw, dict):
+            raise ValueError("each candidate goal must be an object")
+        goal_id = str(raw.get("id", "")).strip()
+        item = str(raw.get("item", "")).strip()
+        state = str(raw.get("state", "")).strip()
+        reward = int(raw.get("reward", 0))
+        cost = raw.get("cost", {})
+        if not goal_id:
+            raise ValueError("candidate goal needs a non-empty id")
+        if goal_id in seen:
+            raise ValueError(f"duplicate candidate goal id: {goal_id}")
+        if item not in valid_items:
+            raise ValueError(f"candidate goal {goal_id} references unknown item '{item}'")
+        if state not in {"cut", "fried", "grilled", "boiled", "mashed", "toasted"}:
+            raise ValueError(f"candidate goal {goal_id} has unsupported state '{state}'")
+        if reward < 0:
+            raise ValueError(f"candidate goal {goal_id} has negative reward")
+        if not isinstance(cost, dict):
+            raise ValueError(f"candidate goal {goal_id} cost must be an object")
+        candidates.append({
+            "id": goal_id,
+            "item": item,
+            "state": state,
+            "reward": reward,
+            "cost": {str(k): int(v) for k, v in cost.items()},
+        })
+        seen.add(goal_id)
+
+    return {
+        "mode": "optimize",
+        "objective": "maximize_reward_under_deadline",
+        "deadline": deadline,
+        "inventory_limits": inventory_limits,
+        "candidate_goals": candidates,
+    }
+
+
+def _resource_feasible(candidates: list[dict], inventory_limits: dict[str, int]) -> bool:
+    usage: dict[str, int] = {}
+    for candidate in candidates:
+        for resource, amount in candidate.get("cost", {}).items():
+            usage[resource] = usage.get(resource, 0) + int(amount)
+    return all(usage.get(resource, 0) <= limit for resource, limit in inventory_limits.items())
+
+
+def solve_optimization_spec(
+    spec: dict,
+    task_dict: dict,
+    *,
+    solver_timeout: float,
+) -> tuple[dict, object]:
+    """Choose the best candidate-goal subset, then schedule it."""
+    opt = _validate_optimization_spec(spec, task_dict)
+    candidates = opt["candidate_goals"]
+    inventory_limits = opt["inventory_limits"]
+    deadline = float(opt["deadline"])
+
+    best = None
+    for size in range(1, len(candidates) + 1):
+        for subset in itertools.combinations(candidates, size):
+            subset = list(subset)
+            if not _resource_feasible(subset, inventory_limits):
+                continue
+            required = {candidate["item"]: candidate["state"] for candidate in subset}
+            schedule_spec = {
+                "mode": "schedule",
+                **_schedule_spec_for_goal(task_dict, required, []),
+            }
+            actions, deps = parse_schedule_spec(
+                schedule_spec,
+                valid_items=set(task_dict["items"].keys()),
+                station_capacities=task_dict.get("stations", {}),
+                robots=task_dict.get("robots"),
+            )
+            sr = solve_schedule(
+                actions,
+                deps,
+                station_capacities=task_dict.get("stations", {}),
+                robots=task_dict.get("robots"),
+                timeout=solver_timeout,
+            )
+            if not sr.optimal or sr.makespan is None or sr.makespan > deadline + 1e-6:
+                continue
+            reward = sum(candidate["reward"] for candidate in subset)
+            selected_ids = tuple(candidate["id"] for candidate in subset)
+            key = (reward, len(subset), -float(sr.makespan), selected_ids)
+            if best is None or key > best[0]:
+                normalized = {
+                    **opt,
+                    "selected_goal_ids": list(selected_ids),
+                    "selected_required_states": required,
+                    "selected_schedule_spec": {
+                        "actions": [a.__dict__ for a in actions],
+                        "dependencies": [
+                            {
+                                "before": dep.before,
+                                "after": dep.after,
+                                **({"min_lag": dep.min_lag} if dep.min_lag else {}),
+                            }
+                            for dep in deps
+                        ],
+                    },
+                    "selected_reward": reward,
+                }
+                best = (key, normalized, sr)
+
+    if best is None:
+        raise ValueError("no candidate subset can be scheduled within the deadline")
+    return best[1], best[2]
 
 
 # ── Pipeline ─────────────────────────────────────────────────────────────────
@@ -314,11 +531,39 @@ def run(
             schedule_results.append(None)
             normalized_specs.append(None)
             continue
+        mode = str(spec.get("mode", "")).strip().lower()
+        objective = spec.get("objective")
+        if isinstance(objective, dict):
+            objective = objective.get("type", "")
+        objective = str(objective or "").strip().lower()
+        is_optimize = (
+            mode == "optimize"
+            or objective == "maximize_reward_under_deadline"
+            or (
+                td.get("objective_type") == "maximize_reward_under_deadline"
+                and "candidate_goals" in spec
+            )
+        )
+        if is_optimize:
+            try:
+                normalized, sr = solve_optimization_spec(
+                    spec,
+                    td,
+                    solver_timeout=solver_timeout,
+                )
+                schedule_results.append(sr)
+                normalized_specs.append(normalized)
+            except Exception as exc:
+                schedule_results.append(("spec_error", str(exc)))
+                normalized_specs.append(spec)
+            continue
+
         try:
             actions, deps = parse_schedule_spec(
                 spec,
                 valid_items=set(td["items"].keys()),
                 station_capacities=td.get("stations", {}),
+                robots=td.get("robots"),
             )
         except Exception as exc:
             schedule_results.append(("parse_error", str(exc)))
@@ -329,12 +574,20 @@ def run(
             actions,
             deps,
             station_capacities=td.get("stations", {}),
+            robots=td.get("robots"),
             timeout=solver_timeout,
         )
         schedule_results.append(sr)
         normalized_specs.append({
             "actions": [a.__dict__ for a in actions],
-            "dependencies": [{"before": before, "after": after} for before, after in deps],
+            "dependencies": [
+                {
+                    "before": dep.before,
+                    "after": dep.after,
+                    **({"min_lag": dep.min_lag} if dep.min_lag else {}),
+                }
+                for dep in deps
+            ],
         })
 
     print(f"Stage 3/3  Engine evaluation ...\n")
@@ -365,6 +618,19 @@ def run(
             "makespan": None,
             "makespan_ratio": None,
         }
+        if td.get("objective_type") == "maximize_reward_under_deadline":
+            r["optimal_reward"] = td.get("optimal_reward")
+            r["deadline"] = td.get("deadline")
+            if isinstance(spec, dict):
+                r["selected_goal_ids"] = spec.get("selected_goal_ids")
+                r["selected_reward"] = spec.get("selected_reward")
+                if td.get("optimal_reward"):
+                    selected_reward = spec.get("selected_reward")
+                    r["reward_ratio"] = (
+                        round(float(selected_reward) / float(td["optimal_reward"]), 4)
+                        if selected_reward is not None else
+                        None
+                    )
 
         if parsed_specs[i] is None:
             r["error_type"] = "llm_error"
@@ -423,20 +689,14 @@ def run(
         "n_solver_error": sum(1 for r in results if r["error_type"] == "solver_error"),
         "n_solver_not_optimal": sum(1 for r in results if r["error_type"] == "solver_not_optimal"),
         "n_eval_error": sum(1 for r in results if r["error_type"] == "eval_error"),
-        "by_difficulty": {
-            diff: {
-                "n": sum(1 for r in results if r["difficulty"] == diff),
-                "n_success": sum(1 for r in results if r["difficulty"] == diff and r["success"]),
-            }
-            for diff in ["easy", "medium", "hard"]
-        },
+        "by_tag": summarize_by_tag(task_dicts, results),
     }
     (out_path / "summary.json").write_text(json.dumps(summary, indent=2))
 
     print(f"\n{'='*50}")
     print(f"Success rate:       {n_success}/{len(results)} ({summary['success_rate']:.1%})")
     print(f"Avg makespan ratio: {avg_ratio:.3f}  (1.000 = optimal)")
-    print(f"By difficulty:      {summary['by_difficulty']}")
+    print(f"By tag:             {summary['by_tag']}")
     print(f"Results saved ->    {out_path}/")
 
 

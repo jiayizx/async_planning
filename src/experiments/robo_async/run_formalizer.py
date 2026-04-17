@@ -30,7 +30,11 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from src.experiments.utils import build_llm_client
-from src.experiments.robo_async.tag_filter import parse_tag_arg, tag_filter_match
+from src.experiments.robo_async.tag_filter import (
+    parse_tag_arg,
+    summarize_by_tag,
+    tag_filter_match,
+)
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 from src.envs.robo_async.engine import Task, evaluate_from_text
 from src.envs.robo_async.nl_generator import task_to_nl
@@ -401,20 +405,14 @@ def run(model_name: str, out_dir: str, task_dir: str,
         "n_llm_error":      sum(1 for r in results if r["error_type"] == "llm_error"),
         "n_solver_error":   sum(1 for r in results if r["error_type"] == "solver_error"),
         "n_eval_error":     sum(1 for r in results if r["error_type"] == "eval_error"),
-        "by_difficulty": {
-            diff: {
-                "n": sum(1 for r in results if r["difficulty"] == diff),
-                "n_success": sum(1 for r in results if r["difficulty"] == diff and r["success"]),
-            }
-            for diff in ["easy", "medium", "hard"]
-        },
+        "by_tag": summarize_by_tag(task_dicts, results),
     }
     (out_path / "summary.json").write_text(json.dumps(summary, indent=2))
 
     print(f"\n{'='*50}")
     print(f"Success rate:       {n_success}/{n} ({summary['success_rate']:.1%})")
     print(f"Avg makespan ratio: {avg_ratio:.3f}  (1.000 = optimal)")
-    print(f"By difficulty:      {summary['by_difficulty']}")
+    print(f"By tag:             {summary['by_tag']}")
     print(f"Results saved →     {out_path}/")
 
 

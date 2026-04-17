@@ -31,7 +31,11 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from src.experiments.utils import build_llm_client
-from src.experiments.robo_async.tag_filter import parse_tag_arg, tag_filter_match
+from src.experiments.robo_async.tag_filter import (
+    parse_tag_arg,
+    summarize_by_tag,
+    tag_filter_match,
+)
 from src.envs.robo_async.engine import Task, evaluate_from_text
 from src.envs.robo_async.nl_generator import task_to_nl
 
@@ -43,17 +47,25 @@ You are an expert kitchen scheduler. Given a cooking task, produce an optimal \
 temporal plan that completes all required preparations as fast as possible by \
 running independent actions in parallel.
 
-OUTPUT FORMAT — one action per line, exactly:
+OUTPUT FORMAT — one action per line.
+
+If the task does NOT list robots, use exactly:
   <time>: (<action> <item>)  [<duration>]
+
+If the task lists robots, use exactly:
+  <time>: (<action> <robot> <item>)  [<duration>]
 
 Rules:
 1. <time> is the start time in seconds (float, 3 decimal places).
 2. <action> is one of: grill, cut, fry, boil, toast, marinate, mash, stack.
 3. <item> is the exact ingredient name from the task.
-4. <duration> must match the duration stated in the task for that action (float).
-5. Actions on DIFFERENT items may start at the same time (run in parallel).
-6. An item can only have one action running on it at a time.
-7. STATE TRANSITIONS: each action requires the item to be in a specific state first:
+4. <robot> is required only when the task has a Robot Constraints section.
+   Use one of the listed robot names exactly. A robot can run at most one action
+   at a time.
+5. <duration> must match the duration stated in the task for that action (float).
+6. Actions on DIFFERENT items may start at the same time (run in parallel).
+7. An item can only have one action running on it at a time.
+8. STATE TRANSITIONS: each action requires the item to be in a specific state first:
    - grill:    item must be raw (or marinated, if the task specifies)
    - cut:      item must be raw
    - fry:      item must be raw (or cut, if the task specifies)
@@ -62,17 +74,29 @@ Rules:
    - marinate: item must be cut first
    - mash:     item must be boiled first
    Apply actions in the correct order to satisfy these state requirements.
-8. STATION CONSTRAINTS: each station has a maximum capacity (given in the task). \
+9. STATION CONSTRAINTS: each station has a maximum capacity (given in the task). \
    At most <capacity> actions of the same type may overlap in time. \
    For example, if the grill has capacity 1, only one grill action may run at a time — \
    the next grill action must start after the previous one ends. \
    Note: marinate and cut share the same cutting_board station concept differently — \
    marinate uses the marinator station, mash uses the cutting board.
-9. stack(<item>) can only start AFTER the item has finished ALL required processing \
+10. stack(<item>) can only start AFTER the item has finished ALL required processing \
    (i.e. start time ≥ final processing end time).
-10. Stack the items in the required order (bottom to top): \
+11. Stack the items in the required order (bottom to top): \
     each stack action must start AFTER the previous stack action ends.
-11. Output ONLY the plan lines — no explanation, no markdown fences.
+12. If the task has Temporal Constraints, enforce every stated wait exactly:
+    if it says "after A finishes, wait at least W seconds before starting B",
+    then start(B) must be >= end(A) + W.
+13. If the task asks to maximize reward by a deadline, choose a feasible subset
+    of candidate rewards. Do NOT try to complete all candidates unless they fit.
+    Respect inventory limits, finish by the deadline, and prefer higher total reward.
+14. Before answering, mentally simulate the plan:
+    - no station exceeds capacity at any time
+    - no robot runs two actions at once
+    - no item receives two actions at once
+    - every prerequisite action finishes before its dependent action starts
+    - every temporal wait and deadline is satisfied
+15. Output ONLY the plan lines — no explanation, no markdown fences.
 """
 
 USER_TEMPLATE = """\
@@ -82,6 +106,9 @@ Produce a temporal plan for the following cooking task.
 
 IMPORTANT — use these EXACT item names (with underscores) in your plan:
 {item_names}
+
+If robots are listed in the task, include the robot argument in every action:
+  <time>: (<action> <robot> <item>)  [<duration>]
 
 Output only the plan lines in the format shown.
 """
@@ -234,20 +261,14 @@ def run(model_name: str, out_dir: str, task_dir: str,
         "avg_makespan_ratio": round(avg_ratio, 4),
         "n_parse_error":      sum(1 for r in results if r["error_type"] == "parse_error"),
         "n_eval_error":       sum(1 for r in results if r["error_type"] == "eval_error"),
-        "by_difficulty": {
-            diff: {
-                "n":         sum(1 for r in results if r["difficulty"] == diff),
-                "n_success": sum(1 for r in results if r["difficulty"] == diff and r["success"]),
-            }
-            for diff in ["easy", "medium", "hard"]
-        },
+        "by_tag": summarize_by_tag(task_dicts, results),
     }
     (out_path / "summary.json").write_text(json.dumps(summary, indent=2))
 
     print(f"\n{'='*50}")
     print(f"Success rate:       {n_success}/{n} ({summary['success_rate']:.1%})")
     print(f"Avg makespan ratio: {avg_ratio:.3f}  (1.000 = optimal)")
-    print(f"By difficulty:      {summary['by_difficulty']}")
+    print(f"By tag:             {summary['by_tag']}")
     print(f"Results saved →     {out_path}/")
 
 

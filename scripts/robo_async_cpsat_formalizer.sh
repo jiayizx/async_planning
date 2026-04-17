@@ -10,7 +10,7 @@
 #
 # Environment variables:
 #   MODEL_NAME    LLM to use                            [openrouter/gemini-3-flash]
-#   DATASET       Dataset split: robo_derived|challenge [challenge]
+#   DATASET       Dataset split: robo_derived|challenge|challenge_v2 [challenge]
 #   TASKS_DIR     Directory with task JSON files        [auto from DATASET]
 #   OUT_DIR       Results output directory              [auto from DATASET/model/mode]
 #   TIMEOUT       CP-SAT timeout (seconds)              [120]
@@ -26,7 +26,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
-DATASET="${DATASET:-challenge}"
+DATASET="${DATASET:-challenge_v2}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 case "${DATASET}" in
   robo_derived)
@@ -37,8 +37,12 @@ case "${DATASET}" in
     DEFAULT_TASKS_DIR="data/robo_async_challenge/tasks"
     DEFAULT_RESULTS_ROOT="results/robo_async_challenge"
     ;;
+  challenge_v2)
+    DEFAULT_TASKS_DIR="data/robo_async_challenge_v2/tasks"
+    DEFAULT_RESULTS_ROOT="results/robo_async_challenge_v2"
+    ;;
   *)
-    echo "Unknown DATASET='${DATASET}' (expected robo_derived or challenge)" >&2
+    echo "Unknown DATASET='${DATASET}' (expected robo_derived, challenge, or challenge_v2)" >&2
     exit 2
     ;;
 esac
@@ -50,7 +54,8 @@ MAX_TASKS="${MAX_TASKS:-}"
 IMPLICIT="${IMPLICIT:-true}"
 ORACLE_SPEC="${ORACLE_SPEC:-false}"
 # Tag filters are comma-separated split tags. Supported split tags:
-#   easy, medium, hard_station, hard_temporal, hard_multiagent, hard_optimization
+#   easy, medium, hard_station, hard_temporal, hard_multiagent,
+#   hard_optimization, hard_high_speedup
 INCLUDE_TAGS="${INCLUDE_TAGS:-}"
 EXCLUDE_TAGS="${EXCLUDE_TAGS:-}"
 

@@ -29,6 +29,14 @@ class ScheduleAction:
     item: str
     duration: int
     station: str | None = None
+    eligible_robots: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ScheduleDependency:
+    before: str
+    after: str
+    min_lag: int = 0
 
 
 @dataclass(frozen=True)
@@ -60,12 +68,27 @@ def _coerce_duration(value: Any) -> int:
     return int(rounded)
 
 
+def _coerce_nonnegative_int(value: Any) -> int:
+    if value in (None, ""):
+        return 0
+    if isinstance(value, str):
+        value = value.strip().lower().replace("seconds", "").replace("second", "").strip()
+    lag = float(value)
+    if lag < 0:
+        raise ValueError(f"min_lag must be nonnegative, got {value!r}")
+    rounded = round(lag)
+    if abs(lag - rounded) > 1e-6:
+        raise ValueError(f"min_lag must be an integer number of seconds, got {lag}")
+    return int(rounded)
+
+
 def parse_schedule_spec(
     spec: dict[str, Any],
     *,
     valid_items: set[str] | None = None,
     station_capacities: dict[str, int] | None = None,
-) -> tuple[list[ScheduleAction], list[tuple[str, str]]]:
+    robots: list[str] | None = None,
+) -> tuple[list[ScheduleAction], list[ScheduleDependency]]:
     """Validate and normalize a JSON scheduling spec.
 
     Expected shape:
@@ -90,6 +113,13 @@ def parse_schedule_spec(
         item = str(raw.get("item", "")).strip()
         station_raw = raw.get("station", None)
         station = None if station_raw in (None, "", "none", "null") else str(station_raw).strip()
+        raw_eligible = raw.get("eligible_robots", [])
+        if raw_eligible in (None, "", "all"):
+            raw_eligible = []
+        if isinstance(raw_eligible, str):
+            eligible_robots = (raw_eligible,)
+        else:
+            eligible_robots = tuple(str(r).strip() for r in raw_eligible if str(r).strip())
 
         if not action_id:
             raise ValueError("each action needs a non-empty id")
@@ -107,6 +137,11 @@ def parse_schedule_spec(
             raise ValueError(f"non-stack action {action_id} needs a station")
         if station is not None and capacities and station not in capacities:
             raise ValueError(f"action {action_id} references unknown station '{station}'")
+        if robots is not None:
+            valid_robots = set(robots)
+            unknown = set(eligible_robots) - valid_robots
+            if unknown:
+                raise ValueError(f"action {action_id} references unknown robots: {sorted(unknown)}")
 
         actions.append(
             ScheduleAction(
@@ -115,6 +150,7 @@ def parse_schedule_spec(
                 item=item,
                 duration=_coerce_duration(raw.get("duration")),
                 station=station,
+                eligible_robots=eligible_robots,
             )
         )
         seen.add(action_id)
@@ -123,30 +159,33 @@ def parse_schedule_spec(
     if not isinstance(raw_deps, list):
         raise ValueError("dependencies must be a list")
 
-    dependencies: list[tuple[str, str]] = []
+    dependencies: list[ScheduleDependency] = []
     for raw in raw_deps:
         if isinstance(raw, dict):
             before = str(raw.get("before", "")).strip()
             after = str(raw.get("after", "")).strip()
+            min_lag = _coerce_nonnegative_int(raw.get("min_lag", raw.get("lag", 0)))
         elif isinstance(raw, (list, tuple)) and len(raw) == 2:
             before = str(raw[0]).strip()
             after = str(raw[1]).strip()
+            min_lag = 0
         else:
             raise ValueError("each dependency must be {'before','after'} or [before, after]")
         if before not in seen or after not in seen:
             raise ValueError(f"dependency references unknown action: {before!r} -> {after!r}")
         if before == after:
             raise ValueError(f"self dependency is not allowed: {before}")
-        dependencies.append((before, after))
+        dependencies.append(ScheduleDependency(before=before, after=after, min_lag=min_lag))
 
     return actions, dependencies
 
 
 def solve_schedule(
     actions: list[ScheduleAction],
-    dependencies: list[tuple[str, str]],
+    dependencies: list[ScheduleDependency] | list[tuple[str, str]],
     *,
     station_capacities: dict[str, int] | None = None,
+    robots: list[str] | None = None,
     timeout: float = 120.0,
 ) -> ScheduleResult:
     """Solve a structured schedule optimally with OR-Tools CP-SAT."""
@@ -181,8 +220,37 @@ def solve_schedule(
             f"interval_{a.id}",
         )
 
-    for before, after in dependencies:
-        model.Add(starts[after] >= ends[before])
+    robot_assignments = {}
+    robot_intervals: dict[str, list] = {}
+    if robots:
+        valid_robots = list(robots)
+        for a in actions:
+            eligible = list(a.eligible_robots) if a.eligible_robots else valid_robots
+            bools = []
+            for robot in eligible:
+                assigned = model.NewBoolVar(f"assign_{a.id}_{robot}")
+                robot_assignments[(a.id, robot)] = assigned
+                bools.append(assigned)
+                robot_interval = model.NewOptionalIntervalVar(
+                    starts[a.id],
+                    a.duration,
+                    ends[a.id],
+                    assigned,
+                    f"interval_{a.id}_{robot}",
+                )
+                robot_intervals.setdefault(robot, []).append(robot_interval)
+            model.AddExactlyOne(bools)
+
+        for robot, r_intervals in robot_intervals.items():
+            model.AddNoOverlap(r_intervals)
+
+    for dep in dependencies:
+        if isinstance(dep, ScheduleDependency):
+            before, after, min_lag = dep.before, dep.after, dep.min_lag
+        else:
+            before, after = dep
+            min_lag = 0
+        model.Add(starts[after] >= ends[before] + min_lag)
 
     capacities = station_capacities or {}
     by_station: dict[str, list[ScheduleAction]] = {}
@@ -213,7 +281,14 @@ def solve_schedule(
     plan = []
     for action_id, a in action_by_id.items():
         start = float(solver.Value(starts[action_id]))
-        plan.append((start, f"{a.action} {a.item}", float(a.duration)))
+        robot = None
+        if robots:
+            for candidate in (a.eligible_robots or tuple(robots)):
+                if solver.Value(robot_assignments[(action_id, candidate)]):
+                    robot = candidate
+                    break
+        action_text = f"{a.action} {robot} {a.item}" if robot else f"{a.action} {a.item}"
+        plan.append((start, action_text, float(a.duration)))
     plan.sort(key=lambda row: (row[0], row[1]))
 
     return ScheduleResult(

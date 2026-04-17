@@ -29,6 +29,9 @@ class Task:
     station_capacities: dict  # station_name → max capacity
     optimal_makespan: float
     sequential_makespan: float
+    temporal_constraints: list[dict] = field(default_factory=list)
+    robots: list[str] = field(default_factory=list)
+    deadline: float | None = None
 
     @classmethod
     def from_dict(cls, d: dict) -> "Task":
@@ -40,6 +43,9 @@ class Task:
             station_capacities=d.get("stations", DEFAULT_STATION_CAPACITY),
             optimal_makespan=d["optimal_makespan"],
             sequential_makespan=d["sequential_makespan"],
+            temporal_constraints=d.get("temporal_constraints", []),
+            robots=d.get("robots", []),
+            deadline=d.get("deadline"),
         )
 
 
@@ -106,7 +112,8 @@ DEFAULT_STATION_CAPACITY = {
 
 class WorldState:
     def __init__(self, items: dict, station_capacities: dict | None = None,
-                 required_states: dict | None = None):
+                 required_states: dict | None = None,
+                 robots: list[str] | None = None):
         # item_name → current state string
         self.item_state: dict[str, str] = {
             name: info["state"] for name, info in items.items()
@@ -121,6 +128,8 @@ class WorldState:
         )
         # item_name → required goal state (for enforcing stack order legality)
         self.required_states: dict[str, str] = required_states or {}
+        self.robots = set(robots or [])
+        self.robot_busy: dict[str, bool] = {r: False for r in self.robots}
 
     def copy(self) -> "WorldState":
         s = WorldState.__new__(WorldState)
@@ -129,6 +138,8 @@ class WorldState:
         s.station_usage = dict(self.station_usage)
         s.station_capacity = dict(self.station_capacity)
         s.required_states = dict(self.required_states)
+        s.robots = set(self.robots)
+        s.robot_busy = dict(self.robot_busy)
         return s
 
 
@@ -155,8 +166,13 @@ def check_start(action: str, args: list[str], state: WorldState,
     if grill_requires_marinated is None:
         grill_requires_marinated = set()
 
+    robot, item = _robot_and_item(args, state)
+    if state.robots:
+        _require(robot is not None, f"{action} requires a robot argument")
+        _require(not state.robot_busy.get(robot, False),
+                 f"robot '{robot}' is busy")
+
     if action == "stack":
-        item = args[0]
         _require(item in state.item_state, f"unknown item '{item}'")
         cur = state.item_state[item]
         _require(cur in TERMINAL,
@@ -167,8 +183,6 @@ def check_start(action: str, args: list[str], state: WorldState,
             _require(cur == req,
                      f"cannot stack '{item}': state is '{cur}', must be '{req}' before stacking")
     elif action in REQUIRED_INPUT_STATE:
-        _require(len(args) == 1, f"{action} takes exactly 1 argument")
-        item = args[0]
         _require(item in state.item_state, f"unknown item '{item}'")
         cur = state.item_state[item]
         required = REQUIRED_INPUT_STATE[action]
@@ -190,21 +204,36 @@ def check_start(action: str, args: list[str], state: WorldState,
 
 
 def apply_start(action: str, args: list[str], state: WorldState):
+    robot, item = _robot_and_item(args, state)
+    if robot:
+        state.robot_busy[robot] = True
     if action in IN_PROGRESS:
-        state.item_state[args[0]] = IN_PROGRESS[action]
+        state.item_state[item] = IN_PROGRESS[action]
         station = ACTION_STATION[action]
         state.station_usage[station] = state.station_usage.get(station, 0) + 1
     # stack has no start effect (instantaneous: start == end)
 
 
 def apply_end(action: str, args: list[str], state: WorldState):
+    robot, item = _robot_and_item(args, state)
     if action == "stack":
-        item = args[0]
         state.stack.append(item)
     elif action in RESULT and RESULT[action] is not None:
-        state.item_state[args[0]] = RESULT[action]
+        state.item_state[item] = RESULT[action]
         station = ACTION_STATION[action]
         state.station_usage[station] = max(0, state.station_usage.get(station, 0) - 1)
+    if robot:
+        state.robot_busy[robot] = False
+
+
+def _robot_and_item(args: list[str], state: WorldState) -> tuple[str | None, str]:
+    if state.robots:
+        _require(len(args) == 2, "expected arguments: <robot> <item>")
+        robot, item = args
+        _require(robot in state.robots, f"unknown robot '{robot}'")
+        return robot, item
+    _require(len(args) == 1, "expected one item argument")
+    return None, args[0]
 
 
 # ── OPTIC plan parser ─────────────────────────────────────────────────────────
@@ -277,6 +306,48 @@ def check_goal(state: WorldState, goal: dict) -> tuple[bool, str]:
     return True, ""
 
 
+def _step_id(action: str, args: list[str]) -> str | None:
+    if not args:
+        return None
+    return f"{action}_{args[-1]}"
+
+
+def check_temporal_constraints(
+    plan: list[PlanStep],
+    temporal_constraints: list[dict],
+    tolerance: float = 1e-6,
+) -> tuple[bool, str]:
+    if not temporal_constraints:
+        return True, ""
+
+    times: dict[str, tuple[float, float]] = {}
+    for step in plan:
+        sid = _step_id(step.action, step.args)
+        if sid and sid not in times:
+            times[sid] = (step.t_start, step.t_end)
+
+    for constraint in temporal_constraints:
+        before = constraint.get("before", {})
+        after = constraint.get("after", {})
+        before_id = f"{before.get('action')}_{before.get('item')}"
+        after_id = f"{after.get('action')}_{after.get('item')}"
+        min_lag = float(constraint.get("min_lag", 0.0))
+        if before_id not in times:
+            return False, f"temporal constraint references missing action '{before_id}'"
+        if after_id not in times:
+            return False, f"temporal constraint references missing action '{after_id}'"
+        _, before_end = times[before_id]
+        after_start, _ = times[after_id]
+        earliest = before_end + min_lag
+        if after_start < earliest - tolerance:
+            return False, (
+                f"temporal constraint violated: '{after_id}' starts at {after_start:.3f}s, "
+                f"but must start at least {min_lag:.3f}s after '{before_id}' ends "
+                f"at {before_end:.3f}s"
+            )
+    return True, ""
+
+
 # ── Engine ────────────────────────────────────────────────────────────────────
 
 @dataclass
@@ -314,7 +385,8 @@ def execute(plan: list[PlanStep], task: Task, verbose: bool = False) -> EvalResu
     After all events: check goal.
     """
     state = WorldState(task.items, task.station_capacities,
-                       task.goal.get("required_states", {}))
+                       task.goal.get("required_states", {}),
+                       task.robots)
 
     # Items that must be cut before frying (isfryableifcut)
     fry_requires_cut = {
@@ -365,6 +437,11 @@ def execute(plan: list[PlanStep], task: Task, verbose: bool = False) -> EvalResu
                   f"  → {dict(state.item_state)}  stack={state.stack}")
 
     ok, err = check_goal(state, task.goal)
+    if ok:
+        ok, err = check_temporal_constraints(plan, task.temporal_constraints)
+    if ok and task.deadline is not None and t_final > float(task.deadline) + 1e-6:
+        ok = False
+        err = f"plan finishes at {t_final:.3f}s, exceeding deadline {float(task.deadline):.3f}s"
     return EvalResult(
         success=ok,
         error=err,

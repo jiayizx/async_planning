@@ -93,6 +93,29 @@ def _affordance_labels(info: dict, terse: bool = False) -> list[str]:
     return labels
 
 
+def _trait_labels(info: dict) -> list[str]:
+    """Rule-based traits used by implicit challenge descriptions."""
+    traits: list[str] = []
+    preds = set(info.get("predicates", []))
+    if "iscuttable" in preds:
+        traits.append("whole")
+    if "isfryable" in preds and not info.get("fry_requires_cut"):
+        traits.append("fryer_ready")
+    if "isfryableifcut" in preds or info.get("fry_requires_cut"):
+        if "whole" not in traits:
+            traits.append("whole")
+        traits.append("prep_for_fryer")
+    if "iscookable" in preds and not info.get("grill_requires_marinated"):
+        traits.append("grill_ready")
+    if "iscookableifmarinated" in preds or info.get("grill_requires_marinated"):
+        if "whole" not in traits:
+            traits.append("whole")
+        traits.extend(["unseasoned", "prep_for_grill"])
+    if "isboilable" in preds:
+        traits.append("hard_root" if info.get("mash_requires_boiled") else "boil_ready")
+    return traits
+
+
 # ── Main generator ────────────────────────────────────────────────────────────
 
 def task_to_nl(task: dict, implicit: bool = False) -> str:
@@ -101,17 +124,25 @@ def task_to_nl(task: dict, implicit: bool = False) -> str:
     durations  = task["action_durations"]
     req_states = goal.get("required_states", {})
     stack_order = goal.get("stack_order", [])
+    show_affordances = task.get("affordance_mode") == "action_model"
 
     lines = []
 
     # ── Section 1: available ingredients ─────────────────────────────────────
-    lines.append("## Ingredients")
-    show_affordances = task.get("affordance_mode") == "action_model"
+    if implicit and show_affordances:
+        lines.append("## Objects")
+    else:
+        lines.append("## Ingredients")
     for name, info in items.items():
         label = _item_label(name, info)
         state = info["state"]
         state_adj = STATE_ADJECTIVES.get(state, state)
-        affordances = _affordance_labels(info, terse=implicit) if show_affordances else []
+        if implicit and show_affordances:
+            traits = _trait_labels(info)
+            traits_note = f"; traits=[{', '.join(traits)}]" if traits else "; traits=[]"
+            lines.append(f"- {name}: state={state}{traits_note}")
+            continue
+        affordances = _affordance_labels(info, terse=False) if show_affordances else []
         affordance_note = f"; {'; '.join(affordances)}" if affordances else ""
         if state_adj and state_adj != "ready":
             if implicit:
@@ -128,7 +159,7 @@ def task_to_nl(task: dict, implicit: bool = False) -> str:
     lines.append("")
 
     # ── Section 2: available actions ──────────────────────────────────────────
-    lines.append("## Available Actions")
+    lines.append("## Action Rules" if implicit and show_affordances else "## Available Actions")
 
     # Collect which actions are actually needed (including transitive prerequisites)
     state_to_action = {
@@ -139,8 +170,15 @@ def task_to_nl(task: dict, implicit: bool = False) -> str:
         "toasted":   "toast",
         "mashed":    "mash",
     }
+    action_goal_states = list(req_states.values())
+    if task.get("objective_type") == "maximize_reward_under_deadline":
+        action_goal_states = [
+            candidate.get("state")
+            for candidate in task.get("candidate_goals", [])
+            if candidate.get("state")
+        ]
     needed_actions = set()
-    for state in req_states.values():
+    for state in action_goal_states:
         if state in state_to_action:
             needed_actions.add(state_to_action[state])
     if stack_order:
@@ -243,9 +281,56 @@ def task_to_nl(task: dict, implicit: bool = False) -> str:
         ),
     }
 
-    for action in ["grill", "cut", "fry", "boil", "toast", "marinate", "mash", "stack"]:
-        if action in needed_actions:
-            lines.append(f"- {action_descriptions[action]}")
+    if implicit and show_affordances:
+        rule_descriptions = {
+            "cut": (
+                "**cut** `(x)` — applicable if state(x)=raw and whole(x). "
+                f"Takes {_duration_phrase(durations['cut'])}. Effect: state(x)=cut."
+            ),
+            "fry": (
+                "**fry** `(x)` — applicable if state(x)=raw and fryer_ready(x), "
+                "or state(x)=cut and prep_for_fryer(x). "
+                f"Takes {_duration_phrase(durations['fry'])}. Effect: state(x)=fried."
+            ),
+            "marinate": (
+                "**marinate** `(x)` — applicable if state(x)=cut and unseasoned(x). "
+                f"Takes {_duration_phrase(durations.get('marinate', 8))}. "
+                "Effect: state(x)=marinated."
+            ),
+            "grill": (
+                "**grill** `(x)` — applicable if state(x)=raw and grill_ready(x), "
+                "or state(x)=marinated and prep_for_grill(x). "
+                f"Takes {_duration_phrase(durations['grill'])}. Effect: state(x)=grilled."
+            ),
+            "boil": (
+                "**boil** `(x)` — applicable if state(x)=raw and "
+                "(boil_ready(x) or hard_root(x)). "
+                f"Takes {_duration_phrase(durations['boil'])}. Effect: state(x)=boiled."
+            ),
+            "toast": (
+                "**toast** `(x)` — applicable if state(x)=raw. "
+                f"Takes {_duration_phrase(durations.get('toast', 5))}. "
+                "Effect: state(x)=toasted."
+            ),
+            "mash": (
+                "**mash** `(x)` — applicable if state(x)=boiled and hard_root(x). "
+                f"Takes {_duration_phrase(durations.get('mash', 4))}. "
+                "Effect: state(x)=mashed."
+            ),
+            "stack": (
+                "**stack** `(x)` — applicable if x is in its required goal state "
+                "or already ready. "
+                f"Takes {_duration_phrase(durations['stack'])}. "
+                "Effect: x is placed on the current stack."
+            ),
+        }
+        for action in ["cut", "fry", "marinate", "grill", "boil", "toast", "mash", "stack"]:
+            if action in needed_actions:
+                lines.append(f"- {rule_descriptions[action]}")
+    else:
+        for action in ["grill", "cut", "fry", "boil", "toast", "marinate", "mash", "stack"]:
+            if action in needed_actions:
+                lines.append(f"- {action_descriptions[action]}")
     lines.append("")
 
     # ── Section 2b: station constraints ──────────────────────────────────────
@@ -274,8 +359,63 @@ def task_to_nl(task: dict, implicit: bool = False) -> str:
         lines.extend(station_lines)
         lines.append("")
 
+    robots = task.get("robots", [])
+    if robots:
+        lines.append("## Robot Constraints")
+        lines.append("Each action must be assigned to exactly one robot.")
+        lines.append("A robot can run at most one action at a time.")
+        lines.append("Available robots:")
+        for robot in robots:
+            lines.append(f"- {robot}")
+        lines.append("")
+
+    temporal_constraints = task.get("temporal_constraints", [])
+    if temporal_constraints:
+        lines.append("## Temporal Constraints")
+        for constraint in temporal_constraints:
+            before = constraint.get("before", {})
+            after = constraint.get("after", {})
+            lag = constraint.get("min_lag", 0)
+            before_item = _item_label(before.get("item", ""), items.get(before.get("item", ""), {}))
+            after_item = _item_label(after.get("item", ""), items.get(after.get("item", ""), {}))
+            lines.append(
+                f"- After **{before.get('action')}** `{before_item}` finishes, wait at least "
+                f"{_duration_phrase(float(lag))} before starting **{after.get('action')}** `{after_item}`."
+            )
+        lines.append("")
+
     # ── Section 3: goal ───────────────────────────────────────────────────────
     lines.append("## Goal")
+
+    if task.get("objective_type") == "maximize_reward_under_deadline":
+        deadline = task.get("deadline")
+        if deadline is not None:
+            lines.append(
+                f"Complete as much reward as possible by {_duration_phrase(float(deadline))}."
+            )
+        candidates = task.get("candidate_goals", [])
+        if candidates:
+            lines.append("Candidate rewards:")
+            for candidate in candidates:
+                item = candidate.get("item", "")
+                label = _item_label(item, items.get(item, {}))
+                state = candidate.get("state", "")
+                reward = candidate.get("reward", 0)
+                cost = candidate.get("cost", {})
+                cost_text = (
+                    "; cost " + ", ".join(f"{k}={v}" for k, v in cost.items())
+                    if cost else
+                    ""
+                )
+                lines.append(f"- {label} as {state}: reward {reward}{cost_text}")
+            lines.append("")
+        inventory_limits = task.get("inventory_limits", {})
+        if inventory_limits:
+            lines.append("Inventory limits:")
+            for resource, limit in inventory_limits.items():
+                lines.append(f"- {resource}: at most {limit}")
+            lines.append("")
+        return "\n".join(lines)
 
     # Describe required processing
     processing_requirements = []
