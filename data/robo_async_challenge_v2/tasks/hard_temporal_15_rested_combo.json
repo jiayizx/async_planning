@@ -1,0 +1,138 @@
+{
+  "id": "hard_temporal_15_rested_combo",
+  "split": "hard_temporal",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_temporal",
+    "time_lag",
+    "and_join"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "chicken15": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "cassava15": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "plantain15": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "pickle15": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "radish15": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "beans15": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "chicken15": "grilled",
+      "cassava15": "mashed",
+      "plantain15": "fried",
+      "pickle15": "cut",
+      "radish15": "cut",
+      "beans15": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "chicken15",
+      "pickle15",
+      "radish15",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [
+    {
+      "before": {
+        "action": "grill",
+        "item": "chicken15"
+      },
+      "after": {
+        "action": "stack",
+        "item": "chicken15"
+      },
+      "min_lag": 5
+    },
+    {
+      "before": {
+        "action": "mash",
+        "item": "cassava15"
+      },
+      "after": {
+        "action": "stack",
+        "item": "bun_top"
+      },
+      "min_lag": 2
+    },
+    {
+      "before": {
+        "action": "boil",
+        "item": "beans15"
+      },
+      "after": {
+        "action": "stack",
+        "item": "bun_top"
+      },
+      "min_lag": 4
+    }
+  ],
+  "optimal_makespan": 29.0,
+  "sequential_makespan": 60,
+  "speedup_ratio": 2.069,
+  "witness_plan": "0.000: (boil cassava15)  [12.000]\n0.000: (cut plantain15)  [3.000]\n0.000: (grill chicken15)  [10.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut pickle15)  [3.000]\n6.000: (cut radish15)  [3.000]\n12.000: (boil beans15)  [12.000]\n12.000: (mash cassava15)  [4.000]\n15.000: (stack chicken15)  [1.000]\n16.000: (fry plantain15)  [8.000]\n21.000: (stack pickle15)  [1.000]\n22.000: (stack radish15)  [1.000]\n28.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

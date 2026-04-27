@@ -1,0 +1,65 @@
+{
+  "id": "easy_10_simple_soup_side",
+  "split": "easy",
+  "difficulty": "easy",
+  "challenge_features": [
+    "easy"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "water": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "onion": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "bowl": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "water": "boiled",
+      "onion": "cut"
+    },
+    "stack_order": [
+      "bowl",
+      "water",
+      "onion"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 14.0,
+  "sequential_makespan": 18,
+  "speedup_ratio": 1.286,
+  "witness_plan": "0.000: (boil water)  [12.000]\n0.000: (cut onion)  [3.000]\n0.000: (stack bowl)  [1.000]\n12.000: (stack water)  [1.000]\n13.000: (stack onion)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

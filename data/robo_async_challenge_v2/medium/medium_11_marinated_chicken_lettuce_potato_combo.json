@@ -1,0 +1,82 @@
+{
+  "id": "medium_11_marinated_chicken_lettuce_potato_combo",
+  "split": "medium",
+  "difficulty": "medium",
+  "challenge_features": [
+    "medium"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "marinated_chicken11": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "potato11": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "lettuce11": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "marinated_chicken11": "grilled",
+      "potato11": "fried",
+      "lettuce11": "cut"
+    },
+    "stack_order": [
+      "bun_bot",
+      "marinated_chicken11",
+      "lettuce11",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 22.0,
+  "sequential_makespan": 37,
+  "speedup_ratio": 1.682,
+  "witness_plan": "0.000: (cut marinated_chicken11)  [3.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut potato11)  [3.000]\n3.000: (marinate marinated_chicken11)  [6.000]\n6.000: (cut lettuce11)  [3.000]\n9.000: (grill marinated_chicken11)  [10.000]\n14.000: (fry potato11)  [8.000]\n19.000: (stack marinated_chicken11)  [1.000]\n20.000: (stack lettuce11)  [1.000]\n21.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

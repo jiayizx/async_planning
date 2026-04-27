@@ -1,0 +1,122 @@
+{
+  "id": "hard_station_05_combo_plate",
+  "split": "hard_station",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_station",
+    "shared_station",
+    "capacity_gt_1"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "chicken05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "patty05": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "potato05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "fish05": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "yam05": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "lettuce05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "cucumber05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "stock05": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "chicken05": "grilled",
+      "patty05": "grilled",
+      "potato05": "fried",
+      "fish05": "fried",
+      "yam05": "mashed",
+      "lettuce05": "cut",
+      "cucumber05": "cut",
+      "stock05": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "chicken05",
+      "lettuce05",
+      "patty05",
+      "cucumber05",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 2,
+    "fryer": 1,
+    "boiler": 2,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 25.0,
+  "sequential_makespan": 88,
+  "speedup_ratio": 3.52,
+  "witness_plan": "0.000: (boil stock05)  [12.000]\n0.000: (boil yam05)  [12.000]\n0.000: (cut chicken05)  [3.000]\n0.000: (cut potato05)  [3.000]\n0.000: (fry fish05)  [8.000]\n0.000: (grill patty05)  [10.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut cucumber05)  [3.000]\n3.000: (cut lettuce05)  [3.000]\n3.000: (marinate chicken05)  [6.000]\n8.000: (fry potato05)  [8.000]\n10.000: (grill chicken05)  [10.000]\n12.000: (mash yam05)  [4.000]\n20.000: (stack chicken05)  [1.000]\n21.000: (stack lettuce05)  [1.000]\n22.000: (stack patty05)  [1.000]\n23.000: (stack cucumber05)  [1.000]\n24.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

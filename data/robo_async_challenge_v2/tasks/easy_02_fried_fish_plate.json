@@ -1,0 +1,57 @@
+{
+  "id": "easy_02_fried_fish_plate",
+  "split": "easy",
+  "difficulty": "easy",
+  "challenge_features": [
+    "easy"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "fish": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "plate": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "fish": "fried"
+    },
+    "stack_order": [
+      "plate",
+      "fish"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 9.0,
+  "sequential_makespan": 10,
+  "speedup_ratio": 1.111,
+  "witness_plan": "0.000: (fry fish)  [8.000]\n0.000: (stack plate)  [1.000]\n8.000: (stack fish)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

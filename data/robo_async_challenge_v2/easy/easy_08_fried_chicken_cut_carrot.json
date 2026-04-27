@@ -1,0 +1,65 @@
+{
+  "id": "easy_08_fried_chicken_cut_carrot",
+  "split": "easy",
+  "difficulty": "easy",
+  "challenge_features": [
+    "easy"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "chicken": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "carrot": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "plate": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "chicken": "fried",
+      "carrot": "cut"
+    },
+    "stack_order": [
+      "plate",
+      "chicken",
+      "carrot"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 10.0,
+  "sequential_makespan": 14,
+  "speedup_ratio": 1.4,
+  "witness_plan": "0.000: (cut carrot)  [3.000]\n0.000: (fry chicken)  [8.000]\n0.000: (stack plate)  [1.000]\n8.000: (stack chicken)  [1.000]\n9.000: (stack carrot)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

@@ -1,0 +1,127 @@
+{
+  "id": "hard_multiagent_07_robot_team_service",
+  "split": "hard_multiagent",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_multiagent",
+    "multiagent",
+    "robot_capacity"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "chicken07": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "tempeh07": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "shrimp07": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "okra07": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "cassava07": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "pickle07": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "radish07": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "beans07": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "chicken07": "grilled",
+      "tempeh07": "grilled",
+      "shrimp07": "fried",
+      "okra07": "fried",
+      "cassava07": "mashed",
+      "pickle07": "cut",
+      "radish07": "cut",
+      "beans07": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "chicken07",
+      "pickle07",
+      "tempeh07",
+      "radish07",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 3,
+    "cutting_board": 3,
+    "fryer": 2,
+    "boiler": 2,
+    "toaster": 1,
+    "marinator": 2
+  },
+  "temporal_constraints": [],
+  "robots": [
+    "robot1",
+    "robot2",
+    "robot3"
+  ],
+  "optimal_makespan": 30.0,
+  "sequential_makespan": 88,
+  "speedup_ratio": 2.933,
+  "witness_plan": "0.000: (boil robot1 cassava07)  [12.000]\n0.000: (cut robot2 tempeh07)  [3.000]\n0.000: (grill robot3 chicken07)  [10.000]\n3.000: (marinate robot2 tempeh07)  [6.000]\n9.000: (cut robot2 okra07)  [3.000]\n10.000: (grill robot3 tempeh07)  [10.000]\n12.000: (boil robot1 beans07)  [12.000]\n12.000: (fry robot2 okra07)  [8.000]\n20.000: (cut robot2 pickle07)  [3.000]\n20.000: (fry robot3 shrimp07)  [8.000]\n23.000: (cut robot2 radish07)  [3.000]\n24.000: (stack robot1 bun_bot)  [1.000]\n25.000: (stack robot1 chicken07)  [1.000]\n26.000: (mash robot2 cassava07)  [4.000]\n26.000: (stack robot1 pickle07)  [1.000]\n27.000: (stack robot1 tempeh07)  [1.000]\n28.000: (stack robot1 radish07)  [1.000]\n29.000: (stack robot1 bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

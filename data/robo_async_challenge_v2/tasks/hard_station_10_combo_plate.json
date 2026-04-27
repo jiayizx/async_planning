@@ -1,0 +1,122 @@
+{
+  "id": "hard_station_10_combo_plate",
+  "split": "hard_station",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_station",
+    "shared_station",
+    "capacity_gt_1"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "tofu10": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "salmon10": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "onion10": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "falafel10": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "turnip10": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "tomato10": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "pepper10": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "broth10": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "tofu10": "grilled",
+      "salmon10": "grilled",
+      "onion10": "fried",
+      "falafel10": "fried",
+      "turnip10": "mashed",
+      "tomato10": "cut",
+      "pepper10": "cut",
+      "broth10": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "tofu10",
+      "tomato10",
+      "salmon10",
+      "pepper10",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 2,
+    "fryer": 1,
+    "boiler": 2,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 25.0,
+  "sequential_makespan": 88,
+  "speedup_ratio": 3.52,
+  "witness_plan": "0.000: (boil broth10)  [12.000]\n0.000: (boil turnip10)  [12.000]\n0.000: (cut onion10)  [3.000]\n0.000: (cut tofu10)  [3.000]\n0.000: (fry falafel10)  [8.000]\n0.000: (grill salmon10)  [10.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut pepper10)  [3.000]\n3.000: (cut tomato10)  [3.000]\n3.000: (marinate tofu10)  [6.000]\n8.000: (fry onion10)  [8.000]\n10.000: (grill tofu10)  [10.000]\n12.000: (mash turnip10)  [4.000]\n20.000: (stack tofu10)  [1.000]\n21.000: (stack tomato10)  [1.000]\n22.000: (stack salmon10)  [1.000]\n23.000: (stack pepper10)  [1.000]\n24.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}
