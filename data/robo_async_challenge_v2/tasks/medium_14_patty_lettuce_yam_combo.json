@@ -1,0 +1,78 @@
+{
+  "id": "medium_14_patty_lettuce_yam_combo",
+  "split": "medium",
+  "difficulty": "medium",
+  "challenge_features": [
+    "medium"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "patty14": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "yam14": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "lettuce14": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "patty14": "grilled",
+      "yam14": "mashed",
+      "lettuce14": "cut"
+    },
+    "stack_order": [
+      "bun_bot",
+      "lettuce14",
+      "patty14",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 16.0,
+  "sequential_makespan": 33,
+  "speedup_ratio": 2.062,
+  "witness_plan": "0.000: (boil yam14)  [12.000]\n0.000: (cut lettuce14)  [3.000]\n0.000: (grill patty14)  [10.000]\n0.000: (stack bun_bot)  [1.000]\n12.000: (mash yam14)  [4.000]\n13.000: (stack lettuce14)  [1.000]\n14.000: (stack patty14)  [1.000]\n15.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

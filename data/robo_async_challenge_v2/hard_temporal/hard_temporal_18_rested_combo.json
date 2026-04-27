@@ -1,0 +1,141 @@
+{
+  "id": "hard_temporal_18_rested_combo",
+  "split": "hard_temporal",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_temporal",
+    "time_lag",
+    "and_join"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "salmon18": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "turnip18": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "okra18": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "tomato18": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "pepper18": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "broth18": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "salmon18": "grilled",
+      "turnip18": "mashed",
+      "okra18": "fried",
+      "tomato18": "cut",
+      "pepper18": "cut",
+      "broth18": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "salmon18",
+      "tomato18",
+      "pepper18",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [
+    {
+      "before": {
+        "action": "grill",
+        "item": "salmon18"
+      },
+      "after": {
+        "action": "stack",
+        "item": "salmon18"
+      },
+      "min_lag": 5
+    },
+    {
+      "before": {
+        "action": "mash",
+        "item": "turnip18"
+      },
+      "after": {
+        "action": "stack",
+        "item": "bun_top"
+      },
+      "min_lag": 3
+    },
+    {
+      "before": {
+        "action": "boil",
+        "item": "broth18"
+      },
+      "after": {
+        "action": "stack",
+        "item": "bun_top"
+      },
+      "min_lag": 4
+    }
+  ],
+  "optimal_makespan": 29.0,
+  "sequential_makespan": 69,
+  "speedup_ratio": 2.379,
+  "witness_plan": "0.000: (boil turnip18)  [12.000]\n0.000: (cut salmon18)  [3.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut okra18)  [3.000]\n3.000: (marinate salmon18)  [6.000]\n6.000: (cut tomato18)  [3.000]\n9.000: (cut pepper18)  [3.000]\n9.000: (grill salmon18)  [10.000]\n12.000: (boil broth18)  [12.000]\n12.000: (mash turnip18)  [4.000]\n20.000: (fry okra18)  [8.000]\n24.000: (stack salmon18)  [1.000]\n25.000: (stack tomato18)  [1.000]\n26.000: (stack pepper18)  [1.000]\n28.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}
