@@ -1,0 +1,58 @@
+(define (domain keep_bees)
+  (:requirements :durative-actions)
+  (:predicates
+    (catch_swarm_pending)
+    (catch_swarm_done)
+    (purchase_hive_pending)
+    (purchase_hive_done)
+    (order_bees_pending)
+    (order_bees_done)
+    (place_bees_pending)
+    (place_bees_done)
+  )
+
+  (:durative-action catch_swarm
+    :parameters ()
+    :duration (= ?duration 259200)
+    :condition (at start (catch_swarm_pending))
+    :effect (and
+      (at start (not (catch_swarm_pending)))
+      (at end (catch_swarm_done))
+    )
+  )
+
+  (:durative-action purchase_hive
+    :parameters ()
+    :duration (= ?duration 172800)
+    :condition (at start (purchase_hive_pending))
+    :effect (and
+      (at start (not (purchase_hive_pending)))
+      (at end (purchase_hive_done))
+    )
+  )
+
+  (:durative-action order_bees
+    :parameters ()
+    :duration (= ?duration 1814400)
+    :condition (at start (order_bees_pending))
+    :effect (and
+      (at start (not (order_bees_pending)))
+      (at end (order_bees_done))
+    )
+  )
+
+  (:durative-action place_bees
+    :parameters ()
+    :duration (= ?duration 86400)
+    :condition (and
+      (at start (place_bees_pending))
+      (at start (catch_swarm_done))
+      (at start (purchase_hive_done))
+      (at start (order_bees_done))
+    )
+    :effect (and
+      (at start (not (place_bees_pending)))
+      (at end (place_bees_done))
+    )
+  )
+)

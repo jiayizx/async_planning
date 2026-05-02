@@ -24,7 +24,10 @@ env/
 Thumbs.db
 
 # Results
-results/
+results/gen-data
+results/gen-data-modified-two-step
+results/test_gemini
+results/asynchow
 test/
 
 # Test files
@@ -35,3 +38,5 @@ test.py
 
 # Results
 results/
+
+data/

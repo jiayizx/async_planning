@@ -1,0 +1,1 @@
+(define (problem walk_to_door_prob) (:domain walk_to_door) (:init (locate_door_pending) (turn_door_pending) (lift_left_pending) (lift_right_pending) (move_left_pending) (move_right_pending) (reach_door_pending)) (:goal (and (locate_door_done) (turn_door_done) (lift_left_done) (lift_right_done) (move_left_done) (move_right_done) (reach_door_done))) (:metric minimize (total-time)))

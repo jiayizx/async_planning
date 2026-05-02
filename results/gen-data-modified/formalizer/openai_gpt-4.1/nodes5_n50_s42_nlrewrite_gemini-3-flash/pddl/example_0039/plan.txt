@@ -1,0 +1,5 @@
+0.000: (record_notepad) [240.000]
+0.000: (put_on_clothes) [180.000]
+0.000: (locate_tape) [120.000]
+180.001: (measure_circum) [300.000]
+240.001: (log_data) [60.000]

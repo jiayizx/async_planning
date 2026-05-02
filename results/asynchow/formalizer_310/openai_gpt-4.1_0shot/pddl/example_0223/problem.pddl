@@ -1,0 +1,17 @@
+(define (problem labradoodle_grooming_instance)
+  (:domain labradoodle_grooming)
+  (:init
+    (bathe_pending)
+    (tub_pending)
+    (shampoo_pending)
+    (rinse_pending)
+    (dry_pending)
+  )
+  (:goal (and
+    (bathe_done)
+    (tub_done)
+    (shampoo_done)
+    (rinse_done)
+    (dry_done)
+  ))
+)

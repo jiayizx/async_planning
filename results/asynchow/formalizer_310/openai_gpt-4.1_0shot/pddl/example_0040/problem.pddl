@@ -1,0 +1,17 @@
+(define (problem pool_building_problem)
+  (:domain pool_building)
+  (:init
+    (get_financed_pending)
+    (hire_contractor_pending)
+    (make_contract_pending)
+    (transfer_money_pending)
+    (job_monitoring_pending)
+  )
+  (:goal (and
+    (get_financed_done)
+    (hire_contractor_done)
+    (make_contract_done)
+    (transfer_money_done)
+    (job_monitoring_done)
+  ))
+)

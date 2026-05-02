@@ -1,0 +1,5 @@
+0.000: (do_step5_find_wallet_and_phone) [300.000]
+300.001: (do_step3_check_stove_and_lights_off) [120.000]
+420.002: (do_step4_set_home_security_alarm) [30.000]
+420.002: (do_step1_put_on_heavy_winter_coat) [45.000]
+465.003: (do_step2_put_car_keys_in_pocket) [10.000]

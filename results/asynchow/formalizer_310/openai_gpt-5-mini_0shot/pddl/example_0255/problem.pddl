@@ -1,0 +1,17 @@
+(define (problem clean_wubbanub_problem)
+  (:domain clean_wubbanub)
+  (:init
+    (place_in_bag_pending)
+    (put_in_washer_pending)
+    (add_detergent_pending)
+    (start_cycle_pending)
+    (air_dry_pending)
+  )
+  (:goal (and
+    (place_in_bag_done)
+    (put_in_washer_done)
+    (add_detergent_done)
+    (start_cycle_done)
+    (air_dry_done)
+  ))
+)

@@ -1,0 +1,1 @@
+(define (problem bookstore_problem) (:domain bookstore_trip) (:init (shower_pending) (clothes_pending) (shoes_pending) (drive_pending) (find_books_pending)) (:goal (and (shower_done) (clothes_done) (shoes_done) (drive_done) (find_books_done))) (:metric minimize (total-time)))

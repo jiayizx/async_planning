@@ -1,0 +1,5 @@
+0.000: (call_about_large_animal) [900.000]
+900.001: (drive_to_zoo) [2100.000]
+3000.002: (set_up_area) [1800.000]
+3000.002: (set_up_paperwork) [600.000]
+3600.003: (receive_large_animal) [1800.000]

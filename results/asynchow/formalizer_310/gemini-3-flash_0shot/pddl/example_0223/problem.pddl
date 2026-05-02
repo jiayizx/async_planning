@@ -1,0 +1,1 @@
+(define (problem groom_labradoodle_prob)(:domain grooming_labradoodle)(:init (bathe_pending) (put_in_tub_pending) (shampoo_pending) (rinse_pending) (dry_pending))(:goal (and (bathe_done) (put_in_tub_done) (shampoo_done) (rinse_done) (dry_done)))(:metric minimize (total-time)))

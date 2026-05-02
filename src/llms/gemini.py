@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from typing import Any, Dict, List
 
 from google import genai
@@ -9,9 +10,9 @@ from pydantic import BaseModel
 from .base import BaseLLM
 
 GEMINI_MODELS_MAPPING = {
-    "gemini/gemini-2.5-flash": "gemini-2.5-flash",
-    "gemini/gemini-3-flash": "gemini-3-flash-preview",
-    "gemini/gemini-3-pro": "gemini-3-pro-preview",
+    "gemini-2.5-flash": "gemini-2.5-flash",
+    "gemini-3-flash": "gemini-3-flash-preview",
+    "gemini-3-pro": "gemini-3-pro-preview",
 }
 
 # thinking_budget=0 disables thinking for 2.5 series.
@@ -77,16 +78,33 @@ class GeminiLLM(BaseLLM):
                 )
         return system_text, contents
 
+    def _call_with_retry(self, fn, max_retries: int = 5, base_wait: float = 5.0):
+        """Call fn(), retrying on 503/429 with exponential backoff."""
+        wait = base_wait
+        for attempt in range(max_retries):
+            try:
+                return fn()
+            except Exception as e:
+                msg = str(e) + type(e).__name__
+                is_rate_limit = "429" in msg or "RESOURCE_EXHAUSTED" in msg or "ResourceExhausted" in msg
+                is_unavailable = "503" in msg or "UNAVAILABLE" in msg or "ServiceUnavailable" in msg
+                if (is_rate_limit or is_unavailable) and attempt < max_retries - 1:
+                    print(f"  [gemini retry {attempt+1}/{max_retries-1}] {msg[:80]} — waiting {wait:.0f}s")
+                    time.sleep(wait)
+                    wait = min(wait * 2, 60.0)
+                else:
+                    raise
+
     def _chat(self, messages: List[Dict[str, str]]) -> str:
         system_text, contents = self._build_contents(messages)
         extra = {"system_instruction": system_text} if system_text else {}
         config = self._build_gemini_config(extra)
 
-        response = self.client.models.generate_content(
+        response = self._call_with_retry(lambda: self.client.models.generate_content(
             model=self.model_name,
             contents=contents,
             config=config,
-        )
+        ))
         # self._log_usage(response)
         return response.text
 
@@ -99,15 +117,15 @@ class GeminiLLM(BaseLLM):
         new_text = last.parts[0].text + f"\n\nRespond with valid JSON matching this schema:\n{schema_json}"
         contents[-1] = types.Content(role=last.role, parts=[types.Part(text=new_text)])
 
-        extra = {"response_mime_type": "application/json"}
+        extra = {"response_mime_type": "application/json", "response_schema": schema}
         if system_text:
             extra["system_instruction"] = system_text
         config = self._build_gemini_config(extra)
 
-        response = self.client.models.generate_content(
+        response = self._call_with_retry(lambda: self.client.models.generate_content(
             model=self.model_name,
             contents=contents,
             config=config,
-        )
+        ))
         # self._log_usage(response)
         return response.text

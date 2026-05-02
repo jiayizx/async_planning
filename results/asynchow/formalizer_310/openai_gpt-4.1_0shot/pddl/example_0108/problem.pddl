@@ -1,0 +1,17 @@
+(define (problem yellowstone-trip-problem)
+  (:domain yellowstone-trip)
+  (:init
+    (look_up_attractions_pending)
+    (look_up_map_pending)
+    (drive_pending)
+    (go_entrance_pending)
+    (go_attractions_pending)
+  )
+  (:goal (and
+    (look_up_attractions_done)
+    (look_up_map_done)
+    (drive_done)
+    (go_entrance_done)
+    (go_attractions_done)
+  ))
+)

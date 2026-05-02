@@ -1,0 +1,7 @@
+0.000: (take_ingredients_out_of_fridge) [60.000]
+0.000: (put_frying_pan_on_stove) [60.000]
+60.001: (put_butter_in_pan) [30.000]
+90.002: (turn_stove_on) [30.000]
+120.003: (add_egg_to_pan) [30.000]
+150.004: (cook_egg) [300.000]
+450.005: (serve_and_enjoy) [60.000]

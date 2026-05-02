@@ -1,0 +1,15 @@
+(define (problem lose_upper_body_fat-problem)
+  (:domain lose_upper_body_fat)
+  (:init
+    (do_chin_ups_pending)
+    (try_dumbbell_row_pending)
+    (perform_bent_over_rear_delt_raise_pending)
+    (choose_exercises_pending)
+  )
+  (:goal (and
+    (do_chin_ups_done)
+    (try_dumbbell_row_done)
+    (perform_bent_over_rear_delt_raise_done)
+    (choose_exercises_done)
+  ))
+)

@@ -1,0 +1,4 @@
+0.000: (schedule_party) [900.000]
+900.001: (figure_out_transport) [1800.000]
+900.001: (make_hair_appointment) [7200.000]
+900.001: (groom_hands_feet) [3600.000]

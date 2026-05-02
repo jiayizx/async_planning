@@ -1,0 +1,17 @@
+(define (problem own_bar_problem)
+  (:domain own_bar)
+  (:init
+    (obtain_business_license_pending)
+    (buy_building_property_pending)
+    (renovate_building_pending)
+    (inspect_building_pending)
+    (obtain_liquor_license_pending)
+  )
+  (:goal (and
+    (obtain_business_license_done)
+    (buy_building_property_done)
+    (renovate_building_done)
+    (inspect_building_done)
+    (obtain_liquor_license_done)
+  ))
+)

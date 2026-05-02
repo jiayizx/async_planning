@@ -1,0 +1,1 @@
+(define (problem palm_reading_prob) (:domain palm_reading) (:init (s1_p) (s2_p) (s3_p) (s4_p) (s5_p) (s6_p) (s7_p) (s8_p) (s9_p)) (:goal (and (s1_d) (s2_d) (s3_d) (s4_d) (s5_d) (s6_d) (s7_d) (s8_d) (s9_d))) (:metric minimize (total-time)))

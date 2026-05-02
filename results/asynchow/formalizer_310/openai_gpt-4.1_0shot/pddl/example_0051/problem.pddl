@@ -1,0 +1,17 @@
+(define (problem build_fire_problem)
+  (:domain build_fire)
+  (:init
+    (find_matches_pending)
+    (find_wood_pending)
+    (place_wood_pending)
+    (tear_newspaper_pending)
+    (ignite_fire_pending)
+  )
+  (:goal (and
+    (find_matches_done)
+    (find_wood_done)
+    (place_wood_done)
+    (tear_newspaper_done)
+    (ignite_fire_done)
+  ))
+)

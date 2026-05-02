@@ -1,0 +1,5 @@
+0.000: (prepare_medium) [7200.000]
+7200.001: (harvest_microalgae) [21600.000]
+28800.002: (solvent_extraction) [14400.000]
+28800.002: (centrifuge_algae) [2700.000]
+43200.003: (refine_and_bottle) [172800.000]

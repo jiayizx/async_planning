@@ -1,0 +1,4 @@
+0.000: (cover_with_wax_paper) [60.000]
+0.000: (boil_sugar_water) [300.000]
+300.001: (chill_syrup) [3600.000]
+3900.002: (combine_watermelon_syrup) [600.000]

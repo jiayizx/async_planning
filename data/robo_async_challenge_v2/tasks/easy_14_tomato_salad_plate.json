@@ -1,0 +1,65 @@
+{
+  "id": "easy_14_tomato_salad_plate",
+  "split": "easy",
+  "difficulty": "easy",
+  "challenge_features": [
+    "easy"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "tomato14": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "cucumber14": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "plate": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "tomato14": "cut",
+      "cucumber14": "cut"
+    },
+    "stack_order": [
+      "plate",
+      "tomato14",
+      "cucumber14"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 7.0,
+  "sequential_makespan": 9,
+  "speedup_ratio": 1.286,
+  "witness_plan": "0.000: (cut tomato14)  [3.000]\n0.000: (stack plate)  [1.000]\n3.000: (cut cucumber14)  [3.000]\n3.000: (stack tomato14)  [1.000]\n6.000: (stack cucumber14)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

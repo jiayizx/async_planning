@@ -1,0 +1,127 @@
+{
+  "id": "hard_multiagent_16_robot_team_service",
+  "split": "hard_multiagent",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_multiagent",
+    "multiagent",
+    "robot_capacity"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "tofu16": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "eggplant16": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "nugget16": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "plantain16": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "parsnip16": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "carrot16": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "celery16": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "peas16": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "tofu16": "grilled",
+      "eggplant16": "grilled",
+      "nugget16": "fried",
+      "plantain16": "fried",
+      "parsnip16": "mashed",
+      "carrot16": "cut",
+      "celery16": "cut",
+      "peas16": "boiled"
+    },
+    "stack_order": [
+      "bun_bot",
+      "tofu16",
+      "carrot16",
+      "eggplant16",
+      "celery16",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 3,
+    "cutting_board": 3,
+    "fryer": 2,
+    "boiler": 2,
+    "toaster": 1,
+    "marinator": 2
+  },
+  "temporal_constraints": [],
+  "robots": [
+    "robot1",
+    "robot2",
+    "robot3"
+  ],
+  "optimal_makespan": 30.0,
+  "sequential_makespan": 88,
+  "speedup_ratio": 2.933,
+  "witness_plan": "0.000: (boil robot1 parsnip16)  [12.000]\n0.000: (cut robot2 eggplant16)  [3.000]\n0.000: (grill robot3 tofu16)  [10.000]\n3.000: (marinate robot2 eggplant16)  [6.000]\n9.000: (cut robot2 plantain16)  [3.000]\n10.000: (grill robot3 eggplant16)  [10.000]\n12.000: (boil robot1 peas16)  [12.000]\n12.000: (fry robot2 plantain16)  [8.000]\n20.000: (cut robot2 carrot16)  [3.000]\n20.000: (fry robot3 nugget16)  [8.000]\n23.000: (cut robot2 celery16)  [3.000]\n24.000: (stack robot1 bun_bot)  [1.000]\n25.000: (stack robot1 tofu16)  [1.000]\n26.000: (mash robot2 parsnip16)  [4.000]\n26.000: (stack robot1 carrot16)  [1.000]\n27.000: (stack robot1 eggplant16)  [1.000]\n28.000: (stack robot1 celery16)  [1.000]\n29.000: (stack robot1 bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

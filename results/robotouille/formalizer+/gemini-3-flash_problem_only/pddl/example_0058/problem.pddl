@@ -1,0 +1,26 @@
+(define (problem potato-soup-task)
+  (:domain robotouille)
+  (:objects
+    fryer_1 table_1 stove_1 table_2 board_1 sink_1 table_3 - station
+    potato_1 - item
+    robot_1 - player
+  )
+  (:init
+    (isfryer fryer_1) (istable table_1) (isstove stove_1) (istable table_2) (isboard board_1) (issink sink_1) (istable table_3)
+    (ispotato potato_1)
+    (isrobot robot_1)
+    (loc robot_1 fryer_1)
+    (nothing robot_1)
+    (iscuttable potato_1)
+    (on potato_1 fryer_1)
+    (at potato_1 fryer_1)
+    (clear potato_1)
+    (empty table_1) (empty stove_1) (empty table_2) (empty board_1) (empty sink_1) (empty table_3)
+    (vacant table_1) (vacant stove_1) (vacant table_2) (vacant board_1) (vacant sink_1) (vacant table_3)
+    (item-free potato_1)
+  )
+  (:goal (and
+    (iscut potato_1)
+    (at potato_1 table_1)
+  ))
+)

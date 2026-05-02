@@ -1,0 +1,15 @@
+(define (problem play_with_chinchilla_problem)
+  (:domain play_with_chinchilla)
+  (:init
+    (put_in_cage_pending)
+    (setup_wheel_pending)
+    (fill_toys_pending)
+    (add_hiding_house_pending)
+  )
+  (:goal (and
+    (put_in_cage_done)
+    (setup_wheel_done)
+    (fill_toys_done)
+    (add_hiding_house_done)
+  ))
+)

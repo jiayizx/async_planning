@@ -1,0 +1,17 @@
+(define (problem grill-with-friends-problem)
+  (:domain grill-with-friends)
+  (:init
+    (light_grill_pending)
+    (charcoal_warmup_pending)
+    (make_patties_pending)
+    (cook_hamburgers_pending)
+    (put_on_bun_pending)
+  )
+  (:goal (and
+    (light_grill_done)
+    (charcoal_warmup_done)
+    (make_patties_done)
+    (cook_hamburgers_done)
+    (put_on_bun_done)
+  ))
+)

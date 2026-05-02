@@ -1,0 +1,103 @@
+(define (domain read-palms)
+  (:requirements :durative-actions)
+  (:predicates
+    (choose_hand_pending)
+    (choose_hand_done)
+    (identify_lines_pending)
+    (identify_lines_done)
+    (interpret_heart_line_pending)
+    (interpret_heart_line_done)
+    (examine_head_line_pending)
+    (examine_head_line_done)
+    (evaluate_life_line_pending)
+    (evaluate_life_line_done)
+    (study_fate_line_pending)
+    (study_fate_line_done)
+    (determine_hand_shape_pending)
+    (determine_hand_shape_done)
+    (look_at_mounts_pending)
+    (look_at_mounts_done)
+    (examine_hand_finger_size_pending)
+    (examine_hand_finger_size_done)
+  )
+
+  ;; Step 1: Choose a hand (1 min = 60s)
+  (:durative-action choose_hand
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (choose_hand_pending))
+                    (at start (determine_hand_shape_done))
+                    (at start (look_at_mounts_done))
+                    (at start (examine_hand_finger_size_done)))
+    :effect (and (at start (not (choose_hand_pending))) (at end (choose_hand_done)))
+  )
+
+  ;; Step 2: Identify the four major lines (2 min = 120s)
+  (:durative-action identify_lines
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (identify_lines_pending))
+                    (at start (choose_hand_done)))
+    :effect (and (at start (not (identify_lines_pending))) (at end (identify_lines_done)))
+  )
+
+  ;; Step 3: Interpret the heart line (3 min = 180s)
+  (:durative-action interpret_heart_line
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (interpret_heart_line_pending))
+                    (at start (identify_lines_done)))
+    :effect (and (at start (not (interpret_heart_line_pending))) (at end (interpret_heart_line_done)))
+  )
+
+  ;; Step 4: Examine the head line (2 min = 120s)
+  (:durative-action examine_head_line
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (examine_head_line_pending))
+                    (at start (identify_lines_done)))
+    :effect (and (at start (not (examine_head_line_pending))) (at end (examine_head_line_done)))
+  )
+
+  ;; Step 5: Evaluate the life line (2 min = 120s)
+  (:durative-action evaluate_life_line
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (evaluate_life_line_pending))
+                    (at start (identify_lines_done)))
+    :effect (and (at start (not (evaluate_life_line_pending))) (at end (evaluate_life_line_done)))
+  )
+
+  ;; Step 6: Study the fate line (3 min = 180s)
+  (:durative-action study_fate_line
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (study_fate_line_pending))
+                    (at start (identify_lines_done)))
+    :effect (and (at start (not (study_fate_line_pending))) (at end (study_fate_line_done)))
+  )
+
+  ;; Step 7: Determine the hand shape (2 min = 120s)
+  (:durative-action determine_hand_shape
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (determine_hand_shape_pending))
+    :effect (and (at start (not (determine_hand_shape_pending))) (at end (determine_hand_shape_done)))
+  )
+
+  ;; Step 8: Look at the mounts (3 min = 180s)
+  (:durative-action look_at_mounts
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (at start (look_at_mounts_pending))
+    :effect (and (at start (not (look_at_mounts_pending))) (at end (look_at_mounts_done)))
+  )
+
+  ;; Step 9: Examine the hand and finger size (2 min = 120s)
+  (:durative-action examine_hand_finger_size
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (examine_hand_finger_size_pending))
+    :effect (and (at start (not (examine_hand_finger_size_pending))) (at end (examine_hand_finger_size_done)))
+  )
+)

@@ -1,0 +1,176 @@
+{
+  "id": "hard_high_speedup_08_feast",
+  "split": "hard_high_speedup",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_high_speedup",
+    "high_speedup",
+    "shared_station",
+    "capacity_gt_1"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "feast_plate": {
+      "state": "ready",
+      "predicates": []
+    },
+    "patty08": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "salmon08": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "chicken08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "tofu08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "fish08": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "falafel08": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "potato08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "onion08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "yam08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "turnip08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "stock08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "beans08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    },
+    "lettuce08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "tomato08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "cucumber08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "carrot08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    }
+  },
+  "goal": {
+    "required_states": {
+      "patty08": "grilled",
+      "salmon08": "grilled",
+      "chicken08": "grilled",
+      "tofu08": "grilled",
+      "fish08": "fried",
+      "falafel08": "fried",
+      "potato08": "fried",
+      "onion08": "fried",
+      "yam08": "mashed",
+      "turnip08": "mashed",
+      "stock08": "boiled",
+      "beans08": "boiled",
+      "lettuce08": "cut",
+      "tomato08": "cut",
+      "cucumber08": "cut",
+      "carrot08": "cut"
+    },
+    "stack_order": [
+      "feast_plate"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 3,
+    "cutting_board": 4,
+    "fryer": 3,
+    "boiler": 3,
+    "toaster": 1,
+    "marinator": 3
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 24.0,
+  "sequential_makespan": 165,
+  "speedup_ratio": 6.875,
+  "witness_plan": "0.000: (boil stock08)  [12.000]\n0.000: (boil turnip08)  [12.000]\n0.000: (boil yam08)  [12.000]\n0.000: (cut chicken08)  [3.000]\n0.000: (cut onion08)  [3.000]\n0.000: (cut potato08)  [3.000]\n0.000: (cut tofu08)  [3.000]\n0.000: (fry falafel08)  [8.000]\n0.000: (fry fish08)  [8.000]\n0.000: (grill patty08)  [10.000]\n0.000: (grill salmon08)  [10.000]\n0.000: (stack feast_plate)  [1.000]\n3.000: (cut carrot08)  [3.000]\n3.000: (cut cucumber08)  [3.000]\n3.000: (cut lettuce08)  [3.000]\n3.000: (cut tomato08)  [3.000]\n3.000: (fry onion08)  [8.000]\n3.000: (marinate chicken08)  [6.000]\n3.000: (marinate tofu08)  [6.000]\n8.000: (fry potato08)  [8.000]\n9.000: (grill chicken08)  [10.000]\n10.000: (grill tofu08)  [10.000]\n12.000: (boil beans08)  [12.000]\n12.000: (mash turnip08)  [4.000]\n12.000: (mash yam08)  [4.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

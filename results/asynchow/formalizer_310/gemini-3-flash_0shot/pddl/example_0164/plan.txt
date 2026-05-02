@@ -1,0 +1,3 @@
+0.000: (hold_marker) [120.000]
+120.001: (color_picture) [600.000]
+120.001: (sketch_picture) [300.000]

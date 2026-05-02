@@ -1,0 +1,5 @@
+0.000: (clean_counter) [900.000]
+900.001: (apply_masking_tape) [300.000]
+1200.002: (use_pigmented_epoxy) [900.000]
+1200.002: (fix_cracks_with_superglue) [600.000]
+2100.003: (file_glue_patch) [1200.000]

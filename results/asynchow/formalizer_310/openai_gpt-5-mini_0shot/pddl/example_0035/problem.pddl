@@ -1,0 +1,17 @@
+(define (problem learn_film_problem)
+  (:domain learn_film)
+  (:init
+    (decide_pending)
+    (research_pending)
+    (library_pending)
+    (read_pending)
+    (enjoy_pending)
+  )
+  (:goal (and
+    (decide_done)
+    (research_done)
+    (library_done)
+    (read_done)
+    (enjoy_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem impress-popular-girls-problem)
+  (:domain impress-popular-girls)
+  (:init
+    (research_interests_pending)
+    (determine_girls_pending)
+    (find_location_pending)
+    (travel_to_location_pending)
+    (impress_girls_pending)
+  )
+  (:goal (and
+    (research_interests_done)
+    (determine_girls_done)
+    (find_location_done)
+    (travel_to_location_done)
+    (impress_girls_done)
+  ))
+)

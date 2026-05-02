@@ -1,0 +1,7 @@
+0.000: (buy_pass) [300.000]
+0.000: (think_destination) [60.000]
+60.001: (lookup_bus) [120.000]
+180.002: (map_stop) [180.000]
+300.001: (collect_pass) [120.000]
+420.002: (walk_to_stop) [300.000]
+720.003: (check_on_time) [120.000]

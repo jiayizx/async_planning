@@ -1,0 +1,2184 @@
+[
+  {
+    "id": 1,
+    "question": "To make eggless chocolate cake, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make eggless chocolate cake?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make eggless chocolate cake",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 2,
+    "question": "To introduce friends to other friends, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to introduce friends to other friends?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "introduce friends to other friends",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "1": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 3,
+    "question": "To count to ten in finnish, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to count to ten in finnish?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "count to ten in finnish",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "2": 2,
+        "5": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 4,
+    "question": "To hang planters with knotted rope, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hang planters with knotted rope?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "hang planters with knotted rope",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "4": 1,
+        "1": 2,
+        "5": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 5,
+    "question": "To make farina, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make farina?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "make farina",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "5": 1,
+        "1": 2,
+        "3": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 6,
+    "question": "To cook new york strip steak, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook new york strip steak?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "cook new york strip steak",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "1": 1,
+        "4": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 7,
+    "question": "To make beef stroganoff, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make beef stroganoff?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make beef stroganoff",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 8,
+    "question": "To leave house and get into car., here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave house and get into car.?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "leave house and get into car.",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "5": 2,
+        "1": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 9,
+    "question": "To treat bruises on your face, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 2 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat bruises on your face?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "treat bruises on your face",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "4": 1,
+        "3": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 10,
+    "question": "To go play at the neighbor boy's house, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go play at the neighbor boy's house?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "go play at the neighbor boy's house",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "4": 1,
+        "5": 2,
+        "3": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 11,
+    "question": "To get a new tv, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new tv?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "get a new tv",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "3": 1,
+        "5": 2,
+        "4": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 12,
+    "question": "To buy a bus pass, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 4 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy a bus pass?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "buy a bus pass",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "5": 2,
+        "2": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 13,
+    "question": "To go to school today, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go to school today?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "go to school today",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "5": 1,
+        "1": 2,
+        "3": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 14,
+    "question": "To draw and paint a rustic cabin in two‐point perspective, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to draw and paint a rustic cabin in two‐point perspective?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "draw and paint a rustic cabin in two‐point perspective",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "4": 2,
+        "3": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 15,
+    "question": "To cure alcohol breath, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure alcohol breath?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "cure alcohol breath",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "1": 2,
+        "2": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 16,
+    "question": "To make lemon bars, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make lemon bars?",
+    "answer": "2",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 2,
+    "task_title": "make lemon bars",
+    "par_ratio": 2.5,
+    "path_count": 3,
+    "dag_depth_actual": 1,
+    "and_join_count": 0,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          2,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "1": 2,
+        "2": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 17,
+    "question": "To go fishing anymore, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go fishing anymore?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "go fishing anymore",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 18,
+    "question": "To get dha, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get dha?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "get dha",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "3": 2,
+        "1": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 19,
+    "question": "To make orange, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make orange?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make orange",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "2": 1,
+        "4": 2,
+        "1": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 20,
+    "question": "To have fresh herbs to enjoy year-round, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 4.\nStep 5 must precede Step 1.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to have fresh herbs to enjoy year-round?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "have fresh herbs to enjoy year-round",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "2": 1,
+        "3": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 21,
+    "question": "To make chicken curry, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chicken curry?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "make chicken curry",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "3": 1,
+        "2": 2,
+        "5": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 22,
+    "question": "To treat liver disease in older dogs, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 1.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat liver disease in older dogs?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "treat liver disease in older dogs",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "2": 2,
+        "1": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 23,
+    "question": "To become a dental assistant in texas, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to become a dental assistant in texas?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "become a dental assistant in texas",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "1": 1,
+        "5": 2,
+        "4": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 24,
+    "question": "To help your child help the community, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to help your child help the community?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "help your child help the community",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "5": 1,
+        "2": 2,
+        "4": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 25,
+    "question": "To polish jewelry, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to polish jewelry?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "polish jewelry",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 26,
+    "question": "To leave school location., here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "leave school location.",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "3": 1,
+        "1": 2,
+        "4": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 27,
+    "question": "To customize a drum set, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to customize a drum set?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "customize a drum set",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 28,
+    "question": "To connect your nintendo wii wifi to dial up, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 4 must precede Step 2.\nStep 4 must precede Step 3.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to connect your nintendo wii wifi to dial up?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "connect your nintendo wii wifi to dial up",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "4": 2,
+        "5": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 29,
+    "question": "To cure gastritis, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure gastritis?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "cure gastritis",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "5": 2,
+        "2": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 30,
+    "question": "To make solid perfume, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make solid perfume?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make solid perfume",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "5": 1,
+        "4": 2,
+        "1": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 31,
+    "question": "To make a canoe, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a canoe?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make a canoe",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "2": 1,
+        "5": 2,
+        "3": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 32,
+    "question": "To acclimate starfish, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 3 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to acclimate starfish?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "acclimate starfish",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "5": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 33,
+    "question": "To make a balloon pet, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 4.\nStep 4 must precede Step 2.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a balloon pet?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make a balloon pet",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "2": 2,
+        "3": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 34,
+    "question": "To restrain a dog, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to restrain a dog?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "restrain a dog",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 35,
+    "question": "To write freeform poetry, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to write freeform poetry?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 5,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "write freeform poetry",
+    "par_ratio": 1.25,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.5,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "4": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 36,
+    "question": "To buy postage stamps, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy postage stamps?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "buy postage stamps",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "3": 1,
+        "2": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 37,
+    "question": "To care for manx cats, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to care for manx cats?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "care for manx cats",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "5": 1,
+        "2": 2,
+        "4": 3,
+        "1": 4
+      }
+    }
+  },
+  {
+    "id": 38,
+    "question": "To choose flowers from the garden for making potpourri, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to choose flowers from the garden for making potpourri?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "choose flowers from the garden for making potpourri",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "5": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 39,
+    "question": "To make milanesa, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make milanesa?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make milanesa",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "2": 2,
+        "1": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 40,
+    "question": "To take body measurements, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to take body measurements?",
+    "answer": "2",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 2,
+    "task_title": "take body measurements",
+    "par_ratio": 2.5,
+    "path_count": 3,
+    "dag_depth_actual": 1,
+    "and_join_count": 1,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "3": 1,
+        "1": 2,
+        "5": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 41,
+    "question": "To make steamed ginger pudding, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make steamed ginger pudding?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make steamed ginger pudding",
+    "par_ratio": 1.6667,
+    "path_count": 3,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "5": 1,
+        "4": 2,
+        "1": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 42,
+    "question": "To drink from sippy cup, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to drink from sippy cup?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "drink from sippy cup",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "4": 2,
+        "1": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 43,
+    "question": "To make fruit punch, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 3 must precede Step 2.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make fruit punch?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make fruit punch",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 44,
+    "question": "To see the warning signs of child molestation, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the warning signs of child molestation?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "see the warning signs of child molestation",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 1.0,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "5": 2,
+        "2": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 45,
+    "question": "To leave school location., here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "leave school location.",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "5": 1,
+        "3": 2,
+        "4": 3,
+        "2": 4
+      }
+    }
+  },
+  {
+    "id": 46,
+    "question": "To apply powder makeup, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to apply powder makeup?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "apply powder makeup",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "2": 1,
+        "4": 2,
+        "1": 3,
+        "5": 4
+      }
+    }
+  },
+  {
+    "id": 47,
+    "question": "To celebrate may day, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to celebrate may day?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "celebrate may day",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "5": 1,
+        "2": 2,
+        "1": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 48,
+    "question": "To see the natural beauty of maine, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the natural beauty of maine?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "see the natural beauty of maine",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "2": 1,
+        "1": 2,
+        "3": 3,
+        "4": 4
+      }
+    }
+  },
+  {
+    "id": 49,
+    "question": "To make corn soup, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make corn soup?",
+    "answer": "3",
+    "n_steps": 5,
+    "n_edges": 3,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "make corn soup",
+    "par_ratio": 1.6667,
+    "path_count": 2,
+    "dag_depth_actual": 2,
+    "and_join_count": 0,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.3,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "4": 1,
+        "5": 2,
+        "2": 3,
+        "3": 4
+      }
+    }
+  },
+  {
+    "id": 50,
+    "question": "To conduct a self analysis, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 3 must precede Step 2.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to conduct a self analysis?",
+    "answer": "4",
+    "n_steps": 5,
+    "n_edges": 4,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "conduct a self analysis",
+    "par_ratio": 1.25,
+    "path_count": 2,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.4,
+    "graph": {
+      "edges": [
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "3": 2,
+        "1": 3,
+        "2": 4
+      }
+    }
+  }
+]

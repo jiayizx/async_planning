@@ -1,0 +1,17 @@
+(define (problem make_corn_soup)
+  (:domain corn_soup)
+  (:init
+    (saute_onions_garlic_pending)
+    (simmer_corn_broth_pending)
+    (husk_wash_corn_pending)
+    (prep_dice_veggies_pending)
+    (blend_soup_pending)
+  )
+  (:goal (and
+    (saute_onions_garlic_done)
+    (simmer_corn_broth_done)
+    (husk_wash_corn_done)
+    (prep_dice_veggies_done)
+    (blend_soup_done)
+  ))
+)

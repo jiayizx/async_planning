@@ -1,0 +1,184 @@
+{
+  "id": "hard_optimization_08_deadline_menu",
+  "split": "hard_optimization",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_optimization",
+    "deadline",
+    "limited_inventory",
+    "reward_maximization"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "maximize_reward_under_deadline",
+  "affordance_mode": "action_model",
+  "items": {
+    "eggplant08": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "steak08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "nugget08": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "plantain08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "parsnip08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "carrot08": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "peas08": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    }
+  },
+  "goal": {
+    "required_states": {
+      "steak08": "grilled",
+      "nugget08": "fried",
+      "plantain08": "fried",
+      "parsnip08": "mashed"
+    },
+    "stack_order": []
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 2,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "robots": [
+    "robot1",
+    "robot2"
+  ],
+  "deadline": 27,
+  "candidate_goals": [
+    {
+      "id": "grilled_main",
+      "item": "eggplant08",
+      "state": "grilled",
+      "reward": 9,
+      "cost": {
+        "protein": 1
+      }
+    },
+    {
+      "id": "marinated_grill",
+      "item": "steak08",
+      "state": "grilled",
+      "reward": 14,
+      "cost": {
+        "protein": 1,
+        "fresh": 1
+      }
+    },
+    {
+      "id": "fried_main",
+      "item": "nugget08",
+      "state": "fried",
+      "reward": 8,
+      "cost": {
+        "protein": 1,
+        "fryer_oil": 1
+      }
+    },
+    {
+      "id": "fried_side",
+      "item": "plantain08",
+      "state": "fried",
+      "reward": 7,
+      "cost": {
+        "fryer_oil": 1,
+        "fresh": 1
+      }
+    },
+    {
+      "id": "mashed_root",
+      "item": "parsnip08",
+      "state": "mashed",
+      "reward": 10,
+      "cost": {
+        "root": 1
+      }
+    },
+    {
+      "id": "fresh_side",
+      "item": "carrot08",
+      "state": "cut",
+      "reward": 4,
+      "cost": {
+        "fresh": 1
+      }
+    },
+    {
+      "id": "soup_side",
+      "item": "peas08",
+      "state": "boiled",
+      "reward": 6,
+      "cost": {
+        "root": 1
+      }
+    }
+  ],
+  "selected_goal_ids": [
+    "marinated_grill",
+    "fried_main",
+    "fried_side",
+    "mashed_root"
+  ],
+  "optimal_reward": 39,
+  "inventory_limits": {
+    "protein": 2,
+    "fryer_oil": 2,
+    "root": 1,
+    "fresh": 2
+  },
+  "optimal_makespan": 27.0,
+  "sequential_makespan": 54,
+  "speedup_ratio": 2.0,
+  "witness_plan": "0.000: (cut robot1 steak08)  [3.000]\n0.000: (fry robot2 nugget08)  [8.000]\n3.000: (boil robot1 parsnip08)  [12.000]\n8.000: (marinate robot2 steak08)  [6.000]\n14.000: (cut robot2 plantain08)  [3.000]\n15.000: (mash robot1 parsnip08)  [4.000]\n17.000: (grill robot2 steak08)  [10.000]\n19.000: (fry robot1 plantain08)  [8.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

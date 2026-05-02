@@ -1,0 +1,17 @@
+(define (problem operate-nest-thermostat)
+  (:domain nest-thermostat)
+  (:init
+    (download_app_pending)
+    (pair_app_pending)
+    (change_temp_pending)
+    (schedule_temp_pending)
+    (adjust_settings_pending)
+  )
+  (:goal (and
+    (download_app_done)
+    (pair_app_done)
+    (change_temp_done)
+    (schedule_temp_done)
+    (adjust_settings_done)
+  ))
+)

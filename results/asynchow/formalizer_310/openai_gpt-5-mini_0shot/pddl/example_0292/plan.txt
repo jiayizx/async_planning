@@ -1,0 +1,6 @@
+0.000: (do_step6_store_extra) [120.000]
+0.000: (do_step1_choose_ripe) [120.000]
+120.001: (do_step2_wash_and_dry) [180.000]
+300.002: (do_step4_remove_seeds) [120.000]
+300.002: (do_step3_rub) [60.000]
+420.003: (do_step5_eat_kumquat) [60.000]

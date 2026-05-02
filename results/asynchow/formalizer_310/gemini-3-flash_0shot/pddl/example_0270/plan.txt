@@ -1,0 +1,6 @@
+0.000: (fill_bowl) [60.000]
+0.000: (place_saucepan) [180.000]
+180.001: (add_sugar) [300.000]
+480.002: (boil_and_milk) [120.000]
+600.003: (cool_down) [900.000]
+1500.004: (add_powdered_sugar) [300.000]

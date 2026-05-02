@@ -1,0 +1,3 @@
+0.000: (do_step2_pay_for_item) [300.000]
+0.000: (do_step1_make_note_of_employee) [120.000]
+300.001: (do_step3_store_receipt) [60.000]

@@ -1,0 +1,17 @@
+(define (problem manx_care_problem)
+  (:domain manx_care)
+  (:init
+    (research_pending)
+    (purchase_pending)
+    (setup_pending)
+    (feed_pending)
+    (vet_pending)
+  )
+  (:goal (and
+    (research_done)
+    (purchase_done)
+    (setup_done)
+    (feed_done)
+    (vet_done)
+  ))
+)

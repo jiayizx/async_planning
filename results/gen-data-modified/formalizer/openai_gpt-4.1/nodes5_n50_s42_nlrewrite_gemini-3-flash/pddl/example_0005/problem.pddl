@@ -1,0 +1,17 @@
+(define (problem steak-cooking-problem)
+  (:domain steak-cooking)
+  (:init
+    (season_steak_pending)
+    (rest_steak_pending)
+    (remove_steak_pending)
+    (sear_steak_pending)
+    (serve_steak_pending)
+  )
+  (:goal (and
+    (season_steak_done)
+    (rest_steak_done)
+    (remove_steak_done)
+    (sear_steak_done)
+    (serve_steak_done)
+  ))
+)

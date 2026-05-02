@@ -127,9 +127,22 @@ def check_plan_validity(
     # ── Name-based matching (preferred) ──────────────────────────────────────
     if step_actions and len(step_actions) == n:
         action_times = _extract_action_times(plan)
-        topo_order = _topo_order_from_edges(n, gold_edges)
-        node_to_action = {topo_order[i]: step_actions[i] for i in range(n)}
-        step_of = {node: i + 1 for i, node in enumerate(topo_order)}
+
+        # Use step_to_node to map node_id → action (step_actions is ordered by step number).
+        # gen_dag.py shuffles step labels, so node i ≠ Step i+1 in general.
+        raw_s2n = graph.get("step_to_node", {})
+        if raw_s2n:
+            # step_to_node keys are strings ("1".."n"); values are int node IDs
+            node_to_action = {
+                int(node_id): step_actions[int(step_str) - 1]
+                for step_str, node_id in raw_s2n.items()
+            }
+            step_of = {int(node_id): int(step_str) for step_str, node_id in raw_s2n.items()}
+        else:
+            # Fallback for data that predates step_to_node storage
+            topo_order = _topo_order_from_edges(n, gold_edges)
+            node_to_action = {topo_order[i]: step_actions[i] for i in range(n)}
+            step_of = {node: i + 1 for i, node in enumerate(topo_order)}
 
         for node, action_name in node_to_action.items():
             if action_name not in action_times:

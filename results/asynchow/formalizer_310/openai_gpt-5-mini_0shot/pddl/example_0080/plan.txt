@@ -1,0 +1,5 @@
+0.000: (do_acquire_tools) [7200.000]
+0.000: (do_acquire_boards) [3600.000]
+3600.001: (do_lay_pieces) [1800.000]
+7200.001: (do_attach_pieces) [3600.000]
+10800.002: (do_test_buoyancy) [3600.000]

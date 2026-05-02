@@ -1,0 +1,4 @@
+0.000: (decide_discount) [120.000]
+0.000: (calculate_total) [300.000]
+300.001: (multiply_discount) [120.000]
+420.002: (subtract_discount) [120.000]

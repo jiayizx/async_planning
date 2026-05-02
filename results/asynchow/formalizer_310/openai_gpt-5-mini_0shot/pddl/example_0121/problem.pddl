@@ -1,0 +1,17 @@
+(define (problem learn_sloths_prob)
+  (:domain learn_sloths)
+  (:init
+    (open_browser_pending)
+    (search_pending)
+    (select_videos_pending)
+    (select_websites_pending)
+    (find_zoo_pending)
+  )
+  (:goal (and
+    (open_browser_done)
+    (search_done)
+    (select_videos_done)
+    (select_websites_done)
+    (find_zoo_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem make_canoe)
+  (:domain canoe_building)
+  (:init
+    (apply_sealant_pending)
+    (harvest_log_pending)
+    (hollow_log_pending)
+    (carve_bow_stern_pending)
+    (install_seats_pending)
+  )
+  (:goal (and
+    (apply_sealant_done)
+    (harvest_log_done)
+    (hollow_log_done)
+    (carve_bow_stern_done)
+    (install_seats_done)
+  ))
+)

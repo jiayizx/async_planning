@@ -1,0 +1,17 @@
+(define (problem roommate-problems-instance)
+  (:domain roommate-problems)
+  (:init
+    (discuss_cleaning_schedule_pending)
+    (develop_visitor_plan_pending)
+    (discuss_phone_policy_pending)
+    (determine_lights_out_time_pending)
+    (sign_roommate_agreement_pending)
+  )
+  (:goal (and
+    (discuss_cleaning_schedule_done)
+    (develop_visitor_plan_done)
+    (discuss_phone_policy_done)
+    (determine_lights_out_time_done)
+    (sign_roommate_agreement_done)
+  ))
+)

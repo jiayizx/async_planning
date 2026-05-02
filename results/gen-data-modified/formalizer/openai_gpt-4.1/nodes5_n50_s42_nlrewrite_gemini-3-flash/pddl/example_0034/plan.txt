@@ -1,0 +1,5 @@
+0.000: (select_quiet_place) [300.000]
+300.001: (draft_opening_stanza) [3600.000]
+300.001: (reflect_on_memory) [1800.000]
+3900.002: (complete_remaining_verses) [7200.000]
+11100.003: (read_final_poem_aloud) [600.000]

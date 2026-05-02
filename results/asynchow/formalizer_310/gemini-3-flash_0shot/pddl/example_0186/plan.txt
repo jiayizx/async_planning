@@ -1,0 +1,4 @@
+0.000: (start_with_putty_knife) [600.000]
+0.000: (work_slowly) [1800.000]
+600.001: (scrape_leftovers) [1800.000]
+2400.002: (use_pliers) [900.000]

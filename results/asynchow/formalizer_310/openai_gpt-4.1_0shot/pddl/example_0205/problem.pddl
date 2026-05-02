@@ -1,0 +1,17 @@
+(define (problem build_generator_problem)
+  (:domain build_generator)
+  (:init
+    (fabricate_mounting_plate_pending)
+    (mount_pulleys_pending)
+    (run_belts_pending)
+    (mount_gas_tank_pending)
+    (reconnect_gas_pending)
+  )
+  (:goal (and
+    (fabricate_mounting_plate_done)
+    (mount_pulleys_done)
+    (run_belts_done)
+    (mount_gas_tank_done)
+    (reconnect_gas_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem beef-stroganoff-problem)
+  (:domain beef-stroganoff)
+  (:init
+    (slice_beef_pending)
+    (chop_veggies_pending)
+    (sear_beef_pending)
+    (saute_veggies_pending)
+    (simmer_sauce_pending)
+  )
+  (:goal (and
+    (slice_beef_done)
+    (chop_veggies_done)
+    (sear_beef_done)
+    (saute_veggies_done)
+    (simmer_sauce_done)
+  ))
+)

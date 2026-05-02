@@ -1,0 +1,17 @@
+(define (problem freeze-watermelon-problem)
+  (:domain freeze-watermelon)
+  (:init
+    (boil_sugar_water_pending)
+    (chill_syrup_pending)
+    (combine_watermelon_syrup_pending)
+    (cover_with_wax_paper_pending)
+    (freeze_fruit_pending)
+  )
+  (:goal (and
+    (boil_sugar_water_done)
+    (chill_syrup_done)
+    (combine_watermelon_syrup_done)
+    (cover_with_wax_paper_done)
+    (freeze_fruit_done)
+  ))
+)

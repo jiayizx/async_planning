@@ -1,0 +1,8 @@
+0.000: (meet_recruiter) [3600.000]
+0.000: (submit_security_paperwork) [3600.000]
+3600.001: (clear_medical) [172800.000]
+647.000: (centrifuge_training) [86400.000]
+647.000: (submit_pilot_application) [1209600.000]
+647.000: (pass_afoqt) [18000.000]
+647.000: (attend_sere) [1814400.000]
+647.000: (water_survival) [432000.000]

@@ -1,0 +1,17 @@
+(define (problem introduce-friends-problem)
+  (:domain introduce-friends)
+  (:init
+    (send_invite_pending)
+    (research_restaurant_pending)
+    (create_groupchat_pending)
+    (book_table_pending)
+    (host_dinner_pending)
+  )
+  (:goal (and
+    (send_invite_done)
+    (research_restaurant_done)
+    (create_groupchat_done)
+    (book_table_done)
+    (host_dinner_done)
+  ))
+)

@@ -1,0 +1,33 @@
+(define (domain wedding_prep)
+(:requirements :durative-actions)
+(:predicates
+(step1_pending) (step1_done)
+(step2_pending) (step2_done)
+(step3_pending) (step3_done)
+(step4_pending) (step4_done)
+)
+(:durative-action plan_flowers
+:parameters ()
+:duration (= ?duration 7200)
+:condition (and (at start (step1_pending)) (at start (step4_done)))
+:effect (and (at start (not (step1_pending))) (at end (step1_done)))
+)
+(:durative-action choose_food
+:parameters ()
+:duration (= ?duration 14400)
+:condition (at start (step2_pending))
+:effect (and (at start (not (step2_pending))) (at end (step2_done)))
+)
+(:durative-action decide_wear
+:parameters ()
+:duration (= ?duration 10800)
+:condition (and (at start (step3_pending)) (at start (step4_done)))
+:effect (and (at start (not (step3_pending))) (at end (step3_done)))
+)
+(:durative-action get_opinion
+:parameters ()
+:duration (= ?duration 3600)
+:condition (at start (step4_pending))
+:effect (and (at start (not (step4_pending))) (at end (step4_done)))
+)
+)

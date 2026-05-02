@@ -1,0 +1,17 @@
+(define (problem get_books_for_school-problem)
+  (:domain get_books_for_school)
+  (:init
+    (shower_pending)
+    (clothes_pending)
+    (shoes_pending)
+    (drive_pending)
+    (find_pending)
+  )
+  (:goal (and
+    (shower_done)
+    (clothes_done)
+    (shoes_done)
+    (drive_done)
+    (find_done)
+  ))
+)

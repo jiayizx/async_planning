@@ -1,0 +1,27 @@
+{
+  "benchmark": "robotouille",
+  "method": "planner",
+  "model_name": "openai/gpt-4.1",
+  "num_examples": 10,
+  "num_plans_parsed": 10,
+  "plan_parse_rate": 1.0,
+  "accuracy": 1.0,
+  "num_done": 10,
+  "average_steps": 21.7,
+  "avg_steps_ratio": 1.0333333333333334,
+  "simulation_success_rate": 0.0,
+  "num_simulation_tested": 10,
+  "num_simulation_success": 0,
+  "env_simulation_success_rate": 0.0,
+  "num_env_simulation_tested": 10,
+  "num_env_simulation_success": 0,
+  "avg_goal_predicate_recall": 1.0,
+  "goal_count_match_rate": 0.0,
+  "plan_action_type_totals": {
+    "move": 80,
+    "pick-up": 51,
+    "place": 35,
+    "cook": 30,
+    "stack": 21
+  }
+}

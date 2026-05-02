@@ -1,0 +1,1 @@
+(define (problem sand_castle_problem)(:domain sand_castle_domain)(:init (pack_pending)(dress_pending)(drive_pending)(park_pending)(walk_pending))(:goal (and (pack_done)(dress_done)(drive_done)(park_done)(walk_done)))(:metric minimize (total-time)))

@@ -1,0 +1,17 @@
+(define (problem buspass-problem)
+  (:domain buspass)
+  (:init
+    (purchase_pass_pending)
+    (register_serial_pending)
+    (wait_activation_pending)
+    (withdraw_cash_pending)
+    (find_wallet_pending)
+  )
+  (:goal (and
+    (purchase_pass_done)
+    (register_serial_done)
+    (wait_activation_done)
+    (withdraw_cash_done)
+    (find_wallet_done)
+  ))
+)

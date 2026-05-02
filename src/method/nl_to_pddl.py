@@ -11,12 +11,27 @@ Prompt design inspired by:
 from __future__ import annotations
 
 import json
+import re
+from pathlib import Path
 from typing import List, Optional
 
 from pydantic import BaseModel
 
+from src.llms.prompts import (
+    PDDL_SYSTEM_PROMPT,
+    PDDL_SYSTEM_PROMPT_OLD,
+    PDDL_USER_TEMPLATE,
+    PDDL_FEW_SHOT_EXAMPLES,
+    DEP_ANALYSIS_SYSTEM_PROMPT,
+    DEP_ANALYSIS_USER_TEMPLATE,
+)
+
 
 # ── Pydantic schema for structured output ──────────────────────────────
+
+
+class DepAnalysis(BaseModel):
+    analysis: str
 
 
 class PDDLResult(BaseModel):
@@ -29,483 +44,7 @@ class PDDLResponse(BaseModel):
     responses: List[PDDLResult]
 
 
-# ── Prompt ──────────────────────────────────────────────────────────────
-
-# PDDL_SYSTEM_PROMPT = """
-# You are a PDDL expert. Given an asynchronous planning problem, write the domain and problem files in minimal PDDL 2.1 format.
-
-# Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
-# - 'domain_pddl': the domain in PDDL 2.1 format as a string.
-# - 'problem_pddl': the problem in PDDL 2.1 format as a string.
-# """
-
-PDDL_SYSTEM_PROMPT = """
-You are a PDDL expert. Given an asynchronous planning problem, write the domain and problem files in minimal PDDL 2.1 format.
-
-ENCODING: Use PARAMETERLESS actions (no step type, no step objects).
-Each action gets its own pair of predicates: `(X_pending)` and `(X_done)`.
-`X_done` is BOTH the "step completed" marker AND the semantic predicate for successors.
-
-CRITICAL PDDL RULES for OPTIC planner compatibility:
-1. Use ONLY `:durative-actions` in `:requirements`. Do NOT use `:typing`, `:negative-preconditions`,
-   `:adl`, or `:disjunctive-preconditions`.
-2. NEVER use `(not ...)` in action preconditions. Instead, use a positive "_pending" predicate:
-   - BAD:  `:condition (at start (not (task_done)))`
-   - GOOD: `:condition (at start (task_pending))`
-   Then in `:effect`, set `(not (task_pending))` and `(task_done)`.
-   Note: `(not ...)` is allowed in effects, just not in conditions.
-3. ALL predicates must be declared in the `:predicates` block before use.
-4. No `:types` block or `:objects` block is needed — actions take NO parameters.
-5. Use `(:durative-action ...)` with `:duration`, `:condition`, and `:effect` — not `(:action ...)`.
-6. Use `(at start ...)`, `(at end ...)`, or `(over all ...)` inside `:condition` and `:effect`.
-7. Initialize ALL "_pending" predicates as true in the problem's `:init`.
-
-CRITICAL SEMANTIC RULES — failure to follow these causes the planner to find wrong shortcuts:
-
-8. Every action MUST:
-   (a) consume its own `(X_pending)` at start: `(at start (not (X_pending)))`
-   (b) produce its own `(X_done)` at end: `(at end (X_done))`
-   (c) require ALL direct predecessors' `_done` predicates as `(at start ...)` conditions.
-   This is a DAG (not a linear chain): a step may have multiple direct predecessors and ALL must be
-   enforced, otherwise the planner can skip slow predecessors and find an illegally short makespan.
-   - BAD (step C requires only A but not B, so planner skips slow B):
-     ```
-     (:durative-action do_A :parameters () :duration (= ?duration 3600)
-       :condition (at start (a_pending))
-       :effect (and (at start (not (a_pending))) (at end (a_done))))
-     (:durative-action do_B :parameters () :duration (= ?duration 7200)
-       :condition (at start (b_pending))
-       :effect (and (at start (not (b_pending))) (at end (b_done))))
-     (:durative-action do_C :parameters () :duration (= ?duration 600)
-       :condition (and (at start (c_pending)) (at start (a_done)))   ; ← missing (b_done)!
-       :effect (and (at start (not (c_pending))) (at end (c_done))))
-     ```
-   - GOOD (step C requires BOTH A and B — the full AND-join):
-     ```
-     (:durative-action do_A :parameters () :duration (= ?duration 3600)
-       :condition (at start (a_pending))
-       :effect (and (at start (not (a_pending))) (at end (a_done))))
-     (:durative-action do_B :parameters () :duration (= ?duration 7200)
-       :condition (at start (b_pending))
-       :effect (and (at start (not (b_pending))) (at end (b_done))))
-     (:durative-action do_C :parameters () :duration (= ?duration 600)
-       :condition (and (at start (c_pending)) (at start (a_done)) (at start (b_done)))   ; ← both
-       :effect (and (at start (not (c_pending))) (at end (c_done))))
-     ```
-   Steps with NO predecessors need only `(at start (X_pending))` in their condition.
-
-9. The problem's `:goal` MUST include ALL `_done` predicates (one per action).
-   This ensures the planner cannot skip any step.
-   - BAD (missing some predicates — planner can skip steps with no successors):
-     ```
-     (:goal (and (tickets_booked) (departure_prepared)))
-     ; ← missing (luggage_packed), (taxi_called), etc.
-     ```
-   - GOOD (every action's done predicate required):
-     ```
-     (:goal (and (tickets_booked) (luggage_packed) (taxi_called) ... (departure_prepared)))
-     ```
-
-10. Every action's `:duration` MUST come from the time stated in the problem for that step.
-    NEVER give any action a duration of 1 second (or any tiny placeholder) unless the problem
-    explicitly states that step takes 1 second.
-    Do NOT split a step into "the real work" + a 1-second "state confirmation" action —
-    `X_done` is simply an effect of the step's action, not a separate action.
-    - BAD (the act of "buying beer" is given 1 second; its real duration is absorbed into prior steps):
-      ```
-      (:durative-action give_money  :parameters () :duration (= ?duration 120) :effect (at end (money_given)))
-      (:durative-action buy_beer    :parameters () :duration (= ?duration 1)   :effect (at end (beer_bought)))
-      ; "buy_beer" should have the duration from the problem, not 1 second
-      ```
-    - GOOD (each step uses the duration stated in the problem):
-      ```
-      (:durative-action give_money  :parameters () :duration (= ?duration 120) :effect (at end (money_given)))
-      (:durative-action buy_beer    :parameters () :duration (= ?duration 60)  :effect (at end (beer_bought)))
-      ```
-
-11. A `:durative-action` may only have ONE `:condition` keyword. If multiple conditions are needed,
-    wrap them ALL in a single `(and ...)` block. Never write multiple separate `:condition` lines.
-    - BAD (PDDL parsers only keep the last `:condition`, silently dropping all others):
-      ```
-      :condition (at start (supplies_obtained))
-      :condition (at start (task_pending))
-      ```
-    - GOOD:
-      ```
-      :condition (and (at start (supplies_obtained)) (at start (task_pending)))
-      ```
-
-12. The number of `:durative-actions` MUST exactly equal the number of steps (one action per step).
-    Never generate more or fewer actions than steps — extra actions let the planner skip the most
-    expensive one. Correspondingly, initialize exactly N `_pending` predicates in `:init`.
-    - BAD (7 actions but only 6 pending predicates initialized — planner ignores the slowest):
-      ```
-      (:init (a_pending) (b_pending) (c_pending) (d_pending) (e_pending) (f_pending))
-      ; assemble_X (1200s) has no a_pending in :init, so the planner never runs it
-      ```
-    - GOOD (7 actions → 7 pending predicates in :init):
-      ```
-      (:init (a_pending) (b_pending) (c_pending) (d_pending) (e_pending) (f_pending) (g_pending))
-      ```
-
-Return the responses in JSON format with the key: "responses" (list of dicts). Each dictionary must include:
-- 'domain_pddl': the domain in PDDL 2.1 format as a string.
-- 'problem_pddl': the problem in PDDL 2.1 format as a string.
-- 'step_actions': list of PDDL action names in step order. step_actions[0] is the action name for Step 1, step_actions[1] for Step 2, etc.
-"""
-
-
-PDDL_USER_TEMPLATE = """\
-Here is an asynchronous planning problem.
-
-{question}
-"""
-
-
-# ── Few-shot examples ────────────────────────────────────────────────────
-
-FEW_SHOT_EXAMPLES = [
-    {
-        "question": "To go to an amusement park, here are the steps and the times needed for each step.\nStep 1. Get some money (30 seconds)\nStep 2. Find a nearby amusement park (5 minutes)\nStep 3. Travel to the park (15 minutes)\nStep 4. Purchase a pass (1 minutes)\nStep 5. Go into the park (1 minutes)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 4.\nStep 2 must precede step 3.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go to an amusement park? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
-        "domain_pddl": """(define (domain amusement_park)
-  (:requirements :durative-actions)
-  (:predicates
-    (get_money_pending)
-    (have_money)
-    (find_park_pending)
-    (park_found)
-    (travel_pending)
-    (at_park)
-    (purchase_pass_pending)
-    (have_pass)
-    (enter_park_pending)
-    (in_park)
-  )
-
-  (:durative-action get_money
-    :parameters ()
-    :duration (= ?duration 30)
-    :condition (at start (get_money_pending))
-    :effect (and
-      (at start (not (get_money_pending)))
-      (at end (have_money))
-    )
-  )
-
-  (:durative-action find_park
-    :parameters ()
-    :duration (= ?duration 300)
-    :condition (at start (find_park_pending))
-    :effect (and
-      (at start (not (find_park_pending)))
-      (at end (park_found))
-    )
-  )
-
-  (:durative-action travel_to_park
-    :parameters ()
-    :duration (= ?duration 900)
-    :condition (and
-      (at start (travel_pending))
-      (at start (park_found))
-    )
-    :effect (and
-      (at start (not (travel_pending)))
-      (at end (at_park))
-    )
-  )
-
-  (:durative-action purchase_pass
-    :parameters ()
-    :duration (= ?duration 60)
-    :condition (and
-      (at start (purchase_pass_pending))
-      (at start (have_money))
-      (at start (at_park))
-    )
-    :effect (and
-      (at start (not (purchase_pass_pending)))
-      (at end (have_pass))
-    )
-  )
-
-  (:durative-action enter_park
-    :parameters ()
-    :duration (= ?duration 60)
-    :condition (and
-      (at start (enter_park_pending))
-      (at start (have_pass))
-    )
-    :effect (and
-      (at start (not (enter_park_pending)))
-      (at end (in_park))
-    )
-  )
-)""",
-        "problem_pddl": """(define (problem go_to_amusement_park)
-  (:domain amusement_park)
-  (:init
-    (get_money_pending)
-    (find_park_pending)
-    (travel_pending)
-    (purchase_pass_pending)
-    (enter_park_pending)
-  )
-  (:goal (and
-    (have_money)
-    (park_found)
-    (at_park)
-    (have_pass)
-    (in_park)
-  ))
-)""",
-        "step_actions": ["get_money", "find_park", "travel_to_park", "purchase_pass", "enter_park"],
-    },
-    {
-        "question": "To make breakfast in bed for their mom, here are the steps and the times needed for each step.\nStep 1. heat up pan on stove (5 minutes)\nStep 2. crack eggs in a bowl (3 minutes)\nStep 3. whisk eggs to scramble (3 minutes)\nStep 4. pour in whisked eggs (10 seconds)\nStep 5. scramble as cooking (10 minutes)\nStep 6. add butter to pain (10 seconds)\nStep 7. put eggs on plate (10 seconds)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 6.\nStep 2 must precede step 3.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\nStep 5 must precede step 7.\nStep 6 must precede step 4.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make breakfast in bed for their mom? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
-        "domain_pddl": """(define (domain breakfast)
-  (:requirements :durative-actions)
-  (:predicates
-    (heat_pan_pending)
-    (pan_heated)
-    (crack_eggs_pending)
-    (eggs_cracked)
-    (whisk_eggs_pending)
-    (eggs_whisked)
-    (add_butter_pending)
-    (butter_added)
-    (pour_eggs_pending)
-    (eggs_poured)
-    (scramble_cook_pending)
-    (eggs_cooked)
-    (plate_eggs_pending)
-    (eggs_plated)
-  )
-
-  (:durative-action heat_pan
-    :parameters ()
-    :duration (= ?duration 300)
-    :condition (at start (heat_pan_pending))
-    :effect (and
-      (at start (not (heat_pan_pending)))
-      (at end (pan_heated))
-    )
-  )
-
-  (:durative-action crack_eggs
-    :parameters ()
-    :duration (= ?duration 180)
-    :condition (at start (crack_eggs_pending))
-    :effect (and
-      (at start (not (crack_eggs_pending)))
-      (at end (eggs_cracked))
-    )
-  )
-
-  (:durative-action whisk_eggs
-    :parameters ()
-    :duration (= ?duration 180)
-    :condition (and
-      (at start (whisk_eggs_pending))
-      (at start (eggs_cracked))
-    )
-    :effect (and
-      (at start (not (whisk_eggs_pending)))
-      (at end (eggs_whisked))
-    )
-  )
-
-  (:durative-action add_butter
-    :parameters ()
-    :duration (= ?duration 10)
-    :condition (and
-      (at start (add_butter_pending))
-      (at start (pan_heated))
-    )
-    :effect (and
-      (at start (not (add_butter_pending)))
-      (at end (butter_added))
-    )
-  )
-
-  (:durative-action pour_eggs
-    :parameters ()
-    :duration (= ?duration 10)
-    :condition (and
-      (at start (pour_eggs_pending))
-      (at start (eggs_whisked))
-      (at start (butter_added))
-    )
-    :effect (and
-      (at start (not (pour_eggs_pending)))
-      (at end (eggs_poured))
-    )
-  )
-
-  (:durative-action scramble_cook
-    :parameters ()
-    :duration (= ?duration 600)
-    :condition (and
-      (at start (scramble_cook_pending))
-      (at start (eggs_poured))
-    )
-    :effect (and
-      (at start (not (scramble_cook_pending)))
-      (at end (eggs_cooked))
-    )
-  )
-
-  (:durative-action plate_eggs
-    :parameters ()
-    :duration (= ?duration 10)
-    :condition (and
-      (at start (plate_eggs_pending))
-      (at start (eggs_cooked))
-    )
-    :effect (and
-      (at start (not (plate_eggs_pending)))
-      (at end (eggs_plated))
-    )
-  )
-)""",
-        "problem_pddl": """(define (problem breakfast-problem)
-  (:domain breakfast)
-  (:init
-    (heat_pan_pending)
-    (crack_eggs_pending)
-    (whisk_eggs_pending)
-    (add_butter_pending)
-    (pour_eggs_pending)
-    (scramble_cook_pending)
-    (plate_eggs_pending)
-  )
-  (:goal (and
-    (pan_heated)
-    (eggs_cracked)
-    (eggs_whisked)
-    (butter_added)
-    (eggs_poured)
-    (eggs_cooked)
-    (eggs_plated)
-  ))
-)""",
-        # Step 1→heat_pan, 2→crack_eggs, 3→whisk_eggs, 4→pour_eggs, 5→scramble_cook, 6→add_butter, 7→plate_eggs
-        "step_actions": ["heat_pan", "crack_eggs", "whisk_eggs", "pour_eggs", "scramble_cook", "add_butter", "plate_eggs"],
-    },
-    {
-        "question": "To grill with friends, here are the steps and the times needed for each step.\nStep 1. light the grill (3 minutes)\nStep 2. let the charcoal warm up (20 minutes)\nStep 3. make the hamburger patties (5 minutes)\nStep 4. cook the hamburgers (15 minutes)\nStep 5. put the hamburgers on a bun (5 minutes)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 2 and 3.\nStep 2 must precede step 4.\nStep 3 must precede step 4.\nStep 4 must precede step 5.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to grill with friends? Think step by step. Then, encode your final answer in <answer></answer> (e.g. <answer>1 min</answer>)",
-        "domain_pddl": """(define (domain grill-with-friends)
-  (:requirements :durative-actions)
-  (:predicates
-    (light_grill_pending)
-    (grill_lit)
-    (warm_charcoal_pending)
-    (charcoal_warm)
-    (make_patties_pending)
-    (patties_made)
-    (cook_burgers_pending)
-    (burgers_cooked)
-    (put_on_bun_pending)
-    (burgers_on_bun)
-  )
-
-  (:durative-action light_grill
-    :parameters ()
-    :duration (= ?duration 180)
-    :condition (at start (light_grill_pending))
-    :effect (and
-      (at start (not (light_grill_pending)))
-      (at end (grill_lit))
-    )
-  )
-
-  (:durative-action warm_charcoal
-    :parameters ()
-    :duration (= ?duration 1200)
-    :condition (and
-      (at start (warm_charcoal_pending))
-      (at start (grill_lit))
-    )
-    :effect (and
-      (at start (not (warm_charcoal_pending)))
-      (at end (charcoal_warm))
-    )
-  )
-
-  (:durative-action make_patties
-    :parameters ()
-    :duration (= ?duration 300)
-    :condition (and
-      (at start (make_patties_pending))
-      (at start (grill_lit))
-    )
-    :effect (and
-      (at start (not (make_patties_pending)))
-      (at end (patties_made))
-    )
-  )
-
-  (:durative-action cook_burgers
-    :parameters ()
-    :duration (= ?duration 900)
-    :condition (and
-      (at start (cook_burgers_pending))
-      (at start (charcoal_warm))
-      (at start (patties_made))
-    )
-    :effect (and
-      (at start (not (cook_burgers_pending)))
-      (at end (burgers_cooked))
-    )
-  )
-
-  (:durative-action put_on_bun
-    :parameters ()
-    :duration (= ?duration 300)
-    :condition (and
-      (at start (put_on_bun_pending))
-      (at start (burgers_cooked))
-    )
-    :effect (and
-      (at start (not (put_on_bun_pending)))
-      (at end (burgers_on_bun))
-    )
-  )
-)""",
-        "problem_pddl": """(define (problem grill-with-friends-problem)
-  (:domain grill-with-friends)
-  (:init
-    (light_grill_pending)
-    (warm_charcoal_pending)
-    (make_patties_pending)
-    (cook_burgers_pending)
-    (put_on_bun_pending)
-  )
-  (:goal (and
-    (grill_lit)
-    (charcoal_warm)
-    (patties_made)
-    (burgers_cooked)
-    (burgers_on_bun)
-  ))
-)""",
-        "step_actions": ["light_grill", "warm_charcoal", "make_patties", "cook_burgers", "put_on_bun"],
-    },
-]
-
-
 # ── Build messages ──────────────────────────────────────────────────────
-
-
-import re
-
-RETRY_USER_TEMPLATE = """\
-The PDDL you generated caused the following error from the OPTIC planner:
-
-{error}
-
-Please fix the issues and return corrected domain and problem PDDL.
-"""
 
 def optimize_question_to_seconds(question: str) -> str:
     """
@@ -535,19 +74,58 @@ def optimize_question_to_seconds(question: str) -> str:
     return new_question
 
 
-def build_pddl_messages(question: str, num_shots: int = 0) -> list[dict[str, str]]:
-    """Return the chat messages for one NL→PDDL translation call."""
-    messages = [{"role": "system", "content": PDDL_SYSTEM_PROMPT}]
+def build_pddl_messages(
+    question: str,
+    num_shots: int = 0,
+    dep_analysis: str | None = None,
+    effect_goal: bool = False,
+) -> list[dict[str, str]]:
+    """Return the chat messages for one NL→PDDL translation call.
 
-    for ex in FEW_SHOT_EXAMPLES[:num_shots]:
+    effect_goal=False → PDDL_SYSTEM_PROMPT_OLD  (old parameterized encoding, Formalizer)
+    effect_goal=True  → PDDL_SYSTEM_PROMPT       (parameterless encoding, Formalizer+)
+    """
+    system_prompt = PDDL_SYSTEM_PROMPT if effect_goal else PDDL_SYSTEM_PROMPT_OLD
+    messages = [{"role": "system", "content": system_prompt}]
+
+    for ex in PDDL_FEW_SHOT_EXAMPLES[:num_shots]:
         assistant_response = json.dumps({
             "responses": [{"domain_pddl": ex["domain_pddl"], "problem_pddl": ex["problem_pddl"], "step_actions": ex["step_actions"]}]
         })
         messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(ex["question"]))})
         messages.append({"role": "assistant", "content": assistant_response})
 
-    messages.append({"role": "user", "content": PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))})
+    user_content = PDDL_USER_TEMPLATE.format(question=optimize_question_to_seconds(question))
+    if dep_analysis:
+        user_content += (
+            "\n\nDEPENDENCY ANALYSIS (pre-computed — use this to set correct preconditions):\n"
+            + dep_analysis
+        )
+    messages.append({"role": "user", "content": user_content})
     return messages
+
+
+def build_dep_analysis_messages(question: str) -> list[dict[str, str]]:
+    """Return messages for the Phase-1 dependency analysis call."""
+    return [
+        {"role": "system", "content": DEP_ANALYSIS_SYSTEM_PROMPT},
+        {"role": "user", "content": DEP_ANALYSIS_USER_TEMPLATE.format(question=question)},
+    ]
+
+
+def parse_dep_analysis_response(resp: str) -> str | None:
+    """Extract the analysis string from a DepAnalysis JSON response."""
+    if not resp:
+        return None
+    try:
+        brace_idx = resp.find("{")
+        if brace_idx != -1:
+            resp = resp[brace_idx:]
+        data, _ = json.JSONDecoder().raw_decode(resp)
+        return data.get("analysis", "").strip() or None
+    except Exception:
+        # Fallback: use raw response as plain text
+        return resp.strip() or None
 
 
 def _truncate_solver_error(error: str, head: int = 10, tail: int = 20) -> str:
@@ -565,26 +143,31 @@ def _truncate_solver_error(error: str, head: int = 10, tail: int = 20) -> str:
     return "\n".join(kept)
 
 
-def build_retry_messages(
-    question: str,
-    domain_pddl: str | None,
-    problem_pddl: str | None,
-    error: str,
-    num_shots: int = 0,
-    step_actions: Optional[List[str]] = None,
-) -> list[dict[str, str]]:
-    """Build retry messages that feed solver/parse errors back to the LLM."""
-    messages = build_pddl_messages(question, num_shots=num_shots)
 
-    if domain_pddl and problem_pddl:
-        prev_attempt = json.dumps({
-            "responses": [{"domain_pddl": domain_pddl, "problem_pddl": problem_pddl, "step_actions": step_actions or []}]
-        })
-        messages.append({"role": "assistant", "content": prev_attempt})
+# ── PDDL sanitization ─────────────────────────────────────────────────
 
-    messages.append({"role": "user", "content": RETRY_USER_TEMPLATE.format(error=_truncate_solver_error(error))})
-    return messages
 
+def _sanitize_pddl(domain: str, problem: str) -> tuple[str, str]:
+    """Fix common LLM-generated PDDL bugs before sending to the solver.
+
+    Fixes applied:
+      1. Trailing '}' → ')' (LLM confuses JSON brace with PDDL paren)
+      2. Missing ':parameters (?s - step)' in durative-actions
+         (LLM hardcodes step names instead of using a variable)
+    """
+    # Fix 1: trailing } → )
+    domain = _fix_trailing_brace(domain)
+    problem = _fix_trailing_brace(problem)
+
+    return domain, problem
+
+
+def _fix_trailing_brace(pddl: str) -> str:
+    """Replace a trailing '}' with ')' in PDDL text."""
+    stripped = pddl.rstrip()
+    if stripped.endswith("}"):
+        return stripped[:-1] + ")"
+    return pddl
 
 # ── Parse structured response ──────────────────────────────────────────
 
@@ -593,7 +176,7 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
     """Parse the structured JSON response into (domain_pddl, problem_pddl, step_actions).
 
     Expects a JSON string matching the PDDLResponse schema.
-    Returns None if parsing fails.
+    Returns None if parsing fails. Applies sanitization fixes to the PDDL.
     """
     if not response:
         return None
@@ -620,8 +203,483 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
         pddl_resp = PDDLResponse(**data)
         if pddl_resp.responses:
             r = pddl_resp.responses[0]
-            return r.domain_pddl, r.problem_pddl, r.step_actions
+            domain, problem = _sanitize_pddl(r.domain_pddl, r.problem_pddl)
+            return domain, problem, r.step_actions
     except (json.JSONDecodeError, ValueError, KeyError):
         pass
 
     return None
+
+
+# ── Robotouille problem-only generation ────────────────────────────────
+
+from src.llms.prompts import (
+    ROBOTOUILLE_SYSTEM_PROMPT,
+    ROBOTOUILLE_SYSTEM_PROMPT_OLD,
+    ROBOTOUILLE_PROBLEM_EXAMPLES,
+    ROBOTOUILLE_USER_TEMPLATE,
+    ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT,
+    ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD,
+    ROBOTOUILLE_TEMPORAL_USER_TEMPLATE,
+    ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO,
+)
+
+
+class RobotouillePDDL(BaseModel):
+    """Schema for Robotouille problem-only generation (domain is fixed)."""
+    problem_pddl: str
+
+
+def _annotate_robotouille_json(env: dict) -> dict:
+    """Pre-compute PDDL names and station assignments so the LLM doesn't need to.
+
+    Adds to each station:   pddl_name  (e.g. "table_1")
+    Adds to each item:      pddl_name, station (the station's pddl_name at same (x,y)),
+                            atop (pddl_name of item one level lower at same (x,y), or null),
+                            held_by (player pddl_name if item is at player's (x,y), or null)
+    Adds to each player:    pddl_name, facing_station (station at player_pos + direction),
+                            holding (list of item pddl_names at player's (x,y))
+    """
+    import copy
+    from collections import defaultdict
+
+    env = copy.deepcopy(env)
+
+    # Assign PDDL names per type sorted by (x, y) — must match the game engine's
+    # builder ordering so _build_name_map aligns LLM names to builder names correctly.
+    type_count: dict[str, int] = defaultdict(int)
+    coord_to_station: dict[tuple, str] = {}
+
+    stations_sorted = sorted(env.get("stations", []), key=lambda s: (s["x"], s["y"]))
+    for s in stations_sorted:
+        type_count[s["name"]] += 1
+        s["pddl_name"] = f"{s['name']}_{type_count[s['name']]}"
+        coord_to_station[(s["x"], s["y"])] = s["pddl_name"]
+
+    type_count.clear()
+    # Assign item names sorted by (x, y, stack-level) to match builder ordering.
+    coord_level_to_item: dict[tuple, str] = {}
+    items_sorted = sorted(
+        env.get("items", []),
+        key=lambda i: (i["x"], i["y"], i.get("stack-level", 0))
+    )
+    for i in items_sorted:
+        type_count[i["name"]] += 1
+        i["pddl_name"] = f"{i['name']}_{type_count[i['name']]}"
+        coord_level_to_item[(i["x"], i["y"], i.get("stack-level", 0))] = i["pddl_name"]
+
+    # Track which station coordinates have items OR containers on their surface
+    occupied_stations: set[tuple] = set()
+    for i in env.get("items", []):
+        if i.get("stack-level", 0) == 0:
+            occupied_stations.add((i["x"], i["y"]))
+    for c in env.get("containers", []):
+        occupied_stations.add((c["x"], c["y"]))
+
+    # Mark each station as initial_empty based on whether any items/containers are on it
+    for s in env.get("stations", []):
+        s["initial_empty"] = (s["x"], s["y"]) not in occupied_stations
+
+    for i in env.get("items", []):
+        i["station"] = coord_to_station.get((i["x"], i["y"]), f"unknown_{i['x']}_{i['y']}")
+        level = i.get("stack-level", 0)
+        if level > 0:
+            i["atop"] = coord_level_to_item.get((i["x"], i["y"], level - 1))
+        else:
+            i["atop"] = None
+        i["held_by"] = None  # will be filled in player loop below
+
+    # Assign PDDL names to containers sorted by (x, y) — matches builder ordering.
+    type_count.clear()
+    for c in sorted(env.get("containers", []), key=lambda c: (c["x"], c["y"])):
+        type_count[c["name"]] += 1
+        c["pddl_name"] = f"{c['name']}_{type_count[c['name']]}"
+        c["station"] = coord_to_station.get((c["x"], c["y"]), f"unknown_{c['x']}_{c['y']}")
+
+    # Assign PDDL names to meals (usually empty at start; water is created dynamically).
+    type_count.clear()
+    for m in sorted(env.get("meals", []), key=lambda m: (m.get("x", 0), m.get("y", 0))):
+        type_count[m["name"]] += 1
+        m["pddl_name"] = f"{m['name']}_{type_count[m['name']]}"
+
+    # Build player PDDL names and detect held items
+    type_count.clear()
+    player_coord: dict[tuple, str] = {}  # (x,y) → player pddl_name
+    for p in env.get("players", []):
+        type_count[p["name"]] += 1
+        p["pddl_name"] = f"{p['name']}_{type_count[p['name']]}"
+        player_coord[(p["x"], p["y"])] = p["pddl_name"]
+
+    # For each player, find items at player's position (= held items)
+    for p in env.get("players", []):
+        dx, dy = p.get("direction", [0, -1])
+        fx, fy = p["x"] + dx, p["y"] + dy
+        p["facing_station"] = coord_to_station.get((fx, fy), f"unknown_{fx}_{fy}")
+        held = [
+            i["pddl_name"]
+            for i in env.get("items", [])
+            if i["x"] == p["x"] and i["y"] == p["y"]
+        ]
+        p["holding"] = held  # list of item pddl_names the player is holding
+
+    # Back-fill held_by on items
+    for i in env.get("items", []):
+        player_name = player_coord.get((i["x"], i["y"]))
+        if player_name:
+            i["held_by"] = player_name
+
+    # Resolve goal ids → pddl_args so the LLM doesn't need to guess entity mapping.
+    # The goal.ids are combination labels (not absolute entity IDs).
+    # For each entity type referenced, sort the unique IDs numerically and map
+    # the i-th ID to the i-th pddl entity of that type (sorted by pddl_name).
+    _type_to_pddl: dict[str, list[str]] = {}
+    for field in ("stations", "items", "players", "containers", "meals"):
+        for entity in env.get(field, []):
+            name_base = re.sub(r"_\d+$", "", entity.get("pddl_name", ""))
+            if name_base:
+                _type_to_pddl.setdefault(name_base, []).append(entity["pddl_name"])
+
+    # Collect unique IDs per arg-type across all goal predicates
+    _type_ids: dict[str, set] = {}
+    for g in env.get("goal", []):
+        for arg, gid in zip(g.get("args", []), g.get("ids", [])):
+            _type_ids.setdefault(arg, set()).add(gid)
+
+    # Build: arg_type → {id_label: pddl_name}
+    _id_to_pddl: dict[str, dict] = {}
+    for arg_type, id_set in _type_ids.items():
+        sorted_ids = sorted(id_set)  # sort numerically so assignment is stable
+        pddl_names = sorted(_type_to_pddl.get(arg_type, []))
+        mapping: dict = {}
+        for i, gid in enumerate(sorted_ids):
+            mapping[gid] = pddl_names[i] if i < len(pddl_names) else f"{arg_type}_{i + 1}"
+        _id_to_pddl[arg_type] = mapping
+
+    # Add pddl_args to each goal predicate
+    for g in env.get("goal", []):
+        pddl_args = []
+        for arg, gid in zip(g.get("args", []), g.get("ids", [])):
+            pddl_args.append(_id_to_pddl.get(arg, {}).get(gid, f"{arg}_{gid}"))
+        g["pddl_args"] = pddl_args
+
+    return env
+
+
+def build_robotouille_problem_messages(
+    original_json: dict,
+    domain_pddl: str,
+    effect_goal: bool = False,
+    num_shots: int = 0,
+) -> list[dict[str, str]]:
+    """Build chat messages for Robotouille problem-only PDDL generation (GENERATE_DOMAIN=false).
+
+    Uses the fixed domain PDDL + annotated JSON to ask the LLM to generate only the problem.
+    effect_goal=True  → ROBOTOUILLE_SYSTEM_PROMPT (improved prompt)
+    effect_goal=False → ROBOTOUILLE_SYSTEM_PROMPT_OLD
+    num_shots > 0     → append ROBOTOUILLE_PROBLEM_EXAMPLES to system prompt
+    """
+    system_prompt = ROBOTOUILLE_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_SYSTEM_PROMPT_OLD
+    if num_shots > 0:
+        system_prompt = system_prompt + ROBOTOUILLE_PROBLEM_EXAMPLES
+    annotated = _annotate_robotouille_json(original_json)
+    user_content = ROBOTOUILLE_USER_TEMPLATE.format(
+        domain_pddl=domain_pddl,
+        original_json=json.dumps(annotated, indent=2),
+    )
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_content},
+    ]
+
+
+_ROBO_PROMPT_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "baselines" / "robotouille" / "agents" / "prompt_builder" / "prompts" / "IO" / "1.1.0-io-cot.yml"
+)
+_DOMAIN_JSON_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "baselines" / "robotouille" / "domain" / "robotouille.json"
+)
+
+
+def _load_domain_json_summary() -> str:
+    """Return a compact summary of domain/robotouille.json.
+
+    Includes: object types, all predicate signatures + language descriptors,
+    and all action language descriptions.  This tells the LLM the complete
+    type system (station/item/player/container/meal) and vocabulary so it
+    can generate correct PDDL objects and predicates for every task including
+    soup (container/meal types).
+    """
+    data = json.loads(_DOMAIN_JSON_PATH.read_text())
+    lines = []
+    lines.append(f"Object types: {', '.join(data['object_types'])}")
+    lines.append("")
+    lines.append("Predicates (name(param_types) → natural language meaning):")
+    for p in data["predicate_defs"]:
+        sig = f"{p['name']}({', '.join(p['param_types'])})"
+        descs = " | ".join(p["language_descriptors"].values())
+        lines.append(f"  {sig}: {descs}")
+    lines.append("")
+    lines.append("Actions (natural language description):")
+    for a in data["action_defs"]:
+        lines.append(f"  {a['language_description']}")
+    return "\n".join(lines)
+
+
+def _load_robo_instructions() -> str:
+    """Load system + instructions text from the Robotouille io-cot prompt YAML."""
+    try:
+        import yaml
+        data = yaml.safe_load(_ROBO_PROMPT_PATH.read_text())
+        parts = []
+        if data.get("system"):
+            parts.append(data["system"].strip())
+        if data.get("instructions"):
+            parts.append(data["instructions"].strip())
+        return "\n\n".join(parts)
+    except Exception:
+        # Fallback: read as plain text if yaml not available
+        return _ROBO_PROMPT_PATH.read_text()
+
+
+def _compute_required_objects(annotated: dict) -> dict:
+    """Compute the minimal set of stations and items needed to solve the task.
+
+    Returns a dict with keys:
+      "stations": list of pddl_name strings
+      "items":    list of pddl_name strings
+      "containers": list of pddl_name strings (soup tasks)
+      "meals":    list of pddl_name strings (soup tasks)
+
+    Strategy:
+      Items   = goal items + robot-held items (needed to complete the task)
+      Stations = robot start + each required item's start station + goal destination
+                 stations + action-type stations (stove/board/fryer/sink as needed)
+                 + 2 empty staging tables (for intermediate placement)
+    """
+    goal = annotated.get("goal", [])
+    players = annotated.get("players", [])
+    items = annotated.get("items", [])
+    stations = annotated.get("stations", [])
+    containers = annotated.get("containers", [])
+
+    # --- Required items ---
+    goal_item_names: set[str] = set()
+    goal_station_names: set[str] = set()
+    for g in goal:
+        pddl_args = g.get("pddl_args", [])
+        pred = g.get("predicate", "")
+        # item predicates: first arg is item
+        if pred in ("item_on", "item_at", "iscooked", "iscut", "isfried", "clear", "addedto"):
+            if pddl_args:
+                goal_item_names.add(pddl_args[0])
+        # station predicates: second arg is station for item_on/item_at
+        if pred in ("item_on", "item_at"):
+            if len(pddl_args) >= 2:
+                goal_station_names.add(pddl_args[1])
+        # container_at: second arg is station
+        if pred == "container_at":
+            if len(pddl_args) >= 2:
+                goal_station_names.add(pddl_args[1])
+
+    # robot-held items
+    held_item_names: set[str] = set()
+    for p in players:
+        for h in p.get("holding", []):
+            held_item_names.add(h)
+
+    required_item_names = goal_item_names | held_item_names
+
+    # --- Required stations ---
+    required_station_names: set[str] = set()
+
+    # robot start stations
+    for p in players:
+        required_station_names.add(p.get("facing_station", ""))
+
+    # each required item's start station
+    item_map = {i["pddl_name"]: i for i in items}
+    for iname in required_item_names:
+        item = item_map.get(iname)
+        if item and not item.get("held_by"):
+            required_station_names.add(item.get("station", ""))
+
+    # goal destination stations
+    required_station_names |= goal_station_names
+
+    # determine which action-type stations are needed
+    needs_cook  = any(g.get("predicate") == "iscooked" for g in goal)
+    needs_cut   = any(g.get("predicate") == "iscut"    for g in goal)
+    needs_fry   = any(g.get("predicate") == "isfried"  for g in goal)
+    needs_soup  = bool(containers)  # soup task
+
+    station_map  = {s["pddl_name"]: s for s in stations}
+    stove_names  = [s["pddl_name"] for s in stations if s["name"] == "stove"]
+    board_names  = [s["pddl_name"] for s in stations if s["name"] == "board"]
+    fryer_names  = [s["pddl_name"] for s in stations if s["name"] == "fryer"]
+    sink_names   = [s["pddl_name"] for s in stations if s["name"] == "sink"]
+
+    if needs_cook and not any(s in required_station_names for s in stove_names):
+        if stove_names:
+            required_station_names.add(stove_names[0])
+    if needs_cut and not any(s in required_station_names for s in board_names):
+        if board_names:
+            required_station_names.add(board_names[0])
+    if needs_fry and not any(s in required_station_names for s in fryer_names):
+        if fryer_names:
+            required_station_names.add(fryer_names[0])
+    if needs_soup and not any(s in required_station_names for s in sink_names):
+        if sink_names:
+            required_station_names.add(sink_names[0])
+
+    # add 2 empty staging tables not already in required set
+    empty_tables = [
+        s["pddl_name"] for s in stations
+        if s["name"] == "table" and s.get("initial_empty") and s["pddl_name"] not in required_station_names
+    ]
+    for t in empty_tables[:2]:
+        required_station_names.add(t)
+
+    # filter to only valid pddl_names
+    required_station_names.discard("")
+    required_stations = [s["pddl_name"] for s in stations if s["pddl_name"] in required_station_names]
+    required_items    = [i["pddl_name"] for i in items    if i["pddl_name"] in required_item_names]
+    required_containers = [c["pddl_name"] for c in containers]
+    required_meals    = ["water_1"] if needs_soup else []
+
+    return {
+        "stations":   required_stations,
+        "items":      required_items,
+        "containers": required_containers,
+        "meals":      required_meals,
+    }
+
+
+def build_robotouille_temporal_messages(
+    original_json: dict,
+    domain_pddl: str,
+    effect_goal: bool = False,
+    input_mode: str = "json",
+    natural_language: str = "",
+) -> list[dict[str, str]]:
+    """Build chat messages for Robotouille PDDL 2.1 temporal (durative actions) generation.
+
+    effect_goal=True   → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT (parameterless, no :typing)
+    effect_goal=False  → ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD (parameterized, :typing)
+    domain_pddl        → reference STRIPS domain shown in the user message (unused in 'robo' mode)
+    input_mode         → 'json': annotated JSON + domain PDDL reference;
+                         'nl': natural_language + domain PDDL reference;
+                         'robo': io-cot.yml instructions + annotated JSON (no domain PDDL)
+    natural_language   → NL description from dataset 'natural_language' field (used when input_mode='nl')
+    """
+    system_prompt = ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT if effect_goal else ROBOTOUILLE_TEMPORAL_SYSTEM_PROMPT_OLD
+    config = original_json.get("config", {})
+    cook_time = config.get("cook_time", {}).get("default", 3)
+    num_cuts = config.get("num_cuts", {}).get("default", 3)
+    fry_time = config.get("fry_time", {}).get("default", 3)
+
+    domain_json_section = _load_domain_json_summary()
+
+    if input_mode == "robo":
+        robo_instructions = _load_robo_instructions()
+        timing_note = f"Timing: cook_time={cook_time} steps per cook/fry, num_cuts={num_cuts} cuts required."
+        annotated = _annotate_robotouille_json(original_json)
+        annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
+        env_str = json.dumps(annotated, indent=2)
+        user_content = ROBOTOUILLE_TEMPORAL_USER_TEMPLATE_ROBO.format(
+            robo_instructions=robo_instructions + "\n\n" + timing_note,
+            domain_json_section=domain_json_section,
+            original_json=env_str,
+        )
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content},
+        ]
+
+    if input_mode == "nl":
+        nl_section = f"## Natural Language Description\n\n{natural_language or '(no natural language description provided)'}\n\n"
+        env_str = f"cook_time={cook_time}, num_cuts={num_cuts}, fry_time={fry_time}"
+        required_objects_section = ""
+    else:  # json
+        nl_section = ""
+        annotated = _annotate_robotouille_json(original_json)
+        annotated["_timing"] = {"cook_time": cook_time, "num_cuts": num_cuts, "fry_time": fry_time}
+        env_str = json.dumps(annotated, indent=2)
+
+        # Compute the minimal required objects and inject as a hard constraint
+        req_obj = _compute_required_objects(annotated)
+        _req_lines = []
+        if req_obj["stations"]:
+            _req_lines.append(f"  stations: {' '.join(req_obj['stations'])}")
+        if req_obj["items"]:
+            _req_lines.append(f"  items:    {' '.join(req_obj['items'])}")
+        if req_obj["containers"]:
+            _req_lines.append(f"  containers: {' '.join(req_obj['containers'])}")
+        if req_obj["meals"]:
+            _req_lines.append(f"  meals:    {' '.join(req_obj['meals'])}")
+        required_objects_section = (
+            "## Required Objects\n\n"
+            "Use **exactly** these objects in `:objects` — no more, no fewer:\n\n"
+            + "\n".join(_req_lines)
+            + "\n\n"
+        )
+
+    user_content = ROBOTOUILLE_TEMPORAL_USER_TEMPLATE.format(
+        domain_pddl=domain_pddl,
+        domain_json_section=domain_json_section,
+        nl_section=nl_section,
+        original_json=env_str,
+        required_objects_section=required_objects_section,
+    )
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_content},
+    ]
+
+
+def parse_robotouille_problem_response(response: str) -> Optional[str]:
+    """Parse the LLM response to extract problem_pddl string.
+
+    Returns the problem PDDL string, or None if parsing fails.
+    """
+    if not response:
+        return None
+
+    fence_match = re.search(r"```(?:json)?\s*(\{.*?)\s*```", response, re.DOTALL)
+    if fence_match:
+        response = fence_match.group(1).strip()
+    else:
+        brace_idx = response.find("{")
+        if brace_idx != -1:
+            response = response[brace_idx:]
+
+    response = response.replace("\\\n", "")
+
+    try:
+        data, _ = json.JSONDecoder().raw_decode(response)
+        parsed = RobotouillePDDL(**data)
+        problem = _fix_trailing_brace(parsed.problem_pddl)
+        return problem
+    except (json.JSONDecodeError, ValueError, KeyError):
+        pass
+
+    # Fallback: try to extract raw PDDL directly (model may skip JSON wrapper)
+    pddl_match = re.search(r"(\(define\s*\(problem\b.*)", response, re.DOTALL)
+    if pddl_match:
+        return _fix_trailing_brace(pddl_match.group(1).strip())
+
+    return None
+
+
+def normalize_robotouille_problem_to_domain(problem_pddl: str) -> str:
+    """Ensure the (:domain ...) reference in the problem matches our domain name.
+
+    Some LLMs invent a different domain name; patch it to 'robotouille-async'.
+    """
+    return re.sub(
+        r"\(:domain\s+[\w-]+\)",
+        "(:domain robotouille)",
+        problem_pddl,
+        count=1,
+    )

@@ -1,0 +1,4 @@
+0.000: (speak_with_gate_agent) [600.000]
+600.001: (ask_for_vouchers) [600.000]
+600.001: (ask_for_reimbursement) [600.000]
+600.001: (confirm_flight) [1200.000]

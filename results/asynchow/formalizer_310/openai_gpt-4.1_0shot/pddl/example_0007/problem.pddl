@@ -1,0 +1,17 @@
+(define (problem do-something-different-problem)
+  (:domain do-something-different)
+  (:init
+    (consider_pending)
+    (brainstorm_pending)
+    (write_pending)
+    (see_pending)
+    (pick_pending)
+  )
+  (:goal (and
+    (consider_done)
+    (brainstorm_done)
+    (write_done)
+    (see_done)
+    (pick_done)
+  ))
+)

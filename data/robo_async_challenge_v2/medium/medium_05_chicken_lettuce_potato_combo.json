@@ -1,0 +1,79 @@
+{
+  "id": "medium_05_chicken_lettuce_potato_combo",
+  "split": "medium",
+  "difficulty": "medium",
+  "challenge_features": [
+    "medium"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "chicken05": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "potato05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "lettuce05": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "bun_bot": {
+      "state": "ready",
+      "predicates": []
+    },
+    "bun_top": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "chicken05": "fried",
+      "potato05": "fried",
+      "lettuce05": "cut"
+    },
+    "stack_order": [
+      "bun_bot",
+      "chicken05",
+      "lettuce05",
+      "bun_top"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 16.0,
+  "sequential_makespan": 26,
+  "speedup_ratio": 1.625,
+  "witness_plan": "0.000: (cut potato05)  [3.000]\n0.000: (fry chicken05)  [8.000]\n0.000: (stack bun_bot)  [1.000]\n3.000: (cut lettuce05)  [3.000]\n8.000: (fry potato05)  [8.000]\n8.000: (stack chicken05)  [1.000]\n9.000: (stack lettuce05)  [1.000]\n10.000: (stack bun_top)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

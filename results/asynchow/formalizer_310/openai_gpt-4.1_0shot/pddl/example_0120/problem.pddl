@@ -1,0 +1,17 @@
+(define (problem get_snack)
+  (:domain snack_plan)
+  (:init
+    (walk_kitchen_pending)
+    (open_cupboard_pending)
+    (look_cupboard_pending)
+    (decide_food_pending)
+    (reach_food_pending)
+  )
+  (:goal (and
+    (walk_kitchen_done)
+    (open_cupboard_done)
+    (look_cupboard_done)
+    (decide_food_done)
+    (reach_food_done)
+  ))
+)

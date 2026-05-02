@@ -39,9 +39,7 @@ class BaseLLM(ABC):
 
     def chat(self, messages: List[Dict[str, str]], schema: BaseModel = None) -> str:
         """Send a single conversation and return a single response string."""
-        if self.strict_json:
-            if schema is None:
-                raise ValueError("Schema is required for strict JSON mode.")
+        if self.strict_json and schema is not None:
             return self._chat_with_format(messages, schema)
         return self._chat(messages)
 
@@ -82,6 +80,10 @@ class BaseLLM(ABC):
                     try:
                         results[index] = future.result()
                         pbar.set_postfix({"completed": f"#{index}"})
+                    except RuntimeError as e:
+                        # Unrecoverable errors (e.g. quota exceeded) — abort immediately
+                        pbar.write(f"Fatal error: {e}")
+                        raise
                     except Exception as e:
                         pbar.write(f"Error processing message {index}: {e}")
                         results[index] = None

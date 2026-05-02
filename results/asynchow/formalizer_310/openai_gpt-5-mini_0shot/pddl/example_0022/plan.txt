@@ -1,0 +1,7 @@
+0.000: (step1_go_to_store) [600.000]
+600.001: (step3_buy_sauce) [60.000]
+600.001: (step2_buy_noodles) [60.000]
+660.002: (step4_go_home) [600.000]
+1260.003: (step7_cover_dish) [60.000]
+1260.003: (step6_preheat_oven) [30.000]
+1260.003: (step5_assemble_ingredients) [1200.000]

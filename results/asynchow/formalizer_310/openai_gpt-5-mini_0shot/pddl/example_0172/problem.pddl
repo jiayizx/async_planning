@@ -1,0 +1,15 @@
+(define (problem peel_papaya_prob)
+  (:domain peel_papaya)
+  (:init
+    (slice_halved_pending)
+    (remove_seeds_pending)
+    (slice_wedges_pending)
+    (peel_wedges_pending)
+  )
+  (:goal (and
+    (slice_halved_done)
+    (remove_seeds_done)
+    (slice_wedges_done)
+    (peel_wedges_done)
+  ))
+)

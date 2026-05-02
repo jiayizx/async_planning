@@ -1,0 +1,17 @@
+(define (problem learn_language_problem)
+  (:domain learn_language)
+  (:init
+    (look_for_local_classes_pending)
+    (call_to_enroll_pending)
+    (attend_each_class_pending)
+    (wait_for_next_weekly_class_pending)
+    (practice_at_home_pending)
+  )
+  (:goal (and
+    (look_for_local_classes_done)
+    (call_to_enroll_done)
+    (attend_each_class_done)
+    (wait_for_next_weekly_class_done)
+    (practice_at_home_done)
+  ))
+)

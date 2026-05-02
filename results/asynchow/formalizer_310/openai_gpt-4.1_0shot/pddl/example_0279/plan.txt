@@ -1,0 +1,4 @@
+0.000: (do_work_with_trainer) [3600.000]
+3600.001: (do_try_balance_or_wobble_board) [1800.000]
+3600.001: (do_incorporate_split_and_one_leg) [2700.000]
+3600.001: (do_use_bosu_and_stability_ball) [1800.000]

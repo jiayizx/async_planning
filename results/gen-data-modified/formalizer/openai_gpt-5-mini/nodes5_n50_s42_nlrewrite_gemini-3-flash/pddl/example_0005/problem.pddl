@@ -1,0 +1,18 @@
+(define (problem cook_ny_strip)
+  (:domain cook_steak)
+  ; shortest possible makespan = 3660 seconds (critical path: remove_from_fridge 2700 + sear_steak 360 + rest_steak 600 = 3660)
+  (:init
+    (season_pending)
+    (rest_pending)
+    (remove_pending)
+    (sear_pending)
+    (serve_pending)
+  )
+  (:goal (and
+    (season_done)
+    (rest_done)
+    (remove_done)
+    (sear_done)
+    (serve_done)
+  ))
+)

@@ -1,0 +1,17 @@
+(define (problem poetry-writing-problem)
+  (:domain poetry-writing)
+  (:init
+    (reflect_pending)
+    (draft_pending)
+    (readaloud_pending)
+    (selectplace_pending)
+    (completeverses_pending)
+  )
+  (:goal (and
+    (reflect_done)
+    (draft_done)
+    (readaloud_done)
+    (selectplace_done)
+    (completeverses_done)
+  ))
+)

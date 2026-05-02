@@ -1,0 +1,7 @@
+0.000: (step1_purchase) [1800.000]
+1800.001: (step7_sprinkle_roastveg) [180.000]
+1800.001: (step6_add_frittata) [480.000]
+1800.001: (step5_add_zaatar) [180.000]
+1800.001: (step4_marinate) [600.000]
+1800.001: (step3_add_dips) [180.000]
+1800.001: (step2_use_replace) [300.000]

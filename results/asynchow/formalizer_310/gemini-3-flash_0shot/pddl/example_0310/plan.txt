@@ -1,0 +1,7 @@
+0.000: (measure_half_girth) [120.000]
+0.000: (measure_thigh) [60.000]
+0.000: (prepare_trousers) [120.000]
+0.000: (measure_hip) [60.000]
+0.000: (identify_waist) [60.000]
+60.001: (measure_waist) [120.000]
+120.001: (measure_inseam) [120.000]

@@ -1,0 +1,15 @@
+(define (problem remove_pet_hair-problem)
+  (:domain remove_pet_hair)
+  (:init
+    (rub_pumice_pending)
+    (mist_carpet_pending)
+    (vacuum_carpet_pending)
+    (mop_hardwood_pending)
+  )
+  (:goal (and
+    (rub_pumice_done)
+    (mist_carpet_done)
+    (vacuum_carpet_done)
+    (mop_hardwood_done)
+  ))
+)

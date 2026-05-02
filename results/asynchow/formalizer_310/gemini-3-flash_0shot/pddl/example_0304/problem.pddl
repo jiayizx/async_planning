@@ -1,0 +1,1 @@
+(define (problem corned_beef_hash_prob) (:domain corned_beef_hash) (:init (gather_ingredients_pending) (combine_mixture_pending) (toast_bread_pending) (spread_mixture_pending)) (:goal (and (gather_ingredients_done) (combine_mixture_done) (toast_bread_done) (spread_mixture_done))) (:metric minimize (total-time)))

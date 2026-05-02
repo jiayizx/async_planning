@@ -1,0 +1,17 @@
+(define (problem add_large_animal_problem)
+  (:domain add_large_animal)
+  (:init
+    (step1_call_pending)
+    (step2_drive_pending)
+    (step3_paperwork_pending)
+    (step4_setup_area_pending)
+    (step5_receive_pending)
+  )
+  (:goal (and
+    (step1_call_done)
+    (step2_drive_done)
+    (step3_paperwork_done)
+    (step4_setup_area_done)
+    (step5_receive_done)
+  ))
+)

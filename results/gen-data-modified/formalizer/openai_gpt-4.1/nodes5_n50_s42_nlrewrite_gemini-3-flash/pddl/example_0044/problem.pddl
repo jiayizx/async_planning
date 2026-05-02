@@ -1,0 +1,17 @@
+(define (problem leave_school_instance)
+  (:domain leave_school)
+  (:init
+    (pack_backpack_pending)
+    (locate_keys_pending)
+    (logout_lab_pending)
+    (walk_to_parking_pending)
+    (unlock_car_pending)
+  )
+  (:goal (and
+    (pack_backpack_done)
+    (locate_keys_done)
+    (logout_lab_done)
+    (walk_to_parking_done)
+    (unlock_car_done)
+  ))
+)

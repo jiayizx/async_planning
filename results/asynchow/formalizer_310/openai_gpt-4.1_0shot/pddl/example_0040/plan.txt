@@ -1,0 +1,4 @@
+0.000: (do_hire_contractor) [259200.000]
+0.000: (do_get_financed) [604800.000]
+604800.001: (do_make_contract) [86400.000]
+691200.002: (do_transfer_money) [86400.000]

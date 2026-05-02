@@ -1,0 +1,17 @@
+(define (problem play_video_games-problem)
+  (:domain play_video_games)
+  (:init
+    (pick_system_pending)
+    (search_games_pending)
+    (order_online_pending)
+    (setup_system_pending)
+    (find_interesting_games_pending)
+  )
+  (:goal (and
+    (pick_system_done)
+    (search_games_done)
+    (order_online_done)
+    (setup_system_done)
+    (find_interesting_games_done)
+  ))
+)

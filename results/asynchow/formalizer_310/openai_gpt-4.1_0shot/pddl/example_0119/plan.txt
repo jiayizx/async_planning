@@ -1,0 +1,7 @@
+0.000: (buy_laundry_detergent) [1200.000]
+0.000: (buy_fabric_softener) [1200.000]
+1200.001: (gather_dirty_clothes) [120.000]
+1320.002: (open_washing_machine) [20.000]
+1340.003: (add_laundry_detergent) [30.000]
+1340.003: (put_clothes_in_washing_machine) [60.000]
+1400.004: (turn_on_washing_machine) [20.000]

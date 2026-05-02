@@ -1,0 +1,17 @@
+(define (problem treat_liver_disease)
+  (:domain liver_disease_treatment)
+  (:init
+    (blood_panel_pending)
+    (physical_exam_pending)
+    (supplements_pending)
+    (nutritionist_pending)
+    (ultrasound_pending)
+  )
+  (:goal (and
+    (blood_panel_done)
+    (physical_exam_done)
+    (supplements_done)
+    (nutritionist_done)
+    (ultrasound_done)
+  ))
+)

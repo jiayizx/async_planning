@@ -1,0 +1,66 @@
+{
+  "id": "easy_19_toastless_breakfast_plate",
+  "split": "easy",
+  "difficulty": "easy",
+  "challenge_features": [
+    "easy"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "minimize_makespan",
+  "affordance_mode": "action_model",
+  "items": {
+    "patty19": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "potato19": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "plate": {
+      "state": "ready",
+      "predicates": []
+    }
+  },
+  "goal": {
+    "required_states": {
+      "patty19": "grilled",
+      "potato19": "mashed"
+    },
+    "stack_order": [
+      "plate",
+      "patty19",
+      "potato19"
+    ]
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 1,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "optimal_makespan": 17.0,
+  "sequential_makespan": 29,
+  "speedup_ratio": 1.706,
+  "witness_plan": "0.000: (boil potato19)  [12.000]\n0.000: (grill patty19)  [10.000]\n0.000: (stack plate)  [1.000]\n10.000: (stack patty19)  [1.000]\n12.000: (mash potato19)  [4.000]\n16.000: (stack potato19)  [1.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

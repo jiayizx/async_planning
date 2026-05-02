@@ -1,0 +1,32 @@
+(define (domain guessing_box)
+  (:requirements :durative-actions)
+  (:predicates
+    (find_box_pending)
+    (find_box_done)
+    (cut_rectangle_pending)
+    (cut_rectangle_done)
+    (cut_circle_pending)
+    (cut_circle_done)
+  )
+
+  (:durative-action do_find_box
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (find_box_pending))
+    :effect (and (at start (not (find_box_pending))) (at end (find_box_done)))
+  )
+
+  (:durative-action do_cut_rectangle
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (and (at start (cut_rectangle_pending)) (at start (find_box_done)))
+    :effect (and (at start (not (cut_rectangle_pending))) (at end (cut_rectangle_done)))
+  )
+
+  (:durative-action do_cut_circle
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (cut_circle_pending)) (at start (find_box_done)))
+    :effect (and (at start (not (cut_circle_pending))) (at end (cut_circle_done)))
+  )
+)

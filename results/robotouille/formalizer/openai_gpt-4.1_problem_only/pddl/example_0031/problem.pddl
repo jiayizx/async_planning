@@ -1,0 +1,118 @@
+(define (problem robotouille-problem)
+  (:domain robotouille)
+  (:objects
+    table_1 table_2 table_3 table_4 fryer_1 fryer_2 stove_1 stove_2 stove_3 board_1 - station
+    bottombun_1 cheese_1 bread_1 topbun_2 topbun_1 patty_2 topbun_3 potato_1 tomato_1 patty_1 - item
+    robot_1 - player
+  )
+  (:init
+    ; Station identity
+    (istable table_1)
+    (istable table_2)
+    (istable table_3)
+    (istable table_4)
+    (isfryer fryer_1)
+    (isfryer fryer_2)
+    (isstove stove_1)
+    (isstove stove_2)
+    (isstove stove_3)
+    (isboard board_1)
+
+    ; Player identity
+    (isrobot robot_1)
+
+    ; Item identity
+    (isbottombun bottombun_1)
+    (ischeese cheese_1)
+    (isbread bread_1)
+    (istopbun topbun_2)
+    (istopbun topbun_1)
+    (ispatty patty_2)
+    (istopbun topbun_3)
+    (ispotato potato_1)
+    (istomato tomato_1)
+    (ispatty patty_1)
+
+    ; Item capability predicates
+    (iscookable patty_2)
+    (iscookable patty_1)
+    (iscuttable potato_1)
+    (isfryableifcut potato_1)
+    (iscuttable tomato_1)
+
+    ; Player location
+    (loc robot_1 table_1)
+
+    ; Player hand state
+    (nothing robot_1)
+
+    ; Item locations (on/at/atop/has)
+    (on bottombun_1 table_1)
+    (at bottombun_1 table_1)
+    (on cheese_1 table_4)
+    (at cheese_1 table_4)
+    (on bread_1 table_2)
+    (at bread_1 table_2)
+    (on topbun_2 fryer_2)
+    (at topbun_2 fryer_2)
+    (on topbun_1 stove_1)
+    (at topbun_1 stove_1)
+    (on patty_2 stove_2)
+    (at patty_2 stove_2)
+    (on topbun_3 table_3)
+    (at topbun_3 table_3)
+    (on potato_1 stove_3)
+    (at potato_1 stove_3)
+    (on tomato_1 board_1)
+    (at tomato_1 board_1)
+    (on patty_1 fryer_1)
+    (at patty_1 fryer_1)
+
+    ; Clear predicates (no item is stacked)
+    (clear bottombun_1)
+    (clear cheese_1)
+    (clear bread_1)
+    (clear topbun_2)
+    (clear topbun_1)
+    (clear patty_2)
+    (clear topbun_3)
+    (clear potato_1)
+    (clear tomato_1)
+    (clear patty_1)
+
+    ; All stations except table_1 are vacant (robot_1 at table_1)
+    (vacant table_2)
+    (vacant table_3)
+    (vacant table_4)
+    (vacant fryer_1)
+    (vacant fryer_2)
+    (vacant stove_1)
+    (vacant stove_2)
+    (vacant stove_3)
+    (vacant board_1)
+
+    ; All items start item-free
+    (item-free bottombun_1)
+    (item-free cheese_1)
+    (item-free bread_1)
+    (item-free topbun_2)
+    (item-free topbun_1)
+    (item-free patty_2)
+    (item-free topbun_3)
+    (item-free potato_1)
+    (item-free tomato_1)
+    (item-free patty_1)
+  )
+  (:goal (and
+    (on bottombun_1 table_1)
+    (iscooked patty_1)
+    (at patty_1 table_1)
+    (iscut tomato_1)
+    (at tomato_1 table_1)
+    (at topbun_1 table_1)
+    (clear topbun_1)
+    (iscut potato_1)
+    (isfried potato_1)
+    (on potato_1 table_2)
+  ))
+)

@@ -1,0 +1,6 @@
+0.000: (look_at_flights) [3600.000]
+0.000: (look_at_hotel_prices) [1800.000]
+1800.001: (book_hotel) [300.000]
+3600.001: (buy_plane_tickets) [300.000]
+3900.002: (go_to_airport) [2700.000]
+6600.003: (board_plane) [300.000]

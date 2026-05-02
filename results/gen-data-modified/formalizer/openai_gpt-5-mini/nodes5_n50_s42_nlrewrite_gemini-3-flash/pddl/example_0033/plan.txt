@@ -1,0 +1,5 @@
+0.000: (retrieve_harness) [60.000]
+0.000: (calm_with_treat) [120.000]
+60.001: (slide_harness) [30.000]
+90.002: (adjust_straps) [45.000]
+120.001: (attach_leash) [10.000]
