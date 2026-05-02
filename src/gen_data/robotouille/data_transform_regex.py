@@ -37,25 +37,9 @@ def convert_task(task: dict, *, include_coordinates: bool = True) -> str:
     cook_time = config.get("cook_time", {}).get("default", 3)
     num_cuts = config.get("num_cuts", {}).get("default", 3)
 
-    # --- Player ---
-    player = data["players"][0]
-    px, py = player["x"], player["y"]
-    pdir = direction_to_str(player.get("direction", [0, -1]))
-
-    lines = []
-    if include_coordinates:
-        pos_clause = f"You are currently at ({px}, {py}) facing {pdir}."
-    else:
-        pos_clause = f"You are at your starting position facing {pdir}."
-    lines.append(
-        f"You are a robot in a kitchen environment. The objects in the kitchen and your goal are described. "
-        f"You are currently in a {w}x{h} kitchen. "
-        f"{pos_clause} "
-    )
-    lines.append("")
-
-    # --- Stations ---
-    stations = data.get("stations", [])
+    # --- Stations (built first so player can reference nearest station) ---
+    # Sort by (x, y) to match _annotate_robotouille_json naming order
+    stations = sorted(data.get("stations", []), key=lambda s: (s["x"], s["y"]))
     # Assign unique names: table_1, table_2, stove_1, etc.
     station_count = defaultdict(int)
     station_labels = []  # parallel to stations list
@@ -67,6 +51,29 @@ def convert_task(task: dict, *, include_coordinates: bool = True) -> str:
         station_labels.append(label)
         station_at[(s["x"], s["y"])] = label
 
+    # --- Player ---
+    player = data["players"][0]
+    px, py = player["x"], player["y"]
+    pdir = direction_to_str(player.get("direction", [0, -1]))
+    from collections import Counter as _Counter
+    _player_seen: _Counter = _Counter()
+    _player_seen[player["name"]] += 1
+    player_pddl_name = f"{player['name']}_{_player_seen[player['name']]}"
+    nearest_station = min(stations, key=lambda s: (s["x"] - px) ** 2 + (s["y"] - py) ** 2)
+    nearest_label = station_at[(nearest_station["x"], nearest_station["y"])]
+
+    lines = []
+    if include_coordinates:
+        pos_clause = f"You are currently at ({px}, {py}) facing {pdir}."
+    else:
+        pos_clause = f"You are at {nearest_label}, facing {pdir}."
+    lines.append(
+        f"You are {player_pddl_name}, a robot in a kitchen environment. The objects in the kitchen and your goal are described. "
+        f"You are currently in a {w}x{h} kitchen. "
+        f"{pos_clause} "
+    )
+    lines.append("")
+
     lines.append(f"There are {len(stations)} stations:")
     for s, label in zip(stations, station_labels):
         if include_coordinates:
@@ -76,25 +83,61 @@ def convert_task(task: dict, *, include_coordinates: bool = True) -> str:
     lines.append("")
 
     # --- Items ---
-    items = data.get("items", [])
+    # Sort by (x, y, stack-level) to match _annotate_robotouille_json naming order
+    items = sorted(data.get("items", []), key=lambda i: (i["x"], i["y"], i.get("stack-level", 0)))
     item_count = defaultdict(int)
-    item_labels = []  # parallel to items list (1-indexed id -> label)
+    item_labels = []
+    item_label_map = {}  # (x, y, stack-level) -> label
     for item in items:
         item_count[item["name"]] += 1
         label = f'{item["name"]}_{item_count[item["name"]]}'
         item_labels.append(label)
+        item_label_map[(item["x"], item["y"], item.get("stack-level", 0))] = label
+
+    # Held items = items at player position
+    held_labels = {
+        item_label_map[(item["x"], item["y"], item.get("stack-level", 0))]
+        for item in items
+        if item["x"] == px and item["y"] == py
+    }
 
     lines.append(f"There are {len(items)} items:")
     for item, label in zip(items, item_labels):
-        loc_label = station_at.get((item["x"], item["y"]), f'({item["x"]}, {item["y"]})')
-        if include_coordinates:
-            lines.append(f"- {label} at ({item['x']}, {item['y']}) on {loc_label}")
-        else:
-            if str(loc_label).startswith("("):
-                lines.append(f"- {label} (location unspecified)")
+        level = item.get("stack-level", 0)
+        if item["x"] == px and item["y"] == py:
+            # Item held by player
+            lines.append(f"- {label}: held by {player_pddl_name}")
+        elif level > 0:
+            # Item stacked on top of another item
+            below_label = item_label_map.get((item["x"], item["y"], level - 1), "unknown")
+            station = station_at.get((item["x"], item["y"]), f'({item["x"]},{item["y"]})')
+            if include_coordinates:
+                lines.append(f"- {label} at ({item['x']}, {item['y']}): on top of {below_label} at {station}")
             else:
-                lines.append(f"- {label} on {loc_label}")
+                lines.append(f"- {label}: on top of {below_label} at {station}")
+        else:
+            loc_label = station_at.get((item["x"], item["y"]), f'({item["x"]}, {item["y"]})')
+            if include_coordinates:
+                lines.append(f"- {label} at ({item['x']}, {item['y']}) on {loc_label}")
+            else:
+                if str(loc_label).startswith("("):
+                    lines.append(f"- {label}: location unknown")
+                else:
+                    lines.append(f"- {label}: on {loc_label}")
     lines.append("")
+
+    # --- Empty stations ---
+    item_coords = {(item["x"], item["y"]) for item in items if item.get("stack-level", 0) == 0}
+    empty_stations = [label for s, label in zip(stations, station_labels)
+                      if (s["x"], s["y"]) not in item_coords and (s["x"], s["y"]) != (px, py)]
+    if empty_stations:
+        lines.append(f"Initially empty stations (no items): {', '.join(empty_stations)}")
+        lines.append("")
+
+    # --- Robot hand state ---
+    if not held_labels:
+        lines.append(f"{player_pddl_name} is not holding anything.")
+        lines.append("")
 
     # --- Requirements ---
     # --- Cookable / cuttable predicates ---
@@ -156,51 +199,48 @@ def convert_task(task: dict, *, include_coordinates: bool = True) -> str:
     # The arg names tell us the entity type; the id distinguishes instances.
 
     PREDICATE_TEMPLATES = {
-        "item_on":  lambda resolved: f"{resolved[0]} is on {resolved[1]}",
-        "item_at":  lambda resolved: f"{resolved[0]} is at {resolved[1]}",
-        "iscooked": lambda resolved: f"{resolved[0]} is cooked",
-        "iscut":    lambda resolved: f"{resolved[0]} is cut",
-        "clear":    lambda resolved: f"{resolved[0]} has nothing on top of it (clear)",
-        "on":       lambda resolved: f"{resolved[0]} is on {resolved[1]}",
-        "holding":  lambda resolved: f"robot is holding {resolved[0]}",
+        "item_on":  lambda r: f"{r[0]} is on {r[1]}",
+        "item_at":  lambda r: f"{r[0]} is at {r[1]}",
+        "iscooked": lambda r: f"{r[0]} is cooked",
+        "iscut":    lambda r: f"{r[0]} is cut",
+        "isfried":  lambda r: f"{r[0]} is fried",
+        "clear":    lambda r: f"{r[0]} has nothing on top of it (clear)",
+        "on":       lambda r: f"{r[0]} is on {r[1]}",
+        "holding":  lambda r: f"{player_pddl_name} is holding {r[0]}",
     }
 
-    # Build a mapping: for each (arg_name, id) pair, create a readable label.
-    # We count how many distinct ids exist per arg_name across all goals
-    # to decide if we need disambiguation.
-    from collections import Counter
-    name_id_pairs = set()
+    # Resolve goal ids → pddl_names using same scheme as _annotate_robotouille_json:
+    # group pddl entities by base type, sort ids, map i-th id to i-th pddl_name.
+    type_to_pddl: dict[str, list[str]] = {}
+    for lbl in item_labels:
+        base = lbl.rsplit("_", 1)[0]
+        type_to_pddl.setdefault(base, []).append(lbl)
+    for lbl in station_labels:
+        base = lbl.rsplit("_", 1)[0]
+        type_to_pddl.setdefault(base, []).append(lbl)
+    type_to_pddl[player["name"]] = [player_pddl_name]
+
+    type_ids: dict[str, set] = {}
     for g in goals:
-        for arg, aid in zip(g["args"], g.get("ids", [])):
-            name_id_pairs.add((arg, aid))
-    
-    # For each unique name, sort its ids and assign _1, _2, etc.
-    name_to_ids = defaultdict(set)
-    for name, aid in name_id_pairs:
-        name_to_ids[name].add(aid)
-    
-    id_label_map = {}
-    for name, ids_set in name_to_ids.items():
-        sorted_ids = sorted(ids_set)
-        if len(sorted_ids) == 1:
-            id_label_map[(name, sorted_ids[0])] = name
-        else:
-            for idx, aid in enumerate(sorted_ids, 1):
-                id_label_map[(name, aid)] = f"{name}_{idx}"
+        for arg, gid in zip(g.get("args", []), g.get("ids", [])):
+            type_ids.setdefault(arg, set()).add(gid)
+
+    id_to_pddl: dict[str, dict] = {}
+    for arg_type, id_set in type_ids.items():
+        sorted_ids = sorted(id_set)
+        pddl_names = sorted(type_to_pddl.get(arg_type, []))
+        id_to_pddl[arg_type] = {
+            gid: pddl_names[i] if i < len(pddl_names) else f"{arg_type}_{i+1}"
+            for i, gid in enumerate(sorted_ids)
+        }
 
     for g in goals:
         pred = g["predicate"]
-        args = g["args"]
+        args = g.get("args", [])
         ids = g.get("ids", list(range(1, len(args) + 1)))
-
-        resolved = [id_label_map.get((arg, aid), f"{arg}_{aid}") for arg, aid in zip(args, ids)]
-
+        resolved = [id_to_pddl.get(arg, {}).get(aid, f"{arg}_{aid}") for arg, aid in zip(args, ids)]
         template = PREDICATE_TEMPLATES.get(pred)
-        if template:
-            goal_str = template(resolved)
-        else:
-            goal_str = f"{pred}({', '.join(resolved)})"
-
+        goal_str = template(resolved) if template else f"{pred}({', '.join(resolved)})"
         lines.append(f"- {goal_str}")
     
     # lines.append("Please generate the the step by step plan to complete the task. And output in the following format:") 

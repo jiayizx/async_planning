@@ -54,13 +54,14 @@ from src.method.nl_to_pddl import (
     parse_robotouille_problem_response,
     normalize_robotouille_problem_to_domain,
     _truncate_solver_error,
+    _annotate_robotouille_json,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
 from src.evaluation.robotouille.eval import evaluate_record, summarize_eval
 
 
 _TRANSIENT_SOLVER_RETRIES = 5  # Apptainer container errors are transient; give server time to recover
-SOLVER_TIMEOUT = 120
+SOLVER_TIMEOUT = 300
 DEFAULT_SOLVER = "lama-first"  # faster than OPTIC for classical STRIPS domains
 # Fallback planners tried when lama-first returns empty output (search timeout on complex problems)
 _LAMA_FALLBACKS = ["lama", "fd-ms"]
@@ -94,10 +95,13 @@ def _normalize_predicate_names(domain_pddl: str, problem_pddl: str) -> tuple[str
         ("handempty", "nothing"),
         ("holding",   "has"),
         ("on-surface", "on"),
+        # fry-cut-item / fry_cut_item → fry (hallucinated combined action; game engine uses separate fry/cut)
+        ("fry-cut-item", "fry"),
+        ("fry_cut_item", "fry"),
     ]
     for llm_name, ref_name in rewrites:
         # Skip if the reference name already appears in the domain (already correct)
-        if ref_name in domain_pddl:
+        if ref_name in domain_pddl and llm_name not in domain_pddl:
             continue
         if llm_name not in domain_pddl and llm_name not in problem_pddl:
             continue
@@ -106,6 +110,102 @@ def _normalize_predicate_names(domain_pddl: str, problem_pddl: str) -> tuple[str
         domain_pddl = pat.sub(ref_name, domain_pddl)
         problem_pddl = pat.sub(ref_name, problem_pddl)
     return domain_pddl, problem_pddl
+
+
+def _fix_nothing_contradiction(problem_pddl: str) -> str:
+    """Remove (nothing ?p) from :init when (has ?p ?i) is also present.
+
+    (nothing ?p) and (has ?p ?i) are mutually exclusive — a player holding an
+    item cannot also have an empty hand.  LLMs frequently emit both when the
+    robot starts holding an item, which gives OPTIC a trivial shortcut (it can
+    skip the pick-up and use nothing-hand actions directly) or makes goals
+    unreachable.  Drop the (nothing ...) fact for any player that also appears
+    in a (has ...) fact.
+    """
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+
+    # Find all players that are holding something
+    holding_players = set(_re.findall(r'\(has\s+(\S+)\s+\S+\)', init_text))
+    if not holding_players:
+        return problem_pddl
+
+    # Remove (nothing <player>) for those players
+    def _remove_nothing(m):
+        player = m.group(1)
+        if player in holding_players:
+            return ""
+        return m.group(0)
+
+    new_init = _re.sub(r'\(nothing\s+(\S+)\)', _remove_nothing, init_text)
+    return problem_pddl[:init_m.start(1)] + new_init + problem_pddl[init_m.end(1):]
+
+
+def _fix_missing_capability_predicates(problem_pddl: str) -> str:
+    """Inject missing capability predicates inferred from the goal.
+
+    LLMs often forget to add (isfryable X) / (iscookable X) / (iscuttable X)
+    to :init even when the goal requires (isfried X) / (iscooked X) / (iscut X).
+    Without these the corresponding action can never fire and the problem is unsolvable.
+    """
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    goal_m = _re.search(r'\(:goal(.*)', problem_pddl, _re.DOTALL)
+    if not init_m or not goal_m:
+        return problem_pddl
+
+    init_text = init_m.group(1)
+    goal_text = goal_m.group(1)
+
+    # Map goal state predicate → required capability predicate
+    capability_map = [
+        ("isfried", "isfryable"),
+        ("iscooked", "iscookable"),
+        ("iscut", "iscuttable"),
+    ]
+
+    to_add = []
+    for goal_pred, cap_pred in capability_map:
+        # Find all items that appear as (isfried item) / (iscooked item) / (iscut item) in goal
+        for item in _re.findall(r'\(' + goal_pred + r'\s+(\S+)\)', goal_text):
+            cap_fact = f"({cap_pred} {item})"
+            if cap_fact not in init_text:
+                to_add.append(cap_fact)
+
+    if not to_add:
+        return problem_pddl
+
+    # Inject before closing paren of :init
+    new_init = init_text.rstrip() + " " + " ".join(to_add)
+    return problem_pddl[:init_m.start(1)] + new_init + problem_pddl[init_m.end(1):]
+
+
+def _fix_stacked_clear_contradiction(problem_pddl: str) -> str:
+    """Remove (clear X) from :init when (atop Y X) is also present.
+
+    (atop Y X) means item Y is on top of item X, so X is NOT clear.
+    LLMs frequently emit both, giving OPTIC a false shortcut and causing
+    'preconditions not met: (clear X)' failures in the env simulator.
+    """
+    init_m = _re.search(r'\(:init(.*?)\)(?=\s*\(:goal)', problem_pddl, _re.DOTALL)
+    if not init_m:
+        return problem_pddl
+    init_text = init_m.group(1)
+
+    # Items that have something on top of them
+    covered_items = set(_re.findall(r'\(atop\s+\S+\s+(\S+)\)', init_text))
+    if not covered_items:
+        return problem_pddl
+
+    def _remove_clear(m):
+        item = m.group(1)
+        if item in covered_items:
+            return ""
+        return m.group(0)
+
+    new_init = _re.sub(r'\(clear\s+(\S+)\)', _remove_clear, init_text)
+    return problem_pddl[:init_m.start(1)] + new_init + problem_pddl[init_m.end(1):]
 
 
 def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
@@ -140,7 +240,7 @@ def _fix_empty_predicate(domain_pddl: str, problem_pddl: str) -> str:
     for fact in facts:
         toks = _re.findall(pat_obj, fact)
         stripped = fact.strip()
-        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ")):
+        if len(toks) >= 2 and (stripped.startswith("(at ") or "on-surface" in stripped or stripped.startswith("(on ") or stripped.startswith("(container_at ")):
             occupied.add(toks[-1])
 
     already_empty: set[str] = set()
@@ -527,9 +627,16 @@ def _fix_clear_predicate(domain_pddl: str, problem_pddl: str) -> str:
         if m:
             items_on_station.add(m.group(1))
 
-    # Items stacked on another item (atop) are NOT clear unless nothing is on top of them;
-    # for simplicity, add clear to all items that have 'on/on-surface' but no 'clear'.
-    to_inject = items_on_station - items_with_clear
+    # Items that have something on top of them (via atop) are NOT clear.
+    items_covered: set[str] = set()
+    for fact in facts:
+        m = _re.match(r'\(atop\s+\S+\s+(\S+)\s*\)', fact.strip())
+        if m:
+            items_covered.add(m.group(1))
+
+    # Only inject (clear) for items that are on a station, not already clear,
+    # and not covered by another item via atop.
+    to_inject = items_on_station - items_with_clear - items_covered
     if not to_inject:
         return problem_pddl
 
@@ -1068,9 +1175,14 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     gold_data: list[dict] = []
 
     for rec in records:
+        orig = rec.get("original_json")
+        # annotated_json = original_json with pddl_name/station/atop/held_by/facing_station
+        # fields pre-computed by _annotate_robotouille_json (same as what JSON-mode sends to LLM)
         gold_data.append({
             "id": rec.get("id", "?"),
-            "original_json": rec.get("original_json"),
+            "original_json": orig,
+            "annotated_json": _annotate_robotouille_json(orig) if orig else None,
+            "natural_language": rec.get("natural_language"),
         })
 
     # Per-example mutable state
@@ -1086,7 +1198,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     if args.generate_domain:
         # PDDL 2.1 temporal path: LLM generates domain+problem with durative actions → OPTIC
         histories: list[list[dict]] = [
-            build_robotouille_temporal_messages(rec.get("original_json", {}), domain_pddl, effect_goal=args.effect_goal)
+            build_robotouille_temporal_messages(
+                rec.get("original_json", {}), domain_pddl,
+                effect_goal=args.effect_goal,
+                input_mode=args.input_mode,
+                natural_language=rec.get("natural_language", ""),
+            )
             for rec in records
         ]
         schema = PDDLResponse
@@ -1141,6 +1258,9 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     d = _fix_unstack_empty_effect(d)
                     d = _fix_cook_fry_effects(d)
                     p = _strip_undeclared_init_facts(d, p)
+                    p = _fix_nothing_contradiction(p)
+                    p = _fix_missing_capability_predicates(p)
+                    p = _fix_stacked_clear_contradiction(p)
                     p = _fix_nothing_predicate(d, p)
                     p = _fix_item_locations(d, p, original_json=gold_data[i].get("original_json"))
                     p = _fix_empty_contradiction(d, p)
@@ -1186,10 +1306,18 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 if sr.error:
                     errors[i] = sr.error
                     _e = sr.error.lower()
-                    if "unreachable" in _e or "unsolvable" in _e:
-                        error_types[i] = "planning_failure"
-                    elif "timeout" in _e or "timed out" in _e or "empty solver" in _e:
+                    _is_timeout = (
+                        "timeout" in _e or "timed out" in _e or "empty solver" in _e
+                        # OPTIC search-progress output truncated = timeout (no "Solution Found")
+                        # "b (" appears in beam-search progress lines; if present without a solution
+                        # the planner timed out mid-search. Takes priority over "unreachable" which
+                        # also appears in "Post filtering unreachable actions" during normal search.
+                        or ("solution found" not in _e and "b (" in sr.error)
+                    )
+                    if _is_timeout:
                         error_types[i] = "solver_error"
+                    elif "unreachable" in _e or "unsolvable" in _e:
+                        error_types[i] = "planning_failure"
                     else:
                         error_types[i] = "syntax_error"
                     if "unreachable" in sr.error.lower() and args.generate_domain:
@@ -1200,6 +1328,9 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                         d = _fix_unstack_empty_effect(d)
                         d = _fix_cook_fry_effects(d)
                         p_fixed = _strip_undeclared_init_facts(d, p_fixed)
+                        p_fixed = _fix_nothing_contradiction(p_fixed)
+                        p_fixed = _fix_missing_capability_predicates(p_fixed)
+                        p_fixed = _fix_stacked_clear_contradiction(p_fixed)
                         p_fixed = _fix_nothing_predicate(d, p_fixed)
                         p_fixed = _fix_item_locations(d, p_fixed, original_json=gold_data[i].get("original_json"))
                         p_fixed = _fix_empty_contradiction(d, p_fixed)
@@ -1243,14 +1374,16 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                         hint = _diagnose_unreachable(d, p_fixed)
                         histories[i].append({"role": "user", "content": hint})
 
-        # ── TFD fallback for OPTIC planning failures ───────────────────────
+        # ── TFD fallback for OPTIC planning failures AND solver errors ────────
         # OPTIC times out on complex temporal problems (low compression-safe %).
         # TFD (Temporal Fast Downward) uses different search algorithms and
         # can solve many cases that OPTIC cannot within the time limit.
+        # Also covers solver_error (OPTIC timeout / empty output) since TFD
+        # uses a different search strategy that may succeed where OPTIC ran out of time.
         if args.solver == "optic" and args.generate_domain:
             tfd_candidates = [
                 i for i in range(n)
-                if error_types[i] == "planning_failure"
+                if error_types[i] in ("planning_failure", "solver_error")
                 and domains[i] and problems[i]
             ]
             if tfd_candidates:
@@ -1273,6 +1406,7 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                         problems[i] = tfd_pairs[idx][1]
                         errors[i] = ""
                         error_types[i] = ""
+
 
     # ── formalizer+ pre-pass: get planning analysis, then ask for PDDL ─
     if args.generate_domain and args.effect_goal:
@@ -1297,13 +1431,15 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
     _attempt(list(range(n)), desc="LLM translation (NL→PDDL)")
 
     # ── Retry loop ──────────────────────────────────────────────────
+    # Only retry syntax_error (LLM output unparseable) — planning_failure and
+    # solver_error are handled by the TFD fallback below, not by re-asking the LLM.
     for retry in range(args.llm_retries):
         n_syntax = sum(1 for t in error_types if t == "syntax_error")
         n_pf = sum(1 for t in error_types if t == "planning_failure")
-        failed = [i for i in range(n) if errors[i]]
+        failed = [i for i in range(n) if error_types[i] == "syntax_error"]
         if not failed:
             break
-        print(f"\nRetry {retry + 1}/{args.llm_retries}: {len(failed)} failed ({n_syntax} syntax, {n_pf} planning)")
+        print(f"\nRetry {retry + 1}/{args.llm_retries}: {len(failed)} syntax errors (planning_failures={n_pf} handled by TFD)")
         _attempt(failed, desc=f"LLM retry {retry + 1}")
 
     # ── Assemble records & save ─────────────────────────────────────
@@ -1331,6 +1467,8 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
         rec = {
             "id": gold["id"],
             "original_json": gold.get("original_json"),
+            "annotated_json": gold.get("annotated_json"),
+            "natural_language": gold.get("natural_language"),
             "error_type": error_types[i],
             "error": errors[i] if errors[i] else None,
             "plan": plan,
@@ -1514,6 +1652,16 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_SOLVER,
         choices=["optic", "lama-first"],
         help="PDDL solver to use. 'lama-first' is faster for classical STRIPS domains (default).",
+    )
+    parser.add_argument(
+        "--input-mode",
+        default="json",
+        choices=["json", "nl", "robo"],
+        help=(
+            "Input representation: 'json' passes the annotated environment JSON + domain PDDL reference; "
+            "'nl' passes the natural_language field + domain PDDL reference; "
+            "'robo' replaces the domain PDDL with the Robotouille io-cot prompt + annotated JSON."
+        ),
     )
     return parser.parse_args()
 

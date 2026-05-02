@@ -1,0 +1,186 @@
+{
+  "id": "hard_optimization_13_deadline_menu",
+  "split": "hard_optimization",
+  "difficulty": "hard",
+  "challenge_features": [
+    "hard_optimization",
+    "deadline",
+    "limited_inventory",
+    "reward_maximization"
+  ],
+  "implicit_style": "rule_based",
+  "objective_type": "maximize_reward_under_deadline",
+  "affordance_mode": "action_model",
+  "items": {
+    "patty13": {
+      "state": "raw",
+      "predicates": [
+        "iscookable"
+      ]
+    },
+    "chicken13": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "ismarinatable",
+        "iscookableifmarinated"
+      ],
+      "grill_requires_marinated": true
+    },
+    "fish13": {
+      "state": "raw",
+      "predicates": [
+        "isfryable"
+      ]
+    },
+    "potato13": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable",
+        "isfryableifcut"
+      ],
+      "fry_requires_cut": true
+    },
+    "yam13": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ],
+      "mash_requires_boiled": true
+    },
+    "lettuce13": {
+      "state": "raw",
+      "predicates": [
+        "iscuttable"
+      ]
+    },
+    "stock13": {
+      "state": "raw",
+      "predicates": [
+        "isboilable"
+      ]
+    }
+  },
+  "goal": {
+    "required_states": {
+      "patty13": "grilled",
+      "fish13": "fried",
+      "potato13": "fried",
+      "yam13": "mashed",
+      "lettuce13": "cut"
+    },
+    "stack_order": []
+  },
+  "action_durations": {
+    "grill": 10.0,
+    "cut": 3.0,
+    "fry": 8.0,
+    "boil": 12.0,
+    "toast": 5.0,
+    "marinate": 6.0,
+    "mash": 4.0,
+    "stack": 1.0
+  },
+  "stations": {
+    "grill": 1,
+    "cutting_board": 2,
+    "fryer": 1,
+    "boiler": 1,
+    "toaster": 1,
+    "marinator": 1
+  },
+  "temporal_constraints": [],
+  "robots": [
+    "robot1",
+    "robot2"
+  ],
+  "deadline": 24,
+  "candidate_goals": [
+    {
+      "id": "grilled_main",
+      "item": "patty13",
+      "state": "grilled",
+      "reward": 9,
+      "cost": {
+        "protein": 1
+      }
+    },
+    {
+      "id": "marinated_grill",
+      "item": "chicken13",
+      "state": "grilled",
+      "reward": 14,
+      "cost": {
+        "protein": 1,
+        "fresh": 1
+      }
+    },
+    {
+      "id": "fried_main",
+      "item": "fish13",
+      "state": "fried",
+      "reward": 8,
+      "cost": {
+        "protein": 1,
+        "fryer_oil": 1
+      }
+    },
+    {
+      "id": "fried_side",
+      "item": "potato13",
+      "state": "fried",
+      "reward": 7,
+      "cost": {
+        "fryer_oil": 1,
+        "fresh": 1
+      }
+    },
+    {
+      "id": "mashed_root",
+      "item": "yam13",
+      "state": "mashed",
+      "reward": 10,
+      "cost": {
+        "root": 1
+      }
+    },
+    {
+      "id": "fresh_side",
+      "item": "lettuce13",
+      "state": "cut",
+      "reward": 4,
+      "cost": {
+        "fresh": 1
+      }
+    },
+    {
+      "id": "soup_side",
+      "item": "stock13",
+      "state": "boiled",
+      "reward": 6,
+      "cost": {
+        "root": 1
+      }
+    }
+  ],
+  "selected_goal_ids": [
+    "grilled_main",
+    "fried_main",
+    "fried_side",
+    "mashed_root",
+    "fresh_side"
+  ],
+  "optimal_reward": 38,
+  "inventory_limits": {
+    "protein": 2,
+    "fryer_oil": 2,
+    "root": 1,
+    "fresh": 2
+  },
+  "optimal_makespan": 24.0,
+  "sequential_makespan": 48,
+  "speedup_ratio": 2.0,
+  "witness_plan": "0.000: (boil robot1 yam13)  [12.000]\n0.000: (fry robot2 fish13)  [8.000]\n8.000: (cut robot2 potato13)  [3.000]\n11.000: (grill robot2 patty13)  [10.000]\n12.000: (fry robot1 potato13)  [8.000]\n20.000: (mash robot1 yam13)  [4.000]\n21.000: (cut robot2 lettuce13)  [3.000]",
+  "groundtruth_solver": "cp-sat",
+  "groundtruth_solver_status": "OPTIMAL"
+}

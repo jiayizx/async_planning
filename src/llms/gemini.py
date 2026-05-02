@@ -85,9 +85,10 @@ class GeminiLLM(BaseLLM):
             try:
                 return fn()
             except Exception as e:
-                msg = str(e)
-                is_retryable = "503" in msg or "UNAVAILABLE" in msg or "429" in msg or "RESOURCE_EXHAUSTED" in msg
-                if is_retryable and attempt < max_retries - 1:
+                msg = str(e) + type(e).__name__
+                is_rate_limit = "429" in msg or "RESOURCE_EXHAUSTED" in msg or "ResourceExhausted" in msg
+                is_unavailable = "503" in msg or "UNAVAILABLE" in msg or "ServiceUnavailable" in msg
+                if (is_rate_limit or is_unavailable) and attempt < max_retries - 1:
                     print(f"  [gemini retry {attempt+1}/{max_retries-1}] {msg[:80]} — waiting {wait:.0f}s")
                     time.sleep(wait)
                     wait = min(wait * 2, 60.0)
