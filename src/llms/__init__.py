@@ -30,6 +30,16 @@ def get_model(
     strict_json: bool = False,
 ) -> BaseLLM:
     """Get a model instance."""
+    # vllm/<model-id> prefix → local vLLM server (OpenAI-compatible)
+    if model_name.startswith("vllm/"):
+        model_name = model_name[len("vllm/"):]
+        base_url = os.environ.get("VLLM_BASE_URL", "http://localhost:8000/v1")
+        return VLLMOpenAI(
+            model_name=model_name,
+            config={**config, "base_url": base_url},
+            num_workers=num_workers,
+            strict_json=strict_json,
+        )
     if "claude" in model_name:
         if os.environ.get("ANTHROPIC_API_KEY") is None:
             print("ANTHROPIC_API_KEY is not set, falling back to openrouter")
