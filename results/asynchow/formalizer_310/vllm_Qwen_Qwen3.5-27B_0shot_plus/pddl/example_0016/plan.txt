@@ -1,0 +1,5 @@
+0.000: (do_get_dressed) [600.000]
+0.000: (do_pack_shovel) [120.000]
+600.001: (do_drive_to_beach) [1800.000]
+2400.002: (do_park_by_beach) [1200.000]
+3600.003: (do_walk_near_ocean) [600.000]

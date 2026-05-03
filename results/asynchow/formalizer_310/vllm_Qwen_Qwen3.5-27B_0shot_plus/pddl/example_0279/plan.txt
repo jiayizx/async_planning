@@ -1,0 +1,4 @@
+0.000: (work_with_trainer) [3600.000]
+3600.001: (try_balance_wobble_board) [1800.000]
+3600.001: (incorporate_split_stance) [2700.000]
+3600.001: (use_bosu_stability_ball) [1800.000]

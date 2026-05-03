@@ -1,0 +1,5 @@
+0.000: (make_grocery_list) [300.000]
+0.000: (put_on_clothes) [300.000]
+300.001: (get_in_car) [60.000]
+360.002: (drive_to_walmart) [1200.000]
+1560.003: (find_parking_spot) [120.000]

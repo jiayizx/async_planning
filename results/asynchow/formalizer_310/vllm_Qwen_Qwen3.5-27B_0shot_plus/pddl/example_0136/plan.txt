@@ -1,0 +1,3 @@
+0.000: (do_understand_phrases) [1800.000]
+1800.001: (do_learn_praise) [3600.000]
+1800.001: (do_practice_greeting) [3600.000]

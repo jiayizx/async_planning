@@ -1,0 +1,19 @@
+(define (problem run_for_president)
+  (:domain class_president_campaign)
+  
+  (:init
+    (speak_to_classmates_pending)
+    (identify_issues_pending)
+    (write_platform_pending)
+    (make_speeches_pending)
+    (make_posters_pending)
+  )
+
+  (:goal (and
+    (speak_to_classmates_done)
+    (identify_issues_done)
+    (write_platform_done)
+    (make_speeches_done)
+    (make_posters_done)
+  ))
+)

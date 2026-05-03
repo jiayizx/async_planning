@@ -1,0 +1,7 @@
+0.000: (find_body_of_water) [3600.000]
+0.000: (purchase_scuba_gear) [300.000]
+300.001: (put_scuba_gear_on) [900.000]
+3600.001: (dive_into_water) [60.000]
+3660.002: (enter_underwater_caves) [300.000]
+3960.003: (explore_caves) [3600.000]
+7560.004: (return_to_surface) [120.000]

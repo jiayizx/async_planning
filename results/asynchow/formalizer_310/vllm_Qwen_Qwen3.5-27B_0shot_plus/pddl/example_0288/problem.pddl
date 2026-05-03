@@ -1,0 +1,21 @@
+(define (problem apply_for_clearance)
+  (:domain police_clearance)
+  
+  (:init
+    (visit_website_pending)
+    (register_pending)
+    (fill_application_pending)
+    (pay_fee_pending)
+    (schedule_appointment_pending)
+    (print_confirmation_pending)
+  )
+
+  (:goal (and
+    (visit_website_done)
+    (register_done)
+    (fill_application_done)
+    (pay_fee_done)
+    (schedule_appointment_done)
+    (print_confirmation_done)
+  ))
+)

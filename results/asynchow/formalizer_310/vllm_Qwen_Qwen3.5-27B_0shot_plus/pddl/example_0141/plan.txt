@@ -1,0 +1,3 @@
+0.000: (do_measure_tree) [300.000]
+0.000: (do_sterilize_sharpen) [900.000]
+900.001: (do_cut_trunk) [1800.000]

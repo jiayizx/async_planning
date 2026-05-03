@@ -1,0 +1,6 @@
+0.000: (look_up_pet_store) [18000.000]
+18000.001: (check_availability) [18000.000]
+18000.001: (browse_pets) [18000.000]
+36000.002: (go_to_store) [18000.000]
+54000.003: (interact_with_pets) [10800.000]
+64800.004: (walk_to_cashier) [3600.000]

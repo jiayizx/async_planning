@@ -1,0 +1,17 @@
+(define (problem clean_limestone_fireplace_problem)
+    (:domain clean_limestone_fireplace)
+    
+    (:init
+        (scoop_flour_pending)
+        (apply_poultice_pending)
+        (remove_paste_pending)
+        (wipe_fireplace_pending)
+    )
+
+    (:goal (and
+        (scoop_flour_done)
+        (apply_poultice_done)
+        (remove_paste_done)
+        (wipe_fireplace_done)
+    ))
+)

@@ -1,0 +1,6 @@
+0.000: (prepare) [300.000]
+300.001: (prayer_candle) [60.000]
+300.001: (prayer_spices) [60.000]
+300.001: (prayer_wine) [60.000]
+360.002: (concluding_prayer) [120.000]
+480.003: (extinguish) [60.000]

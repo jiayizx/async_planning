@@ -1,0 +1,5 @@
+0.000: (come_up_with_idea) [30.000]
+30.001: (plan_logistics) [604800.000]
+30.001: (plan_app_functions) [7200.000]
+604830.002: (write_code) [432000.000]
+1036830.003: (test_app) [604800.000]
