@@ -9,7 +9,7 @@
 # non-default port, then run any experiment script.
 set -euo pipefail
 
-MODEL="${MODEL:-Qwen/Qwen2.5-27B-Instruct}"
+MODEL="${MODEL:-Qwen/Qwen3.5-27B}"
 PORT="${PORT:-8000}"
 TENSOR_PARALLEL="${TENSOR_PARALLEL:-1}"          # set to number of GPUs
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
