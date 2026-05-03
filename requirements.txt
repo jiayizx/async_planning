@@ -2,6 +2,7 @@ datasets
 pydantic
 tqdm
 anthropic
+boto3>=1.28.57
 openai
 torch
 transformers
