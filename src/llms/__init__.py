@@ -8,6 +8,7 @@ from .openrouter import OpenRouterLLM
 from .vllm import VLLMOpenAI
 from .openai import OpenAILLM
 from .gemini import GeminiLLM
+from .deepseek import DeepSeekLLM
 # from .litellm import LiteLLM
 
 __all__ = ["get_model"]
@@ -18,6 +19,7 @@ LLM_REGISTRY: Dict[str, Type[BaseLLM]] = {
     "openrouter": OpenRouterLLM,
     "vllm": VLLMOpenAI,
     "gemini": GeminiLLM,
+    "deepseek": DeepSeekLLM,
     # "litellm": LiteLLM,
 }
 
@@ -33,6 +35,9 @@ def get_model(
     if model_name.startswith("openrouter/"):
         model_name = model_name[len("openrouter/"):]
         model_class = LLM_REGISTRY["openrouter"]
+    elif model_name.startswith("deepseek/"):
+        model_name = model_name[len("deepseek/"):]
+        model_class = LLM_REGISTRY["deepseek"]
     elif "claude" in model_name:
         if os.environ.get("ANTHROPIC_API_KEY") is None:
             print("ANTHROPIC_API_KEY is not set, falling back to openrouter")
@@ -42,6 +47,8 @@ def get_model(
         model_class = LLM_REGISTRY["openai"]
     elif "gemini" in model_name:
         model_class = LLM_REGISTRY["gemini"]
+    elif model_name in {"deepseek-v4-flash", "deepseek-v4-pro"}:
+        model_class = LLM_REGISTRY["deepseek"]
     else:
         model_class = LLM_REGISTRY["vllm" if use_vllm else "openrouter"]
 

@@ -379,14 +379,16 @@ Return the responses in JSON format with the key: "responses" (list of dicts). E
 
 DEP_ANALYSIS_SYSTEM_PROMPT = """\
 You are an expert at analyzing step dependencies in planning problems.
-Given a planning problem with N steps, output a concise dependency analysis.
+Given a planning problem with N steps, output a concise dependency analysis in JSON.
 For each step, list which steps MUST be fully completed before it can start.
 Include BOTH explicit constraints (e.g. "Step A must precede Step B") and
 implicit ones (logical necessity: cannot cook before heating; cannot assemble
 before all parts are ready).
-Format: one line per step:
+Return a JSON object with this shape:
+{"analysis": "Step 1: ...\\nStep 2: ..."}
+Inside the analysis string, use one line per step:
   Step N: [no prerequisites | requires Step X, Step Y, ...]
-Output ONLY the dependency list, no extra explanation."""
+Output ONLY the JSON object, with no extra explanation."""
 
 
 DEP_ANALYSIS_USER_TEMPLATE = """\
@@ -394,7 +396,8 @@ Here is an asynchronous planning problem. Analyze the dependencies between steps
 
 {question}
 
-For each step, list ALL steps that must be fully completed before it can start."""
+For each step, list ALL steps that must be fully completed before it can start.
+Return the result as JSON."""
 
 
 PDDL_FEW_SHOT_EXAMPLES = [

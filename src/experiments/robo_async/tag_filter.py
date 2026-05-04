@@ -10,6 +10,13 @@ SUMMARY_SPLIT_TAGS = (
     "hard_multiagent",
     "hard_optimization",
     "hard_high_speedup",
+    "online_easy",
+    "online_medium",
+    "online_station",
+    "online_multiagent",
+    "online_deadline",
+    "online_optimization",
+    "online_speedup",
 )
 
 

@@ -273,18 +273,27 @@ def parse_optic_plan(text: str) -> list[PlanStep]:
         action    = m.group(2).lower()
         args      = m.group(3).split()
         duration  = float(m.group(4))
+        # Ignore planner-only wait actions used to encode temporal lag constraints.
+        if action.startswith("wait_"):
+            continue
         # Normalize ground PDDL action names like stack_bun_bot or fry_potato
         # back into the engine's parameterized action vocabulary.
-        if not args:
-            for prefix in (
-                "marinate", "grill", "cut", "fry", "boil",
-                "toast", "mash", "stack",
-            ):
-                marker = f"{prefix}_"
-                if action.startswith(marker):
-                    args = [action[len(marker):]]
-                    action = prefix
-                    break
+        for prefix in (
+            "marinate", "grill", "cut", "fry", "boil",
+            "toast", "mash", "stack",
+        ):
+            marker = f"{prefix}_"
+            if not action.startswith(marker):
+                continue
+            item_name = action[len(marker):]
+            if not args:
+                args = [item_name]
+                action = prefix
+            elif len(args) == 1:
+                # Robot-aware grounded action, e.g. (stack_bun_bot robot1)
+                args = [args[0], item_name]
+                action = prefix
+            break
         steps.append(PlanStep(t_start, duration, action, args))
     return sorted(steps, key=lambda s: s.t_start)
 
