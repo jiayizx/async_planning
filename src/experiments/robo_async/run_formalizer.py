@@ -17,12 +17,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from dotenv import load_dotenv
+from tqdm import tqdm
 load_dotenv()
 
 _ROOT = Path(__file__).resolve().parent.parent.parent.parent
@@ -36,6 +38,7 @@ from src.experiments.robo_async.tag_filter import (
     tag_filter_match,
 )
 from src.method.pddl_solver import solve, batch_solve, SolverResult
+from src.method.nl_to_pddl import _truncate_solver_error
 from src.envs.robo_async.engine import Task, evaluate_from_text
 from src.envs.robo_async.nl_generator import task_to_nl
 from src.envs.robo_async.tasks import load_all_tasks
@@ -64,25 +67,35 @@ INTERFACE CONTRACT — follow this exactly:
   <base_action>_<exact_item_name>, for example fry_potato1, grill_patty2, \
   marinate_chicken3, stack_bun_top. The prefix before the first underscore \
   must still be one of the allowed base actions.
+- If the task lists robots, the final solver plan must use robot-aware actions:
+  (grill ROBOT ITEM), (cut ROBOT ITEM), (fry ROBOT ITEM), (boil ROBOT ITEM), \
+  (toast ROBOT ITEM), (marinate ROBOT ITEM), (mash ROBOT ITEM), or \
+  (stack ROBOT ITEM), with ROBOT exactly from the task and ITEM exactly from \
+  the task.
 - Use item names EXACTLY as listed in the task. Never remove numeric suffixes, \
   never singularize/pluralize, never replace underscores with spaces, and never \
   shorten names such as patty1 to patty or portobello8 to portobello.
-- In the final solver plan, every action must therefore normalize to one of:
+- If the task does NOT list robots, every action in the final solver plan must \
+  normalize to one of:
   (grill ITEM), (cut ITEM), (fry ITEM), (boil ITEM), (toast ITEM), \
   (marinate ITEM), (mash ITEM), or (stack ITEM), with ITEM exactly from the task.
 
 RULES:
 1. Requirements: (:requirements :durative-actions :typing)
-2. Types: (:types item)
+2. Types: declare item. If the task lists robots, also declare robot.
 3. Predicates: (raw ?i - item), (stackable ?i - item), (stacked ?i - item), \
    (ready ?i - item), one result predicate per processing action used in the task \
    (grilled, cut, fried, boiled, toasted, marinated, mashed), AND one <station>_free \
    predicate per station mentioned in the task \
-   (e.g. grill_free, cutting_board_free, fryer_free, marinator_free).
+   (e.g. grill_free, cutting_board_free, fryer_free, marinator_free). \
+   If the task lists robots, also declare (robot_free ?r - robot).
 4. Processing actions (grill / cut / fry / boil / toast / marinate / mash) are \
-   parameterized (?i - item) by default. Each action consumes its input state and \
-   produces its output state; the station is occupied at start and released at end:
-   :condition (and (at start (<input_state> ?i)) (at start (<station>_free)))
+   parameterized (?i - item) by default. If the task lists robots, parameterize \
+   them as (?r - robot ?i - item). Each action consumes its input state and \
+   produces its output state; the station is occupied at start and released at end. \
+   If robots are present, the action must also require (robot_free ?r) at start, \
+   set (not (robot_free ?r)) at start, and restore (robot_free ?r) at end:
+   :condition (and (at start (<input_state> ?i)) (at start (<station>_free)) ...)
    :effect    (and (at start (not (<input_state> ?i)))
                    (at start (not (<station>_free)))
                    (at end   (<output_state> ?i))
@@ -104,25 +117,43 @@ RULES:
    If different items need different input states for the same output action \
    (e.g. chicken is fryable from raw but potato is fryable after cut), create \
    separate item-specific ground actions such as fry_chicken1 and fry_potato1 \
-   with :parameters () instead of one incorrect generic fry action. The action \
-   name must be <allowed_base_action>_<exact_item_name>; never use names like \
-   fry_raw, fry_cut, fry_generic, grill_raw, or grill_generic.
+   with :parameters () instead of one incorrect generic fry action. If robots are \
+   present, use :parameters (?r - robot) instead so the plan still contains the \
+   robot argument. The action name must be <allowed_base_action>_<exact_item_name>; \
+   never use names like fry_raw, fry_cut, fry_generic, grill_raw, or grill_generic.
 5. STACKING — one ground action per item in stack order:
-   - Action name: stack_<item_name>, :parameters ()
+   - Action name: stack_<item_name>
+   - If no robots: :parameters ()
+   - If robots are present: :parameters (?r - robot), and also require/release \
+     (robot_free ?r) just like other actions.
    - :condition must include: (at start (stackable <item>))
    - If the item has a required goal state (e.g. grilled, cut, mashed), add: \
      (at start (<required_state> <item>))  — ensures it is fully processed before stacking.
    - If there is a previous item in the order, add: (at start (stacked <prev_item>))
    - :effect (and (at start (not (stackable <item>))) (at end (stacked <item>)))
-6. (:init): raw items → (raw X); ready items → (ready X) (stackable X); \
-   all stations start free → (grill_free) (cutting_board_free) etc.
-7. Goal: (and <all required processed-state predicates> \
+6. TEMPORAL CONSTRAINTS — if the task says "after A finishes, wait at least W \
+   seconds before starting B", encode that lag explicitly in PDDL. Use this pattern:
+   - Add a dedicated completion predicate for A, such as (done_grill_patty01), \
+     and make A set it at end.
+   - Add a dedicated lag predicate for B, such as (lag_ready_stack_patty01).
+   - Add a planner-only durative action named wait_<after_action>_<after_item> \
+     with duration W, no station usage, and no robot usage. It should require \
+     the completion predicate for A at start and set the lag predicate for B at end.
+   - Add the lag predicate as an extra start condition on B.
+   The solver MAY output wait_* actions; they are planning-only helpers and will \
+   be ignored by the execution engine. Do not use wait_* for anything except \
+   temporal lag constraints.
+7. (:init): raw items → (raw X); ready items → (ready X) (stackable X); \
+   all stations start free → (grill_free) (cutting_board_free) etc. \
+   If robots are present, all robots start free → (robot_free robot1) ...
+8. Goal: (and <all required processed-state predicates> \
    <(stacked X) for every item in stack order>).
-8. NO negative preconditions inside :condition. NO (or ...). NO (when ...).
-9. Use EXACT item names from the task. Every object in (:objects), every object \
+9. NO negative preconditions inside :condition. NO (or ...). NO (when ...).
+10. Use EXACT item names from the task. Every object in (:objects), every object \
    in action names, and every object in predicates must be copied verbatim from \
-   the provided item list.
-10. Output ONLY valid JSON, no markdown fences:
+   the provided item list. If robots are present, also use EXACT robot names \
+   from the task in (:objects), predicates, and action arguments.
+11. Output ONLY valid JSON, no markdown fences:
 
 {"domain_pddl": "<full domain PDDL>", "problem_pddl": "<full problem PDDL>"}
 
@@ -142,28 +173,252 @@ IMPORTANT — use these EXACT item names (with underscores, no spaces) in all \
 PDDL identifiers (action names, predicates, objects):
 {item_names}
 
+If the task lists robots, use these EXACT robot names in all PDDL identifiers \
+and action parameters:
+{robot_names}
+
 CRITICAL interface constraints:
 - Allowed base actions are ONLY: grill, cut, fry, boil, toast, marinate, mash, stack.
 - Do NOT create action names like grill_raw, fry_raw, grill_generic, fry_generic, \
   prepare, cook, assemble, or place.
 - Item-specific action names, if needed, must be exactly <base_action>_<exact_item_name>.
   Examples: fry_potato1, grill_patty2, marinate_chicken3, stack_bun_top.
+- If robots are listed, executable actions must carry the robot argument in the \
+  final solver plan. Generic actions should therefore use (?r - robot ?i - item), \
+  and item-specific grounded actions should use (?r - robot).
 - Do not shorten item names. If the item is patty1, use patty1 everywhere, never patty.
+- NEVER insert a new underscore before numeric suffixes. For example:
+  cassava03 is valid, cassava_03 is invalid.
+  patty01 is valid, patty_01 is invalid.
+  tempeh12 is valid, tempeh_12 is invalid.
+- If the task has Temporal Constraints with "wait at least W seconds", encode \
+  them explicitly using planner-only wait_* durative actions plus completion/lag \
+  predicates so the actual executable action starts late enough.
 
 Output JSON with keys "domain_pddl" and "problem_pddl".
 """
 
+SYNTAX_REPAIR_TEMPLATE = """\
+Your previous PDDL failed in OPTIC.
+
+Natural-language task:
+{nl}
+
+Exact item names you MUST preserve:
+{item_names}
+
+Exact robot names you MUST preserve:
+{robot_names}
+
+Previous domain PDDL:
+{domain_pddl}
+
+Previous problem PDDL:
+{problem_pddl}
+
+OPTIC error:
+{solver_error}
+
+Repair instructions:
+- Fix all syntax, typing, and action-schema issues.
+- Preserve the same task semantics and item/robot names.
+- The allowed item names are EXACTLY the task item names. Never rename `foo03` to `foo_03`.
+- Never insert underscores before numeric suffixes, and never remove existing underscores like `bun_bot`.
+- If a grounded item-specific action uses a robot parameter, every effect and condition must use the declared parameter variables correctly.
+- Never use bare `i` when you mean `?i`.
+- If a predicate/effect is item-specific, use either the exact grounded object consistently or a declared variable consistently.
+- Return ONLY valid JSON with keys "domain_pddl" and "problem_pddl".
+"""
+
+EVAL_REPAIR_TEMPLATE = """\
+Your previous PDDL was solvable, but the resulting plan failed execution.
+
+Natural-language task:
+{nl}
+
+Exact item names you MUST preserve:
+{item_names}
+
+Exact robot names you MUST preserve:
+{robot_names}
+
+Previous domain PDDL:
+{domain_pddl}
+
+Previous problem PDDL:
+{problem_pddl}
+
+Solver plan:
+{solver_plan}
+
+Execution error:
+{eval_error}
+
+Repair instructions:
+- Fix the PDDL semantics so OPTIC cannot produce this invalid plan.
+- Pay special attention to item-specific prerequisites, robot usage, station capacity, and temporal wait constraints.
+- If a temporal lag applies to a specific action-instance, make sure the completion predicate and wait action are tied to that exact instance, not a generic action.
+- Preserve the exact task item names. Never rename `foo03` to `foo_03`, and never change `bun_bot`.
+- Return ONLY valid JSON with keys "domain_pddl" and "problem_pddl".
+"""
+
+
+def _format_robot_names(robots: list[str]) -> str:
+    if not robots:
+        return "- <no robots listed in this task>"
+    return "\n".join(f"- {name}" for name in robots)
+
+
+def _build_user_prompt(nl: str, item_names: list[str], robots: list[str]) -> str:
+    return USER_TEMPLATE.format(
+        nl=nl,
+        item_names="\n".join(f"- {n}" for n in item_names),
+        robot_names=_format_robot_names(robots),
+    )
+
+
+def _inject_domain_constants(domain_pddl: str, task_dict: dict) -> str:
+    """Add domain-level constants for task items/robots if missing.
+
+    LLM outputs sometimes reference problem objects directly inside domain action
+    schemas, e.g. ``(raw patty01)`` in a durative action body. OPTIC's type
+    checker rejects those unless the symbols are declared as domain constants.
+    """
+    if "(:constants" in domain_pddl:
+        return domain_pddl
+
+    items = list(task_dict.get("items", {}).keys())
+    robots = list(task_dict.get("robots", []))
+    lines = []
+    if items:
+        lines.append("    " + " ".join(items) + " - item")
+    if robots:
+        lines.append("    " + " ".join(robots) + " - robot")
+    if not lines:
+        return domain_pddl
+
+    constants_block = "  (:constants\n" + "\n".join(lines) + "\n  )\n"
+    type_match = re.search(r"(^\s*\(:types\b[^\)]*\)\s*$)", domain_pddl, flags=re.MULTILINE)
+    if type_match:
+        insert_at = type_match.end()
+        return domain_pddl[:insert_at] + "\n" + constants_block + domain_pddl[insert_at:]
+
+    req_match = re.search(r"(^\s*\(:requirements\b[^\)]*\)\s*$)", domain_pddl, flags=re.MULTILINE)
+    if req_match:
+        insert_at = req_match.end()
+        return domain_pddl[:insert_at] + "\n" + constants_block + domain_pddl[insert_at:]
+
+    return domain_pddl
+
+
+def _strip_problem_redeclared_objects(problem_pddl: str, task_dict: dict) -> str:
+    """Remove problem-level object declarations that are duplicated as domain constants.
+
+    Once task items/robots are injected as domain constants, OPTIC may reject
+    the same symbols when they are also listed inside the problem's :objects
+    block. We therefore keep them in the domain and drop the duplicate
+    declarations from the problem file.
+    """
+    match = re.search(r"\(\:objects\b(.*?)\)\s*", problem_pddl, flags=re.S)
+    if not match:
+        return problem_pddl
+
+    blocked = set(task_dict.get("items", {}).keys()) | set(task_dict.get("robots", []))
+    content = match.group(1)
+    kept_lines: list[str] = []
+    removed_any = False
+
+    for raw_line in content.splitlines():
+        line = raw_line.rstrip()
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith(";"):
+            kept_lines.append(raw_line)
+            continue
+        if "-" not in stripped:
+            tokens = [tok for tok in stripped.split() if tok not in blocked]
+            removed_any = removed_any or len(tokens) != len(stripped.split())
+            if tokens:
+                indent = re.match(r"^\s*", raw_line).group(0)
+                kept_lines.append(indent + " ".join(tokens))
+            continue
+
+        left, right = stripped.split("-", 1)
+        names = [tok for tok in left.split() if tok]
+        kept_names = [tok for tok in names if tok not in blocked]
+        removed_any = removed_any or len(kept_names) != len(names)
+        if kept_names:
+            indent = re.match(r"^\s*", raw_line).group(0)
+            kept_lines.append(f"{indent}{' '.join(kept_names)} - {right.strip()}")
+
+    if not removed_any:
+        return problem_pddl
+
+    if kept_lines:
+        replacement = "(:objects\n" + "\n".join(kept_lines) + "\n  )\n"
+    else:
+        replacement = ""
+    return problem_pddl[:match.start()] + replacement + problem_pddl[match.end():]
+
+
+def _variant_name_forms(name: str) -> set[str]:
+    variants = set()
+    m = re.match(r"^(.*?)(\d+)$", name)
+    if m:
+        variants.add(f"{m.group(1)}_{m.group(2)}")
+    return variants
+
+
+def _validate_exact_names(domain_pddl: str, problem_pddl: str, task_dict: dict) -> str | None:
+    """Reject PDDL that mutates exact item/robot names.
+
+    This is intentionally a validator, not an aligner: we do not rewrite the
+    output. We simply reject suspicious naming drift so the caller can retry.
+    """
+    blob = f"{domain_pddl}\n{problem_pddl}"
+    names = list(task_dict.get("items", {}).keys()) + list(task_dict.get("robots", []))
+    for name in names:
+        for variant in _variant_name_forms(name):
+            if variant in blob:
+                return (
+                    f"Invalid renamed symbol '{variant}'. Use the exact task name "
+                    f"'{name}' verbatim; do not insert underscores before numeric suffixes."
+                )
+    return None
+
+
+def _parse_pddl_json(text: str) -> tuple[str, str] | None:
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.split("```")[1]
+        if text.startswith("json"):
+            text = text[4:]
+    try:
+        parsed = json.loads(text.strip())
+    except Exception:
+        return None
+    domain = parsed.get("domain_pddl", "")
+    problem = parsed.get("problem_pddl", "")
+    if domain and problem:
+        return domain, problem
+    return None
+
 
 # ── LLM call + parse ──────────────────────────────────────────────────────────
 
-def _call_llm(llm, nl: str, item_names: list[str], max_retries: int = 3) -> tuple[str, str] | None:
+def _call_llm(
+    llm,
+    task_dict: dict,
+    nl: str,
+    item_names: list[str],
+    robots: list[str],
+    max_retries: int = 3,
+) -> tuple[str, str] | None:
     """Call LLM and parse domain + problem PDDL. Returns (domain, problem) or None."""
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user",   "content": USER_TEMPLATE.format(
-            nl=nl,
-            item_names="\n".join(f"- {n}" for n in item_names),
-        )},
+        {"role": "user",   "content": _build_user_prompt(nl, item_names, robots)},
     ]
 
     for attempt in range(max_retries):
@@ -180,10 +435,71 @@ def _call_llm(llm, nl: str, item_names: list[str], max_retries: int = 3) -> tupl
             domain  = parsed.get("domain_pddl", "")
             problem = parsed.get("problem_pddl", "")
             if domain and problem:
+                name_error = _validate_exact_names(domain, problem, task_dict)
+                if name_error:
+                    continue
                 return domain, problem
         except Exception as e:
             if attempt == max_retries - 1:
                 return None
+    return None
+
+
+def _repair_pddl(
+    llm,
+    task_dict: dict,
+    nl: str,
+    domain_pddl: str,
+    problem_pddl: str,
+    *,
+    solver_error: str | None = None,
+    eval_error: str | None = None,
+    solver_plan: str | None = None,
+    max_retries: int = 2,
+) -> tuple[str, str] | None:
+    extra_warning = ""
+    for attempt in range(max_retries):
+        if solver_error:
+            prompt = SYNTAX_REPAIR_TEMPLATE.format(
+                nl=nl,
+                item_names="\n".join(f"- {n}" for n in task_dict.get("items", {}).keys()),
+                robot_names=_format_robot_names(list(task_dict.get("robots", []))),
+                domain_pddl=domain_pddl,
+                problem_pddl=problem_pddl,
+                solver_error=_truncate_solver_error(solver_error),
+            )
+        elif eval_error:
+            prompt = EVAL_REPAIR_TEMPLATE.format(
+                nl=nl,
+                item_names="\n".join(f"- {n}" for n in task_dict.get("items", {}).keys()),
+                robot_names=_format_robot_names(list(task_dict.get("robots", []))),
+                domain_pddl=domain_pddl,
+                problem_pddl=problem_pddl,
+                solver_plan=solver_plan or "",
+                eval_error=eval_error,
+            )
+        else:
+            return None
+
+        if extra_warning:
+            prompt += "\n\nAdditional validation failure from the previous repair attempt:\n" + extra_warning
+
+        response = llm.chat([
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ])
+        text = response if isinstance(response, str) else response.content
+        parsed = _parse_pddl_json(text or "")
+        if parsed is None:
+            continue
+        d, p = parsed
+        name_error = _validate_exact_names(d, p, task_dict)
+        if name_error:
+            extra_warning = name_error
+            continue
+        d = _inject_domain_constants(d, task_dict)
+        p = _strip_problem_redeclared_objects(p, task_dict)
+        return d, p
     return None
 
 
@@ -210,13 +526,15 @@ def run_task(task: Task, task_dict: dict, llm, solver_timeout: float) -> dict:
     }
 
     # Step 1: LLM → PDDL
-    pddl = _call_llm(llm, nl, list(task_dict["items"].keys()))
+    pddl = _call_llm(llm, task_dict, nl, list(task_dict["items"].keys()), list(task_dict.get("robots", [])))
     if pddl is None:
         result["error_type"] = "llm_error"
         result["error"] = "LLM failed to return valid JSON"
         return result
 
     domain_pddl, problem_pddl = pddl
+    domain_pddl = _inject_domain_constants(domain_pddl, task_dict)
+    problem_pddl = _strip_problem_redeclared_objects(problem_pddl, task_dict)
     result["domain_pddl"]  = domain_pddl
     result["problem_pddl"] = problem_pddl
 
@@ -257,6 +575,7 @@ def run_task(task: Task, task_dict: dict, llm, solver_timeout: float) -> dict:
 def run(model_name: str, out_dir: str, task_dir: str,
         solver_timeout: float, max_tasks: int | None,
         num_workers: int = 8, batch: int = 8, implicit: bool = False,
+        repair_rounds: int = 1, repair_workers: int = 8,
         include_tags: set[str] | None = None,
         exclude_tags: set[str] | None = None):
 
@@ -283,6 +602,12 @@ def run(model_name: str, out_dir: str, task_dir: str,
         max_tokens=4096,
         num_workers=num_workers,
     )
+    repair_llm = build_llm_client(
+        model_name=model_name,
+        temperature=0.0,
+        max_tokens=4096,
+        num_workers=repair_workers,
+    ) if repair_rounds > 0 else None
 
     # ── Stage 1: LLM → PDDL (batched) ────────────────────────────────────────
     print(f"Stage 1/3  LLM → PDDL  ({n} tasks, {num_workers} workers) …")
@@ -290,9 +615,10 @@ def run(model_name: str, out_dir: str, task_dir: str,
     messages_batch = [
         [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user",   "content": USER_TEMPLATE.format(
-                nl=nl,
-                item_names="\n".join(f"- {n}" for n in td["items"].keys()),
+            {"role": "user",   "content": _build_user_prompt(
+                nl,
+                list(td["items"].keys()),
+                list(td.get("robots", [])),
             )},
         ]
         for nl, td in zip(nls, task_dicts)
@@ -307,12 +633,19 @@ def run(model_name: str, out_dir: str, task_dir: str,
             text = text.split("```")[1]
             if text.startswith("json"):
                 text = text[4:]
-        try:
-            parsed = json.loads(text.strip())
-            d, p = parsed.get("domain_pddl", ""), parsed.get("problem_pddl", "")
-            pddl_results.append((d, p) if d and p else None)
-        except Exception:
+        parsed = _parse_pddl_json(text or "")
+        if parsed is None:
             pddl_results.append(None)
+        else:
+            d, p = parsed
+            td = task_dicts[len(pddl_results)]
+            name_error = _validate_exact_names(d, p, td)
+            if name_error:
+                pddl_results.append(None)
+            else:
+                d = _inject_domain_constants(d, td)
+                p = _strip_problem_redeclared_objects(p, td)
+                pddl_results.append((d, p))
 
     # ── Stage 2: batch_solve (OPTIC) ──────────────────────────────────────────
     print(f"Stage 2/3  OPTIC solver ({batch} parallel) …")
@@ -386,6 +719,117 @@ def run(model_name: str, out_dir: str, task_dir: str,
         with open(jsonl_path, "a") as f:
             f.write(json.dumps(r) + "\n")
 
+    # ── Stage 4: targeted repair loop for solver/eval failures ──────────────
+    if repair_rounds > 0:
+        print(
+            f"\nStage 4/4  Repair loop ({repair_rounds} round{'s' if repair_rounds != 1 else ''}, "
+            f"{repair_workers} workers) …"
+        )
+    for repair_round in range(repair_rounds):
+        changed = False
+        candidates = [
+            (i, r) for i, r in enumerate(results)
+            if (not r["success"])
+            and r["error_type"] in {"solver_error", "eval_error"}
+            and r.get("domain_pddl")
+            and r.get("problem_pddl")
+        ]
+        if not candidates:
+            break
+
+        def _repair_candidate(i: int, r: dict) -> tuple[int, dict] | None:
+            td = task_dicts[i]
+            task = Task.from_dict(td)
+            repaired = _repair_pddl(
+                repair_llm,
+                td,
+                nls[i],
+                r["domain_pddl"],
+                r["problem_pddl"],
+                solver_error=r["error"] if r["error_type"] == "solver_error" else None,
+                eval_error=r["error"] if r["error_type"] == "eval_error" else None,
+                solver_plan=r.get("solver_plan"),
+            )
+            if repaired is None:
+                return None
+
+            domain_pddl, problem_pddl = repaired
+            sr = solve(
+                domain_pddl,
+                problem_pddl,
+                solver="optic",
+                timeout=solver_timeout,
+                max_retries=2,
+            )
+
+            new_r = dict(r)
+            new_r["domain_pddl"] = domain_pddl
+            new_r["problem_pddl"] = problem_pddl
+            new_r["solver_plan"] = None
+            new_r["success"] = False
+            new_r["makespan"] = None
+            new_r["makespan_ratio"] = None
+
+            if sr is None or sr.error:
+                new_r["error_type"] = "solver_error"
+                new_r["error"] = sr.error if sr else "solver returned None"
+            else:
+                plan_lines = [f"{t:.3f}: ({a})  [{d:.3f}]" for t, a, d in sr.plan]
+                plan_text = "\n".join(plan_lines)
+                new_r["solver_plan"] = plan_text
+                eval_result = evaluate_from_text(plan_text, task)
+                new_r["success"] = eval_result.success
+                new_r["makespan"] = eval_result.makespan
+                new_r["makespan_ratio"] = round(eval_result.makespan_ratio, 4)
+                if not eval_result.success:
+                    new_r["error_type"] = "eval_error"
+                    new_r["error"] = eval_result.error
+                else:
+                    new_r["error_type"] = None
+                    new_r["error"] = ""
+            return i, new_r
+
+        progress = tqdm(total=len(candidates), desc=f"Repair {repair_round + 1}/{repair_rounds}", unit="task")
+        with ThreadPoolExecutor(max_workers=repair_workers) as executor:
+            future_map = {
+                executor.submit(_repair_candidate, i, r): (i, r["id"], r["error_type"])
+                for i, r in candidates
+            }
+            for future in as_completed(future_map):
+                i, task_id, error_type = future_map[future]
+                progress.set_postfix_str(f"{task_id} [{error_type}]")
+                try:
+                    repaired_result = future.result()
+                except Exception as e:
+                    tqdm.write(f"  [repair {repair_round + 1}] {task_id} ... exception: {e}")
+                    progress.update(1)
+                    continue
+                if repaired_result is None:
+                    progress.update(1)
+                    continue
+
+                idx, new_r = repaired_result
+                old_r = results[idx]
+                if (
+                    new_r["success"] and not old_r["success"]
+                ) or (
+                    new_r["error_type"] != old_r["error_type"] or new_r["error"] != old_r["error"]
+                ):
+                    changed = True
+                    results[idx] = new_r
+                    status = "✓" if new_r["success"] else f"✗ ({new_r['error_type']})"
+                    tqdm.write(f"  [repair {repair_round + 1}] {task_id} ... {status}")
+                progress.update(1)
+        progress.close()
+        if not changed:
+            break
+
+    # Rewrite JSONL with repaired results if needed.
+    jsonl_path.unlink(missing_ok=True)
+    with open(jsonl_path, "a") as f:
+        for r in results:
+            f.write(json.dumps(r) + "\n")
+
     # Summary
     n = len(results)
     n_success = sum(1 for r in results if r["success"])
@@ -428,6 +872,8 @@ def main():
     parser.add_argument("--num-workers", type=int,   default=8,    help="parallel LLM workers (batch_chat)")
     parser.add_argument("--batch",       type=int,   default=8,    help="parallel OPTIC solver workers")
     parser.add_argument("--implicit",    action="store_true", help="hide dependency hints in NL (implicit mode)")
+    parser.add_argument("--repair-rounds", type=int, default=1, help="LLM repair rounds after solver/eval failures")
+    parser.add_argument("--repair-workers", type=int, default=8, help="parallel workers for repair loop")
     parser.add_argument("--include-tags", default="", help="comma-separated challenge tags to include")
     parser.add_argument("--exclude-tags", default="", help="comma-separated challenge tags to exclude")
     args = parser.parse_args()
@@ -441,6 +887,8 @@ def main():
     print(f"Timeout:     {args.timeout}s")
     print(f"LLM workers: {args.num_workers}")
     print(f"Batch:       {args.batch}")
+    print(f"Repair:      {args.repair_rounds}")
+    print(f"Repair jobs: {args.repair_workers}")
     if args.include_tags:
         print(f"Include tags:{args.include_tags}")
     if args.exclude_tags:
@@ -456,6 +904,8 @@ def main():
         num_workers=args.num_workers,
         batch=args.batch,
         implicit=args.implicit,
+        repair_rounds=args.repair_rounds,
+        repair_workers=args.repair_workers,
         include_tags=parse_tag_arg(args.include_tags),
         exclude_tags=parse_tag_arg(args.exclude_tags),
     )

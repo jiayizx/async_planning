@@ -98,6 +98,9 @@ Important rules:
    - every mash action has a boil-before-mash dependency for the same item
    - no stack action exists for an item absent from the stack order
    - every stated temporal wait appears as a dependency with the correct min_lag
+13. If the task includes online rush deliveries or explicit deadlines, prefer a
+    scheduling model that allows those rush-critical deliveries to finish before
+    non-rush work, even if total makespan is slightly worse.
 
 Common mistakes to avoid:
 - Do NOT write {"before": "mash_yam", "after": null}. If yam is not in the
@@ -217,6 +220,57 @@ def _normalize_id(action: str, item: str) -> str:
     return f"{action}_{item}"
 
 
+def _effective_state_for_remaining_planning(state: str) -> str:
+    in_progress_to_terminal = {
+        "grilling": "grilled",
+        "cutting": "cut",
+        "frying": "fried",
+        "boiling": "boiled",
+        "toasting": "toasted",
+        "marinating": "marinated",
+        "mashing": "mashed",
+    }
+    return in_progress_to_terminal.get(state, state)
+
+
+def _remaining_chain(info: dict, current_state: str, required_state: str) -> list[str]:
+    current = _effective_state_for_remaining_planning(current_state)
+    if current == required_state:
+        return []
+
+    if required_state == "cut":
+        return ["cut"] if current == "raw" else []
+    if required_state == "fried":
+        if info.get("fry_requires_cut"):
+            if current == "raw":
+                return ["cut", "fry"]
+            if current == "cut":
+                return ["fry"]
+            return []
+        return ["fry"] if current == "raw" else []
+    if required_state == "grilled":
+        if info.get("grill_requires_marinated"):
+            if current == "raw":
+                return ["cut", "marinate", "grill"]
+            if current == "cut":
+                return ["marinate", "grill"]
+            if current == "marinated":
+                return ["grill"]
+            return []
+        return ["grill"] if current == "raw" else []
+    if required_state == "boiled":
+        return ["boil"] if current == "raw" else []
+    if required_state == "mashed":
+        if current == "raw":
+            return ["boil", "mash"]
+        if current == "boiled":
+            return ["mash"]
+        return []
+    if required_state == "toasted":
+        return ["toast"] if current == "raw" else []
+    return []
+
+
 def _schedule_spec_for_goal(task_dict: dict, required_states: dict, stack_order: list[str]) -> dict:
     durations = task_dict["action_durations"]
     items = task_dict["items"]
@@ -242,21 +296,7 @@ def _schedule_spec_for_goal(task_dict: dict, required_states: dict, stack_order:
 
     for item, state in required_states.items():
         info = items[item]
-        chain: list[str]
-        if state == "cut":
-            chain = ["cut"]
-        elif state == "fried":
-            chain = ["cut", "fry"] if info.get("fry_requires_cut") else ["fry"]
-        elif state == "grilled":
-            chain = ["cut", "marinate", "grill"] if info.get("grill_requires_marinated") else ["grill"]
-        elif state == "boiled":
-            chain = ["boil"]
-        elif state == "mashed":
-            chain = ["boil", "mash"]
-        elif state == "toasted":
-            chain = ["toast"]
-        else:
-            chain = []
+        chain = _remaining_chain(info, info.get("state", "raw"), state)
 
         prev_id = None
         for action in chain:

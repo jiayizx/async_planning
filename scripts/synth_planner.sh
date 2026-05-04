@@ -37,8 +37,8 @@ DATA_DIR="data/async_planning"
 # DATA_DIR="data/async_planning/nodes50_n50_s42_nlrewrite_gemini-3-flash.json"
 # MODEL="gemini-3-flash"
 # MODEL="openai/gpt-4.1"
-MODEL="openai/gpt-5-mini"
-SAVE_DIR="results/gen-data-modified/baselines"
+MODEL="qwen3.6-35b-a3b"
+SAVE_DIR="results/gen-data-modified/baselines_add"
 MAX_EXAMPLES=400
 ICL_EXAMPLES=0
 COT=true
@@ -46,7 +46,7 @@ NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=4096
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*nlrewrite_*.json"
+PATTERN="*nlrewrite_openrouter*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
