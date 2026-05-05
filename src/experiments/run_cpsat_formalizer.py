@@ -1,4 +1,4 @@
-"""Run LLM-as-Formalizer on synthetic async-planning data with CP-SAT.
+"""Run LLM-as-Formalizer on async planning data with CP-SAT.
 
 Pipeline per example:
   1. LLM translates NL planning problem into a scheduling JSON spec
@@ -142,6 +142,27 @@ def _build_messages(question: str, n_steps: int) -> list[dict[str, str]]:
     ]
 
 
+def _infer_n_steps(example: dict, question: str) -> int:
+    if example.get("n_steps") is not None:
+        return int(example["n_steps"])
+
+    step_nums = [
+        int(m.group(1))
+        for m in re.finditer(r"(?m)^\s*(\d+)[\).]\s+", question)
+    ]
+    if step_nums:
+        return max(step_nums)
+
+    step_mentions = [
+        int(m.group(1))
+        for m in re.finditer(r"\bstep\s*(\d+)\b", question, flags=re.IGNORECASE)
+    ]
+    if step_mentions:
+        return max(step_mentions)
+
+    raise ValueError("could not infer number of steps from example")
+
+
 def _validate_schedule_spec(spec: dict, n_steps: int) -> tuple[list, list]:
     expected_ids = [f"step{i}" for i in range(1, n_steps + 1)]
     actions, dependencies = parse_schedule_spec(
@@ -175,7 +196,9 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
         question = clean_question(example["question"])
         gold_seconds = parse_gold_seconds(example["answer"])
         graph = example.get("graph")
-        if not graph:
+        try:
+            n_steps = _infer_n_steps(example, question)
+        except Exception:
             continue
 
         questions.append(question)
@@ -186,7 +209,7 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
                 "gold_answer": example["answer"],
                 "gold_seconds": gold_seconds,
                 "graph": graph,
-                "n_steps": int(example["n_steps"]),
+                "n_steps": n_steps,
             }
         )
         if idx + 1 >= args.max_examples:
@@ -313,11 +336,12 @@ def run_task(llm_client: BaseLLM, eval_dataset, args: argparse.Namespace):
             if sched is not None and getattr(sched, "makespan", None) is not None:
                 pred_seconds = int(round(sched.makespan))
                 plan = [(start, action, dur) for start, action, dur in sched.plan]
-                plan_valid, plan_validity_error = check_plan_validity(
-                    sched.plan,
-                    graph,
-                    step_actions=[f"step{k}" for k in range(1, gold["n_steps"] + 1)],
-                )
+                if graph:
+                    plan_valid, plan_validity_error = check_plan_validity(
+                        sched.plan,
+                        graph,
+                        step_actions=[f"step{k}" for k in range(1, gold["n_steps"] + 1)],
+                    )
 
             rec = {
                 "question": gold["question"],
@@ -418,17 +442,27 @@ def parse_args() -> argparse.Namespace:
         choices=["cumulative", "single-turn"],
         dest="history_mode",
     )
-    parser.add_argument("--data-path", required=True, help="Local JSON file for gen-data")
+    parser.add_argument("--data-path", help="Local JSON file for gen-data")
     parser.add_argument("--timeout", type=float, default=120.0, help="CP-SAT solve timeout in seconds")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    if args.benchmark_name != "gen-data":
-        raise ValueError("run_cpsat_formalizer currently supports only --benchmark-name gen-data")
 
-    eval_dataset = json.loads(Path(args.data_path).read_text(encoding="utf-8"))
+    if args.benchmark_name == "gen-data":
+        if not args.data_path:
+            raise ValueError("--data-path is required when --benchmark-name gen-data")
+        eval_dataset = json.loads(Path(args.data_path).read_text(encoding="utf-8"))
+    elif args.benchmark_name == "asynchow":
+        from datasets import load_dataset
+
+        eval_dataset = load_dataset("fangrulin/asynchow", split="test")
+    else:
+        raise ValueError(
+            "run_cpsat_formalizer supports --benchmark-name gen-data or asynchow"
+        )
+
     os.makedirs(args.save_path, exist_ok=True)
 
     llm_client = build_llm_client(

@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 _ROOT = Path(__file__).resolve().parent.parent.parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
@@ -45,12 +46,17 @@ from src.experiments.robo_async.run_online_planner import (  # noqa: E402
     _snapshot_for_replan,
     _apply_event,
     _initial_world,
+    _continuation_oracle,
     evaluate_episode_plan,
 )
 from src.experiments.robo_async.tag_filter import (  # noqa: E402
     parse_tag_arg,
     summarize_by_tag,
     tag_filter_match,
+)
+from src.experiments.robo_async.online_progress import (  # noqa: E402
+    OnlineSubsetProgress,
+    sort_online_episodes,
 )
 from src.method.cpsat_scheduler import (  # noqa: E402
     ScheduleAction,
@@ -138,12 +144,6 @@ def _stage_nl(
                 f"`{effective}` after about {remaining:.3f}s. Do not restart that action.\n"
             )
     return task_dict, nl
-
-
-def _suffix_shift_seconds(ongoing_steps: list[PlanStep], now: float) -> float:
-    if not ongoing_steps:
-        return 0.0
-    return max(0.0, max(step.t_end - now for step in ongoing_steps))
 
 
 def _remaining_seconds(step: PlanStep, now: float) -> int:
@@ -333,6 +333,7 @@ def run(
             ep for ep in episodes
             if tag_filter_match(ep, include_tags or set(), exclude_tags or set())
         ]
+    episodes = sort_online_episodes(episodes)
     if max_tasks:
         episodes = episodes[:max_tasks]
 
@@ -352,9 +353,12 @@ def run(
     results = []
 
     print(f"Stage 1/1  Online CP-SAT formalization ({len(episodes)} episodes) ...\n")
+    progress = OnlineSubsetProgress(episodes)
     for episode in episodes:
+        difficulty = episode.get("difficulty", "online")
+        progress.start_episode(episode)
         working = copy.deepcopy(episode["initial_task"])
-        working["difficulty"] = episode.get("difficulty", "")
+        working["difficulty"] = difficulty
         committed_steps: list[PlanStep] = []
         stage_records = []
         current_state = _initial_world(working)
@@ -362,6 +366,7 @@ def run(
         current_ongoing_steps: list[PlanStep] = []
         error_type = None
         error = ""
+        continuation_oracle: dict = {}
 
         event_times = [float(ev["trigger_time"]) for ev in episode.get("events", [])]
         for stage_idx in range(len(event_times) + 1):
@@ -529,7 +534,16 @@ def run(
                 current_completed_steps = partial.completed_steps
                 current_ongoing_steps = partial.ongoing_steps
                 working = _apply_event(working, episode["events"][stage_idx])
-                working["difficulty"] = episode.get("difficulty", "")
+                working["difficulty"] = difficulty
+                oracle_snapshot = _snapshot_for_replan(working, current_state, horizon)
+                oracle_snapshot["difficulty"] = difficulty
+                continuation_oracle = _continuation_oracle(
+                    oracle_snapshot,
+                    current_ongoing_steps,
+                    horizon,
+                    solver_timeout=solver_timeout,
+                )
+                stage_records[-1]["continuation_oracle"] = continuation_oracle
             else:
                 committed_steps = combined_steps
                 break
@@ -537,7 +551,8 @@ def run(
         final_steps = committed_steps
         final_plan_text = _render_plan_text(final_steps)
         final_task = copy.deepcopy(working)
-        evaluation = evaluate_episode_plan(final_steps, final_task, episode.get("oracle"))
+        eval_oracle = {**episode.get("oracle", {}), **continuation_oracle}
+        evaluation = evaluate_episode_plan(final_steps, final_task, eval_oracle)
         success = evaluation.success and error_type not in {"llm_error", "spec_error", "solver_error", "parse_error"}
         if error_type is None and not evaluation.success:
             error_type = "eval_error"
@@ -547,6 +562,7 @@ def run(
 
         result = {
             "id": episode["id"],
+            "online_mode": "strict",
             "difficulty": episode.get("difficulty"),
             "source_split": episode.get("source_split"),
             "n_events": len(episode.get("events", [])),
@@ -557,27 +573,34 @@ def run(
             "error_type": error_type,
             "error": error,
             "makespan": evaluation.makespan if success or final_steps else None,
+            "makespan_ratio": evaluation.makespan_ratio if success else None,
+            "oracle_final_makespan": episode.get("oracle", {}).get("oracle_final_makespan"),
+            "continuation_oracle_makespan": evaluation.continuation_oracle_makespan,
             "selected_reward": evaluation.selected_reward,
             "reward_ratio": evaluation.reward_ratio,
+            "optimal_reward": episode.get("oracle", {}).get("optimal_reward"),
+            "continuation_oracle_reward": evaluation.continuation_oracle_reward,
             "delivery_completion_times": evaluation.delivery_completion_times,
         }
-        status = "✓" if result["success"] else f"✗ ({result['error_type']})"
-        extra = f"makespan={result['makespan']:.3f}" if result["makespan"] is not None else ""
-        print(f"  [{episode.get('difficulty', 'online'):18s}] {episode['id']} ... {status}  {extra}")
+        progress.update()
         results.append(result)
         with jsonl_path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(result, ensure_ascii=False) + "\n")
+    progress.close()
 
     n_success = sum(1 for r in results if r["success"])
     makespans = [r["makespan"] for r in results if r["success"] and r["makespan"] is not None]
+    ratios = [r["makespan_ratio"] for r in results if r["success"] and r.get("makespan_ratio") is not None]
     summary = {
         "model": model_name,
         "backend": "cp-sat",
+        "online_mode": "strict",
         "oracle_spec": oracle_spec,
         "n_tasks": len(results),
         "n_success": n_success,
         "success_rate": round(n_success / len(results), 4) if results else 0.0,
         "avg_makespan": round(sum(makespans) / len(makespans), 4) if makespans else None,
+        "avg_makespan_ratio": round(sum(ratios) / len(ratios), 4) if ratios else 0,
         "n_llm_error": sum(1 for r in results if r["error_type"] == "llm_error"),
         "n_spec_error": sum(1 for r in results if r["error_type"] == "spec_error"),
         "n_solver_error": sum(1 for r in results if r["error_type"] == "solver_error"),

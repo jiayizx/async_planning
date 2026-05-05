@@ -16,10 +16,10 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-deepseek/deepseek-v4-pro}"
+MODEL_NAME="${MODEL_NAME:-openrouter/gemini-3-flash}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 TASKS_DIR="${TASKS_DIR:-data/robo_async_online/episodes}"
-RESULTS_ROOT="${RESULTS_ROOT:-results/robo_async_online}"
+RESULTS_ROOT="${RESULTS_ROOT:-results/robo_async_online_strict}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
 MAX_TASKS="${MAX_TASKS:-}"
 IMPLICIT="${IMPLICIT:-false}"

@@ -14,7 +14,7 @@ MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 NUM_WORKERS="${NUM_WORKERS:-8}" # limit the number of workers to avoid hitting rate limits
 NUM_SHOTS="${NUM_SHOTS:-0}"     # number of few-shot examples (0-3)
 LLM_RETRIES="${LLM_RETRIES:-3}"      # max retries where LLM fixes PDDL based on solver error feedback
-EFFECT_GOAL="${EFFECT_GOAL:-1}"      # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
+EFFECT_GOAL="${EFFECT_GOAL:-0}"      # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 BENCHMARK="${BENCHMARK:-asynchow}"
 _VARIANT=$([[ "$EFFECT_GOAL" == "1" ]] && echo "_plus" || echo "")
 SAVE_PATH="${SAVE_PATH:-results/${BENCHMARK}/formalizer_310/${MODEL_NAME//\//_}_${NUM_SHOTS}shot${_VARIANT}}"

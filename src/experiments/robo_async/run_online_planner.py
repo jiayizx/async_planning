@@ -30,10 +30,21 @@ from src.envs.robo_async.engine import (  # noqa: E402
     parse_optic_plan,
 )
 from src.envs.robo_async.nl_generator import task_to_nl  # noqa: E402
+from src.experiments.robo_async.run_cpsat_formalizer import (  # noqa: E402
+    _normalize_id,
+    _resource_feasible,
+    _schedule_spec_for_goal,
+    _validate_optimization_spec,
+    oracle_schedule_spec,
+)
 from src.experiments.robo_async.tag_filter import (  # noqa: E402
     parse_tag_arg,
     summarize_by_tag,
     tag_filter_match,
+)
+from src.experiments.robo_async.online_progress import (  # noqa: E402
+    OnlineSubsetProgress,
+    sort_online_episodes,
 )
 
 
@@ -152,7 +163,10 @@ class EpisodeEval:
     makespan: float
     selected_reward: int | None = None
     reward_ratio: float | None = None
+    makespan_ratio: float | None = None
     delivery_completion_times: dict[str, float] | None = None
+    continuation_oracle_makespan: float | None = None
+    continuation_oracle_reward: int | None = None
 
 
 def _aggregate_goal(deliveries: list[dict]) -> dict:
@@ -206,12 +220,6 @@ def _shift_relative_steps(steps: list[PlanStep], offset: float) -> list[PlanStep
         )
         for step in steps
     ]
-
-
-def _suffix_shift_seconds(ongoing_steps: list[PlanStep], now: float) -> float:
-    if not ongoing_steps:
-        return 0.0
-    return max(0.0, max(step.t_end - now for step in ongoing_steps))
 
 
 def _initial_world(task_dict: dict) -> WorldState:
@@ -406,21 +414,174 @@ def _snapshot_for_replan(task_dict: dict, state: WorldState, now: float) -> dict
         "robots": list(task_dict.get("robots", [])),
     }
     remaining_candidates = _remaining_candidate_goals(task_dict, state)
+    committed_reward = 0
+    committed_candidate_ids = []
+    for candidate in task_dict.get("candidate_goals", []):
+        effective = _effective_item_state(state.item_state.get(candidate["item"], ""))
+        if effective == candidate["state"]:
+            committed_reward += int(candidate.get("reward", 0))
+            committed_candidate_ids.append(candidate.get("id"))
     if remaining_candidates:
         snapshot["candidate_goals"] = remaining_candidates
         snapshot["deadline"] = task_dict.get("deadline")
         snapshot["inventory_limits"] = _remaining_inventory_limits(task_dict, state)
+    if task_dict.get("candidate_goals"):
+        snapshot["committed_reward"] = committed_reward
+        snapshot["committed_candidate_ids"] = committed_candidate_ids
     snapshot["difficulty"] = task_dict.get("difficulty", "")
     snapshot["now"] = now
     return snapshot
+
+
+def _remaining_seconds(step: PlanStep, now: float) -> int:
+    return max(1, int(round(max(0.0, step.t_end - now))))
+
+
+def _continuation_oracle(
+    snapshot: dict,
+    ongoing_steps: list[PlanStep],
+    now: float,
+    solver_timeout: float = 30.0,
+) -> dict:
+    """Optimal continuation from the current online state.
+
+    The returned makespan is absolute episode time: now + optimal suffix length.
+    """
+    try:
+        from src.method.cpsat_scheduler import ScheduleAction, ScheduleDependency, parse_schedule_spec, solve_schedule
+    except Exception as exc:
+        return {"error": f"oracle import failed: {exc}"}
+
+    task_dict = _build_task_dict(snapshot, str(snapshot.get("id", "continuation_oracle")))
+    committed_reward = int(snapshot.get("committed_reward", 0))
+    if snapshot.get("committed_reward") is not None and not snapshot.get("candidate_goals") and not snapshot.get("deliveries"):
+        return {
+            "continuation_oracle_makespan": float(now),
+            "continuation_oracle_suffix_makespan": 0.0,
+            "continuation_oracle_reward": committed_reward,
+            "continuation_oracle_status": "ALREADY_COMPLETE",
+        }
+    remaining_deadline = None
+    if task_dict.get("deadline") is not None:
+        remaining_deadline = max(0.0, float(task_dict["deadline"]) - float(now))
+
+    def augment(
+        actions,
+        deps,
+    ) -> tuple[list[ScheduleAction], list[ScheduleDependency]]:
+        augmented_actions = list(actions)
+        augmented_deps = list(deps)
+        seen = {action.id for action in augmented_actions}
+        for step in ongoing_steps:
+            item = step.args[-1] if step.args else ""
+            if not item:
+                continue
+            blocker_id = f"ongoing_{step.action}_{item}"
+            if blocker_id in seen:
+                continue
+            robot = step.args[0] if len(step.args) == 2 else None
+            augmented_actions.append(ScheduleAction(
+                id=blocker_id,
+                action=step.action,
+                item=item,
+                duration=_remaining_seconds(step, now),
+                station=ACTION_STATION.get(step.action),
+                eligible_robots=((robot,) if robot else ()),
+                hidden=True,
+                fixed_start=0,
+            ))
+            seen.add(blocker_id)
+            for action in actions:
+                if action.item == item:
+                    augmented_deps.append(ScheduleDependency(before=blocker_id, after=action.id))
+        return augmented_actions, augmented_deps
+
+    try:
+        spec = oracle_schedule_spec(task_dict)
+        if task_dict.get("objective_type") == "maximize_reward_under_deadline":
+            opt = _validate_optimization_spec(spec, task_dict)
+            candidates = opt["candidate_goals"]
+            inventory_limits = opt["inventory_limits"]
+            deadline = remaining_deadline if remaining_deadline is not None else float(opt["deadline"])
+            best = None
+            import itertools
+            for size in range(1, len(candidates) + 1):
+                for subset in itertools.combinations(candidates, size):
+                    subset = list(subset)
+                    if not _resource_feasible(subset, inventory_limits):
+                        continue
+                    required = {candidate["item"]: candidate["state"] for candidate in subset}
+                    schedule_spec = {
+                        "mode": "schedule",
+                        **_schedule_spec_for_goal(task_dict, required, []),
+                    }
+                    actions, deps = parse_schedule_spec(
+                        schedule_spec,
+                        valid_items=set(task_dict["items"].keys()),
+                        station_capacities=task_dict.get("stations", {}),
+                        robots=task_dict.get("robots"),
+                    )
+                    actions, deps = augment(actions, deps)
+                    sr = solve_schedule(
+                        actions,
+                        deps,
+                        station_capacities=task_dict.get("stations", {}),
+                        robots=task_dict.get("robots"),
+                        timeout=solver_timeout,
+                    )
+                    if sr.makespan is None or not sr.optimal or sr.makespan > deadline + 1e-6:
+                        continue
+                    reward = sum(int(candidate["reward"]) for candidate in subset)
+                    selected_ids = tuple(candidate["id"] for candidate in subset)
+                    key = (reward, len(subset), -float(sr.makespan), selected_ids)
+                    if best is None or key > best[0]:
+                        best = (key, reward, sr)
+            if best is None:
+                return {
+                    "continuation_oracle_makespan": float(now),
+                    "continuation_oracle_suffix_makespan": 0.0,
+                    "continuation_oracle_reward": committed_reward,
+                    "continuation_oracle_status": "NO_FEASIBLE_SUBSET",
+                }
+            _, reward, sched = best
+            reward += committed_reward
+        else:
+            actions, deps = parse_schedule_spec(
+                spec,
+                valid_items=set(task_dict["items"]),
+                station_capacities=task_dict.get("stations", {}),
+                robots=task_dict.get("robots"),
+            )
+            actions, deps = augment(actions, deps)
+            sched = solve_schedule(
+                actions,
+                deps,
+                station_capacities=task_dict.get("stations", {}),
+                robots=task_dict.get("robots"),
+                timeout=solver_timeout,
+            )
+            reward = None
+        if sched is None or sched.makespan is None or not sched.plan:
+            return {"error": getattr(sched, "error", "oracle solve failed")}
+        return {
+            "continuation_oracle_makespan": round(float(now) + float(sched.makespan), 4),
+            "continuation_oracle_suffix_makespan": round(float(sched.makespan), 4),
+            "continuation_oracle_reward": reward,
+            "continuation_oracle_status": getattr(sched, "status", None),
+        }
+    except Exception as exc:
+        return {"error": str(exc)}
 
 
 def _apply_event(task_dict: dict, event: dict) -> dict:
     updated = copy.deepcopy(task_dict)
     delta = event.get("delta", {})
     updated["items"].update(copy.deepcopy(delta.get("add_items", {})))
-    updated.setdefault("deliveries", [])
-    updated["deliveries"].extend(copy.deepcopy(delta.get("add_deliveries", [])))
+    if "replace_deliveries" in delta:
+        updated["deliveries"] = copy.deepcopy(delta.get("replace_deliveries", []))
+    else:
+        updated.setdefault("deliveries", [])
+        updated["deliveries"].extend(copy.deepcopy(delta.get("add_deliveries", [])))
     if delta.get("add_temporal_constraints"):
         updated.setdefault("temporal_constraints", [])
         updated["temporal_constraints"].extend(copy.deepcopy(delta["add_temporal_constraints"]))
@@ -705,12 +866,34 @@ def evaluate_episode_plan(steps: list[PlanStep], task_dict: dict, oracle: dict |
 
     selected_reward = None
     reward_ratio = None
+    oracle_reward = None
     if task_dict.get("candidate_goals"):
         ok, err, selected_reward = _evaluate_optimization(state, task_dict, makespan)
         if not ok:
             return EpisodeEval(False, err, makespan)
-        if oracle and oracle.get("optimal_reward"):
-            reward_ratio = round(float(selected_reward) / float(oracle["optimal_reward"]), 4)
+        oracle_reward = None
+        if oracle:
+            oracle_reward = oracle.get("continuation_oracle_reward", oracle.get("optimal_reward"))
+        if oracle_reward is not None:
+            reward_ratio = round(float(selected_reward) / float(oracle_reward), 4) if float(oracle_reward) > 0 else 1.0
+            if selected_reward < int(oracle_reward):
+                return EpisodeEval(
+                    False,
+                    f"selected reward {selected_reward} below continuation oracle reward {int(oracle_reward)}",
+                    makespan,
+                    selected_reward=selected_reward,
+                    reward_ratio=reward_ratio,
+                    continuation_oracle_reward=int(oracle_reward),
+                )
+
+    makespan_ratio = None
+    oracle_makespan = None
+    if oracle:
+        oracle_makespan = oracle.get("continuation_oracle_makespan", oracle.get("oracle_final_makespan"))
+    if oracle_makespan:
+        oracle_makespan = float(oracle_makespan)
+        if oracle_makespan > 0:
+            makespan_ratio = round(float(makespan) / oracle_makespan, 4)
 
     return EpisodeEval(
         success=True,
@@ -718,7 +901,10 @@ def evaluate_episode_plan(steps: list[PlanStep], task_dict: dict, oracle: dict |
         makespan=makespan,
         selected_reward=selected_reward,
         reward_ratio=reward_ratio,
+        makespan_ratio=makespan_ratio,
         delivery_completion_times=delivery_completion,
+        continuation_oracle_makespan=float(oracle_makespan) if oracle_makespan else None,
+        continuation_oracle_reward=int(oracle_reward) if oracle_reward is not None else None,
     )
 
 
@@ -746,6 +932,7 @@ def run(
             ep for ep in episodes
             if tag_filter_match(ep, include_tags or set(), exclude_tags or set())
         ]
+    episodes = sort_online_episodes(episodes)
     if max_tasks:
         episodes = episodes[:max_tasks]
 
@@ -761,7 +948,9 @@ def run(
     results = []
 
     print(f"Stage 1/1  Online replanning ({len(episodes)} episodes) ...\n")
+    progress = OnlineSubsetProgress(episodes)
     for episode in episodes:
+        progress.start_episode(episode)
         working = copy.deepcopy(episode["initial_task"])
         working["difficulty"] = episode.get("difficulty", "")
         committed_steps: list[PlanStep] = []
@@ -772,6 +961,7 @@ def run(
         error_type = None
         error = ""
         success = False
+        continuation_oracle: dict = {}
 
         event_times = [float(ev["trigger_time"]) for ev in episode.get("events", [])]
         for stage_idx in range(len(event_times) + 1):
@@ -812,12 +1002,10 @@ def run(
                 })
                 break
 
-            # Conservative online safety guard for the direct planner: if there
-            # are committed ongoing actions, push the whole new suffix behind
-            # their remaining occupied window so we do not immediately collide
-            # with busy robots/stations.
-            shift = _suffix_shift_seconds(current_ongoing_steps, now)
-            abs_steps = _shift_relative_steps(rel_steps, now + shift)
+            # Strict online mode: the model is responsible for accounting for
+            # ongoing actions and occupied resources in its replan suffix.
+            shift = 0.0
+            abs_steps = _shift_relative_steps(rel_steps, now)
             combined_steps = sorted(committed_steps + abs_steps, key=lambda s: (s.t_start, s.action, tuple(s.args)))
             stage_records.append({
                 "stage": stage_idx,
@@ -842,10 +1030,19 @@ def run(
                 current_ongoing_steps = partial.ongoing_steps
                 working = _apply_event(working, episode["events"][stage_idx])
                 working["difficulty"] = episode.get("difficulty", "")
+                oracle_snapshot = _snapshot_for_replan(working, current_state, horizon)
+                oracle_snapshot["difficulty"] = episode.get("difficulty", "")
+                continuation_oracle = _continuation_oracle(
+                    oracle_snapshot,
+                    current_ongoing_steps,
+                    horizon,
+                )
+                stage_records[-1]["continuation_oracle"] = continuation_oracle
             else:
                 committed_steps = combined_steps
                 final_task = copy.deepcopy(working)
-                evaluation = evaluate_episode_plan(committed_steps, final_task, episode.get("oracle"))
+                eval_oracle = {**episode.get("oracle", {}), **continuation_oracle}
+                evaluation = evaluate_episode_plan(committed_steps, final_task, eval_oracle)
                 success = evaluation.success
                 error = evaluation.error
                 if not success:
@@ -857,7 +1054,8 @@ def run(
         final_steps = committed_steps
         final_plan_text = _render_plan_text(final_steps)
         final_task = copy.deepcopy(working)
-        evaluation = evaluate_episode_plan(final_steps, final_task, episode.get("oracle"))
+        eval_oracle = {**episode.get("oracle", {}), **continuation_oracle}
+        evaluation = evaluate_episode_plan(final_steps, final_task, eval_oracle)
         success = evaluation.success if error_type != "parse_error" else False
         if error_type is None and not evaluation.success:
             error_type = "eval_error"
@@ -867,6 +1065,7 @@ def run(
 
         result = {
             "id": episode["id"],
+            "online_mode": "strict",
             "difficulty": episode.get("difficulty"),
             "source_split": episode.get("source_split"),
             "n_events": len(episode.get("events", [])),
@@ -876,25 +1075,32 @@ def run(
             "error_type": error_type,
             "error": error,
             "makespan": evaluation.makespan if success or final_steps else None,
+            "makespan_ratio": evaluation.makespan_ratio if success else None,
+            "oracle_final_makespan": episode.get("oracle", {}).get("oracle_final_makespan"),
+            "continuation_oracle_makespan": evaluation.continuation_oracle_makespan,
             "selected_reward": evaluation.selected_reward,
             "reward_ratio": evaluation.reward_ratio,
+            "optimal_reward": episode.get("oracle", {}).get("optimal_reward"),
+            "continuation_oracle_reward": evaluation.continuation_oracle_reward,
             "delivery_completion_times": evaluation.delivery_completion_times,
         }
-        status = "✓" if result["success"] else f"✗ ({result['error_type']})"
-        extra = f"makespan={result['makespan']:.3f}" if result["makespan"] is not None else ""
-        print(f"  [{episode.get('difficulty', 'online'):18s}] {episode['id']} ... {status}  {extra}")
+        progress.update()
         results.append(result)
         with jsonl_path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(result, ensure_ascii=False) + "\n")
+    progress.close()
 
     n_success = sum(1 for r in results if r["success"])
     makespans = [r["makespan"] for r in results if r["success"] and r["makespan"] is not None]
+    ratios = [r["makespan_ratio"] for r in results if r["success"] and r.get("makespan_ratio") is not None]
     summary = {
         "model": model_name,
+        "online_mode": "strict",
         "n_tasks": len(results),
         "n_success": n_success,
         "success_rate": round(n_success / len(results), 4) if results else 0.0,
         "avg_makespan": round(sum(makespans) / len(makespans), 4) if makespans else None,
+        "avg_makespan_ratio": round(sum(ratios) / len(ratios), 4) if ratios else 0,
         "n_parse_error": sum(1 for r in results if r["error_type"] == "parse_error"),
         "n_eval_error": sum(1 for r in results if r["error_type"] == "eval_error"),
         "by_tag": summarize_by_tag(episodes, results),

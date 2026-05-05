@@ -1,43 +1,31 @@
 #!/usr/bin/env python3
-"""Generate the Robo-Async online benchmark episodes."""
+"""Generate Robo-Async online episodes from Challenge v2 tasks.
+
+Each online episode maps 1:1 to a static v2 task. The initial online task is the
+full static task, and later events inject extra dynamic work. This preserves the
+static task's initial difficulty while testing autonomous replanning under
+multiple online perturbations.
+"""
 from __future__ import annotations
 
 import argparse
+import copy
 import json
-import sys
+import shutil
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
 
-from scripts.gen_robo_async_challenge import (  # noqa: E402
-    DURATIONS,
-    STATIONS,
-    boil_item,
-    cut_item,
-    fry_after_cut_item,
-    fry_item,
-    grill_item,
-    marinated_grill_item,
-    mash_item,
-    ready_item,
+STATIC_TO_ONLINE = (
+    ("easy", "online_easy"),
+    ("medium", "online_medium"),
+    ("hard_station", "online_hard_station"),
+    ("hard_temporal", "online_hard_temporal"),
+    ("hard_multiagent", "online_hard_multiagent"),
+    ("hard_optimization", "online_hard_optimization"),
+    ("hard_high_speedup", "online_hard_high_speedup"),
 )
 
-
-ONLINE_SPLITS = (
-    "online_easy",
-    "online_medium",
-    "online_station",
-    "online_multiagent",
-    "online_deadline",
-    "online_optimization",
-    "online_speedup",
-)
-
-
-def _numbered(base: str, n: int) -> str:
-    return f"{base}{n:02d}"
+ONLINE_SPLITS = tuple(online for _, online in STATIC_TO_ONLINE)
 
 
 def _delivery(
@@ -56,538 +44,340 @@ def _delivery(
     }
 
 
+def _trigger_times(task: dict, count: int, idx: int) -> list[float]:
+    optimal = float(task.get("optimal_makespan") or 12.0)
+    fractions = (0.22, 0.46) if count == 2 else (0.18, 0.38, 0.62)
+    jitter = 0.35 * ((idx % 3) - 1)
+    times = []
+    last = 0.0
+    for rank, frac in enumerate(fractions):
+        lower = 2.0 + rank * 1.5
+        upper = max(lower + 0.5, optimal * 0.82)
+        t = min(max(optimal * frac + jitter, lower), upper)
+        t = max(t, last + 1.0)
+        times.append(round(t, 3))
+        last = t
+    return times
+
+
 def _base_episode(
     episode_id: str,
-    source_split: str,
-    difficulty: str,
-    features: list[str],
+    source_task: dict,
+    online_split: str,
     initial_task: dict,
     events: list[dict],
 ) -> dict:
+    oracle = {
+        "replan_points": [float(ev["trigger_time"]) for ev in events],
+        "source_task_id": source_task["id"],
+        "source_optimal_makespan": source_task.get("optimal_makespan"),
+        "oracle_final_makespan": None,
+        "source_sequential_makespan": source_task.get("sequential_makespan"),
+        "source_speedup_ratio": source_task.get("speedup_ratio"),
+        "notes": (
+            "Initial task is the full matching Robo-Async Challenge v2 task; "
+            "online events add extra dynamic perturbations. Use continuation "
+            "oracle fields computed during evaluation for final online optima."
+        ),
+    }
+    if source_task.get("optimal_reward") is not None:
+        oracle["source_optimal_reward"] = source_task["optimal_reward"]
+        oracle["source_selected_goal_ids"] = list(source_task.get("selected_goal_ids", []))
+
     return {
         "id": episode_id,
-        "protocol": "robo_async_online_v1",
+        "protocol": "robo_async_online_v2",
         "source_dataset": "robo_async_challenge_v2",
-        "source_split": source_split,
-        "difficulty": difficulty,
-        "challenge_features": ["online", *features],
+        "source_task_id": source_task["id"],
+        "source_split": source_task["split"],
+        "difficulty": online_split,
+        "challenge_features": ["online", "dynamic_goal_injection", "replanning", *source_task.get("challenge_features", [])],
         "initial_task": initial_task,
         "events": events,
-        "oracle": {
-            "replan_points": [float(ev["trigger_time"]) for ev in events],
-            "notes": "",
-        },
+        "oracle": oracle,
     }
 
 
-def online_medium_specs(n: int) -> list[dict]:
-    greens = ["tomato", "cucumber", "pepper", "radish"]
-    mains = ["patty", "salmon", "sausage", "eggplant"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        patty = _numbered(mains[i % len(mains)], idx)
-        lettuce = _numbered(["lettuce", "arugula", "slaw", "spinach"][i % 4], idx)
-        side_a = _numbered(greens[i % len(greens)], idx + 20)
-        side_b = _numbered(greens[(i + 1) % len(greens)], idx + 20)
-        plate = _numbered("plate", idx + 20)
-        trigger = float(2 + (i % 3))
-        initial_task = {
-            "items": {
-                patty: grill_item(),
-                lettuce: cut_item(),
-                "bun_bot": ready_item(),
-                "bun_top": ready_item(),
-            },
-            "deliveries": [
+def _episode_id(task: dict, online_split: str) -> str:
+    static_prefix = f"{task['split']}_"
+    suffix = task["id"][len(static_prefix):] if task["id"].startswith(static_prefix) else task["id"]
+    return f"{online_split}_{suffix}"
+
+
+ITEM_TEMPLATES = {
+    "cut": (
+        {"state": "raw", "predicates": ["iscuttable"]},
+        "cut",
+        "cut",
+        3,
+    ),
+    "fry_raw": (
+        {"state": "raw", "predicates": ["isfryable"]},
+        "fried",
+        "fry",
+        8,
+    ),
+    "fry_cut": (
+        {"state": "raw", "predicates": ["iscuttable", "isfryableifcut"], "fry_requires_cut": True},
+        "fried",
+        "fry",
+        11,
+    ),
+    "grill_raw": (
+        {"state": "raw", "predicates": ["iscookable"]},
+        "grilled",
+        "grill",
+        10,
+    ),
+    "marinated_grill": (
+        {
+            "state": "raw",
+            "predicates": ["iscuttable", "ismarinatable", "iscookableifmarinated"],
+            "grill_requires_marinated": True,
+        },
+        "grilled",
+        "grill",
+        19,
+    ),
+    "boil": (
+        {"state": "raw", "predicates": ["isboilable"]},
+        "boiled",
+        "boil",
+        12,
+    ),
+    "mash": (
+        {"state": "raw", "predicates": ["isboilable"], "mash_requires_boiled": True},
+        "mashed",
+        "mash",
+        16,
+    ),
+}
+
+
+def _extra_item_name(task: dict, idx: int, event_idx: int, kind: str) -> str:
+    stem = kind.replace("_raw", "").replace("_cut", "")
+    name = f"online_{stem}_{idx + 1:02d}_{event_idx}"
+    suffix = 2
+    while name in task["items"]:
+        name = f"online_{stem}_{idx + 1:02d}_{event_idx}_{suffix}"
+        suffix += 1
+    return name
+
+
+def _event_count(online_split: str) -> int:
+    return 2 if online_split in {"online_easy", "online_medium"} else 3
+
+
+def _event_specs(online_split: str) -> list[list[dict]]:
+    if online_split == "online_easy":
+        return [
+            [{"kind": "cut", "stack": True, "rush": False}],
+            [{"kind": "grill_raw", "stack": True, "rush": True}],
+        ]
+    if online_split == "online_medium":
+        return [
+            [{"kind": "fry_cut", "stack": False, "rush": False}],
+            [{"kind": "mash", "stack": True, "rush": True}],
+        ]
+    if online_split == "online_hard_station":
+        return [
+            [{"kind": "fry_cut", "stack": False, "rush": False}],
+            [{"kind": "marinated_grill", "stack": True, "rush": True}],
+            [{"kind": "mash", "stack": False, "rush": False}],
+        ]
+    if online_split == "online_hard_temporal":
+        return [
+            [{"kind": "mash", "stack": True, "rush": False, "lag": 3}],
+            [{"kind": "boil", "stack": True, "rush": True, "lag": 4}],
+            [{"kind": "marinated_grill", "stack": True, "rush": True, "lag": 2}],
+        ]
+    if online_split == "online_hard_multiagent":
+        return [
+            [{"kind": "mash", "stack": False, "rush": False}],
+            [{"kind": "fry_cut", "stack": False, "rush": True}],
+            [{"kind": "marinated_grill", "stack": True, "rush": True}],
+        ]
+    if online_split == "online_hard_high_speedup":
+        return [
+            [
+                {"kind": "fry_cut", "stack": False, "rush": False},
+                {"kind": "grill_raw", "stack": False, "rush": False},
+            ],
+            [
+                {"kind": "mash", "stack": False, "rush": True},
+                {"kind": "boil", "stack": False, "rush": True},
+            ],
+            [
+                {"kind": "marinated_grill", "stack": True, "rush": True},
+                {"kind": "cut", "stack": True, "rush": True},
+            ],
+        ]
+    return [[{"kind": "cut", "stack": True, "rush": False}]]
+
+
+def _deadline_for_event(trigger_time: float, specs: list[dict]) -> float | None:
+    if not any(spec.get("rush") for spec in specs):
+        return None
+    longest = max(ITEM_TEMPLATES[spec["kind"]][3] + (1 if spec.get("stack") else 0) for spec in specs)
+    return round(trigger_time + longest + 5.0, 3)
+
+
+def _initial_task_from_static(task: dict) -> dict:
+    initial_task = {
+        "items": copy.deepcopy(task["items"]),
+        "deliveries": [
+            _delivery(
+                "source_order",
+                task["goal"].get("required_states", {}),
+                task["goal"].get("stack_order", []),
+                task.get("deadline"),
+            )
+        ],
+        "action_durations": copy.deepcopy(task["action_durations"]),
+        "stations": copy.deepcopy(task["stations"]),
+        "temporal_constraints": copy.deepcopy(task.get("temporal_constraints", [])),
+        "robots": list(task.get("robots", [])),
+    }
+    if task.get("deadline") is not None:
+        initial_task["deadline"] = task.get("deadline")
+    return initial_task
+
+
+def _non_optimization_episode(task: dict, online_split: str, idx: int) -> dict:
+    initial_task = {
+        **_initial_task_from_static(task),
+    }
+
+    events = []
+    times = _trigger_times(task, _event_count(online_split), idx)
+    for event_idx, (trigger_time, specs) in enumerate(zip(times, _event_specs(online_split)), start=1):
+        add_items = {}
+        add_deliveries = []
+        add_temporal_constraints = []
+        deadline = _deadline_for_event(trigger_time, specs)
+        for spec_idx, spec in enumerate(specs, start=1):
+            item_name = _extra_item_name(task, idx, event_idx * 10 + spec_idx, spec["kind"])
+            item_info, required_state, before_action, _duration = ITEM_TEMPLATES[spec["kind"]]
+            add_items[item_name] = copy.deepcopy(item_info)
+            delivery_id = f"{'rush_' if spec.get('rush') else ''}event_{event_idx}_order_{spec_idx}"
+            add_deliveries.append(
                 _delivery(
-                    "burger_main",
-                    {patty: "grilled", lettuce: "cut"},
-                    ["bun_bot", patty, lettuce, "bun_top"],
+                    delivery_id,
+                    {item_name: required_state},
+                    [item_name] if spec.get("stack") else [],
+                    deadline if spec.get("rush") else None,
                 )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": dict(STATIONS),
-            "robots": [],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": trigger,
-                "type": "add_delivery",
-                "description": "A fresh side order arrives while the main burger is already underway.",
-                "delta": {
-                    "add_items": {
-                        side_a: cut_item(),
-                        side_b: cut_item(),
-                        plate: ready_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "late_salad",
-                            {side_a: "cut", side_b: "cut"},
-                            [plate, side_a, side_b],
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_medium_{idx:02d}_side_insert",
-            "medium",
-            "online_medium",
-            ["dynamic_goal_injection", "replanning", "light_conflict"],
-            initial_task,
-            events,
-        ))
-    return specs
+            )
+            if spec.get("lag") and spec.get("stack"):
+                add_temporal_constraints.append({
+                    "before": {"action": before_action, "item": item_name},
+                    "after": {"action": "stack", "item": item_name},
+                    "min_lag": int(spec["lag"]),
+                })
 
-
-def online_easy_specs(n: int) -> list[dict]:
-    mains = ["chicken", "fish", "patty", "eggplant"]
-    sides = ["tomato", "cucumber", "carrot", "radish"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        main = _numbered(mains[i % 4], idx)
-        late_side = _numbered(sides[i % 4], idx + 40)
-        bowl = _numbered("bowl", idx + 40)
-        initial_task = {
-            "items": {
-                main: grill_item(),
+        events.append({
+            "id": f"event_{event_idx}",
+            "trigger_time": trigger_time,
+            "type": "add_delivery",
+            "description": "A new dynamic order arrives while the original static task is already underway.",
+            "delta": {
+                "add_items": add_items,
+                "add_deliveries": add_deliveries,
+                "add_temporal_constraints": add_temporal_constraints,
+                "set_deadline": None,
             },
-            "deliveries": [
-                _delivery(
-                    "simple_main",
-                    {main: "grilled"},
-                    [],
-                )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": dict(STATIONS),
-            "robots": [],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": 2.0,
-                "type": "add_delivery",
-                "description": "A very small side order arrives during a simple one-item task.",
-                "delta": {
-                    "add_items": {
-                        late_side: cut_item(),
-                        bowl: ready_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "late_simple_side",
-                            {late_side: "cut"},
-                            [bowl, late_side],
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_easy_{idx:02d}_simple_insert",
-            "easy",
-            "online_easy",
-            ["dynamic_goal_injection", "replanning", "simple_online_baseline"],
-            initial_task,
-            events,
-        ))
-    return specs
+        })
 
-
-def online_station_specs(n: int) -> list[dict]:
-    fry_raw = ["fish", "falafel", "shrimp", "nugget"]
-    fry_cut = ["potato", "onion", "okra", "plantain"]
-    greens = ["lettuce", "pickle", "cabbage", "celery"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        raw_main = _numbered(fry_raw[i % 4], idx)
-        cut_side = _numbered(fry_cut[i % 4], idx)
-        green = _numbered(greens[i % 4], idx)
-        late_side = _numbered(fry_cut[(i + 1) % 4], idx + 20)
-        trigger = float(5 + (i % 2))
-        initial_task = {
-            "items": {
-                raw_main: fry_item(),
-                cut_side: fry_after_cut_item(),
-                green: cut_item(),
-                "plate01": ready_item(),
-            },
-            "deliveries": [
-                _delivery(
-                    "fried_plate",
-                    {raw_main: "fried", cut_side: "fried", green: "cut"},
-                    ["plate01", raw_main, cut_side, green],
-                )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": {
-                **STATIONS,
-                "cutting_board": 2,
-                "fryer": 1,
-            },
-            "robots": [],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": trigger,
-                "type": "add_delivery",
-                "description": "A late fried side arrives and competes for the only fryer.",
-                "delta": {
-                    "add_items": {
-                        late_side: fry_after_cut_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "late_fried_side",
-                            {late_side: "fried"},
-                            [],
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_station_{idx:02d}_fryer_insert",
-            "hard_station",
-            "online_station",
-            ["dynamic_goal_injection", "replanning", "shared_station", "bottleneck_station"],
-            initial_task,
-            events,
-        ))
-    return specs
-
-
-def online_multiagent_specs(n: int) -> list[dict]:
-    proteins = ["patty", "salmon", "sausage", "eggplant"]
-    marinated = ["chicken", "tofu", "mushroom", "tempeh"]
-    greens = ["lettuce", "tomato", "pickle", "cucumber"]
-    sides = ["shrimp", "nugget", "falafel", "fish"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        p = _numbered(proteins[i % 4], idx)
-        m = _numbered(marinated[i % 4], idx)
-        g1 = _numbered(greens[i % 4], idx)
-        g2 = _numbered(greens[(i + 1) % 4], idx)
-        side = _numbered(sides[i % 4], idx + 30)
-        deadline = float(18 + (i % 3))
-        initial_task = {
-            "items": {
-                p: grill_item(),
-                m: marinated_grill_item(),
-                g1: cut_item(),
-                g2: cut_item(),
-                "bun_bot": ready_item(),
-                "bun_top": ready_item(),
-            },
-            "deliveries": [
-                _delivery(
-                    "double_protein_burger",
-                    {p: "grilled", m: "grilled", g1: "cut", g2: "cut"},
-                    ["bun_bot", p, g1, m, g2, "bun_top"],
-                )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": {
-                **STATIONS,
-                "grill": 2,
-                "cutting_board": 2,
-            },
-            "robots": ["robot1", "robot2"],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": 6.0,
-                "type": "add_delivery",
-                "description": "A rush fried side arrives and forces the planner to reassign robots.",
-                "delta": {
-                    "add_items": {
-                        side: fry_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "rush_side",
-                            {side: "fried"},
-                            [],
-                            deadline=deadline,
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_multiagent_{idx:02d}_rush_combo",
-            "hard_multiagent",
-            "online_multiagent",
-            ["dynamic_goal_injection", "replanning", "multiagent", "robot_reassignment"],
-            initial_task,
-            events,
-        ))
-    return specs
-
-
-def online_deadline_specs(n: int) -> list[dict]:
-    mains = ["patty", "salmon", "eggplant", "tofu"]
-    mashes = ["yam", "turnip", "cassava", "parsnip"]
-    greens = ["lettuce", "spinach", "slaw", "arugula"]
-    soups = ["stock", "broth", "beans", "peas"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        main = _numbered(mains[i % 4], idx)
-        mash = _numbered(mashes[i % 4], idx)
-        green = _numbered(greens[i % 4], idx)
-        soup = _numbered(soups[i % 4], idx + 30)
-        deadline = float(17 + (i % 3))
-        initial_task = {
-            "items": {
-                main: grill_item(),
-                mash: mash_item(),
-                green: cut_item(),
-                "bun_bot": ready_item(),
-                "bun_top": ready_item(),
-            },
-            "deliveries": [
-                _delivery(
-                    "burger_combo",
-                    {main: "grilled", mash: "mashed", green: "cut"},
-                    ["bun_bot", main, green, "bun_top"],
-                )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": dict(STATIONS),
-            "robots": [],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": float(4 + (i % 2)),
-                "type": "add_delivery",
-                "description": "A rush soup must be completed on a much tighter deadline than the original work.",
-                "delta": {
-                    "add_items": {
-                        soup: boil_item(),
-                        _numbered("bowl", idx + 30): ready_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "rush_soup",
-                            {soup: "boiled"},
-                            [],
-                            deadline=deadline,
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_deadline_{idx:02d}_rush_soup",
-            "hard_temporal",
-            "online_deadline",
-            ["dynamic_goal_injection", "replanning", "deadline", "temporal_tradeoff"],
-            initial_task,
-            events,
-        ))
-    return specs
-
-
-def online_optimization_specs(n: int) -> list[dict]:
-    mains = ["patty", "salmon", "sausage", "eggplant"]
-    fries = ["fish", "falafel", "shrimp", "nugget"]
-    cutfries = ["potato", "onion", "okra", "plantain"]
-    greens = ["lettuce", "tomato", "pickle", "carrot"]
-    soups = ["stock", "broth", "beans", "peas"]
-    late = ["chicken", "tofu", "mushroom", "steak"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        main = _numbered(mains[i % 4], idx)
-        fried = _numbered(fries[i % 4], idx)
-        side = _numbered(cutfries[i % 4], idx)
-        green = _numbered(greens[i % 4], idx)
-        soup = _numbered(soups[i % 4], idx)
-        vip = _numbered(late[i % 4], idx + 40)
-        initial_task = {
-            "items": {
-                main: grill_item(),
-                fried: fry_item(),
-                side: fry_after_cut_item(),
-                green: cut_item(),
-                soup: boil_item(),
-            },
-            "deliveries": [],
-            "candidate_goals": [
-                {"id": "grilled_main", "item": main, "state": "grilled", "reward": 9, "cost": {"protein": 1}},
-                {"id": "fried_main", "item": fried, "state": "fried", "reward": 8, "cost": {"protein": 1, "fryer_oil": 1}},
-                {"id": "fried_side", "item": side, "state": "fried", "reward": 7, "cost": {"fryer_oil": 1, "fresh": 1}},
-                {"id": "fresh_side", "item": green, "state": "cut", "reward": 4, "cost": {"fresh": 1}},
-                {"id": "soup_side", "item": soup, "state": "boiled", "reward": 6, "cost": {"root": 1}},
-            ],
-            "deadline": float(24 + (i % 2)),
-            "inventory_limits": {
-                "protein": 2,
-                "fryer_oil": 2,
-                "root": 1,
-                "fresh": 2,
-            },
-            "action_durations": dict(DURATIONS),
-            "stations": {
-                **STATIONS,
-                "cutting_board": 2,
-            },
-            "robots": ["robot1", "robot2"],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": 4.0,
-                "type": "add_candidate_goal",
-                "description": "A VIP grilled item appears and changes the best reward-maximizing subset.",
-                "delta": {
-                    "add_items": {
-                        vip: marinated_grill_item(),
-                    },
-                    "add_candidate_goals": [
-                        {
-                            "id": "vip_marinated_grill",
-                            "item": vip,
-                            "state": "grilled",
-                            "reward": 16,
-                            "cost": {"protein": 1, "fresh": 1},
-                        }
-                    ],
-                    "set_deadline": float(24 + (i % 2)),
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_optimization_{idx:02d}_vip_shift",
-            "hard_optimization",
-            "online_optimization",
-            ["dynamic_goal_injection", "replanning", "reward_maximization", "subset_change"],
-            initial_task,
-            events,
-        ))
-    return specs
-
-
-def online_speedup_specs(n: int) -> list[dict]:
-    grills = ["patty", "salmon", "sausage", "eggplant"]
-    fryers = ["shrimp", "nugget", "fish", "falafel"]
-    cutfries = ["potato", "onion", "okra", "plantain"]
-    soups = ["stock", "broth", "beans", "peas"]
-    extras = ["tofu", "mushroom", "tempeh", "chicken"]
-    specs = []
-    for i in range(n):
-        idx = i + 1
-        grill_main = _numbered(grills[i % 4], idx)
-        fryer_main = _numbered(fryers[i % 4], idx)
-        cut_side = _numbered(cutfries[i % 4], idx)
-        boil_side = _numbered(soups[i % 4], idx)
-        extra = _numbered(extras[i % 4], idx + 50)
-        deadline = float(26 + (i % 2))
-        initial_task = {
-            "items": {
-                grill_main: grill_item(),
-                fryer_main: fry_item(),
-                cut_side: fry_after_cut_item(),
-                boil_side: boil_item(),
-                "plate01": ready_item(),
-            },
-            "deliveries": [
-                _delivery(
-                    "parallel_combo",
-                    {
-                        grill_main: "grilled",
-                        fryer_main: "fried",
-                        cut_side: "fried",
-                        boil_side: "boiled",
-                    },
-                    ["plate01", fryer_main, cut_side, grill_main],
-                )
-            ],
-            "action_durations": dict(DURATIONS),
-            "stations": {
-                **STATIONS,
-                "grill": 2,
-                "cutting_board": 2,
-            },
-            "robots": ["robot1", "robot2"],
-        }
-        events = [
-            {
-                "id": "event_1",
-                "trigger_time": 4.0,
-                "type": "add_delivery",
-                "description": "A new high-value item arrives and the planner must reorganize parallel work to preserve speedup.",
-                "delta": {
-                    "add_items": {
-                        extra: marinated_grill_item(),
-                    },
-                    "add_deliveries": [
-                        _delivery(
-                            "rush_parallel_bonus",
-                            {extra: "grilled"},
-                            [],
-                            deadline=deadline,
-                        )
-                    ],
-                    "add_temporal_constraints": [],
-                    "set_deadline": None,
-                },
-            }
-        ]
-        specs.append(_base_episode(
-            f"online_speedup_{idx:02d}_parallel_shift",
-            "hard_high_speedup",
-            "online_speedup",
-            ["dynamic_goal_injection", "replanning", "parallel_restructuring", "high_speedup"],
-            initial_task,
-            events,
-        ))
-    return specs
-
-
-def build_episodes(per_family: int) -> list[dict]:
-    return (
-        online_easy_specs(per_family)
-        + online_medium_specs(per_family)
-        + online_station_specs(per_family)
-        + online_multiagent_specs(per_family)
-        + online_deadline_specs(per_family)
-        + online_optimization_specs(per_family)
-        + online_speedup_specs(per_family)
+    return _base_episode(
+        _episode_id(task, online_split),
+        task,
+        online_split,
+        initial_task,
+        events,
     )
 
 
-def write_dataset(out_dir: Path, per_family: int) -> list[dict]:
+def _optimization_episode(task: dict, online_split: str, idx: int) -> dict:
+    initial_task = {
+        "items": copy.deepcopy(task["items"]),
+        "deliveries": [],
+        "candidate_goals": copy.deepcopy(task.get("candidate_goals", [])),
+        "deadline": task.get("deadline"),
+        "inventory_limits": copy.deepcopy(task.get("inventory_limits", {})),
+        "action_durations": copy.deepcopy(task["action_durations"]),
+        "stations": copy.deepcopy(task["stations"]),
+        "temporal_constraints": [],
+        "robots": list(task.get("robots", [])),
+    }
+
+    candidate_specs = [
+        ("grill_raw", "dynamic_grilled_bonus", 16, {"protein": 1}),
+        ("fry_cut", "dynamic_fried_bonus", 13, {"fryer_oil": 1, "fresh": 1}),
+        ("mash", "dynamic_mashed_bonus", 15, {"root": 1}),
+    ]
+    events = []
+    for event_idx, (trigger_time, (kind, goal_id, reward, cost)) in enumerate(
+        zip(_trigger_times(task, 3, idx), candidate_specs),
+        start=1,
+    ):
+        item_name = _extra_item_name(task, idx, event_idx, kind)
+        item_info, required_state, _before_action, _duration = ITEM_TEMPLATES[kind]
+        events.append({
+            "id": f"event_{event_idx}",
+            "trigger_time": trigger_time,
+            "type": "add_candidate_goal",
+            "description": "A new high-reward candidate goal becomes available during execution.",
+            "delta": {
+                "add_items": {item_name: copy.deepcopy(item_info)},
+                "add_candidate_goals": [
+                    {
+                        "id": f"{goal_id}_{idx + 1:02d}_{event_idx}",
+                        "item": item_name,
+                        "state": required_state,
+                        "reward": reward,
+                        "cost": copy.deepcopy(cost),
+                    }
+                ],
+                "set_deadline": task.get("deadline"),
+            },
+        })
+
+    return _base_episode(
+        _episode_id(task, online_split),
+        task,
+        online_split,
+        initial_task,
+        events,
+    )
+
+
+def build_episodes(source_root: Path, per_family: int) -> list[dict]:
+    episodes: list[dict] = []
+    for static_split, online_split in STATIC_TO_ONLINE:
+        paths = sorted((source_root / static_split).glob("*.json"))[:per_family]
+        for idx, path in enumerate(paths):
+            task = json.loads(path.read_text())
+            if task.get("objective_type") == "maximize_reward_under_deadline":
+                episodes.append(_optimization_episode(task, online_split, idx))
+            else:
+                episodes.append(_non_optimization_episode(task, online_split, idx))
+    return episodes
+
+
+def write_dataset(out_dir: Path, source_root: Path, per_family: int) -> list[dict]:
     out_dir.mkdir(parents=True, exist_ok=True)
     for old in out_dir.glob("*.json"):
         old.unlink()
 
-    episodes = build_episodes(per_family)
+    episodes = build_episodes(source_root, per_family)
     for episode in episodes:
         (out_dir / f"{episode['id']}.json").write_text(json.dumps(episode, indent=2) + "\n")
 
     split_root = out_dir.parent / "by_split"
+    if split_root.exists():
+        for old_split_dir in split_root.iterdir():
+            if old_split_dir.is_dir() and old_split_dir.name not in ONLINE_SPLITS:
+                shutil.rmtree(old_split_dir)
     for split in ONLINE_SPLITS:
         split_dir = split_root / split
         split_dir.mkdir(parents=True, exist_ok=True)
@@ -603,16 +393,17 @@ def write_dataset(out_dir: Path, per_family: int) -> list[dict]:
 
     print(f"Wrote {len(episodes)} online episodes to {out_dir}")
     for split in ONLINE_SPLITS:
-        print(f"  {split:<20s} n={counts.get(split, 0):2d}")
+        print(f"  {split:<30s} n={counts.get(split, 0):2d}")
     return episodes
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="data/robo_async_online/episodes")
-    parser.add_argument("--per-family", type=int, default=5)
+    parser.add_argument("--source", default="data/robo_async_challenge_v2")
+    parser.add_argument("--per-family", type=int, default=20)
     args = parser.parse_args()
-    write_dataset(Path(args.out), args.per_family)
+    write_dataset(Path(args.out), Path(args.source), args.per_family)
 
 
 if __name__ == "__main__":

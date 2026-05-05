@@ -12,11 +12,11 @@ SUMMARY_SPLIT_TAGS = (
     "hard_high_speedup",
     "online_easy",
     "online_medium",
-    "online_station",
-    "online_multiagent",
-    "online_deadline",
-    "online_optimization",
-    "online_speedup",
+    "online_hard_station",
+    "online_hard_temporal",
+    "online_hard_multiagent",
+    "online_hard_optimization",
+    "online_hard_high_speedup",
 )
 
 
@@ -40,6 +40,9 @@ def task_tags(task_dict: dict) -> set[str]:
 
 def summary_tags(task_dict: dict) -> set[str]:
     """Primary split tags used for summary tables."""
+    difficulty = task_dict.get("difficulty")
+    if isinstance(difficulty, str) and difficulty.startswith("online_"):
+        return {difficulty}
     tags = task_tags(task_dict)
     primary = {tag for tag in SUMMARY_SPLIT_TAGS if tag in tags}
     if primary:
