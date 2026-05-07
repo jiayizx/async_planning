@@ -1,0 +1,4 @@
+0.000: (boil_syrup step1) [300.000]
+0.000: (cover_watermelon step5) [60.000]
+300.001: (chill_syrup step2) [3600.000]
+3900.002: (combine_watermelon_syrup step3) [600.000]

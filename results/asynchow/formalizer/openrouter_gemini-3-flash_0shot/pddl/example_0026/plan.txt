@@ -1,0 +1,7 @@
+0.000: (find_time step1) [900.000]
+900.001: (ask_friends step2) [900.000]
+1800.002: (make_list step3) [900.000]
+2700.003: (drive_to_store step4) [900.000]
+3600.004: (buy_supplies step5) [1800.000]
+5400.005: (get_out_supplies step6) [1800.000]
+5400.005: (make_food step7) [3600.000]

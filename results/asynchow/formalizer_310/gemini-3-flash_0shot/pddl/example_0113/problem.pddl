@@ -1,1 +1,0 @@
-(define (problem cooking_problem) (:domain cooking_domain) (:init (buy_food_pending) (lookup_videos_pending) (watch_videos_pending) (cut_ingredients_pending) (assemble_ingredients_pending)) (:goal (and (buy_food_done) (lookup_videos_done) (watch_videos_done) (cut_ingredients_done) (assemble_ingredients_done))) (:metric minimize (total-time)))

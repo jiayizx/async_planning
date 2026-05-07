@@ -1,0 +1,7 @@
+0.000: (open_drawers step1) [5.000]
+5.001: (take_out_pants step2) [10.000]
+5.001: (take_out_socks step3) [10.000]
+5.001: (take_out_shirt step4) [10.000]
+15.002: (put_on_pants step5) [20.000]
+15.002: (put_on_socks step6) [10.000]
+15.002: (put_on_shirt step7) [10.000]

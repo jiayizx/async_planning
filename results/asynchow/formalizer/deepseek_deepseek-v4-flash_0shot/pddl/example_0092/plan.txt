@@ -1,0 +1,5 @@
+0.000: (do_call step1) [900.000]
+0.000: (do_call step5) [900.000]
+900.001: (do_drive step2) [2100.000]
+3000.002: (do_paperwork step3) [600.000]
+3600.003: (do_receive step4) [1800.000]

@@ -1,6 +1,0 @@
-0.000: (step1_lookup_pet_store) [18000.000]
-18000.001: (step3_check_availability_of_pet) [18000.000]
-18000.001: (step2_browse_pets_on_site) [18000.000]
-36000.002: (step4_go_to_pet_store) [18000.000]
-54000.003: (step5_interact_with_various_pets_at_store) [10800.000]
-64800.004: (step6_walk_up_to_cashier_with_pet) [3600.000]

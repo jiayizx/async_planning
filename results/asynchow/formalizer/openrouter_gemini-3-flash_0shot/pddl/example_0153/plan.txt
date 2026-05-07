@@ -1,0 +1,3 @@
+0.000: (respect_space step1) [1209600.000]
+0.000: (discuss_future step3) [7200.000]
+7200.001: (discuss_finances step2) [7200.000]

@@ -1,0 +1,4 @@
+0.000: (do_choose_exercises step1) [1200.000]
+1200.001: (do_bent_over_rear_delt_raise step2) [600.000]
+1200.001: (do_dumbbell_row step3) [900.000]
+1200.001: (do_chin_ups step4) [600.000]

@@ -1,0 +1,4 @@
+0.000: (note_physical_changes step1) [90.000]
+0.000: (observe_behavior step4) [60.000]
+90.001: (perform_diagnosis step2) [14.000]
+104.002: (check_fetal_responsiveness step3) [30.000]

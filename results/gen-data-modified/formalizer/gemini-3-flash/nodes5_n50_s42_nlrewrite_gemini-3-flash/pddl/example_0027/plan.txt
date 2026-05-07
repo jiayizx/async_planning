@@ -1,5 +1,0 @@
-0.000: (connect_phone_line) [120.000]
-0.000: (purchase_adapter) [259200.000]
-120.001: (configure_ics) [1200.000]
-259200.001: (plug_ethernet) [30.000]
-259230.002: (connection_test) [300.000]

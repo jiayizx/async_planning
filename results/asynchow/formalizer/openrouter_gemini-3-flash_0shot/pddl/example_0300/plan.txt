@@ -1,0 +1,7 @@
+0.000: (cut_power_water s1) [300.000]
+0.000: (purchase_pump s1) [1800.000]
+300.001: (remove_dishwasher s1) [1800.000]
+2100.002: (disconnect_wires_lines s1) [900.000]
+3000.003: (disconnect_old_pump s1) [900.000]
+3900.004: (install_new_pump s1) [1800.000]
+5700.005: (reconnect_dishwasher s1) [900.000]

@@ -1,0 +1,10 @@
+(define (problem understand_math_problem)
+  (:domain understand_math)
+  (:init
+    (help_pending)
+    (practice_pending)
+    (tutor_pending)
+    (friend_pending)
+  )
+  (:goal (and (practice_done) (help_done) (tutor_done) (friend_done)))
+)

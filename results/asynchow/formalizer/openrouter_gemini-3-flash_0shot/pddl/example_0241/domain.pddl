@@ -1,0 +1,48 @@
+(define (domain make_girl_feel_beautiful)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (item_bought)
+    (photo_shoot_done)
+    (song_sung)
+    (poem_written)
+    (card_given)
+  )
+
+  (:durative-action buy_pretty_item
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (item_bought)))
+  )
+
+  (:durative-action have_photo_shoot
+    :parameters (?s - step)
+    :duration (= ?duration 10800)
+    :condition (and (at start (step_pending ?s)) (at start (item_bought)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (photo_shoot_done)))
+  )
+
+  (:durative-action sing_song
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (song_sung)))
+  )
+
+  (:durative-action write_poem
+    :parameters (?s - step)
+    :duration (= ?duration 1800)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (poem_written)))
+  )
+
+  (:durative-action give_card
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (card_given)))
+  )
+)

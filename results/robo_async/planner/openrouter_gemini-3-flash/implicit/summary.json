@@ -1,0 +1,23 @@
+{
+  "model": "openrouter/gemini-3-flash",
+  "n_tasks": 10,
+  "n_success": 6,
+  "success_rate": 0.6,
+  "avg_makespan_ratio": 0.7305,
+  "n_parse_error": 0,
+  "n_eval_error": 4,
+  "by_difficulty": {
+    "easy": {
+      "n": 3,
+      "n_success": 2
+    },
+    "medium": {
+      "n": 4,
+      "n_success": 3
+    },
+    "hard": {
+      "n": 3,
+      "n_success": 1
+    }
+  }
+}

@@ -1,0 +1,5 @@
+0.000: (do_step1_clean step1) [900.000]
+900.001: (do_step2_tape step2) [300.000]
+1200.002: (do_step4_epoxy step3) [900.000]
+1200.002: (do_step3_superglue step4) [600.000]
+2100.003: (do_step5_file step5) [1200.000]

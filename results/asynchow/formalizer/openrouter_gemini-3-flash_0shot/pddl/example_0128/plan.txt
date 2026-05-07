@@ -1,0 +1,5 @@
+0.000: (sit_down step1) [5.000]
+0.000: (grab_sock step5) [1.000]
+5.001: (raise_foot step2) [1.000]
+6.002: (pull_over_toes step3) [1.000]
+7.003: (pull_backwards step4) [1.000]

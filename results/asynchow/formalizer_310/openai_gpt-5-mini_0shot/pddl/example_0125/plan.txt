@@ -1,7 +1,0 @@
-0.000: (pay_for_some_catering) [900.000]
-0.000: (invite_a_bunch_of_guests) [600.000]
-0.000: (pay_band_to_come_play) [1200.000]
-1200.001: (get_dressed_up_in_fine_clothing) [300.000]
-1500.002: (go_to_church) [120.000]
-1620.003: (exchange_vows_and_rings) [3600.000]
-5220.004: (kiss_and_dance) [7200.000]

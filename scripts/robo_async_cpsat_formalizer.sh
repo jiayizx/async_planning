@@ -4,6 +4,8 @@
 #
 # Usage:
 #   bash scripts/robo_async_cpsat_formalizer.sh
+#   MODEL_NAME=deepseek-v4-flash bash scripts/robo_async_cpsat_formalizer.sh
+#   MODEL_NAME=deepseek-v4-pro bash scripts/robo_async_cpsat_formalizer.sh
 #   MODEL_NAME=openai/gpt-5-mini MAX_TASKS=3 bash scripts/robo_async_cpsat_formalizer.sh
 #   DATASET=challenge IMPLICIT=true MODEL_NAME=openai/gpt-5-mini bash scripts/robo_async_cpsat_formalizer.sh
 #   ORACLE_SPEC=true MAX_TASKS=3 bash scripts/robo_async_cpsat_formalizer.sh
@@ -25,7 +27,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 DATASET="${DATASET:-challenge_v2}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 case "${DATASET}" in
@@ -51,7 +53,7 @@ TASKS_DIR="${TASKS_DIR:-${DEFAULT_TASKS_DIR}}"
 TIMEOUT="${TIMEOUT:-120}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
 MAX_TASKS="${MAX_TASKS:-}"
-IMPLICIT="${IMPLICIT:-true}"
+IMPLICIT="${IMPLICIT:-false}"
 ORACLE_SPEC="${ORACLE_SPEC:-false}"
 # Tag filters are comma-separated split tags. Supported split tags:
 #   easy, medium, hard_station, hard_temporal, hard_multiagent,

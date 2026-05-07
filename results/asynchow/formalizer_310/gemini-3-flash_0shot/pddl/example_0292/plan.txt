@@ -1,6 +1,0 @@
-0.000: (store_extra) [120.000]
-0.000: (choose_ripe_kumquats) [120.000]
-120.001: (wash_and_dry) [180.000]
-300.002: (remove_seeds) [120.000]
-300.002: (rub_kumquat) [60.000]
-420.003: (eat_kumquat) [60.000]

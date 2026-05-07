@@ -1,7 +1,0 @@
-0.000: (combine_dry_ingredients) [300.000]
-0.000: (mash_banana_with_flax_and_water) [600.000]
-0.000: (preheat_oven_and_line_sheet) [300.000]
-600.001: (stir_in_sugar_and_vanilla) [300.000]
-900.002: (combine_wet_and_dry_with_choc_chips) [600.000]
-1500.003: (scoop_cookies_onto_sheet) [300.000]
-1800.004: (bake_oatmeal_raisin_cookies) [900.000]

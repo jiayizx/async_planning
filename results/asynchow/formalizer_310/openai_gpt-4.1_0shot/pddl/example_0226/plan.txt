@@ -1,5 +1,0 @@
-0.000: (throw_out) [7200.000]
-7200.001: (purchase_kitchen) [7200.000]
-7200.001: (use_drawers) [7200.000]
-7200.001: (use_bookshelves) [14400.000]
-7200.001: (purchase_storage) [3600.000]

@@ -1,0 +1,50 @@
+(define (domain bake_soft_cookies)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (cookies_stored)
+    (towel_added)
+    (bread_included)
+  )
+
+  (:durative-action store_cookies
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (cookies_stored))
+    )
+  )
+
+  (:durative-action add_towel
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (cookies_stored))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (towel_added))
+    )
+  )
+
+  (:durative-action include_bread
+    :parameters (?s - step)
+    :duration (= ?duration 86400)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (cookies_stored))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (bread_included))
+    )
+  )
+)

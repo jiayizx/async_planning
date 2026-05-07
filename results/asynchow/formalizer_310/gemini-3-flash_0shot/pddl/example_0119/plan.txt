@@ -1,7 +1,0 @@
-0.000: (buy_detergent) [1200.000]
-0.000: (buy_softener) [1200.000]
-1200.001: (gather_clothes) [120.000]
-1320.002: (open_machine) [20.000]
-1340.003: (add_detergent) [30.000]
-1340.003: (put_clothes) [60.000]
-1400.004: (turn_on) [20.000]

@@ -1,1 +1,0 @@
-(define (problem cat_talk_problem)(:domain teach_cat_to_talk)(:init (step1_pending) (step2_pending) (step3_pending))(:goal (and (step1_done) (step2_done) (step3_done)))(:metric minimize (total-time)))

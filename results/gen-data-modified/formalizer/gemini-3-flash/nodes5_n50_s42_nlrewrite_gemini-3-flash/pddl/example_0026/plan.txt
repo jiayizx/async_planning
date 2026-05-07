@@ -1,5 +1,0 @@
-0.000: (order_hardware) [432000.000]
-0.000: (research_wood_stain) [1800.000]
-1800.001: (sand_shells) [7200.000]
-432000.001: (apply_vinyl_wraps) [14400.000]
-446400.002: (install_hardware_tune) [5400.000]

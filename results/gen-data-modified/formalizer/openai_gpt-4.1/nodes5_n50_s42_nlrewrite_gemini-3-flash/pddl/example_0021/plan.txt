@@ -1,4 +1,0 @@
-0.000: (do_nutritionist) [3600.000]
-0.000: (do_physical_exam) [2700.000]
-2700.001: (do_blood_panel) [172800.000]
-175500.002: (do_ultrasound) [1800.000]

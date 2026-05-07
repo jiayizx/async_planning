@@ -1,0 +1,31 @@
+(define (problem garden_protection_problem)
+  (:domain garden_protection)
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 step8 step9 step10 step11 step12 step13 step14 step15 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+    (step_pending step6)
+    (step_pending step7)
+    (step_pending step8)
+    (step_pending step9)
+    (step_pending step10)
+    (step_pending step11)
+    (step_pending step12)
+    (step_pending step13)
+    (step_pending step14)
+    (step_pending step15)
+  )
+  (:goal
+    (and
+      (s5_done)
+      (s8_done)
+      (s11_done)
+      (s13_done)
+    )
+  )
+)

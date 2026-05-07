@@ -1,0 +1,5 @@
+0.000: (research_trails step1) [3600.000]
+0.000: (book_cottage step5) [1800.000]
+0.000: (book_cottage step4) [1800.000]
+3600.001: (drive_to_park step2) [3600.000]
+7200.002: (watch_sunrise step3) [7200.000]

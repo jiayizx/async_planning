@@ -1,0 +1,5 @@
+0.000: (purchase_rv step1) [10800.000]
+10800.001: (pack_belongings step2) [172800.000]
+183600.002: (fill_gas step3) [600.000]
+183600.002: (fill_food step4) [18000.000]
+201600.003: (set_out step5) [180.000]

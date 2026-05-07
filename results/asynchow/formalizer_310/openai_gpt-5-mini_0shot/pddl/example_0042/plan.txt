@@ -1,7 +1,0 @@
-0.000: (crack_eggs_in_bowl) [180.000]
-0.000: (heat_pan_on_stove) [300.000]
-180.001: (whisk_eggs_to_scramble) [180.000]
-300.001: (add_butter_to_pan) [10.000]
-360.002: (pour_whisked_eggs) [10.000]
-370.003: (scramble_as_cooking) [600.000]
-970.004: (put_eggs_on_plate) [10.000]

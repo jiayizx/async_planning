@@ -1,0 +1,30 @@
+(define (domain anxiety_food)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step) (ordered_over_phone) (gone_through_drive_thru) (asked_friend) (used_app) (received_food))
+  (:durative-action do_order_over_phone
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (ordered_over_phone))))
+  (:durative-action do_go_through_drive_thru
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (step_pending step2))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (gone_through_drive_thru))))
+  (:durative-action do_ask_friend
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (at start (step_pending step3))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (asked_friend))))
+  (:durative-action do_use_app
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (step_pending step4))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (used_app))))
+  (:durative-action do_receive_food
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending step5)) (at start (ordered_over_phone)) (at start (gone_through_drive_thru)) (at start (asked_friend)) (at start (used_app)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (received_food))))
+)

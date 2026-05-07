@@ -1,4 +1,0 @@
-0.000: (work_with_trainer) [3600.000]
-3600.001: (try_boards) [1800.000]
-3600.001: (incorporate_exercises) [2700.000]
-3600.001: (use_balls) [1800.000]

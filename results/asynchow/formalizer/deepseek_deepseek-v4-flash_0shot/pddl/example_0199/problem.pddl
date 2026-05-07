@@ -1,0 +1,18 @@
+(define (problem keep_cat_yard)
+  (:domain cat_yard)
+  (:objects )
+  (:init
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step4_pending)
+    (step5_pending)
+  )
+  (:goal (and
+    (fence_up)
+    (pvc_pipes_on)
+    (objects_removed)
+    (cat_net_attached)
+    (cat_enclosure_built)
+  ))
+)

@@ -1,5 +1,0 @@
-0.000: (build_cat_enclosure) [259200.000]
-0.000: (attach_cat_net) [7200.000]
-0.000: (put_up_fence) [172800.000]
-172800.001: (remove_objects) [7200.000]
-172800.001: (put_pvc_pipes) [10800.000]

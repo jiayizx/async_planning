@@ -1,5 +1,0 @@
-0.000: (carry_bag) [300.000]
-0.000: (wear_belt) [120.000]
-0.000: (accessorize_neck) [180.000]
-0.000: (accessorize_wrists) [300.000]
-300.001: (cover_jacket) [600.000]

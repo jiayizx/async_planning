@@ -1,0 +1,5 @@
+0.000: (do_step1_place_in_bag step1) [300.000]
+0.000: (do_step3_add_detergent step5) [60.000]
+300.001: (do_step2_place_in_machine step2) [120.000]
+420.002: (do_step4_start_cycle step3) [1800.000]
+2220.003: (do_step5_air_dry step4) [21600.000]

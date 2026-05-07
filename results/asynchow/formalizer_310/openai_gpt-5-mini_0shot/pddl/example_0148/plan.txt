@@ -1,3 +1,0 @@
-0.000: (do_step3_plug_micro_usb) [120.000]
-0.000: (do_step1_insert_display_key) [120.000]
-120.001: (do_step2_ensure_blue_led) [60.000]

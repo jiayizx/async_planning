@@ -1,0 +1,5 @@
+0.000: (purchase_notebook step1) [900.000]
+900.001: (schedule_session step2) [600.000]
+900.001: (define_values step3) [2700.000]
+3600.002: (review_records step4) [7200.000]
+10800.003: (write_report step5) [3600.000]

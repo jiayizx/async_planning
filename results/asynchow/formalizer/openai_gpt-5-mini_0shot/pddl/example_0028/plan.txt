@@ -1,0 +1,5 @@
+0.000: (do_step2_buy_console) [300.000]
+0.000: (do_step1_buy_game) [300.000]
+300.001: (do_step3_hook_console) [600.000]
+900.002: (do_step4_insert_game) [300.000]
+1200.003: (do_step5_press_play) [300.000]

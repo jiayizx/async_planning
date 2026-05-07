@@ -1,0 +1,4 @@
+0.000: (shake_paint step1) [120.000]
+0.000: (roll_bottle step4) [60.000]
+120.001: (add_thinner step2) [60.000]
+180.002: (check_results step3) [60.000]

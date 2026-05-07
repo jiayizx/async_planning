@@ -1,92 +1,20 @@
-(define (problem make_potato_soup)
-    (:domain robotouille-async)
+(define (problem robotouille-problem)
+  (:domain robotouille)
 
-    (:objects
-        table_1 table_2 table_3 - station
-        stove_1 board_1 sink_1 - station
-        robot_1 - player
-        potato_1 - item
-        pot_1 bowl_1 - container
-        water_1 - water
-    )
+  (:objects
+    table_1 table_2 table_3 table_4 table_5 stove_1 stove_2 sink_1 - station
+    robot_1 - player
+    bread_1 bread_2 bread_3 chicken_1 cheese_1 - item
+  )
 
-    (:init
-        ;; station identities
-        (istable table_1)
-        (istable table_2)
-        (istable table_3)
-        (isstove stove_1)
-        (isboard board_1)
-        (issink sink_1)
+  (:init (istable table_1) (istable table_2) (issink sink_1) (isstove stove_2) (istable table_5) (istable table_3) (isstove stove_1) (istable table_4) (loc robot_1 table_1) (nothing robot_1) (empty stove_2) (empty stove_1) (empty table_4) (vacant table_2) (vacant sink_1) (vacant stove_2) (vacant table_5) (vacant table_3) (vacant stove_1) (vacant table_4) (on bread_3 table_5) (at bread_3 table_5) (on bread_1 table_1) (at bread_1 table_1) (on bread_2 table_2) (at bread_2 table_2) (on chicken_1 sink_1) (at chicken_1 sink_1) (on cheese_1 table_3) (at cheese_1 table_3) (item-free bread_1) (item-free bread_2) (item-free bread_3) (item-free chicken_1) (item-free cheese_1) (iscookable chicken_1) (clear bread_1) (clear bread_2) (clear bread_3) (clear cheese_1) (clear chicken_1))
 
-        ;; player identity
-        (isrobot robot_1)
-
-        ;; item identities
-        (ispotato potato_1)
-
-        ;; container types
-        (ispottype pot_1)
-        (isbowltype bowl_1)
-
-        ;; capability flags
-        (iscuttable potato_1)
-
-        ;; initial item states (none processed yet)
-        ;; (iscut potato_1) is not true initially
-
-        ;; spatial: player starts at (0,0) facing down -> facing station is (0,1) = table_1
-        (loc robot_1 table_1)
-        (nothing robot_1)
-        (nocontainer robot_1)
-
-        ;; spatial: item locations
-        (at potato_1 table_1)
-        (on potato_1 table_1)
-        (clear potato_1)
-
-        ;; containers on stations
-        (container_at pot_1 sink_1)
-        (container_on_station pot_1)
-        (container_at bowl_1 table_3)
-        (container_on_station bowl_1)
-
-        ;; water availability (water object exists and is available to be filled)
-        (water_available water_1)
-
-        ;; station free flags (all stations free initially)
-        (station_free table_1)
-        (station_free table_2)
-        (station_free table_3)
-        (station_free stove_1)
-        (station_free board_1)
-        (station_free sink_1)
-
-        ;; empty: stations with no items on their surface
-        ;; table_1 has potato_1 so not empty. Others have no items.
-        (empty table_2)
-        (empty table_3)
-        (empty stove_1)
-        (empty board_1)
-        (empty sink_1)
-
-        ;; vacant: stations without the player
-        (vacant table_2)
-        (vacant table_3)
-        (vacant stove_1)
-        (vacant board_1)
-        (vacant sink_1)
-        ;; table_1 is not vacant because player is there
-
-        ;; containers do not yet have water
-        ;; has_water predicates false initially
-    )
-
-    (:goal (and
-        (in water_1 bowl_1)
-        (addedto potato_1 water_1)
-        (isboiling water_1)
-        (container_at bowl_1 table_3)
-        (iscut potato_1)
-    ))
+  (:goal (and
+    (on bread_1 table_1)
+    (iscooked chicken_1)
+    (at chicken_1 table_1)
+    (at cheese_1 table_1)
+    (at bread_2 table_1)
+    (clear bread_2)
+  ))
 )

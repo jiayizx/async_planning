@@ -1,0 +1,5 @@
+0.000: (fabricate_mounting_plate step1) [7200.000]
+0.000: (mount_pulleys step5) [3600.000]
+0.000: (mount_pulleys step4) [3600.000]
+7200.001: (mount_tank step2) [3600.000]
+10800.002: (reconnect_supply step3) [900.000]

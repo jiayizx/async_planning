@@ -1,0 +1,5 @@
+0.000: (buy step1) [3600.000]
+0.000: (give_card step2) [900.000]
+0.000: (write_poem step3) [1800.000]
+0.000: (sing step5) [600.000]
+3600.001: (photoshoot step4) [10800.000]

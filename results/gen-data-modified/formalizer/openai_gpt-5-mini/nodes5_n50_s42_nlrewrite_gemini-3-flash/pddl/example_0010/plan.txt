@@ -1,5 +1,0 @@
-0.000: (step5_transfer_funds) [172800.000]
-0.000: (step1_research) [10800.000]
-10800.001: (step2_measure) [600.000]
-172800.001: (step3_drive_purchase) [2700.000]
-175500.002: (step4_unbox_mount) [3600.000]

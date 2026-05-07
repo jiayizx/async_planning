@@ -1,0 +1,32 @@
+(define (domain rabbit_care)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (vet_found)
+    (vaccinated)
+    (parasites_removed)
+  )
+
+  (:durative-action find_vet
+    :parameters (?s - step)
+    :duration (= ?duration 1209600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (vet_found)))
+  )
+
+  (:durative-action vaccinate
+    :parameters (?s - step)
+    :duration (= ?duration 1209600)
+    :condition (and (at start (step_pending ?s)) (at start (vet_found)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (vaccinated)))
+  )
+
+  (:durative-action remove_parasites
+    :parameters (?s - step)
+    :duration (= ?duration 1209600)
+    :condition (and (at start (step_pending ?s)) (at start (vet_found)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (parasites_removed)))
+  )
+)

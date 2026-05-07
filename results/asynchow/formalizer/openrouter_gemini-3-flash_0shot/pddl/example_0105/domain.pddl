@@ -1,0 +1,56 @@
+(define (domain camping_trip)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (equipment_bought)
+    (site_picked)
+    (equipment_packed)
+    (driven_to_site)
+    (car_parked)
+    (site_entered)
+  )
+
+  (:durative-action buy_equipment
+    :parameters (?s - step)
+    :duration (= ?duration 7200)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (equipment_bought)))
+  )
+
+  (:durative-action pick_site
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (site_picked)))
+  )
+
+  (:durative-action pack_equipment
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (and (at start (step_pending ?s)) (at start (equipment_bought)) (at start (site_picked)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (equipment_packed)))
+  )
+
+  (:durative-action drive_to_site
+    :parameters (?s - step)
+    :duration (= ?duration 7200)
+    :condition (and (at start (step_pending ?s)) (at start (equipment_packed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (driven_to_site)))
+  )
+
+  (:durative-action park_car
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s)) (at start (driven_to_site)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (car_parked)))
+  )
+
+  (:durative-action enter_site
+    :parameters (?s - step)
+    :duration (= ?duration 1200)
+    :condition (and (at start (step_pending ?s)) (at start (car_parked)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (site_entered)))
+  )
+)

@@ -1,0 +1,5 @@
+(define (problem create_prison_tattoo_ink_problem)
+  (:domain create_prison_tattoo_ink)
+  (:init (powder_pending) (water_pending) (ink_pending))
+  (:goal (ink_mixed))
+)

@@ -1,0 +1,10 @@
+(define (problem raise-handlebars-problem)
+  (:domain raise-handlebars)
+  (:objects step1 step2 step3 - step)
+  (:init
+    (step_pending_step1)
+    (step_pending_step2)
+    (step_pending_step3)
+  )
+  (:goal (and (step_done_step1) (step_done_step2) (step_done_step3) (positioned)))
+)

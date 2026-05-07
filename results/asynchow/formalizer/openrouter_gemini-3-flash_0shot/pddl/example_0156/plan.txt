@@ -1,0 +1,3 @@
+0.000: (talk_to_physician step1) [1800.000]
+1800.001: (take_anti_diarrheals step2) [3600.000]
+1800.001: (take_anti_nausea step3) [3600.000]

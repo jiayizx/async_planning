@@ -1,5 +1,0 @@
-0.000: (heat_oil) [120.000]
-0.000: (mix_turkey_spices) [300.000]
-300.001: (shape_patties) [300.000]
-600.002: (cook_burgers) [600.000]
-1200.003: (serve_burgers) [60.000]

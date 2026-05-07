@@ -1,0 +1,4 @@
+0.000: (allow_rest step1) [7200.000]
+7200.001: (peer_proofread step2) [1200.000]
+7200.001: (read_out_loud step3) [1800.000]
+7200.001: (print_paper step4) [900.000]

@@ -1,1 +1,0 @@
-(define (problem move_out_town_prob)(:domain move_out_town)(:init (pack_pending) (rent_pending) (load_pending) (start_uhaul_pending) (leave_pending))(:goal (and (pack_done) (rent_done) (load_done) (start_uhaul_done) (leave_done)))(:metric minimize (total-time)))

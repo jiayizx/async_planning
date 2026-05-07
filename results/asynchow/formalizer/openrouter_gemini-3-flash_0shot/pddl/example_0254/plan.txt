@@ -1,0 +1,6 @@
+0.000: (find_snow step1) [300.000]
+0.000: (find_target step6) [60.000]
+300.001: (form_core step2) [120.000]
+420.002: (add_layer step3) [120.000]
+540.003: (reinforce_snowball step4) [180.000]
+720.004: (refine_snowball step5) [300.000]

@@ -1,0 +1,18 @@
+(define (problem make_short_film_problem)
+  (:domain make_short_film)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (step_done step4)
+    (step_done step5)
+    (direct_actors_done)
+  ))
+)

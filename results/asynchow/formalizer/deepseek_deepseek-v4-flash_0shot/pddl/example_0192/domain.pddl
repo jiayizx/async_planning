@@ -1,0 +1,51 @@
+(define (domain exfoliate-eyebrows)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (sanitized)
+    (cleansed)
+    (exfoliated)
+    (rinsed)
+  )
+  
+  (:durative-action do_sanitize
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (sanitized)))
+  )
+  
+  (:durative-action do_cleanse
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending ?s))
+                    (at start (sanitized)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (cleansed)))
+  )
+  
+  (:durative-action do_rub
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending ?s))
+                    (at start (cleansed))
+                    (at start (rinsed)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (exfoliated)))
+  )
+  
+  (:durative-action do_rinse
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (rinsed)))
+  )
+)

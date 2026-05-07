@@ -1,0 +1,6 @@
+0.000: (call_friends step1) [1800.000]
+0.000: (dress step6) [900.000]
+1800.001: (arrange_time step2) [1200.000]
+3000.002: (drive step3) [600.000]
+3600.003: (exit_car step4) [60.000]
+3660.004: (walk_towards_field step5) [120.000]

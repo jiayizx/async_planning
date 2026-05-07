@@ -1,0 +1,5 @@
+0.000: (visit_website step1) [25.000]
+25.001: (login step2) [25.000]
+50.002: (confirm_info step3) [35.000]
+50.002: (signup step4) [35.000]
+85.003: (wait_for_card step5) [604800.000]

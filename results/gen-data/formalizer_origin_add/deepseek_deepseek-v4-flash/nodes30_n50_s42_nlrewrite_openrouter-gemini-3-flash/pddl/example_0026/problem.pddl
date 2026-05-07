@@ -1,0 +1,17 @@
+(define (problem grow_rose_from_cuttings)
+  (:domain rose_growing)
+  (:init
+    (pending step1) (pending step2) (pending step3) (pending step4) (pending step5)
+    (pending step6) (pending step7) (pending step8) (pending step9) (pending step10)
+    (pending step11) (pending step12) (pending step13) (pending step14) (pending step15)
+    (pending step16) (pending step17) (pending step18) (pending step19) (pending step20)
+    (pending step21) (pending step22) (pending step23) (pending step24) (pending step25)
+    (pending step26) (pending step27) (pending step28) (pending step29) (pending step30))
+  (:goal (and
+    (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+    (step_done step6) (step_done step7) (step_done step8) (step_done step9) (step_done step10)
+    (step_done step11) (step_done step12) (step_done step13) (step_done step14) (step_done step15)
+    (step_done step16) (step_done step17) (step_done step18) (step_done step19) (step_done step20)
+    (step_done step21) (step_done step22) (step_done step23) (step_done step24) (step_done step25)
+    (step_done step26) (step_done step27) (step_done step28) (step_done step29) (step_done step30)
+    (s30_done)))

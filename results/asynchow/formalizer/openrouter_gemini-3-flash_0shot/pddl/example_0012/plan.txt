@@ -1,0 +1,5 @@
+0.000: (talk_to_doctor step1) [10800.000]
+0.000: (compare_diets step2) [10800.000]
+0.000: (lookup_diets step3) [18000.000]
+0.000: (get_recommendations step5) [10800.000]
+18000.001: (make_commitment step4) [30.000]

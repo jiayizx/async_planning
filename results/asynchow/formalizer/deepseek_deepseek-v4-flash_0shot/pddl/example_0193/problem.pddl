@@ -1,0 +1,16 @@
+(define (problem cure_rash_problem)
+  (:domain cure_rash)
+  (:init
+    (step_pending1)
+    (step_pending2)
+    (step_pending3)
+    (step_pending4)
+  )
+  (:goal (and
+    (step1_done)
+    (step2_done)
+    (step3_done)
+    (step4_done)
+    (rash_cured)
+  ))
+)

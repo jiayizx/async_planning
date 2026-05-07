@@ -1,0 +1,6 @@
+0.000: (pickup_phone step1) [1.000]
+1.001: (search_restaurants step2) [20.000]
+21.002: (narrow_options step3) [120.000]
+141.003: (look_ratings step4) [600.000]
+141.003: (look_menus step5) [600.000]
+741.004: (look_pricing step6) [600.000]

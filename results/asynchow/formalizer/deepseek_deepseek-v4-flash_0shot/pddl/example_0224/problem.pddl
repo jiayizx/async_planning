@@ -1,0 +1,5 @@
+(define (problem make_den_problem)
+  (:domain make_den)
+  (:init (pending step1) (pending step2) (pending step3) (pending step4) (pending step5))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5) (den_ready)))
+)

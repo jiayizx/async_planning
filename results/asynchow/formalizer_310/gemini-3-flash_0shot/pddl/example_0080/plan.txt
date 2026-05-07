@@ -1,5 +1,0 @@
-0.000: (acquire_construction_tools) [7200.000]
-0.000: (acquire_wooden_boards) [3600.000]
-3600.001: (lay_out_pieces) [1800.000]
-7200.001: (begin_attaching_pieces) [3600.000]
-10800.002: (test_buoyancy) [3600.000]

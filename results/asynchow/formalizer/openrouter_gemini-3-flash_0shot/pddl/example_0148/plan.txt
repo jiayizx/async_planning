@@ -1,0 +1,3 @@
+0.000: (plug_usb step1) [120.000]
+0.000: (insert_wireless step3) [120.000]
+120.001: (ensure_led step2) [60.000]

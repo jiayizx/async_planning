@@ -1,0 +1,31 @@
+(define (domain coconut_skincare)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (wash_done)
+    (moisturize_done)
+    (makeup_done)
+    (refresh_done))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending ?s)) (at start (makeup_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (wash_done))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending ?s)) (at start (wash_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (moisturize_done))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 180)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (makeup_done))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (refresh_done))))
+)

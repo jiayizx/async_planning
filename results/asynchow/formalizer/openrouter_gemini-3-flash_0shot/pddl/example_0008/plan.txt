@@ -1,0 +1,5 @@
+0.000: (look_for_classes step1) [600.000]
+600.001: (enroll step2) [300.000]
+900.002: (wait_for_next_class step3) [604800.000]
+900.002: (attend_class step4) [60.000]
+605700.003: (practice_at_home step5) [1800.000]

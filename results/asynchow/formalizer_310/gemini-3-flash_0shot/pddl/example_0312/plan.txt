@@ -1,4 +1,0 @@
-0.000: (get_lemon_juice) [600.000]
-0.000: (make_simple_syrup) [300.000]
-600.001: (combine_ingredients) [120.000]
-720.002: (refrigerate_and_serve) [3600.000]

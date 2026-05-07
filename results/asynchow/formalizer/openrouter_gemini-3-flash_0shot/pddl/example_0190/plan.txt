@@ -1,0 +1,4 @@
+0.000: (catch_cinccino step1) [900.000]
+900.001: (trade_for_munchlax step2) [600.000]
+1500.002: (use_rare_candy step3) [120.000]
+1500.002: (raise_friendship step4) [3600.000]

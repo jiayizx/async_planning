@@ -1,0 +1,48 @@
+(define (domain know-attraction)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (watch_done)
+    (sense_done)
+    (attracted_known)
+  )
+
+  (:durative-action do_watch
+    :parameters (?s - step)
+    :duration (= ?duration 604800)
+    :condition (at start (step_pending ?s))
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (watch_done))
+    )
+  )
+
+  (:durative-action do_sense_attention
+    :parameters (?s - step)
+    :duration (= ?duration 604800)
+    :condition (at start (step_pending ?s))
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (sense_done))
+    )
+  )
+
+  (:durative-action do_put_clues_together
+    :parameters (?s - step)
+    :duration (= ?duration 172800)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (watch_done))
+      (at start (sense_done))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (attracted_known))
+    )
+  )
+)

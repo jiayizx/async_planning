@@ -1,1 +1,0 @@
-(define (problem remove_lead_problem)(:domain remove_lead_from_water)(:init (find_lab_pending) (collect_samples_pending) (test_samples_pending))(:goal (and (find_lab_done) (collect_samples_done) (test_samples_done))))

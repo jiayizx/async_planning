@@ -1,5 +1,0 @@
-0.000: (do_step4_dip_and_tap) [10.000]
-0.000: (do_step1_wash_moisturize) [300.000]
-10.001: (do_step3_buff_powder) [180.000]
-190.002: (do_step5_mist_setting_spray) [30.000]
-300.001: (do_step2_apply_primer) [120.000]

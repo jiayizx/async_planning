@@ -1,0 +1,6 @@
+0.000: (decide_where) [60.000]
+60.001: (find_keys) [180.000]
+60.001: (put_clothing) [300.000]
+360.002: (put_shoes) [120.000]
+360.002: (check_mirror) [60.000]
+480.003: (step_outside) [60.000]

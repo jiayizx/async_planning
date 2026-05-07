@@ -1,0 +1,11 @@
+(define (problem keep_bees_problem)
+  (:domain keep_bees)
+  (:objects)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+  )
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (bees_housed)))
+)

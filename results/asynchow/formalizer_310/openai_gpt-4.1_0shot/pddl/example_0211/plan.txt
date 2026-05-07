@@ -1,5 +1,0 @@
-0.000: (read_guidelines) [600.000]
-0.000: (calm_down) [600.000]
-600.001: (research_topic) [1800.000]
-2400.002: (find_sources) [1200.000]
-3600.003: (pick_evidence) [1500.000]

@@ -1,0 +1,5 @@
+0.000: (eat_meal step1) [1200.000]
+0.000: (drink_water step5) [120.000]
+120.001: (brush_teeth step3) [240.000]
+360.002: (rinse_mouthwash step4) [60.000]
+1200.001: (chew_gum step2) [900.000]

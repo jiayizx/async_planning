@@ -1,0 +1,37 @@
+(define (domain leave_school)
+  (:requirements :typing :durative-actions)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (textbooks_packed)
+    (walked_to_parking)
+    (keys_located)
+    (car_started)
+    (driven_out))
+  (:durative-action step1_walk_parking
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s)) (at start (textbooks_packed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (walked_to_parking))))
+  (:durative-action step2_pack_textbooks
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (textbooks_packed))))
+  (:durative-action step3_drive_out
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (and (at start (step_pending ?s)) (at start (car_started)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (driven_out))))
+  (:durative-action step4_locate_keys
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending ?s)) (at start (walked_to_parking)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (keys_located))))
+  (:durative-action step5_start_car
+    :parameters (?s - step)
+    :duration (= ?duration 45)
+    :condition (and (at start (step_pending ?s)) (at start (keys_located)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (car_started))))
+)

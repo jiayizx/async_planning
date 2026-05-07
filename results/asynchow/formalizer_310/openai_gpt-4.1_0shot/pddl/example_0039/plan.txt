@@ -1,7 +1,0 @@
-0.000: (find_movie) [300.000]
-0.000: (shower_and_dress) [900.000]
-300.001: (buy_tickets) [60.000]
-360.002: (print_tickets) [60.000]
-900.001: (leave_and_lock) [300.000]
-1200.002: (go_to_theatre) [1200.000]
-2400.003: (present_tickets) [60.000]

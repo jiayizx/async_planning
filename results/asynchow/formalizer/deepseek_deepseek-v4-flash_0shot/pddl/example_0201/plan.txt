@@ -1,0 +1,4 @@
+0.000: (do_wipe step4) [300.000]
+0.000: (do_scoop step1) [300.000]
+300.001: (do_apply step2) [900.000]
+1200.002: (do_remove step3) [1800.000]

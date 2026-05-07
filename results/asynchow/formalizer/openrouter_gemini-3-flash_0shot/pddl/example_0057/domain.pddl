@@ -1,0 +1,48 @@
+(define (domain movie_production)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (script_written)
+    (backdrop_planned)
+    (cast_hired)
+    (lines_learned)
+    (movie_shot)
+  )
+
+  (:durative-action write_script
+    :parameters (?s - step)
+    :duration (= ?duration 7776000)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (script_written)))
+  )
+
+  (:durative-action plan_backdrop
+    :parameters (?s - step)
+    :duration (= ?duration 604800)
+    :condition (and (at start (step_pending ?s)) (at start (script_written)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (backdrop_planned)))
+  )
+
+  (:durative-action hire_cast
+    :parameters (?s - step)
+    :duration (= ?duration 604800)
+    :condition (and (at start (step_pending ?s)) (at start (backdrop_planned)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (cast_hired)))
+  )
+
+  (:durative-action learn_lines
+    :parameters (?s - step)
+    :duration (= ?duration 432000)
+    :condition (and (at start (step_pending ?s)) (at start (backdrop_planned)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (lines_learned)))
+  )
+
+  (:durative-action shoot_movie
+    :parameters (?s - step)
+    :duration (= ?duration 25920000)
+    :condition (and (at start (step_pending ?s)) (at start (cast_hired)) (at start (lines_learned)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (movie_shot)))
+  )
+)

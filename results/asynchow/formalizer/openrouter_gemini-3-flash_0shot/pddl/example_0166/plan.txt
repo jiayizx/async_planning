@@ -1,0 +1,4 @@
+0.000: (choose_bunch step1) [300.000]
+0.000: (create_circle step4) [240.000]
+300.001: (trim_stem step2) [120.000]
+420.002: (tape_bunch step3) [180.000]

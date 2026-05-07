@@ -1,0 +1,5 @@
+0.000: (do_shower step1) [1200.000]
+0.000: (do_shower step5) [1200.000]
+1200.001: (do_shoes step2) [120.000]
+1200.001: (do_clothes step3) [300.000]
+1500.002: (do_drive step4) [1800.000]

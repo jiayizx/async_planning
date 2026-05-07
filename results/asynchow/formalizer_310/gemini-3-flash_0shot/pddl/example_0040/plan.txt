@@ -1,4 +1,0 @@
-0.000: (hire_contractor) [259200.000]
-0.000: (get_financed) [604800.000]
-604800.001: (make_contract) [86400.000]
-691200.002: (transfer_money) [86400.000]

@@ -2,7 +2,8 @@
 
 The solver expects a domain-specific scheduling representation rather than
 PDDL.  Each action is an interval with a fixed duration, optional unary/capacity
-resource, and precedence dependencies.  The objective is minimum makespan.
+resource, and precedence dependencies.  The default objective is minimum
+makespan, with optional deadline-aware delivery tardiness terms.
 """
 from __future__ import annotations
 
@@ -11,6 +12,7 @@ from typing import Any
 
 
 ALLOWED_ACTIONS = {
+    "task",
     "grill",
     "cut",
     "fry",
@@ -30,6 +32,9 @@ class ScheduleAction:
     duration: int
     station: str | None = None
     eligible_robots: tuple[str, ...] = ()
+    hidden: bool = False
+    earliest_start: int = 0
+    fixed_start: int | None = None
 
 
 @dataclass(frozen=True)
@@ -93,7 +98,10 @@ def parse_schedule_spec(
 
     Expected shape:
       {"actions": [{"id", "action", "item", "duration", "station"}],
-       "dependencies": [{"before", "after"}] or [["a", "b"]]}
+       "dependencies": [{"predecessor", "successor"}] or [["a", "b"]]}
+
+    The legacy {"before", "after"} dependency keys are still accepted. Both
+    shapes mean the first action must finish before the second action can start.
     """
     if not isinstance(spec, dict):
         raise ValueError("schedule spec must be a JSON object")
@@ -131,7 +139,7 @@ def parse_schedule_spec(
             raise ValueError(f"action {action_id} needs an item")
         if valid_items is not None and item not in valid_items:
             raise ValueError(f"action {action_id} references unknown item '{item}'")
-        if action == "stack":
+        if action in {"stack", "task"}:
             station = None
         elif station is None:
             raise ValueError(f"non-stack action {action_id} needs a station")
@@ -151,6 +159,13 @@ def parse_schedule_spec(
                 duration=_coerce_duration(raw.get("duration")),
                 station=station,
                 eligible_robots=eligible_robots,
+                hidden=bool(raw.get("hidden", False)),
+                earliest_start=_coerce_nonnegative_int(raw.get("earliest_start", 0)),
+                fixed_start=(
+                    _coerce_nonnegative_int(raw.get("fixed_start"))
+                    if raw.get("fixed_start", None) not in (None, "")
+                    else None
+                ),
             )
         )
         seen.add(action_id)
@@ -162,15 +177,18 @@ def parse_schedule_spec(
     dependencies: list[ScheduleDependency] = []
     for raw in raw_deps:
         if isinstance(raw, dict):
-            before = str(raw.get("before", "")).strip()
-            after = str(raw.get("after", "")).strip()
+            before = str(raw.get("predecessor", raw.get("before", ""))).strip()
+            after = str(raw.get("successor", raw.get("after", ""))).strip()
             min_lag = _coerce_nonnegative_int(raw.get("min_lag", raw.get("lag", 0)))
         elif isinstance(raw, (list, tuple)) and len(raw) == 2:
             before = str(raw[0]).strip()
             after = str(raw[1]).strip()
             min_lag = 0
         else:
-            raise ValueError("each dependency must be {'before','after'} or [before, after]")
+            raise ValueError(
+                "each dependency must be {'predecessor','successor'}, "
+                "{'before','after'}, or [predecessor, successor]"
+            )
         if before not in seen or after not in seen:
             raise ValueError(f"dependency references unknown action: {before!r} -> {after!r}")
         if before == after:
@@ -187,6 +205,7 @@ def solve_schedule(
     station_capacities: dict[str, int] | None = None,
     robots: list[str] | None = None,
     timeout: float = 120.0,
+    deadline_objectives: list[dict[str, Any]] | None = None,
 ) -> ScheduleResult:
     """Solve a structured schedule optimally with OR-Tools CP-SAT."""
     try:
@@ -219,6 +238,10 @@ def solve_schedule(
             ends[a.id],
             f"interval_{a.id}",
         )
+        if a.fixed_start is not None:
+            model.Add(starts[a.id] == int(a.fixed_start))
+        if a.earliest_start > 0:
+            model.Add(starts[a.id] >= int(a.earliest_start))
 
     robot_assignments = {}
     robot_intervals: dict[str, list] = {}
@@ -268,7 +291,30 @@ def solve_schedule(
 
     makespan = model.NewIntVar(0, horizon, "makespan")
     model.AddMaxEquality(makespan, [ends[a.id] for a in actions])
-    model.Minimize(makespan)
+
+    deadline_objectives = deadline_objectives or []
+    tardiness_terms = []
+    for i, objective in enumerate(deadline_objectives):
+        action_ids = [str(aid) for aid in objective.get("action_ids", []) if str(aid) in action_by_id]
+        if not action_ids:
+            continue
+        completion = model.NewIntVar(0, horizon, f"deadline_completion_{i}")
+        model.AddMaxEquality(completion, [ends[action_id] for action_id in action_ids])
+        deadline = _coerce_nonnegative_int(objective.get("deadline", 0))
+        tardiness = model.NewIntVar(0, horizon, f"deadline_tardiness_{i}")
+        model.Add(tardiness >= completion - deadline)
+        model.Add(tardiness >= 0)
+        weight = max(1, int(objective.get("weight", 1)))
+        tardiness_terms.append((tardiness, weight))
+
+    if tardiness_terms:
+        objective_expr = makespan
+        big_m = horizon + 1
+        for tardiness, weight in tardiness_terms:
+            objective_expr += tardiness * (weight * big_m)
+        model.Minimize(objective_expr)
+    else:
+        model.Minimize(makespan)
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = float(timeout)
@@ -287,8 +333,12 @@ def solve_schedule(
                 if solver.Value(robot_assignments[(action_id, candidate)]):
                     robot = candidate
                     break
-        action_text = f"{a.action} {robot} {a.item}" if robot else f"{a.action} {a.item}"
-        plan.append((start, action_text, float(a.duration)))
+        if a.action == "task":
+            action_text = a.id
+        else:
+            action_text = f"{a.action} {robot} {a.item}" if robot else f"{a.action} {a.item}"
+        if not a.hidden:
+            plan.append((start, action_text, float(a.duration)))
     plan.sort(key=lambda row: (row[0], row[1]))
 
     return ScheduleResult(

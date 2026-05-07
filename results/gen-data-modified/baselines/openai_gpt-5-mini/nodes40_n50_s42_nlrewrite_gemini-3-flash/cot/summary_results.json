@@ -1,9 +1,0 @@
-{
-  "benchmark": "gen-data",
-  "model_name": "openai/gpt-5-mini",
-  "icl_examples": 0,
-  "cot": true,
-  "accuracy": 0.3541666666666667,
-  "num_correct": 17,
-  "num_data_points": 48
-}

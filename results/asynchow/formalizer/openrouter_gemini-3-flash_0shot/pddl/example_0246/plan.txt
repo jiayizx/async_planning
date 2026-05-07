@@ -1,0 +1,4 @@
+0.000: (establish_requirements step1) [1800.000]
+0.000: (establish_return_policy step2) [900.000]
+0.000: (add_clause step4) [600.000]
+1800.001: (sign_contract step3) [300.000]

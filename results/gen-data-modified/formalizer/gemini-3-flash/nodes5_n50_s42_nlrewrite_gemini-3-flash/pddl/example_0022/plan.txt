@@ -1,4 +1,0 @@
-0.000: (cpr_certification) [14400.000]
-0.000: (enroll_program) [604800.000]
-14400.001: (jurisprudence_exam) [7200.000]
-647.000: (submit_application) [1209600.000]

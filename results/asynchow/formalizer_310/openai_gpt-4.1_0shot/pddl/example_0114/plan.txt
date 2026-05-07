@@ -1,5 +1,0 @@
-0.000: (do_search_for_ice_rink) [120.000]
-120.001: (do_drive_to_ice_rink) [1200.000]
-1320.002: (do_rent_ice_skates) [300.000]
-1620.003: (do_put_right_skate_on) [30.000]
-1620.003: (do_put_left_skate_on) [30.000]

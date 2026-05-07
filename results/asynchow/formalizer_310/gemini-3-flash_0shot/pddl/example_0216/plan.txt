@@ -1,4 +1,0 @@
-0.000: (give_music) [1800.000]
-0.000: (choose_dentist) [300.000]
-300.001: (offer_appointment) [600.000]
-900.002: (go_with_him) [7200.000]

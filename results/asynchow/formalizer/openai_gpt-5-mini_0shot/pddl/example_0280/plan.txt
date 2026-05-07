@@ -1,0 +1,4 @@
+0.000: (do_select_hat step1) [300.000]
+0.000: (do_blow_balloons step2) [600.000]
+0.000: (do_buy_glue step4) [120.000]
+600.001: (do_add_hat step3) [180.000]

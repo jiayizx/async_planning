@@ -1,0 +1,23 @@
+(define (problem roast-turnips-problem)
+  (:domain roast-turnips)
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 step8 step9 step10 - step
+  )
+  (:init
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step4_pending)
+    (step5_pending)
+    (step6_pending)
+    (step7_pending)
+    (step8_pending)
+    (step9_pending)
+    (step10_pending)
+  )
+  (:goal (and
+    (step1_done) (step2_done) (step3_done) (step4_done) (step5_done)
+    (step6_done) (step7_done) (step8_done) (step9_done) (step10_done)
+    (served)
+  ))
+)

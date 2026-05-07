@@ -1,6 +1,0 @@
-0.000: (buy_scale) [3600.000]
-3600.001: (place_scale) [60.000]
-3660.002: (begin_undress) [300.000]
-3960.003: (remove_pants) [60.000]
-3960.003: (remove_shirt) [60.000]
-4020.004: (stand_on_scale) [60.000]

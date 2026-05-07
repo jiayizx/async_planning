@@ -1,5 +1,0 @@
-0.000: (make_ganache) [900.000]
-0.000: (cut_cake) [600.000]
-0.000: (melt_chocolate) [3600.000]
-900.001: (assemble_cake) [300.000]
-3600.001: (break_shards) [1200.000]

@@ -1,0 +1,5 @@
+0.000: (do_step3_put_wax_paper) [120.000]
+0.000: (do_step1_choose_patch) [300.000]
+300.001: (do_step2_cut_patch) [600.000]
+900.002: (do_step4_attach_patch) [900.000]
+1800.003: (do_step5_allow_dry) [7200.000]

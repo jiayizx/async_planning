@@ -1,0 +1,4 @@
+0.000: (do_rinse step1) [60.000]
+0.000: (do_sanitize step4) [60.000]
+60.001: (do_cleanse step2) [30.000]
+90.002: (do_rub step3) [120.000]

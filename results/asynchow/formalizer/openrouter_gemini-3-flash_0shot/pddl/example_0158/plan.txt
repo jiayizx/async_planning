@@ -1,0 +1,3 @@
+0.000: (film_movie step1) [3600.000]
+0.000: (buy_toys step3) [1200.000]
+1200.001: (enjoy_diving step2) [1800.000]

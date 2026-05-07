@@ -1,0 +1,18 @@
+(define (problem read-ear-reflexology)
+  (:domain ear_reflexology)
+  (:init
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step4_pending)
+    (step5_pending)
+  )
+  (:goal (and
+    (step1_complete)
+    (step2_complete)
+    (step3_complete)
+    (step4_complete)
+    (step5_complete)
+  ))
+  (:metric minimize (total-time))
+)

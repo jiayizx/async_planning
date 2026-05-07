@@ -1,0 +1,20 @@
+(define (problem dog_fertility_problem)
+  (:domain dog_fertility_testing)
+  (:init
+    (step_pending_1) (step_pending_2) (step_pending_3) (step_pending_4) (step_pending_5)
+    (step_pending_6) (step_pending_7) (step_pending_8) (step_pending_9) (step_pending_10)
+    (step_pending_11) (step_pending_12) (step_pending_13) (step_pending_14) (step_pending_15)
+    (step_pending_16) (step_pending_17) (step_pending_18) (step_pending_19) (step_pending_20)
+    (step_pending_21) (step_pending_22) (step_pending_23) (step_pending_24) (step_pending_25)
+    (step_pending_26) (step_pending_27) (step_pending_28) (step_pending_29) (step_pending_30)
+    (step_pending_31) (step_pending_32) (step_pending_33) (step_pending_34) (step_pending_35)
+    (step_pending_36) (step_pending_37) (step_pending_38) (step_pending_39) (step_pending_40)
+    (step_pending_41) (step_pending_42) (step_pending_43) (step_pending_44) (step_pending_45)
+    (step_pending_46) (step_pending_47) (step_pending_48) (step_pending_49) (step_pending_50)
+  )
+  (:goal
+    (and
+      (s12_done) (s14_done) (s18_done) (s27_done) (s29_done) (s32_done) (s33_done) (s36_done) (s45_done) (s47_done) (s48_done) (s49_done) (s50_done)
+    )
+  )
+)

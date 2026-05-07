@@ -1,0 +1,5 @@
+0.000: (research_guidelines step1) [2700.000]
+2700.001: (download_checklist step2) [600.000]
+2700.001: (attend_seminar step3) [14400.000]
+3300.002: (cross_reference step4) [1800.000]
+17100.002: (review_case_studies step5) [7200.000]

@@ -1,0 +1,4 @@
+0.000: (put_in_cage step1) [300.000]
+300.001: (add_house step2) [300.000]
+300.001: (fill_toys step3) [900.000]
+300.001: (setup_wheel step4) [600.000]

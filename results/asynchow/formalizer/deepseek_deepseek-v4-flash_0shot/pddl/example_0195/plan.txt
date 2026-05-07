@@ -1,0 +1,4 @@
+0.000: (do_prepare_chili step1) [120.000]
+0.000: (do_slice step4) [60.000]
+0.000: (do_slice step3) [60.000]
+120.001: (do_place_cap step2) [60.000]

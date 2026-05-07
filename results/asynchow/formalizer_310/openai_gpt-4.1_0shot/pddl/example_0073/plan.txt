@@ -1,5 +1,0 @@
-0.000: (put_on_clothes) [120.000]
-120.001: (put_on_right_shoe) [60.000]
-120.001: (put_on_left_shoe) [60.000]
-180.002: (grab_car_keys) [30.000]
-210.003: (exit_house) [30.000]

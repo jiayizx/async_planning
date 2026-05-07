@@ -1,0 +1,5 @@
+0.000: (step2_cut_and_rest step1) [1200.000]
+0.000: (step1_heat_grill step5) [600.000]
+1200.001: (step3_rub_and_season step2) [300.000]
+1500.002: (step4_grill_flounder step3) [1200.000]
+2700.003: (step5_final_rest step4) [600.000]

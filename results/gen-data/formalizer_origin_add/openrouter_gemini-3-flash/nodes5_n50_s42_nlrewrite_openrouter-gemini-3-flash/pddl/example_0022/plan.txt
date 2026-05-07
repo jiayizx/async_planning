@@ -1,0 +1,5 @@
+0.000: (enroll_program step1) [86400.000]
+0.000: (complete_cpr step5) [21600.000]
+21600.001: (pass_jurisprudence step3) [7200.000]
+86400.001: (pass_radiography step2) [259200.000]
+345600.002: (submit_application step4) [1209600.000]

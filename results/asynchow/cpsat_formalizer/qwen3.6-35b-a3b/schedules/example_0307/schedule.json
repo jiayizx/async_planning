@@ -1,0 +1,108 @@
+{
+  "actions": [
+    {
+      "id": "step1",
+      "action": "task",
+      "item": "step1",
+      "duration": 120
+    },
+    {
+      "id": "step2",
+      "action": "task",
+      "item": "step2",
+      "duration": 300
+    },
+    {
+      "id": "step3",
+      "action": "task",
+      "item": "step3",
+      "duration": 180
+    },
+    {
+      "id": "step4",
+      "action": "task",
+      "item": "step4",
+      "duration": 300
+    },
+    {
+      "id": "step5",
+      "action": "task",
+      "item": "step5",
+      "duration": 600
+    },
+    {
+      "id": "step6",
+      "action": "task",
+      "item": "step6",
+      "duration": 300
+    },
+    {
+      "id": "step7",
+      "action": "task",
+      "item": "step7",
+      "duration": 420
+    },
+    {
+      "id": "step8",
+      "action": "task",
+      "item": "step8",
+      "duration": 120
+    },
+    {
+      "id": "step9",
+      "action": "task",
+      "item": "step9",
+      "duration": 900
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "step2",
+      "after": "step1"
+    },
+    {
+      "before": "step1",
+      "after": "step3"
+    },
+    {
+      "before": "step3",
+      "after": "step5"
+    },
+    {
+      "before": "step3",
+      "after": "step6"
+    },
+    {
+      "before": "step3",
+      "after": "step7"
+    },
+    {
+      "before": "step3",
+      "after": "step8"
+    },
+    {
+      "before": "step3",
+      "after": "step9"
+    },
+    {
+      "before": "step4",
+      "after": "step5"
+    },
+    {
+      "before": "step4",
+      "after": "step6"
+    },
+    {
+      "before": "step4",
+      "after": "step7"
+    },
+    {
+      "before": "step4",
+      "after": "step8"
+    },
+    {
+      "before": "step4",
+      "after": "step9"
+    }
+  ]
+}

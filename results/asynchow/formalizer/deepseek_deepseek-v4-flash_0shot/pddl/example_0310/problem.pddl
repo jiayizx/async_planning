@@ -1,0 +1,21 @@
+(define (problem take_measurements_problem)
+  (:domain take_measurements)
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 - step)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+    (step_pending step6)
+    (step_pending step7))
+  (:goal (and
+    (step_completed step1)
+    (step_completed step2)
+    (step_completed step3)
+    (step_completed step4)
+    (step_completed step5)
+    (step_completed step6)
+    (step_completed step7)))
+)

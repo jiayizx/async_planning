@@ -1,0 +1,45 @@
+(define (domain repair_leather_seats)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step)
+               (step_done ?s - step)
+               (patch_chosen)
+               (patch_cut)
+               (wax_paper_placed)
+               (patch_attached)
+               (adhesive_dried))
+  (:durative-action do_step1
+    :duration 300
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1)))
+                 (at end (step_done step1))
+                 (at end (patch_chosen))))
+  (:durative-action do_step2
+    :duration 600
+    :condition (and (at start (step_pending step2))
+                    (at start (patch_chosen)))
+    :effect (and (at start (not (step_pending step2)))
+                 (at end (step_done step2))
+                 (at end (patch_cut))))
+  (:durative-action do_step3
+    :duration 120
+    :condition (at start (step_pending step3))
+    :effect (and (at start (not (step_pending step3)))
+                 (at end (step_done step3))
+                 (at end (wax_paper_placed))))
+  (:durative-action do_step4
+    :duration 900
+    :condition (and (at start (step_pending step4))
+                    (at start (patch_cut))
+                    (at start (wax_paper_placed)))
+    :effect (and (at start (not (step_pending step4)))
+                 (at end (step_done step4))
+                 (at end (patch_attached))))
+  (:durative-action do_step5
+    :duration 7200
+    :condition (and (at start (step_pending step5))
+                    (at start (patch_attached)))
+    :effect (and (at start (not (step_pending step5)))
+                 (at end (step_done step5))
+                 (at end (adhesive_dried))))
+)

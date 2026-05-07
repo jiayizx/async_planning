@@ -1,0 +1,6 @@
+0.000: (prepare_supplies step1) [300.000]
+300.001: (recite_candle_prayer step2) [60.000]
+300.001: (recite_spices_prayer step3) [60.000]
+300.001: (recite_wine_prayer step4) [60.000]
+360.002: (recite_concluding_prayer step5) [120.000]
+480.003: (extinguish_candle step6) [60.000]

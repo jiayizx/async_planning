@@ -1,0 +1,5 @@
+(define (problem air_dry_hair_problem)
+  (:domain air_dry_hair)
+  (:init)
+  (:goal (and (step1_done) (step2_done) (step3_done) (hair_combed_in_shower)))
+)

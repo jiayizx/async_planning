@@ -1,4 +1,0 @@
-0.000: (gather_materials) [600.000]
-600.001: (make_soup_can_bowling_game) [1200.000]
-600.001: (make_tin_can_drum_kit) [2700.000]
-600.001: (make_tin_can_desk_caddy) [1800.000]

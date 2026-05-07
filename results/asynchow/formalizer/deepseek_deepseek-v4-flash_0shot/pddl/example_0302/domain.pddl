@@ -1,0 +1,81 @@
+(define (domain gluten_free_cookies)
+  (:requirements :durative-actions :typing)
+  (:predicates 
+    (pending_step1)
+    (done_step1)
+    (pending_step2)
+    (done_step2)
+    (pending_step3)
+    (done_step3)
+    (pending_step4)
+    (done_step4)
+    (pending_step5)
+    (done_step5)
+    (pending_step6)
+    (done_step6)
+    (pending_step7)
+    (done_step7)
+    (preheat_done)
+    (mash_done)
+    (stir_done)
+    (combine_dry_done)
+    (combine_wet_done)
+    (scoop_done)
+    (bake_done)
+  )
+  (:durative-action do_step1
+    :duration 5
+    :condition (at start (pending_step1))
+    :effect (and (at start (not (pending_step1)))
+                 (at end (done_step1))
+                 (at end (preheat_done)))
+  )
+  (:durative-action do_step2
+    :duration 10
+    :condition (at start (pending_step2))
+    :effect (and (at start (not (pending_step2)))
+                 (at end (done_step2))
+                 (at end (mash_done)))
+  )
+  (:durative-action do_step3
+    :duration 5
+    :condition (and (at start (pending_step3))
+                    (at start (mash_done)))
+    :effect (and (at start (not (pending_step3)))
+                 (at end (done_step3))
+                 (at end (stir_done)))
+  )
+  (:durative-action do_step4
+    :duration 5
+    :condition (at start (pending_step4))
+    :effect (and (at start (not (pending_step4)))
+                 (at end (done_step4))
+                 (at end (combine_dry_done)))
+  )
+  (:durative-action do_step5
+    :duration 10
+    :condition (and (at start (pending_step5))
+                    (at start (stir_done))
+                    (at start (combine_dry_done)))
+    :effect (and (at start (not (pending_step5)))
+                 (at end (done_step5))
+                 (at end (combine_wet_done)))
+  )
+  (:durative-action do_step6
+    :duration 5
+    :condition (and (at start (pending_step6))
+                    (at start (preheat_done))
+                    (at start (combine_wet_done)))
+    :effect (and (at start (not (pending_step6)))
+                 (at end (done_step6))
+                 (at end (scoop_done)))
+  )
+  (:durative-action do_step7
+    :duration 15
+    :condition (and (at start (pending_step7))
+                    (at start (scoop_done)))
+    :effect (and (at start (not (pending_step7)))
+                 (at end (done_step7))
+                 (at end (bake_done)))
+  )
+)

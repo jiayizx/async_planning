@@ -1,0 +1,37 @@
+(define (domain calzones)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (preheat_done)
+    (roll_done)
+    (fill_done)
+    (fold_done)
+    (bake_done))
+  (:durative-action preheat_oven
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (preheat_done))))
+  (:durative-action roll_dough
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (roll_done))))
+  (:durative-action add_filling
+    :parameters (?s - step)
+    :duration (= ?duration 15)
+    :condition (and (at start (step_pending ?s)) (at start (roll_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (fill_done))))
+  (:durative-action fold_pinch
+    :parameters (?s - step)
+    :duration (= ?duration 5)
+    :condition (and (at start (step_pending ?s)) (at start (fill_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (fold_done))))
+  (:durative-action bake_calzones
+    :parameters (?s - step)
+    :duration (= ?duration 25)
+    :condition (and (at start (step_pending ?s)) (at start (preheat_done)) (at start (fold_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (bake_done))))
+)

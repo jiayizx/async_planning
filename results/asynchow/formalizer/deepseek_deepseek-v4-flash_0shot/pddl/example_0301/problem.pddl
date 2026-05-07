@@ -1,0 +1,6 @@
+(define (problem iron_shirt_problem)
+  (:domain iron_shirt_domain)
+  (:objects)
+  (:init)
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5) (towels_obtained)))
+)

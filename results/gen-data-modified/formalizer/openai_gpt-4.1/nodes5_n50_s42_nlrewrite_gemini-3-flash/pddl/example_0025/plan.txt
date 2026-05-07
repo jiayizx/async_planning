@@ -1,5 +1,0 @@
-0.000: (do_pack_backpack) [180.000]
-0.000: (do_save_paper_cloud) [300.000]
-180.001: (do_return_locker_key) [480.000]
-300.001: (do_log_out_library_computer) [120.000]
-660.002: (do_walk_to_bus_stop) [600.000]

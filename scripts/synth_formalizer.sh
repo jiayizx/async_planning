@@ -53,7 +53,7 @@ MAX_TOKENS=8192
 TWO_PHASE=0      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
 EFFECT_GOAL=1    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*nlrewrite_*.json"
+PATTERN="*nlrewrite_openrouter*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -87,6 +87,7 @@ fi
 
 SAFE_MODEL="${MODEL//\//_}"
 SAFE_MODEL="${SAFE_MODEL//:/_}"
+VARIANT_DIR=$([[ "$EFFECT_GOAL" == "1" ]] && echo "formalizer_plus" || echo "formalizer")
 
 echo "============================================================"
 echo " Formalizer on gen-data"
@@ -94,6 +95,7 @@ echo "============================================================"
 echo "  data-dir      : $DATA_DIR"
 echo "  model         : $MODEL"
 echo "  save-dir      : $SAVE_DIR"
+echo "  variant       : $VARIANT_DIR"
 echo "  history-mode  : $HISTORY_MODE"
 echo "  max-examples  : $MAX_EXAMPLES"
 echo "  num-shots     : $NUM_SHOTS"
@@ -108,7 +110,7 @@ FAILED=()
 
 for DATA_PATH in "${FILES[@]}"; do
     STEM="$(basename "$DATA_PATH" .json)"
-    SAVE_PATH="${SAVE_DIR}/${SAFE_MODEL}/${STEM}"
+    SAVE_PATH="${SAVE_DIR}/${VARIANT_DIR}/${SAFE_MODEL}/${STEM}"
 
     echo "────────────────────────────────────────────────────────────"
     echo " File   : $DATA_PATH"

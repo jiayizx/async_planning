@@ -1,9 +1,0 @@
-{
-  "benchmark": "gen-data",
-  "model_name": "openai/gpt-4.1",
-  "icl_examples": 0,
-  "cot": true,
-  "accuracy": 0.22448979591836735,
-  "num_correct": 11,
-  "num_data_points": 49
-}

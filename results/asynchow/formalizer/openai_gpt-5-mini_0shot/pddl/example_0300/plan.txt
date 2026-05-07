@@ -1,0 +1,7 @@
+0.000: (do_step2_cut_power_water) [300.000]
+0.000: (do_step1_purchase_pump) [1800.000]
+300.001: (do_step4_remove_dishwasher_from_cabinet) [1800.000]
+2100.002: (do_step3_disconnect_wires_and_water_lines) [900.000]
+3000.003: (do_step5_disconnect_old_pump) [900.000]
+3900.004: (do_step6_install_new_pump) [1800.000]
+5700.005: (do_step7_reconnect_dishwasher) [900.000]

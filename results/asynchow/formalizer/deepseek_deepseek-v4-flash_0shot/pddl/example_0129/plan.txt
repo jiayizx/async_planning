@@ -1,0 +1,5 @@
+0.000: (do_step1 step1) [1.000]
+1.001: (do_step2 step2) [1.000]
+2.002: (do_step4 step3) [1.000]
+2.002: (do_step3 step4) [1.000]
+3.003: (do_step5 step5) [1.000]

@@ -1,5 +1,0 @@
-0.000: (look_up_numbers) [120.000]
-120.001: (write_flashcards) [600.000]
-120.001: (memorize_sequence) [1800.000]
-1920.002: (record_recitation) [300.000]
-2220.003: (listen_and_correct) [180.000]

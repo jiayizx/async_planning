@@ -1,0 +1,5 @@
+0.000: (do_step1_take_week_off) [604800.000]
+604800.001: (do_step2_drive_to_park) [10800.000]
+615600.002: (do_step3_hike_out) [604800.000]
+1220400.003: (do_step5_stay_away_electronics) [604800.000]
+1220400.003: (do_step4_live_off_land) [604800.000]

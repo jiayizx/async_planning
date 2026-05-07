@@ -1,0 +1,94 @@
+(define (domain fix_leaky_dishwasher)
+  (:requirements :durative-actions :typing)
+  (:types step)
+
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+
+    (pump_purchased)
+    (power_cut)
+    (wires_disconnected)
+    (dishwasher_removed)
+    (old_pump_disconnected)
+    (new_pump_installed)
+    (dishwasher_reconnected)
+  )
+
+  (:durative-action do_step1_purchase_pump
+     :parameters ()
+     :duration (= ?duration 1800)
+     :condition (at start (step_pending step1))
+     :effect (and
+       (at start (not (step_pending step1)))
+       (at end (step_done step1))
+       (at end (pump_purchased))
+     )
+  )
+
+  (:durative-action do_step2_cut_power_water
+     :parameters ()
+     :duration (= ?duration 300)
+     :condition (at start (step_pending step2))
+     :effect (and
+       (at start (not (step_pending step2)))
+       (at end (step_done step2))
+       (at end (power_cut))
+     )
+  )
+
+  (:durative-action do_step3_disconnect_wires_and_water_lines
+     :parameters ()
+     :duration (= ?duration 900)
+     :condition (and (at start (step_pending step3)) (at start (dishwasher_removed)))
+     :effect (and
+       (at start (not (step_pending step3)))
+       (at end (step_done step3))
+       (at end (wires_disconnected))
+     )
+  )
+
+  (:durative-action do_step4_remove_dishwasher_from_cabinet
+     :parameters ()
+     :duration (= ?duration 1800)
+     :condition (and (at start (step_pending step4)) (at start (power_cut)))
+     :effect (and
+       (at start (not (step_pending step4)))
+       (at end (step_done step4))
+       (at end (dishwasher_removed))
+     )
+  )
+
+  (:durative-action do_step5_disconnect_old_pump
+     :parameters ()
+     :duration (= ?duration 900)
+     :condition (and (at start (step_pending step5)) (at start (wires_disconnected)))
+     :effect (and
+       (at start (not (step_pending step5)))
+       (at end (step_done step5))
+       (at end (old_pump_disconnected))
+     )
+  )
+
+  (:durative-action do_step6_install_new_pump
+     :parameters ()
+     :duration (= ?duration 1800)
+     :condition (and (at start (step_pending step6)) (at start (pump_purchased)) (at start (old_pump_disconnected)))
+     :effect (and
+       (at start (not (step_pending step6)))
+       (at end (step_done step6))
+       (at end (new_pump_installed))
+     )
+  )
+
+  (:durative-action do_step7_reconnect_dishwasher
+     :parameters ()
+     :duration (= ?duration 900)
+     :condition (and (at start (step_pending step7)) (at start (new_pump_installed)))
+     :effect (and
+       (at start (not (step_pending step7)))
+       (at end (step_done step7))
+       (at end (dishwasher_reconnected))
+     )
+  )
+)

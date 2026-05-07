@@ -1,0 +1,7 @@
+0.000: (shower_and_dress step1) [900.000]
+0.000: (find_movie step7) [300.000]
+300.001: (buy_tickets step2) [60.000]
+360.002: (print_tickets step3) [60.000]
+900.001: (leave_and_lock step4) [300.000]
+1200.002: (go_to_theater step5) [1200.000]
+2400.003: (present_tickets step6) [60.000]

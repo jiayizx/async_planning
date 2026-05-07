@@ -1,0 +1,13 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "openai/gpt-5-mini",
+  "solver": "cp-sat",
+  "accuracy": 1.0,
+  "num_correct": 50,
+  "num_syntax_errors": 0,
+  "num_semantic_errors": 0,
+  "num_solver_errors": 0,
+  "num_data_points": 50,
+  "plan_valid_rate": 1.0,
+  "num_plan_valid": 50
+}

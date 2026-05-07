@@ -1,0 +1,7 @@
+0.000: (step5_walk_to_fridge step1) [5.000]
+0.000: (step1_walk_to_cabinet step7) [5.000]
+5.001: (step6_grab_milk step2) [5.000]
+5.001: (step2_grab_glass step3) [5.000]
+10.002: (step3_place_on_counter step4) [5.000]
+15.003: (step4_pour_milk step5) [5.000]
+20.004: (step7_drink_milk step6) [60.000]

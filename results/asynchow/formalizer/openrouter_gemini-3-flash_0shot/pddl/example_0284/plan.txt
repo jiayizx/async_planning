@@ -1,0 +1,7 @@
+0.000: (purchase_sumac step1) [1800.000]
+1800.001: (roast_veggies step2) [180.000]
+1800.001: (season_omelet step3) [480.000]
+1800.001: (add_to_zaatar step4) [180.000]
+1800.001: (marinade_meat step5) [600.000]
+1800.001: (add_to_dips step6) [180.000]
+1800.001: (replace_lemon step7) [300.000]

@@ -1,0 +1,47 @@
+(define (domain chandelier)
+  (:requirements :durative-actions :typing)
+  (:predicates
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step1_done)
+    (step2_done)
+    (step3_done)
+    (ceiling_height_figured)
+    (room_size_figured)
+    (chandelier_size_chosen)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (step1_pending))
+    :effect (and
+      (at start (not (step1_pending)))
+      (at end (step1_done))
+      (at end (ceiling_height_figured))
+    )
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (step2_pending))
+    :effect (and
+      (at start (not (step2_pending)))
+      (at end (step2_done))
+      (at end (room_size_figured))
+    )
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and
+      (at start (step3_pending))
+      (at start (step2_done))
+    )
+    :effect (and
+      (at start (not (step3_pending)))
+      (at end (step3_done))
+      (at end (chandelier_size_chosen))
+    )
+  )
+)

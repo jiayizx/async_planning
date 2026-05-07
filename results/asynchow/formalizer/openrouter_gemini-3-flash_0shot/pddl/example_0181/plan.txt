@@ -1,0 +1,4 @@
+0.000: (search_place step1) [1800.000]
+0.000: (cut_wood step2) [7200.000]
+0.000: (remove_hardware step4) [900.000]
+7200.001: (transport_wood step3) [3600.000]

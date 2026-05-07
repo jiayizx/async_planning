@@ -1,5 +1,0 @@
-0.000: (do_step4_fill_up_bath_tub) [300.000]
-0.000: (do_step1_take_off_clothes) [180.000]
-180.001: (do_step2_add_bubble_bath) [5.000]
-300.001: (do_step5_set_out_a_towel) [180.000]
-480.002: (do_step3_turn_off_running_water) [5.000]

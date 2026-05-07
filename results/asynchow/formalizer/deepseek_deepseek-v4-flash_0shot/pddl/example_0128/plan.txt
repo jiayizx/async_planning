@@ -1,0 +1,5 @@
+0.000: (do_sit_down) [5.000]
+0.000: (do_grab_sock) [1.000]
+5.001: (do_raise_foot) [1.000]
+6.002: (do_pull_over_toes) [1.000]
+7.003: (do_pull_backwards) [1.000]

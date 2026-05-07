@@ -1,0 +1,13 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "deepseek/deepseek-v4-flash",
+  "solver": "cp-sat",
+  "accuracy": 0.984375,
+  "num_correct": 315,
+  "num_syntax_errors": 0,
+  "num_semantic_errors": 5,
+  "num_solver_errors": 0,
+  "num_data_points": 320,
+  "plan_valid_rate": null,
+  "num_plan_valid": null
+}

@@ -1,5 +1,0 @@
-0.000: (practice_lowering_center) [300.000]
-300.001: (downward_circle_block) [180.000]
-300.001: (cross_block) [360.000]
-300.001: (forward_block) [240.000]
-300.001: (high_block) [300.000]

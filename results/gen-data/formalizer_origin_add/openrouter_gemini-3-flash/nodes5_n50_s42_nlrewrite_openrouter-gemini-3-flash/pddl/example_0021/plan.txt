@@ -1,0 +1,4 @@
+0.000: (schedule_consultation step5) [172800.000]
+172800.001: (conduct_ultrasound step2) [2700.000]
+175500.002: (perform_biopsy step3) [7200.000]
+647.000: (monitor_enzymes step4) [604800.000]

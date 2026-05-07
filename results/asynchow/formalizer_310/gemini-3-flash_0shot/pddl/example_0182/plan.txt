@@ -1,4 +1,0 @@
-0.000: (cook_pasta) [600.000]
-600.001: (pasta_salad) [1800.000]
-600.001: (tomato_sauce) [1200.000]
-600.001: (olive_oil_garlic) [900.000]

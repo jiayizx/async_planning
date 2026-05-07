@@ -1,0 +1,4 @@
+0.000: (catch_swarm step1) [259200.000]
+0.000: (order_bees step2) [1814400.000]
+0.000: (purchase_hive step4) [172800.000]
+1814400.001: (place_bees step3) [86400.000]

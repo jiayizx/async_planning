@@ -1,0 +1,37 @@
+(define (domain exit_house)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (keys_grabbed)
+    (shoes_on)
+    (door_passed)
+    (jacket_on)
+    (exited_house))
+  (:durative-action grab_keys
+    :parameters ()
+    :duration (= ?duration 25)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (keys_grabbed))))
+  (:durative-action put_on_shoes
+    :parameters ()
+    :duration (= ?duration 25)
+    :condition (at start (step_pending step2))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (shoes_on))))
+  (:durative-action go_through_front_door
+    :parameters ()
+    :duration (= ?duration 25)
+    :condition (and (at start (step_pending step3)) (at start (keys_grabbed)) (at start (shoes_on)) (at start (jacket_on)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (door_passed))))
+  (:durative-action lock_door
+    :parameters ()
+    :duration (= ?duration 35)
+    :condition (and (at start (step_pending step4)) (at start (door_passed)))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (exited_house))))
+  (:durative-action put_on_jacket
+    :parameters ()
+    :duration (= ?duration 25)
+    :condition (at start (step_pending step5))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (jacket_on))))
+)

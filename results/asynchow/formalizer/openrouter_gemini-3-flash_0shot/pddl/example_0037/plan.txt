@@ -1,0 +1,7 @@
+0.000: (drive_to_shop step1) [900.000]
+900.001: (look_at_rabbits step2) [900.000]
+1800.002: (pick_rabbit step3) [900.000]
+2700.003: (shop_supplies step4) [420.000]
+2700.003: (shop_food step5) [420.000]
+3120.004: (wait_in_line step6) [900.000]
+4020.005: (make_purchase step7) [180.000]

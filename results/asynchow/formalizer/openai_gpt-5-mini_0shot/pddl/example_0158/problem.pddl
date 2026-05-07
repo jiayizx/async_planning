@@ -1,0 +1,12 @@
+(define (problem have-fun-pool-prob)
+  (:domain have-fun-pool)
+  (:objects step1 step2 step3 - step)
+  (:init
+    ;; All steps are initially pending (rule 7)
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+  )
+  ;; Goal: all steps done AND the final semantic predicate (diving_done)
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (diving_done)))
+)

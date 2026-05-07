@@ -1,0 +1,5 @@
+0.000: (throw_out_things step1) [7200.000]
+7200.001: (purchase_kitchen_containers step2) [7200.000]
+7200.001: (maximize_closet step3) [7200.000]
+7200.001: (use_bookshelves step4) [14400.000]
+7200.001: (purchase_storage_containers step5) [3600.000]

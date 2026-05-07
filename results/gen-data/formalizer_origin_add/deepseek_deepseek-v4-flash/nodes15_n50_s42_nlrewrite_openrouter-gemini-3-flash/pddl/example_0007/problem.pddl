@@ -1,0 +1,5 @@
+(define (problem breakfast_problem)
+  (:domain breakfast)
+  (:init (step_pending s1) (step_pending s2) (step_pending s3) (step_pending s4) (step_pending s5) (step_pending s6) (step_pending s7) (step_pending s8) (step_pending s9) (step_pending s10) (step_pending s11) (step_pending s12) (step_pending s13) (step_pending s14) (step_pending s15))
+  (:goal (and (done s1) (done s2) (done s3) (done s4) (done s5) (done s6) (done s7) (done s8) (done s9) (done s10) (done s11) (done s12) (done s13) (done s14) (done s15)))
+)

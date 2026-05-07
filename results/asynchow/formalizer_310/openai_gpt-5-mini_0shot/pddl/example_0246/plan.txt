@@ -1,4 +1,0 @@
-0.000: (step3_add_spay_neuter_clause) [600.000]
-0.000: (step2_establish_return_policy) [900.000]
-0.000: (step1_establish_requirements) [1800.000]
-1800.001: (step4_have_new_owners_sign_it) [300.000]

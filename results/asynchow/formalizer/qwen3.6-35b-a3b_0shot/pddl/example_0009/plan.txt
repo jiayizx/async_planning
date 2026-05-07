@@ -1,0 +1,6 @@
+0.000: (look_flights step1) [3600.000]
+0.000: (look_hotel_prices step6) [1800.000]
+1800.001: (book_hotel step3) [300.000]
+3600.001: (buy_tickets step2) [300.000]
+3900.002: (go_airport step4) [2700.000]
+6600.003: (board_plane step5) [300.000]

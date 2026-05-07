@@ -1,0 +1,6 @@
+0.000: (mix_ingredients step1) [300.000]
+0.000: (light_stove step6) [120.000]
+300.001: (heat_mixture step2) [600.000]
+900.002: (cool_mixture step3) [1800.000]
+2700.003: (shape_flare step4) [300.000]
+3000.004: (wrap_flare step5) [120.000]

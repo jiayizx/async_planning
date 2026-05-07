@@ -1,3 +1,0 @@
-0.000: (check_discharge) [300.000]
-0.000: (watch_lethargy) [604800.000]
-604800.001: (take_to_vet) [1800.000]

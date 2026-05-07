@@ -1,0 +1,6 @@
+0.000: (preheat_oven step1) [600.000]
+0.000: (make_cake_mixture step2) [900.000]
+0.000: (arrange_berries step6) [300.000]
+900.001: (pour_mixture step3) [120.000]
+1020.002: (bake_cake step4) [1800.000]
+2820.003: (serve_poutine step5) [120.000]

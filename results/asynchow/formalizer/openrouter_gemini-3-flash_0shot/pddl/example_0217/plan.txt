@@ -1,0 +1,5 @@
+0.000: (download_and_login step1) [300.000]
+300.001: (pair_app step2) [120.000]
+420.002: (adjust_settings step3) [120.000]
+420.002: (schedule_temperatures step4) [180.000]
+420.002: (change_temperature step5) [60.000]

@@ -1,0 +1,25 @@
+(define (domain dress_for_audition)
+  (:requirements :durative-actions)
+  (:predicates
+    (clothes_pending)
+    (shoes_pending)
+    (hair_pending)
+    (comfortable_clothes_worn)
+    (dance_shoes_on)
+    (hair_up))
+  (:durative-action wear_comfortable_clothes
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (at start (clothes_pending))
+    :effect (and (at start (not (clothes_pending))) (at end (comfortable_clothes_worn))))
+  (:durative-action slip_on_dance_shoes
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (shoes_pending)) (at start (comfortable_clothes_worn)))
+    :effect (and (at start (not (shoes_pending))) (at end (dance_shoes_on))))
+  (:durative-action wear_hair_up
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (at start (hair_pending))
+    :effect (and (at start (not (hair_pending))) (at end (hair_up))))
+)

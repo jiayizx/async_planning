@@ -1,0 +1,7 @@
+0.000: (step1_decide step1) [60.000]
+60.001: (step5_hat step2) [10.000]
+60.001: (step4_coat step3) [60.000]
+60.001: (step3_boots step4) [180.000]
+60.001: (step2_gloves step5) [30.000]
+240.002: (step6_walk step6) [20.000]
+260.003: (step7_roll step7) [1200.000]

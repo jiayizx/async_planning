@@ -1,0 +1,7 @@
+0.000: (locate_door step1) [3.000]
+3.001: (turn_toward_door step2) [2.000]
+5.002: (lift_right_leg step3) [1.000]
+5.002: (lift_left_leg step4) [1.000]
+6.003: (move_right_leg step5) [1.000]
+6.003: (move_left_leg step6) [1.000]
+7.004: (move_to_door step7) [6.000]

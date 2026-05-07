@@ -1,0 +1,3 @@
+0.000: (wear_crop_top step1) [300.000]
+0.000: (pick_top step3) [180.000]
+180.001: (tuck_shirt step2) [120.000]

@@ -1,0 +1,7 @@
+0.000: (get_invited step1) [600.000]
+600.001: (shop_makeup step2) [3600.000]
+600.001: (shop_costume step3) [7200.000]
+7800.002: (put_on_costume_makeup step4) [3600.000]
+11400.003: (drive_to_venue step5) [1800.000]
+13200.004: (park_car step6) [180.000]
+13380.005: (enter_party step7) [180.000]

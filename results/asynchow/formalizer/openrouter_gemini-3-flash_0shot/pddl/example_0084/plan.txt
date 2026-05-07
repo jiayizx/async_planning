@@ -1,0 +1,7 @@
+0.000: (walk_into_garage step1) [120.000]
+0.000: (unlock_garage step7) [5.000]
+120.001: (get_into_truck step2) [30.000]
+150.002: (start_truck step3) [5.000]
+155.003: (drive_to_area step4) [3600.000]
+3755.004: (pay_fee step5) [120.000]
+3875.005: (drive_onto_trails step6) [300.000]

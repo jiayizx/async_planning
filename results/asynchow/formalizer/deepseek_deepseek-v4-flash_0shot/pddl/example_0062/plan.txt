@@ -1,0 +1,7 @@
+0.000: (do_go_on_internet step1) [60.000]
+60.001: (do_research_locations step2) [3600.000]
+3660.002: (do_make_hotel_reservations step3) [600.000]
+3660.002: (do_look_for_tickets step4) [1800.000]
+5460.003: (do_purchase_tickets step5) [600.000]
+6060.004: (do_pack_suitcase step6) [1800.000]
+7860.005: (do_drive_to_airport step7) [1800.000]

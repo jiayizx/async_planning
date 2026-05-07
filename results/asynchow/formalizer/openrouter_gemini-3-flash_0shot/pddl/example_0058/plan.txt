@@ -1,0 +1,7 @@
+0.000: (open_browser step1) [30.000]
+30.001: (search_ebay step2) [300.000]
+30.001: (search_amazon step3) [60.000]
+90.002: (record_amazon_price step4) [2.000]
+330.002: (record_ebay_price step5) [3.000]
+333.003: (return_to_site step6) [60.000]
+393.004: (click_buy_now step7) [5.000]

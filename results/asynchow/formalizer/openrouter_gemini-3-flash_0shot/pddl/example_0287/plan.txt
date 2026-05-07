@@ -1,0 +1,7 @@
+0.000: (step3_gather_court_docs s1) [3600.000]
+0.000: (step2_get_reports s7) [1800.000]
+1800.001: (step1_look_public_records s2) [900.000]
+3600.001: (step5_include_docs s3) [3600.000]
+7200.002: (step4_write_dispute_letter s4) [1800.000]
+9000.003: (step6_mail_letter s5) [900.000]
+9900.004: (step7_confirm_removal s6) [1209600.000]

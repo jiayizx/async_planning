@@ -1,0 +1,5 @@
+0.000: (do_step1_apply_passport step1) [2700.000]
+0.000: (do_step1_apply_passport step6) [2700.000]
+2700.001: (do_step2_retrieve_passport step2) [2700.000]
+5400.002: (do_step3_research step3) [259200.000]
+264600.003: (do_step4_book_ticket step4) [1800.000]

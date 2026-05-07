@@ -47,7 +47,7 @@ NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=4096
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*nlrewrite_*.json"
+PATTERN="*nlrewrite_openrouter*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do

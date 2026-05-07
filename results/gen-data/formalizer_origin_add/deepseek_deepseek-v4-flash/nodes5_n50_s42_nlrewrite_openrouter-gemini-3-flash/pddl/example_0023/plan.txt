@@ -1,0 +1,5 @@
+0.000: (do_research step1) [7200.000]
+0.000: (do_research step5) [7200.000]
+7200.001: (do_register step2) [900.000]
+8100.002: (do_collection step3) [604800.000]
+612900.003: (do_deliver step4) [2700.000]

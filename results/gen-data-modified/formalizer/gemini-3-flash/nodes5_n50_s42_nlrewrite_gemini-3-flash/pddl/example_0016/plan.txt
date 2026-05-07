@@ -1,5 +1,0 @@
-0.000: (locate_tackle_box) [1800.000]
-1800.001: (renew_license) [600.000]
-2400.002: (buy_bait) [900.000]
-2400.002: (research_spots) [3600.000]
-3300.003: (cast_line) [7200.000]

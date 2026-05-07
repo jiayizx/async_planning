@@ -1,5 +1,0 @@
-0.000: (make_liquid_plant_food) [1200.000]
-0.000: (add_nutrients_to_soil) [900.000]
-0.000: (add_grounds_to_soil) [600.000]
-0.000: (add_coffee_to_compost) [300.000]
-600.001: (consider_adding_lime) [900.000]

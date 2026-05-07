@@ -1,0 +1,30 @@
+(define (domain race_planning)
+  (:requirements :durative-actions :typing)
+  (:predicates (signup_pending) (practice_pending) (eatwell_pending) (rest_pending) (arrive_pending)
+               (signup_done) (practice_done) (eatwell_done) (rest_done) (arrive_done))
+  (:durative-action sign_up
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (signup_pending))
+    :effect (and (at start (not (signup_pending))) (at end (signup_done))))
+  (:durative-action practice_running
+    :parameters ()
+    :duration (= ?duration 2592000)
+    :condition (and (at start (practice_pending)) (at start (signup_done)))
+    :effect (and (at start (not (practice_pending))) (at end (practice_done))))
+  (:durative-action eat_well
+    :parameters ()
+    :duration (= ?duration 2592000)
+    :condition (and (at start (eatwell_pending)) (at start (signup_done)))
+    :effect (and (at start (not (eatwell_pending))) (at end (eatwell_done))))
+  (:durative-action rest_before_race
+    :parameters ()
+    :duration (= ?duration 86400)
+    :condition (and (at start (rest_pending)) (at start (practice_done)) (at start (eatwell_done)))
+    :effect (and (at start (not (rest_pending))) (at end (rest_done))))
+  (:durative-action arrive_at_race
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (and (at start (arrive_pending)) (at start (rest_done)))
+    :effect (and (at start (not (arrive_pending))) (at end (arrive_done))))
+)

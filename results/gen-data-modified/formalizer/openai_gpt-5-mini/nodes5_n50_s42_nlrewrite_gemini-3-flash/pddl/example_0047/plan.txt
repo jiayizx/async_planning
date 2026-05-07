@@ -1,5 +1,0 @@
-0.000: (do_research_sunrise) [3600.000]
-0.000: (do_book_cabin) [2700.000]
-2700.001: (do_drive_route1) [25200.000]
-3600.001: (do_pack_backpack) [1800.000]
-5400.002: (do_hike_precipice) [10800.000]

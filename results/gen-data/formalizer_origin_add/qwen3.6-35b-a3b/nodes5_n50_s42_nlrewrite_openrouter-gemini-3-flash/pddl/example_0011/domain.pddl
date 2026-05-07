@@ -1,0 +1,37 @@
+(define (domain bus_pass_domain)
+  (:requirements :durative-actions :typing)
+  (:types step - object)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (pass_purchased)
+    (app_downloaded)
+    (profile_created)
+    (cash_withdrawn)
+    (bank_found))
+  (:durative-action purchase_pass
+    (:parameters (?s - step))
+    (:duration 300)
+    (:condition (and (at start (step_pending ?s)) (at start (cash_withdrawn))))
+    (:effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (pass_purchased)))))
+  (:durative-action download_app
+    (:parameters (?s - step))
+    (:duration 120)
+    (:condition (at start (step_pending ?s)))
+    (:effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (app_downloaded)))))
+  (:durative-action create_profile
+    (:parameters (?s - step))
+    (:duration 600)
+    (:condition (and (at start (step_pending ?s)) (at start (app_downloaded))))
+    (:effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (profile_created)))))
+  (:durative-action withdraw_cash
+    (:parameters (?s - step))
+    (:duration 180)
+    (:condition (and (at start (step_pending ?s)) (at start (cash_withdrawn))))
+    (:effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (cash_withdrawn)))))
+  (:durative-action find_bank
+    (:parameters (?s - step))
+    (:duration 900)
+    (:condition (at start (step_pending ?s)))
+    (:effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (bank_found)))))
+)

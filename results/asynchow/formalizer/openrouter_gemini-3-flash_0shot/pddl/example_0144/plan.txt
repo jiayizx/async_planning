@@ -1,0 +1,3 @@
+0.000: (cut_personal_info step1) [300.000]
+300.001: (arts_and_crafts step2) [1800.000]
+300.001: (donate_films step3) [900.000]

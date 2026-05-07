@@ -1,5 +1,0 @@
-0.000: (boil_water) [600.000]
-0.000: (peel_potatoes) [300.000]
-300.001: (cut_potatoes) [180.000]
-600.001: (place_in_tray) [60.000]
-660.002: (serve_and_enjoy) [120.000]

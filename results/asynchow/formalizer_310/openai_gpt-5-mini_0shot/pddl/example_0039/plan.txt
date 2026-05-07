@@ -1,7 +1,0 @@
-0.000: (do_step2_find_movie) [300.000]
-0.000: (do_step1_shower_and_dress) [900.000]
-300.001: (do_step3_buy_tickets) [60.000]
-360.002: (do_step4_print_tickets) [60.000]
-900.001: (do_step5_leave_and_lock_house) [300.000]
-1200.002: (do_step6_go_to_theatre) [1200.000]
-2400.003: (do_step7_present_tickets) [60.000]

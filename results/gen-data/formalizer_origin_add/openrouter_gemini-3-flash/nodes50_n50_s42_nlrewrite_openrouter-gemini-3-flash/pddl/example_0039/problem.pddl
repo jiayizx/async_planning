@@ -1,0 +1,20 @@
+(define (problem shower_problem)
+  (:domain shower_routine)
+  (:init
+    (step1_pending) (step2_pending) (step3_pending) (step4_pending) (step5_pending)
+    (step6_pending) (step7_pending) (step8_pending) (step9_pending) (step10_pending)
+    (step11_pending) (step12_pending) (step13_pending) (step14_pending) (step15_pending)
+    (step16_pending) (step17_pending) (step18_pending) (step19_pending) (step20_pending)
+    (step21_pending) (step22_pending) (step23_pending) (step24_pending) (step25_pending)
+    (step26_pending) (step27_pending) (step28_pending) (step29_pending) (step30_pending)
+    (step31_pending) (step32_pending) (step33_pending) (step34_pending) (step35_pending)
+    (step36_pending) (step37_pending) (step38_pending) (step39_pending) (step40_pending)
+    (step41_pending) (step42_pending) (step43_pending) (step44_pending) (step45_pending)
+    (step46_pending) (step47_pending) (step48_pending) (step49_pending) (step50_pending)
+  )
+  (:goal
+    (and
+      (s4_done) (s7_done) (s12_done) (s14_done) (s22_done) (s26_done) (s32_done) (s34_done) (s41_done) (s46_done) (s50_done)
+    )
+  )
+)

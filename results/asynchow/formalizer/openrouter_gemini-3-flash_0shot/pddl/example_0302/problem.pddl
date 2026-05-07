@@ -1,0 +1,27 @@
+(define (problem cookie_problem)
+  (:domain oatmeal_cookies)
+  (:objects
+    st1 st2 st3 st4 st5 st6 st7 - step
+  )
+  (:init
+    (step_pending st1)
+    (step_pending st2)
+    (step_pending st3)
+    (step_pending st4)
+    (step_pending st5)
+    (step_pending st6)
+    (step_pending st7)
+  )
+  (:goal
+    (and
+      (step_done st1)
+      (step_done st2)
+      (step_done st3)
+      (step_done st4)
+      (step_done st5)
+      (step_done st6)
+      (step_done st7)
+      (s7_done)
+    )
+  )
+)

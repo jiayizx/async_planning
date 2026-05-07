@@ -1,0 +1,4 @@
+0.000: (consider_agent step1) [1209600.000]
+0.000: (find_properties step4) [1209600.000]
+1209600.001: (check_amenities step2) [172800.000]
+1209600.001: (speak_manager step3) [3600.000]

@@ -1,0 +1,5 @@
+0.000: (do_step3_remove_packaging step1) [30.000]
+0.000: (do_step3_remove_packaging step5) [30.000]
+0.000: (do_step3_remove_packaging step4) [30.000]
+30.001: (do_step4_pat_dry step2) [60.000]
+90.002: (do_step2_rest step3) [2700.000]

@@ -1,0 +1,30 @@
+(define (problem shoulder_problem)
+  (:domain shoulder_diagnosis)
+  (:objects
+    s1 s2 s3 s4 s5 s6 - step
+  )
+  (:init
+    (step_pending s1)
+    (step_pending s2)
+    (step_pending s3)
+    (step_pending s4)
+    (step_pending s5)
+    (step_pending s6)
+  )
+  (:goal
+    (and
+      (step_done s1)
+      (step_done s2)
+      (step_done s3)
+      (step_done s4)
+      (step_done s5)
+      (step_done s6)
+      (slap_test_done)
+      (impingement_test_done)
+      (ac_joint_test_done)
+      (bicep_test_done)
+      (frozen_shoulder_test_done)
+    )
+  )
+  (:metric minimize (total-time))
+)

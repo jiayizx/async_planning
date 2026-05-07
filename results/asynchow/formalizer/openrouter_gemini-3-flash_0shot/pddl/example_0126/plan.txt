@@ -1,0 +1,7 @@
+0.000: (start_shower step1) [300.000]
+300.001: (get_in_shower step2) [120.000]
+420.002: (take_shower step3) [900.000]
+1320.003: (dry_off step4) [600.000]
+1920.004: (comb_hair step5) [300.000]
+1920.004: (brush_teeth step6) [180.000]
+2220.005: (pick_outfit step7) [300.000]

@@ -1,6 +1,0 @@
-0.000: (approach_desk) [45.000]
-45.001: (sit_down) [30.000]
-75.002: (reach_monitor) [15.000]
-75.002: (move_hand_pc) [15.000]
-90.003: (press_monitor_button) [10.000]
-90.003: (hold_pc_button) [10.000]

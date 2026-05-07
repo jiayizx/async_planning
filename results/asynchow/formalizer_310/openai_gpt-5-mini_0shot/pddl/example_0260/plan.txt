@@ -1,6 +1,0 @@
-0.000: (do_ask_assistant) [300.000]
-300.001: (do_frozen_shoulder_test) [600.000]
-300.001: (do_bicep_tendonitis_test) [300.000]
-300.001: (do_ac_joint_test) [300.000]
-300.001: (do_impingement_test) [300.000]
-300.001: (do_slap_or_rotator_cuff_test) [600.000]

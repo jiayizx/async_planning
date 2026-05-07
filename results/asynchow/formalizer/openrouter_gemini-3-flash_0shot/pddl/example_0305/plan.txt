@@ -1,0 +1,5 @@
+0.000: (choose_hardware step1) [900.000]
+900.001: (pay_photoshop step2) [1200.000]
+900.001: (choose_manga_software step3) [1200.000]
+900.001: (consider_corel_painter step4) [1800.000]
+900.001: (download_free_software step5) [1800.000]

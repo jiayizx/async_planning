@@ -1,0 +1,7 @@
+0.000: (do_buy_snacks) [1800.000]
+1800.001: (do_turn_on_tv) [3.000]
+1800.001: (do_put_snacks_in_bowls) [600.000]
+1800.001: (do_change_clothes) [120.000]
+1803.002: (do_flip_channel) [60.000]
+2400.002: (do_put_bowls_on_table) [60.000]
+2460.003: (do_sit_on_couch) [2.000]

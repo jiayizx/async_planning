@@ -1,0 +1,61 @@
+(define (domain balloon_pet_domain)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (remove_balloon_done)
+    (inflate_balloon_done)
+    (twist_poodle_done)
+    (select_marker_done)
+    (draw_face_done)
+  )
+
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (remove_balloon_done)))
+  )
+
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 45)
+    :condition (and (at start (step_pending ?s))
+                    (at start (remove_balloon_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (inflate_balloon_done)))
+  )
+
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 180)
+    :condition (and (at start (step_pending ?s))
+                    (at start (inflate_balloon_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (twist_poodle_done)))
+  )
+
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (select_marker_done)))
+  )
+
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending ?s))
+                    (at start (select_marker_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (draw_face_done)))
+  )
+)

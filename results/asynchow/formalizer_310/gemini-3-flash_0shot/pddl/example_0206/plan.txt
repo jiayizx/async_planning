@@ -1,5 +1,0 @@
-0.000: (make_shells) [7200.000]
-7200.001: (make_herb_twists) [2400.000]
-7200.001: (make_ham_cheese) [3600.000]
-7200.001: (make_filled_puffs) [2700.000]
-7200.001: (make_baked_brie) [3600.000]

@@ -1,0 +1,5 @@
+0.000: (do_choose_computer) [15.000]
+15.001: (do_pay_photoshop) [20.000]
+15.001: (do_choose_clip) [20.000]
+15.001: (do_consider_corel) [30.000]
+15.001: (do_download_gimp) [30.000]

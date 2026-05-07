@@ -1,0 +1,6 @@
+0.000: (do_step1_ask_assist) [300.000]
+300.001: (do_step6_frozen_shoulder_test) [600.000]
+300.001: (do_step5_bicep_test) [300.000]
+300.001: (do_step4_ac_test) [300.000]
+300.001: (do_step3_impingement_test) [300.000]
+300.001: (do_step2_slap_test) [600.000]

@@ -1,5 +1,0 @@
-0.000: (hang_clothes_in_shower) [600.000]
-0.000: (put_item_on_hanger) [60.000]
-0.000: (buy_garment_steamer) [600.000]
-600.001: (fill_and_turn_on_steamer) [120.000]
-720.002: (hold_steamer_to_wrinkles) [600.000]

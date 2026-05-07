@@ -1,5 +1,0 @@
-0.000: (go_to_store) [1800.000]
-0.000: (ask_neighbor) [600.000]
-0.000: (look_in_linen_closet) [180.000]
-0.000: (look_under_sink) [120.000]
-1800.001: (use_sanitary_pad) [300.000]

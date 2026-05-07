@@ -1,0 +1,5 @@
+0.000: (step1_pack step1) [86400.000]
+0.000: (step2_rent step5) [3600.000]
+86400.001: (step3_load step2) [21600.000]
+108000.002: (step4_start step3) [60.000]
+108060.003: (step5_leave step4) [300.000]

@@ -1,0 +1,4 @@
+0.000: (create_sims step4) [1800.000]
+0.000: (create_sims step3) [1800.000]
+0.000: (create_sims step2) [1800.000]
+1800.001: (assign_traits step1) [1800.000]

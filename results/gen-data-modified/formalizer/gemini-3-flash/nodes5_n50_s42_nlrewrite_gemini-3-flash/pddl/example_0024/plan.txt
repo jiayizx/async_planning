@@ -1,5 +1,0 @@
-0.000: (inspect_stones) [30.000]
-30.001: (scrub_crevices) [240.000]
-30.001: (soak_items) [900.000]
-270.002: (buff_metal) [300.000]
-930.002: (rinse_residue) [120.000]

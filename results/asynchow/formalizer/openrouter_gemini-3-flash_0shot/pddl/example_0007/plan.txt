@@ -1,0 +1,5 @@
+0.000: (consider_normal step1) [900.000]
+900.001: (brainstorm_plans step2) [900.000]
+1800.002: (evaluate_plans step3) [300.000]
+1800.002: (write_plans step4) [900.000]
+2700.003: (select_plan step5) [300.000]

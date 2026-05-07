@@ -1,0 +1,5 @@
+0.000: (slice_beef step1) [600.000]
+0.000: (chop_veg step5) [300.000]
+300.001: (saute_veg step3) [480.000]
+600.001: (sear_beef step2) [360.000]
+960.002: (simmer_sauce step4) [900.000]

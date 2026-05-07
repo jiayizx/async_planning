@@ -1,0 +1,6 @@
+0.000: (find_attractive step1) [1800.000]
+0.000: (find_single step6) [1800.000]
+1800.001: (ask_out step2) [15.000]
+1815.002: (plan_day step3) [300.000]
+2115.003: (drive_to_location step4) [900.000]
+3015.004: (express_anger step5) [300.000]

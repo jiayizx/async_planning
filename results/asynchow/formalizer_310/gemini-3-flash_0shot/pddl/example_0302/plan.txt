@@ -1,7 +1,0 @@
-0.000: (combine_dry) [300.000]
-0.000: (mash_banana) [600.000]
-0.000: (preheat_oven) [300.000]
-600.001: (stir_sugar_vanilla) [300.000]
-900.002: (combine_wet_dry) [600.000]
-1500.003: (scoop_cookies) [300.000]
-1800.004: (bake_cookies) [900.000]

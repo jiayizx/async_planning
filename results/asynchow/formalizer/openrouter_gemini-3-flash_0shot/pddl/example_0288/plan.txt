@@ -1,0 +1,6 @@
+0.000: (visit_website step1) [600.000]
+600.001: (register step2) [600.000]
+1200.002: (fill_application step3) [1200.000]
+2400.003: (schedule_appointment step4) [600.000]
+2400.003: (pay_fee step5) [300.000]
+3000.004: (print_confirmation step6) [120.000]

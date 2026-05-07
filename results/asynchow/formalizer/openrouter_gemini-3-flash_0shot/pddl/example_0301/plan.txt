@@ -1,0 +1,5 @@
+0.000: (clean_iron step1) [300.000]
+0.000: (get_towels step2) [180.000]
+0.000: (adjust_board step3) [120.000]
+0.000: (prepare_hang_place step5) [60.000]
+300.001: (fill_water step4) [60.000]

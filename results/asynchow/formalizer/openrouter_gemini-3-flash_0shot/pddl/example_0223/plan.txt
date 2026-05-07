@@ -1,0 +1,5 @@
+0.000: (bathe_monthly step1) [1800.000]
+0.000: (put_in_tub step5) [300.000]
+300.001: (apply_shampoo step2) [600.000]
+900.002: (rinse_shampoo step3) [300.000]
+1200.003: (dry_off step4) [900.000]

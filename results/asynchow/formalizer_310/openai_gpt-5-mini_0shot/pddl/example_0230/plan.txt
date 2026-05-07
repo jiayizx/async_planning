@@ -1,5 +1,0 @@
-0.000: (watch_for_fakes) [60.000]
-60.001: (reddit_message) [120.000]
-60.001: (facebook_comment) [120.000]
-60.001: (insta_comment) [120.000]
-60.001: (tweet_leah) [120.000]

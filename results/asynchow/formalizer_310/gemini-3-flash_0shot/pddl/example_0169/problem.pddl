@@ -1,1 +1,0 @@
-(define (problem fear_of_reading_problem)(:domain fear_of_reading_domain)(:init (step1_pending)(step2_pending)(step3_pending))(:goal (and (step1_done)(step2_done)(step3_done)))(:metric minimize (total-time)))

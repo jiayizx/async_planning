@@ -1,0 +1,6 @@
+0.000: (research_methods step1) [10800.000]
+0.000: (research_methods step6) [10800.000]
+10800.001: (verification step2) [86400.000]
+97200.002: (wait_approval step3) [86400.000]
+183600.003: (browse_hits step4) [3600.000]
+187200.004: (complete_tasks step5) [3600.000]

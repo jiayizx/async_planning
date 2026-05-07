@@ -1,5 +1,0 @@
-0.000: (do_find_wood) [300.000]
-0.000: (do_find_matches) [300.000]
-300.001: (do_ignite_fire) [780.000]
-300.001: (do_place_wood) [300.000]
-600.002: (do_tear_paper) [120.000]

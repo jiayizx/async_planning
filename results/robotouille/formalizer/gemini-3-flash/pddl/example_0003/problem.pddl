@@ -1,70 +1,17 @@
-(define (problem lettuce-cheeseburger-prep)
-    (:domain robotouille-async)
-    (:objects
-        table_1 table_2 table_3 table_4 stove_1 board_1 - station
-        robot_1 - player
-        bottombun_1 topbun_1 cheese_1 lettuce_1 patty_1 - item
-    )
-    (:init
-        (isrobot robot_1)
-        (istable table_1)
-        (istable table_2)
-        (istable table_3)
-        (istable table_4)
-        (isstove stove_1)
-        (isboard board_1)
-
-        (isbottombun bottombun_1)
-        (istopbun topbun_1)
-        (ischeese cheese_1)
-        (islettuce lettuce_1)
-        (ispatty patty_1)
-
-        (iscuttable lettuce_1)
-        (iscookable patty_1)
-
-        (station_free stove_1)
-        (station_free board_1)
-
-        (loc robot_1 table_1)
-        (vacant table_2)
-        (vacant table_3)
-        (vacant table_4)
-        (vacant stove_1)
-        (vacant board_1)
-
-        (nothing robot_1)
-        (nocontainer robot_1)
-
-        (at bottombun_1 table_1)
-        (on bottombun_1 table_1)
-        (at topbun_1 table_1)
-        (atop topbun_1 bottombun_1)
-        (clear topbun_1)
-
-        (at cheese_1 table_2)
-        (on cheese_1 table_2)
-        (clear cheese_1)
-
-        (at patty_1 table_3)
-        (on patty_1 table_3)
-        (clear patty_1)
-
-        (at lettuce_1 table_4)
-        (on lettuce_1 table_4)
-        (clear lettuce_1)
-
-        (empty stove_1)
-        (empty board_1)
-    )
-    (:goal (and
-        (on bottombun_1 table_1)
-        (iscooked patty_1)
-        (atop patty_1 bottombun_1)
-        (iscut lettuce_1)
-        (atop lettuce_1 patty_1)
-        (atop cheese_1 lettuce_1)
-        (atop topbun_1 cheese_1)
-        (clear topbun_1)
-    ))
+(define (problem robotouille_prob)
+  (:domain robotouille)
+  (:objects
+    board_1 table_3 stove_1 table_1 table_2 - station
+    bread_1 bread_2 chicken_1 cheese_1 - item
+    robot_1 - player
+  )
+  (:init (loc robot_1 board_1) (has robot_1 cheese_1) (vacant table_3) (vacant stove_1) (vacant table_1) (vacant table_2) (isboard board_1) (istable table_3) (isstove stove_1) (istable table_1) (istable table_2) (on bread_1 board_1) (at bread_1 board_1) (clear bread_1) (on bread_2 table_3) (at bread_2 table_3) (clear bread_2) (on chicken_1 stove_1) (at chicken_1 stove_1) (clear chicken_1) (iscookable chicken_1) (item-free bread_1) (item-free bread_2) (item-free chicken_1) (item-free cheese_1) (empty table_1) (empty table_2))
+  (:goal (and
+    (on bread_1 table_1)
+    (iscooked chicken_1)
+    (at chicken_1 table_1)
+    (at cheese_1 table_1)
+    (at bread_2 table_1)
+    (clear bread_2)
+  ))
 )

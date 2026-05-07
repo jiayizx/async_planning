@@ -1,0 +1,6 @@
+0.000: (get_equipment step1) [900.000]
+0.000: (get_seeds step6) [300.000]
+900.001: (dig_holes step2) [1500.000]
+2400.002: (place_pots step3) [300.000]
+2700.003: (add_seeds step4) [900.000]
+3600.004: (water_plants step5) [1500.000]

@@ -1,0 +1,17 @@
+(define (problem funnel_cake_problem)
+  (:domain funnel_cake_making)
+  (:init
+    (s1_pending) (s2_pending) (s3_pending) (s4_pending) (s5_pending) (s6_pending) (s7_pending) (s8_pending) (s9_pending) (s10_pending)
+    (s11_pending) (s12_pending) (s13_pending) (s14_pending) (s15_pending) (s16_pending) (s17_pending) (s18_pending) (s19_pending) (s20_pending)
+    (s21_pending) (s22_pending) (s23_pending) (s24_pending) (s25_pending) (s26_pending) (s27_pending) (s28_pending) (s29_pending) (s30_pending)
+    (s31_pending) (s32_pending) (s33_pending) (s34_pending) (s35_pending) (s36_pending) (s37_pending) (s38_pending) (s39_pending) (s40_pending)
+    (s41_pending) (s42_pending) (s43_pending) (s44_pending) (s45_pending) (s46_pending) (s47_pending) (s48_pending) (s49_pending) (s50_pending)
+    (s51_pending) (s52_pending) (s53_pending) (s54_pending) (s55_pending) (s56_pending) (s57_pending) (s58_pending) (s59_pending) (s60_pending)
+    (s61_pending) (s62_pending) (s63_pending) (s64_pending) (s65_pending) (s66_pending) (s67_pending) (s68_pending) (s69_pending) (s70_pending)
+    (s71_pending) (s72_pending) (s73_pending) (s74_pending) (s75_pending) (s76_pending) (s77_pending) (s78_pending) (s79_pending) (s80_pending)
+  )
+  (:goal (and
+    (s1_done) (s6_done) (s11_done) (s14_done) (s18_done) (s24_done) (s26_done) (s28_done) (s35_done) (s40_done)
+    (s44_done) (s45_done) (s48_done) (s52_done) (s56_done) (s68_done) (s73_done) (s80_done)
+  ))
+)

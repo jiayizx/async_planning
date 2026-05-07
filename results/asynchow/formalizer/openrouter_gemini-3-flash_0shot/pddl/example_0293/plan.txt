@@ -1,0 +1,7 @@
+0.000: (get_hair step1) [1800.000]
+0.000: (get_sunglasses step2) [1200.000]
+0.000: (get_shoes step3) [3600.000]
+0.000: (buy_clothes step4) [3600.000]
+0.000: (wear_socks step7) [900.000]
+3600.001: (rip_flannel step5) [1800.000]
+3600.001: (rip_jeans step6) [7200.000]

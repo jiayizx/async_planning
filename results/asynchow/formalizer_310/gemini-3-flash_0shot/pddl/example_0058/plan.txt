@@ -1,7 +1,0 @@
-0.000: (open_browser) [30.000]
-30.001: (search_ebay) [300.000]
-30.001: (search_amazon) [60.000]
-90.002: (record_amazon_price) [2.000]
-330.002: (record_ebay_price) [3.000]
-333.003: (return_to_site) [60.000]
-393.004: (click_buy_now) [5.000]
