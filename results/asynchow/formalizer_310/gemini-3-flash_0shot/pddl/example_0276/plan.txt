@@ -1,7 +1,0 @@
-0.000: (look_at_hint) [2.000]
-2.001: (give_fireman) [4.000]
-2.001: (give_doctor) [4.000]
-2.001: (give_chef) [4.000]
-2.001: (give_policeman) [4.000]
-6.002: (drag_object) [2.000]
-8.003: (get_starite) [2.000]

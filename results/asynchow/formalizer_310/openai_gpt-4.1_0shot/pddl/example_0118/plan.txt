@@ -1,5 +1,0 @@
-0.000: (come_up_with_app_idea) [30.000]
-30.001: (plan_logistics_of_app) [604800.000]
-30.001: (plan_app_functions) [7200.000]
-604830.002: (write_code_for_app) [432000.000]
-1036830.003: (test_app_out) [604800.000]

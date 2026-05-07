@@ -1,4 +1,0 @@
-0.000: (use_caution) [300.000]
-300.001: (try_black_pepper) [1200.000]
-300.001: (use_ginger) [900.000]
-300.001: (massage_lavender) [600.000]

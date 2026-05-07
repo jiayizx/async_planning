@@ -1,7 +1,0 @@
-0.000: (search_pet_stores) [300.000]
-300.001: (drive_to_store) [900.000]
-1200.002: (look_at_dogs) [600.000]
-1800.003: (pick_dog) [300.000]
-2100.004: (fill_paperwork) [600.000]
-2700.005: (shop_food) [900.000]
-2700.005: (shop_supplies) [900.000]

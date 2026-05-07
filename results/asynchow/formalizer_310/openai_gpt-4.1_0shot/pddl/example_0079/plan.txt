@@ -1,7 +1,0 @@
-0.000: (do_decide_to_learn) [30.000]
-30.001: (do_sit_down) [30.000]
-60.002: (do_turn_on_computer) [60.000]
-120.003: (do_navigate_site) [120.000]
-240.004: (do_decide_best) [300.000]
-240.004: (do_search_recipes) [1800.000]
-2040.005: (do_print_recipe) [120.000]

@@ -1,5 +1,0 @@
-0.000: (consider_normally_done) [900.000]
-900.001: (brainstorm_other_plans) [900.000]
-1800.002: (see_interesting_plans) [300.000]
-1800.002: (write_down_things) [900.000]
-2700.003: (pick_something_to_do) [300.000]

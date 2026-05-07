@@ -1,6 +1,0 @@
-0.000: (measure_drawer) [120.000]
-0.000: (choose_paper) [300.000]
-300.001: (cut_paper) [180.000]
-480.002: (align_place_paper) [300.000]
-780.003: (trim_correct) [600.000]
-1380.004: (add_decoration) [900.000]

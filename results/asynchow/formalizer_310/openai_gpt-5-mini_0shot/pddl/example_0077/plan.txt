@@ -1,5 +1,0 @@
-0.000: (walk_to_closet) [15.000]
-15.001: (find_pair_of_shoes) [10.000]
-25.002: (get_pair_of_socks) [20.000]
-45.003: (put_on_left_sock) [10.000]
-45.003: (put_on_right_sock) [10.000]

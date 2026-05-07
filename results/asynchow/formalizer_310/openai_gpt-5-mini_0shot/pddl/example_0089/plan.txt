@@ -1,5 +1,0 @@
-0.000: (step1_find_gatherings) [3600.000]
-647.000: (step4_converse) [3600.000]
-647.000: (step3_introduce) [3600.000]
-647.000: (step5_find_common) [3600.000]
-647.000: (step6_invite_coffee) [900.000]

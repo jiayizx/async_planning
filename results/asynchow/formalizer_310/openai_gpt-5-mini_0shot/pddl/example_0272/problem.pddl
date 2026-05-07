@@ -1,8 +1,0 @@
-(define (problem calc-owners-equity-problem) (:domain calculate-owners-equity)
-  (:init
-    ;; initialize all pending predicates (one per action)
-    (step1_pending) (step2_pending) (step3_pending) (step4_pending) (step5_pending) (step6_pending)
-  )
-  ;; goal requires every step done
-  (:goal (and (step1_done) (step2_done) (step3_done) (step4_done) (step5_done) (step6_done)))
-)

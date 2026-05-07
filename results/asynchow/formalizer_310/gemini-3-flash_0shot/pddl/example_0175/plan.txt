@@ -1,4 +1,0 @@
-0.000: (physical_changes) [90.000]
-0.000: (observe_behavior) [60.000]
-90.001: (scientific_diagnosis) [14.000]
-104.002: (fetal_responsiveness) [30.000]

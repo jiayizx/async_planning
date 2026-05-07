@@ -1,3 +1,0 @@
-0.000: (store_cookies) [300.000]
-300.001: (include_bread) [86400.000]
-300.001: (add_paper_towel) [600.000]

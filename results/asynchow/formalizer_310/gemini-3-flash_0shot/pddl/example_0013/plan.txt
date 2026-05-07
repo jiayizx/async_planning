@@ -1,6 +1,0 @@
-0.000: (go_to_store) [600.000]
-600.001: (buy_ingredients) [600.000]
-1200.002: (drive_home) [600.000]
-1800.003: (take_out_tools) [30.000]
-1800.003: (put_pots_on_stove) [30.000]
-1800.003: (turn_on_stove) [10.000]

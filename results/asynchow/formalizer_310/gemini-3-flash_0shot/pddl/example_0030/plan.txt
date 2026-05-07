@@ -1,7 +1,0 @@
-0.000: (walk_to_fridge) [5.000]
-0.000: (walk_to_cabinet) [5.000]
-5.001: (grab_milk) [5.000]
-5.001: (grab_glass) [5.000]
-10.002: (place_on_counter) [5.000]
-15.003: (pour_milk) [5.000]
-20.004: (drink_milk) [60.000]

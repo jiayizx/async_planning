@@ -1,5 +1,0 @@
-0.000: (use_app_or_online) [300.000]
-0.000: (ask_friend_to_order) [180.000]
-0.000: (go_through_drive_thru) [600.000]
-0.000: (order_over_phone) [300.000]
-600.001: (receive_food) [120.000]

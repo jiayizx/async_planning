@@ -1,5 +1,0 @@
-0.000: (preheat_grill) [900.000]
-0.000: (locate_urchin) [900.000]
-900.001: (cut_opening) [120.000]
-1020.002: (scoop_tongues) [300.000]
-1320.003: (serve_urchin) [600.000]

@@ -1,3 +1,0 @@
-0.000: (introduce_self) [120.000]
-120.001: (highlight_demeanor) [120.000]
-120.001: (emphasize_reliability) [120.000]

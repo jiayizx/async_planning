@@ -1,3 +1,0 @@
-0.000: (shampoo_roots) [120.000]
-0.000: (cut_down_shampooing) [180.000]
-120.001: (comb_hair_shower) [300.000]

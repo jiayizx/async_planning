@@ -1,5 +1,0 @@
-647.000: (do_confess_coach) [3600.000]
-647.000: (do_show_skills) [259200.000]
-647.000: (do_pre_season_game) [10800.000]
-647.000: (do_receive_spot) [3600.000]
-647.000: (do_first_var_game) [300.000]

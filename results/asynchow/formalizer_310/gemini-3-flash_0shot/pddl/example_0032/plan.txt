@@ -1,6 +1,0 @@
-0.000: (preheat_oven) [300.000]
-0.000: (take_chicken_nuggets_from_freezer) [5.000]
-300.001: (get_out_baking_pan) [5.000]
-305.002: (lay_down_tinfoil) [10.000]
-315.003: (arrange_chicken_nuggets) [60.000]
-375.004: (cook_in_oven) [600.000]

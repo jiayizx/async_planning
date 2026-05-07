@@ -1,1 +1,0 @@
-(define (problem muscle_problem) (:domain muscle_development) (:init (find_gym_pending) (find_trainer_pending) (eat_protein_pending) (increase_routine_pending) (workout_everyday_pending)) (:goal (and (find_gym_done) (find_trainer_done) (eat_protein_done) (increase_routine_done) (workout_everyday_done))) (:metric minimize (total-time)))

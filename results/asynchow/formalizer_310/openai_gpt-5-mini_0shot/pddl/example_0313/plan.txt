@@ -1,5 +1,0 @@
-0.000: (do_put_wax_paper) [120.000]
-0.000: (do_choose_patch) [300.000]
-300.001: (do_cut_patch) [600.000]
-900.002: (do_attach_patch) [900.000]
-1800.003: (do_dry_adhesive) [7200.000]

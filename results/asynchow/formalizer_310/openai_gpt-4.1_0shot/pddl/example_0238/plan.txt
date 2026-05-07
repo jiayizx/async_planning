@@ -1,5 +1,0 @@
-0.000: (clean_counter) [900.000]
-900.001: (masking_tape) [300.000]
-1200.002: (epoxy_adhesive) [900.000]
-1200.002: (fix_cracks) [600.000]
-2100.003: (file_patch) [1200.000]

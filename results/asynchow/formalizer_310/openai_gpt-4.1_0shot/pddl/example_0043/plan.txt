@@ -1,5 +1,0 @@
-0.000: (do_get_in_car) [60.000]
-60.001: (do_drive_store) [900.000]
-960.002: (do_show_id) [60.000]
-960.002: (do_count_money) [600.000]
-1560.003: (do_give_money) [120.000]

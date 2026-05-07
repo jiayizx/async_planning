@@ -1,4 +1,0 @@
-0.000: (do_step4_talk_medical_professional) [1800.000]
-1800.001: (do_step3_consider_mild_astringent) [600.000]
-1800.001: (do_step2_use_blotting_pads) [300.000]
-1800.001: (do_step1_try_face_masks) [1200.000]

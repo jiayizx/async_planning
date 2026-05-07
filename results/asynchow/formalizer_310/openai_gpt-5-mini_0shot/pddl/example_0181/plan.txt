@@ -1,4 +1,0 @@
-0.000: (do_cut_down_large_pieces) [7200.000]
-0.000: (do_remove_screws_nails) [900.000]
-0.000: (do_search_for_recycler) [1800.000]
-7200.001: (do_transport_or_pickup) [3600.000]

@@ -1,3 +1,0 @@
-0.000: (let_dog_sniff_area) [120.000]
-0.000: (introduce_yourself_to_santa) [120.000]
-120.001: (make_noise_get_dog_look) [180.000]

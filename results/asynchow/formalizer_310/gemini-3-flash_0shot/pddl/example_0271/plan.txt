@@ -1,6 +1,0 @@
-0.000: (light_stimulus) [120.000]
-0.000: (prevent_uncomfortable) [300.000]
-0.000: (mild_technique) [1800.000]
-0.000: (wear_watch) [600.000]
-0.000: (realize_dreaming) [30.000]
-1800.001: (combine_techniques) [900.000]

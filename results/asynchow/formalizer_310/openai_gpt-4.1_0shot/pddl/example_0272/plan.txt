@@ -1,6 +1,0 @@
-0.000: (calc_liabilities) [600.000]
-0.000: (calc_contra) [300.000]
-0.000: (add_assets) [600.000]
-600.001: (calc_net_asset) [120.000]
-720.002: (subtract_liabilities) [120.000]
-840.003: (calc_indiv_equity) [300.000]

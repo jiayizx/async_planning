@@ -1,7 +1,0 @@
-0.000: (do_find_time) [900.000]
-900.001: (do_ask_friends) [900.000]
-1800.002: (do_make_list) [900.000]
-2700.003: (do_drive_store) [900.000]
-3600.004: (do_buy_supplies) [1800.000]
-5400.005: (do_get_supplies) [1800.000]
-5400.005: (do_make_food) [3600.000]

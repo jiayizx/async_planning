@@ -1,4 +1,0 @@
-0.000: (do_step4_wipe_with_damp_cloth) [300.000]
-0.000: (do_step1_scoop_flour) [300.000]
-300.001: (do_step2_apply_poultice) [900.000]
-1200.002: (do_step3_remove_paste) [1800.000]

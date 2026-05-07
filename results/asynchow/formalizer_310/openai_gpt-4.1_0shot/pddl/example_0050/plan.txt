@@ -1,5 +1,0 @@
-0.000: (go_to_kitchen) [60.000]
-60.001: (take_out_plate) [10.000]
-60.001: (take_out_knife) [10.000]
-60.001: (open_cabinet) [10.000]
-70.002: (take_out_pb_and_bread) [20.000]

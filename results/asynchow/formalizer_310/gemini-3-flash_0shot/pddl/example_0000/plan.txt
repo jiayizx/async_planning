@@ -1,5 +1,0 @@
-0.000: (identify_girls) [1800.000]
-0.000: (research_interests) [1800.000]
-1800.001: (find_hangout) [600.000]
-2400.002: (travel_to_location) [1800.000]
-4200.003: (impress_girls) [1800.000]

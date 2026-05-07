@@ -1,4 +1,0 @@
-0.000: (top_with_cream_jelly) [120.000]
-0.000: (make_filling) [900.000]
-0.000: (make_french_toast) [900.000]
-900.001: (assemble_sandwich) [300.000]

@@ -1,1 +1,0 @@
-(define (problem camping_problem) (:domain camping_trip) (:init (buy_pending) (pick_pending) (pack_pending) (drive_pending) (park_pending) (enter_pending)) (:goal (and (buy_done) (pick_done) (pack_done) (drive_done) (park_done) (enter_done))) (:metric minimize (total-time)))

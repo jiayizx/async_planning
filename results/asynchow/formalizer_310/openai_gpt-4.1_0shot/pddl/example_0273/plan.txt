@@ -1,5 +1,0 @@
-0.000: (determine_lights_out_time) [1800.000]
-0.000: (discuss_phone_policy) [900.000]
-0.000: (develop_visitor_plan) [3600.000]
-0.000: (discuss_cleaning_schedule) [1800.000]
-3600.001: (sign_roommate_agreement) [3600.000]

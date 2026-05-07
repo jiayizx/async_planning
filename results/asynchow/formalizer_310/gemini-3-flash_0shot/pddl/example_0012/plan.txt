@@ -1,5 +1,0 @@
-0.000: (talk_to_doctor) [10800.000]
-0.000: (compare_diets) [10800.000]
-0.000: (lookup_diets) [18000.000]
-0.000: (get_recommendations) [10800.000]
-18000.001: (make_commitment) [30.000]

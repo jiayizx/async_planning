@@ -1,3 +1,0 @@
-0.000: (do_learn_dose) [86400.000]
-86400.001: (do_consider_liquid) [300.000]
-86400.001: (do_take_pill) [120.000]

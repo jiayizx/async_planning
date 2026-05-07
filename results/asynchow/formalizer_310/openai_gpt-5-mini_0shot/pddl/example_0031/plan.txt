@@ -1,7 +1,0 @@
-0.000: (do_step1-go_to_tournament_location) [300.000]
-300.001: (do_step2-check_in_registration_desk) [900.000]
-1200.002: (do_step4-run_through_possible_strategies) [3600.000]
-1200.002: (do_step3-find_spot_to_wait) [300.000]
-4800.003: (do_step5-go_to_chair_when_called) [60.000]
-4860.004: (do_step6-play_against_opponent) [3600.000]
-8460.005: (do_step7-congratulate_opponent_on_victory) [60.000]

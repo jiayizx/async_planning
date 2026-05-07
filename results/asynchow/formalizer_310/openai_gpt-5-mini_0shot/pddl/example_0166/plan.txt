@@ -1,4 +1,0 @@
-0.000: (do_step4_create_circle) [240.000]
-0.000: (do_step1_choose_long_bunch) [300.000]
-300.001: (do_step2_trim_stem) [120.000]
-420.002: (do_step3_tape_small_bunch_to_stem) [180.000]

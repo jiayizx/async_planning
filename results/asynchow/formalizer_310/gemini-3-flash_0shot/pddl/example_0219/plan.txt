@@ -1,5 +1,0 @@
-0.000: (wear_hat) [60.000]
-0.000: (protect_feet) [180.000]
-0.000: (wear_gloves) [120.000]
-0.000: (wear_base_clothing) [300.000]
-300.001: (cover_waterproof) [600.000]

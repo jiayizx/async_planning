@@ -1,6 +1,0 @@
-0.000: (make_cake) [900.000]
-0.000: (arrange_berries) [300.000]
-0.000: (preheat_oven) [600.000]
-900.001: (pour_mixture) [120.000]
-1020.002: (bake_cake) [1800.000]
-2820.003: (remove_and_serve) [120.000]
