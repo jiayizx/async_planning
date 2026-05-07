@@ -1,0 +1,4 @@
+0.000: (clean_weekly) [1800.000]
+0.000: (mix_solution) [300.000]
+300.001: (rub_solution) [600.000]
+900.002: (rinse_tub) [300.000]

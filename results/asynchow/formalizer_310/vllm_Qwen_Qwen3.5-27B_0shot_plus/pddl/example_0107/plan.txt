@@ -1,0 +1,4 @@
+0.000: (go_to_restaurant) [900.000]
+0.000: (pick_up_application) [900.000]
+900.001: (fill_out_application) [900.000]
+1800.002: (turn_in_application) [60.000]

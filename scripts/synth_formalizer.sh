@@ -35,21 +35,22 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-# DATA_DIR="data/async_planning_ds"
-DATA_DIR="data/async_planning/nodes30_n50_s42_nlrewrite_openrouter-gemini-3-flash.json"
+DATA_DIR="data/async_planning"
+# DATA_DIR="data/async_planning/nodes5_n50_s42_nlrewrite_gemini-3-flash.json"
 # MODEL="openai/gpt-4.1"
-MODEL="openai/gpt-5-mini"
-SAVE_DIR="results/gen-data/formalizer"
+# MODEL="gemini-3-pro"
+MODEL="claude-haiku-4-5"
+SAVE_DIR="results/gen-data-modified/formalizer_origin"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
-HISTORY_MODE="single-turn" # cumulative | single-turn
+HISTORY_MODE="cumulative" # cumulative | single-turn
 BATCH=16 # how many pddl problem are sent to the solver to solve at once
-NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
+NUM_WORKERS=8 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
-MAX_TOKENS=32768
+MAX_TOKENS=8192
 # MAX_TOKENS=65536
-TWO_PHASE=1      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
+TWO_PHASE=0      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
 EFFECT_GOAL=1    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 # PATTERN="*_nlrewrite_*.json"
 PATTERN="*nlrewrite_openrouter*.json"

@@ -1,0 +1,17 @@
+(define (problem calculate_discount)
+  (:domain early_payment_discount)
+  
+  (:init
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step4_pending)
+  )
+
+  (:goal (and
+    (step1_done)
+    (step2_done)
+    (step3_done)
+    (step4_done)
+  ))
+)

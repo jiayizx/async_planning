@@ -1,0 +1,6 @@
+0.000: (browse_styles) [7200.000]
+0.000: (ask_opinions) [1800.000]
+7200.001: (get_snapshot) [300.000]
+7500.002: (make_appointment) [300.000]
+7800.003: (drive_to_salon) [600.000]
+8400.004: (show_picture) [600.000]

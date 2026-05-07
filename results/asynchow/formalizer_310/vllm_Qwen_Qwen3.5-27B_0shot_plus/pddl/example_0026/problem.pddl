@@ -1,0 +1,23 @@
+(define (problem sleepover_party_instance)
+  (:domain sleepover_party)
+  
+  (:init
+    (find_time_pending)
+    (ask_friends_pending)
+    (make_list_pending)
+    (drive_store_pending)
+    (buy_supplies_pending)
+    (make_food_pending)
+    (get_supplies_pending)
+  )
+
+  (:goal (and
+    (find_time_done)
+    (ask_friends_done)
+    (make_list_done)
+    (drive_store_done)
+    (buy_supplies_done)
+    (make_food_done)
+    (get_supplies_done)
+  ))
+)

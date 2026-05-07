@@ -1,0 +1,5 @@
+0.000: (find_park) [300.000]
+0.000: (get_money) [30.000]
+300.001: (travel_to_park) [900.000]
+1200.002: (purchase_pass) [60.000]
+1260.003: (go_into_park) [60.000]

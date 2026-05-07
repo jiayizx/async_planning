@@ -1,0 +1,5 @@
+0.000: (do_throw_out) [7200.000]
+7200.001: (do_purchase_kitchen) [7200.000]
+7200.001: (do_use_drawers) [7200.000]
+7200.001: (do_use_bookshelves) [14400.000]
+7200.001: (do_purchase_containers) [3600.000]

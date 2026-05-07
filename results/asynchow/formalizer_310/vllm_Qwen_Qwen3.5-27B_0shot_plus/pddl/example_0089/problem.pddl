@@ -1,0 +1,23 @@
+(define (problem make_friends_problem)
+  (:domain make_friends)
+  
+  (:init
+    (find_gatherings_pending)
+    (go_to_gatherings_pending)
+    (introduce_pending)
+    (converse_pending)
+    (find_common_pending)
+    (invite_coffee_pending)
+    (meet_coffee_pending)
+  )
+
+  (:goal (and
+    (find_gatherings_done)
+    (go_to_gatherings_done)
+    (introduce_done)
+    (converse_done)
+    (find_common_done)
+    (invite_coffee_done)
+    (meet_coffee_done)
+  ))
+)

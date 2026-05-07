@@ -1,0 +1,7 @@
+0.000: (search_for_pet_stores) [300.000]
+300.001: (drive_to_pet_store) [900.000]
+1200.002: (look_at_dogs) [600.000]
+1800.003: (pick_a_dog) [300.000]
+2100.004: (fill_out_paperwork) [600.000]
+2700.005: (shop_for_food) [900.000]
+2700.005: (shop_for_supplies) [900.000]

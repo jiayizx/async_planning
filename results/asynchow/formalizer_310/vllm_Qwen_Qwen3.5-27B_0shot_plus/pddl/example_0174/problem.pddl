@@ -1,0 +1,15 @@
+(define (problem art_project_instance)
+  (:domain art_project)
+  (:init
+    (gather_materials_pending)
+    (make_caddy_pending)
+    (make_drum_pending)
+    (make_bowling_pending)
+  )
+  (:goal (and
+    (gather_materials_done)
+    (make_caddy_done)
+    (make_drum_done)
+    (make_bowling_done)
+  ))
+)

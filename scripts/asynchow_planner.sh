@@ -24,13 +24,16 @@ MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 # done
 
 
-MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
+# MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+# MODEL_NAME="${MODEL_NAME:-claude-haiku-4-5}"
+MODEL_NAME="${MODEL_NAME:-qwen/qwen3.5-27b}"
+MODEL_NAME_SAFE="$(echo "${MODEL_NAME}" | sed 's#.*/##')" # remove the namespace
 python -m src.experiments.run_baselines \
     --model-name $MODEL_NAME \
     --temperature $TEMPERATURE \
     --max-tokens $MAX_TOKENS \
     --benchmark-name asynchow \
-    --save-path results/asynchow/baselines_310/$MODEL_NAME/ \
+    --save-path results/asynchow/baselines_310/$MODEL_NAME_SAFE/ \
     --icl-examples 0 \
     --cot true \
     --num-workers $NUM_WORKERS \

@@ -1,0 +1,7 @@
+0.000: (ask_friends) [1800.000]
+1800.001: (search_internet) [1800.000]
+1800.001: (think_special) [900.000]
+3600.002: (drive_store) [900.000]
+4500.003: (buy_supplies) [1800.000]
+6300.004: (bake_food) [10800.000]
+17100.005: (setup_supplies) [900.000]

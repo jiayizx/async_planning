@@ -1,0 +1,5 @@
+0.000: (do_carry_bag) [300.000]
+0.000: (do_wear_belt) [120.000]
+0.000: (do_pick_necklaces) [180.000]
+0.000: (do_accessorize_wrists) [300.000]
+300.001: (do_cover_jacket) [600.000]

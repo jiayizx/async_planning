@@ -1,0 +1,7 @@
+0.000: (go_to_website) [120.000]
+120.001: (register_account) [240.000]
+360.002: (verify_account) [60.000]
+420.003: (customize_theme) [900.000]
+1320.004: (edit_video) [600.000]
+1920.005: (upload_video) [300.000]
+1920.005: (click_post) [30.000]

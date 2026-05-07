@@ -1,0 +1,5 @@
+0.000: (choose_hardware) [900.000]
+900.001: (pay_photoshop) [1200.000]
+900.001: (choose_manga_tools) [1200.000]
+900.001: (consider_corel) [1800.000]
+900.001: (download_gimp_krita) [1800.000]
