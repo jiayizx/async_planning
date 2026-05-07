@@ -39,7 +39,7 @@ cd "$ROOT_DIR"
 DATA_DIR="data/async_planning/nodes30_n50_s42_nlrewrite_openrouter-gemini-3-flash.json"
 # MODEL="openai/gpt-4.1"
 MODEL="openai/gpt-5-mini"
-SAVE_DIR="results/gen-data-modified/formalizer_origin_add"
+SAVE_DIR="results/gen-data/formalizer"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3

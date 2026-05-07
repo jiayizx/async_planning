@@ -23,7 +23,7 @@ cd "$ROOT_DIR"
 
 DATA_DIR="data/async_planning"
 MODEL="qwen3.6-35b-a3b"
-SAVE_DIR="results/gen-data-modified/cpsat_formalizer"
+SAVE_DIR="results/gen-data/cpsat_formalizer"
 MAX_EXAMPLES=400
 LLM_RETRIES=3
 HISTORY_MODE="single-turn"
