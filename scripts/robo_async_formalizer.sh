@@ -35,7 +35,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-deepseek/deepseek-v4-pro}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 DATASET="${DATASET:-challenge_v2}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 case "${DATASET}" in

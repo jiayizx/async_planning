@@ -98,7 +98,10 @@ def parse_schedule_spec(
 
     Expected shape:
       {"actions": [{"id", "action", "item", "duration", "station"}],
-       "dependencies": [{"before", "after"}] or [["a", "b"]]}
+       "dependencies": [{"predecessor", "successor"}] or [["a", "b"]]}
+
+    The legacy {"before", "after"} dependency keys are still accepted. Both
+    shapes mean the first action must finish before the second action can start.
     """
     if not isinstance(spec, dict):
         raise ValueError("schedule spec must be a JSON object")
@@ -174,15 +177,18 @@ def parse_schedule_spec(
     dependencies: list[ScheduleDependency] = []
     for raw in raw_deps:
         if isinstance(raw, dict):
-            before = str(raw.get("before", "")).strip()
-            after = str(raw.get("after", "")).strip()
+            before = str(raw.get("predecessor", raw.get("before", ""))).strip()
+            after = str(raw.get("successor", raw.get("after", ""))).strip()
             min_lag = _coerce_nonnegative_int(raw.get("min_lag", raw.get("lag", 0)))
         elif isinstance(raw, (list, tuple)) and len(raw) == 2:
             before = str(raw[0]).strip()
             after = str(raw[1]).strip()
             min_lag = 0
         else:
-            raise ValueError("each dependency must be {'before','after'} or [before, after]")
+            raise ValueError(
+                "each dependency must be {'predecessor','successor'}, "
+                "{'before','after'}, or [predecessor, successor]"
+            )
         if before not in seen or after not in seen:
             raise ValueError(f"dependency references unknown action: {before!r} -> {after!r}")
         if before == after:

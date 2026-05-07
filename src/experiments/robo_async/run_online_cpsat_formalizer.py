@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import copy
 import itertools
 import json
@@ -55,7 +56,6 @@ from src.experiments.robo_async.tag_filter import (  # noqa: E402
     tag_filter_match,
 )
 from src.experiments.robo_async.online_progress import (  # noqa: E402
-    OnlineSubsetProgress,
     sort_online_episodes,
 )
 from src.method.cpsat_scheduler import (  # noqa: E402
@@ -108,6 +108,21 @@ def _build_user_prompt(nl: str, item_names: list[str]) -> str:
     return USER_TEMPLATE.format(
         nl=nl,
         item_names="\n".join(f"- {n}" for n in item_names),
+    )
+
+
+def _is_optimization_spec(spec: dict, task_dict: dict) -> bool:
+    objective = spec.get("objective")
+    if isinstance(objective, dict):
+        objective = objective.get("type", "")
+    objective = str(objective or "").strip().lower()
+    return (
+        str(spec.get("mode", "")).strip().lower() == "optimize"
+        or objective == "maximize_reward_under_deadline"
+        or (
+            task_dict.get("objective_type") == "maximize_reward_under_deadline"
+            and "candidate_goals" in spec
+        )
     )
 
 
@@ -309,6 +324,245 @@ def _solve_online_optimization_spec(
     return best[1], best[2]
 
 
+def _run_episode(
+    episode: dict,
+    llm,
+    *,
+    solver_timeout: float,
+    implicit: bool,
+    oracle_spec: bool,
+    max_llm_attempts: int,
+) -> dict:
+    difficulty = episode.get("difficulty", "online")
+    working = copy.deepcopy(episode["initial_task"])
+    working["difficulty"] = difficulty
+    committed_steps: list[PlanStep] = []
+    stage_records = []
+    current_state = _initial_world(working)
+    current_completed_steps: list[PlanStep] = []
+    current_ongoing_steps: list[PlanStep] = []
+    error_type = None
+    error = ""
+    continuation_oracle: dict = {}
+
+    event_times = [float(ev["trigger_time"]) for ev in episode.get("events", [])]
+    for stage_idx in range(len(event_times) + 1):
+        now = 0.0 if stage_idx == 0 else event_times[stage_idx - 1]
+        snapshot = copy.deepcopy(working) if stage_idx == 0 else _snapshot_for_replan(
+            working,
+            current_state,
+            now,
+        )
+        snapshot["difficulty"] = episode.get("difficulty", "")
+        stage_task, nl = _stage_nl(
+            snapshot,
+            episode["id"],
+            current_completed_steps,
+            current_ongoing_steps,
+            now,
+            implicit,
+        )
+
+        if oracle_spec:
+            spec = oracle_schedule_spec(stage_task)
+            raw_response = None
+        else:
+            raw_response = None
+            spec = None
+            base_prompt = _build_user_prompt(nl, list(stage_task["items"].keys()))
+            for attempt in range(max(1, int(max_llm_attempts))):
+                response = llm.chat([
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": base_prompt},
+                ])
+                raw_response = response if isinstance(response, str) else response.content
+                spec = _parse_llm_json(raw_response or "")
+                if spec is not None:
+                    break
+
+        if spec is None:
+            error_type = "llm_error"
+            error = f"stage {stage_idx}: LLM failed to return valid scheduling JSON"
+            stage_records.append({
+                "stage": stage_idx,
+                "time": now,
+                "nl": nl,
+                "llm_response": raw_response,
+                "error_type": error_type,
+                "error": error,
+            })
+            break
+
+        try:
+            if _is_optimization_spec(spec, stage_task):
+                normalized_spec, sched = _solve_online_optimization_spec(
+                    spec,
+                    stage_task,
+                    current_ongoing_steps,
+                    now,
+                    solver_timeout=solver_timeout,
+                )
+            else:
+                actions, deps = parse_schedule_spec(
+                    spec,
+                    valid_items=set(stage_task["items"].keys()),
+                    station_capacities=stage_task.get("stations", {}),
+                    robots=stage_task.get("robots"),
+                )
+                actions, deps = _augment_with_ongoing_constraints(
+                    actions,
+                    deps,
+                    current_ongoing_steps,
+                    now,
+                )
+                deadline_objectives = _build_deadline_objectives(snapshot, actions, now)
+                sched = solve_schedule(
+                    actions,
+                    deps,
+                    station_capacities=stage_task.get("stations", {}),
+                    robots=stage_task.get("robots"),
+                    timeout=solver_timeout,
+                    deadline_objectives=deadline_objectives,
+                )
+                normalized_spec = {
+                    "actions": [a.__dict__ for a in actions],
+                    "dependencies": [
+                        {
+                            "before": dep.before,
+                            "after": dep.after,
+                            **({"min_lag": dep.min_lag} if dep.min_lag else {}),
+                        }
+                        for dep in deps
+                    ],
+                    "deadline_objectives": deadline_objectives,
+                }
+        except Exception as exc:
+            error_type = "spec_error"
+            error = f"stage {stage_idx}: {exc}"
+            stage_records.append({
+                "stage": stage_idx,
+                "time": now,
+                "nl": nl,
+                "llm_response": raw_response,
+                "schedule_spec": spec,
+                "error_type": error_type,
+                "error": error,
+            })
+            break
+
+        if sched is None or (sched.error and not sched.plan):
+            error_type = "solver_error"
+            error = f"stage {stage_idx}: {sched.error if sched else 'solver returned None'}"
+            stage_records.append({
+                "stage": stage_idx,
+                "time": now,
+                "nl": nl,
+                "llm_response": raw_response,
+                "schedule_spec": normalized_spec,
+                "error_type": error_type,
+                "error": error,
+            })
+            break
+
+        rel_plan_text = sched.to_plan_text()
+        rel_steps = parse_optic_plan(rel_plan_text)
+        if not rel_steps:
+            error_type = "parse_error"
+            error = f"stage {stage_idx}: solver returned no parseable suffix plan"
+            stage_records.append({
+                "stage": stage_idx,
+                "time": now,
+                "nl": nl,
+                "llm_response": raw_response,
+                "schedule_spec": normalized_spec,
+                "solver_plan": rel_plan_text,
+                "error_type": error_type,
+                "error": error,
+            })
+            break
+
+        shift = 0.0
+        abs_steps = _shift_relative_steps(rel_steps, now)
+        combined_steps = sorted(
+            committed_steps + abs_steps,
+            key=lambda s: (s.t_start, s.action, tuple(s.args)),
+        )
+        stage_records.append({
+            "stage": stage_idx,
+            "time": now,
+            "nl": nl,
+            "llm_response": raw_response,
+            "schedule_spec": normalized_spec,
+            "solver_status": getattr(sched, "status", None),
+            "solver_optimal": getattr(sched, "optimal", False),
+            "solver_plan": rel_plan_text,
+            "planned_steps": len(rel_steps),
+            "shift_seconds": shift,
+        })
+
+        if stage_idx < len(event_times):
+            horizon = event_times[stage_idx]
+            partial = _run_events_until(combined_steps, working, horizon)
+            if not partial.success:
+                error_type = "eval_error"
+                error = partial.error
+                committed_steps = combined_steps
+                break
+            committed_steps = partial.started_steps
+            current_state = partial.state
+            current_completed_steps = partial.completed_steps
+            current_ongoing_steps = partial.ongoing_steps
+            working = _apply_event(working, episode["events"][stage_idx])
+            working["difficulty"] = difficulty
+            oracle_snapshot = _snapshot_for_replan(working, current_state, horizon)
+            oracle_snapshot["difficulty"] = difficulty
+            continuation_oracle = _continuation_oracle(
+                oracle_snapshot,
+                current_ongoing_steps,
+                horizon,
+                solver_timeout=solver_timeout,
+            )
+            stage_records[-1]["continuation_oracle"] = continuation_oracle
+        else:
+            committed_steps = combined_steps
+            break
+
+    final_steps = committed_steps
+    final_plan_text = _render_plan_text(final_steps)
+    final_task = copy.deepcopy(working)
+    eval_oracle = {**episode.get("oracle", {}), **continuation_oracle}
+    evaluation = evaluate_episode_plan(final_steps, final_task, eval_oracle)
+    success = evaluation.success and error_type not in {"llm_error", "spec_error", "solver_error", "parse_error"}
+    if error_type is None and not evaluation.success:
+        error_type = "eval_error"
+        error = evaluation.error
+    elif error_type is None:
+        error = ""
+
+    return {
+        "id": episode["id"],
+        "online_mode": "strict",
+        "difficulty": episode.get("difficulty"),
+        "source_split": episode.get("source_split"),
+        "n_events": len(episode.get("events", [])),
+        "oracle_spec": oracle_spec,
+        "stage_records": stage_records,
+        "final_plan": final_plan_text,
+        "success": success,
+        "error_type": error_type,
+        "error": error,
+        "makespan": evaluation.makespan if success or final_steps else None,
+        "makespan_ratio": evaluation.makespan_ratio if success else None,
+        "oracle_final_makespan": episode.get("oracle", {}).get("oracle_final_makespan"),
+        "continuation_oracle_makespan": evaluation.continuation_oracle_makespan,
+        "selected_reward": evaluation.selected_reward,
+        "reward_ratio": evaluation.reward_ratio,
+        "optimal_reward": episode.get("oracle", {}).get("optimal_reward"),
+        "continuation_oracle_reward": evaluation.continuation_oracle_reward,
+        "delivery_completion_times": evaluation.delivery_completion_times,
+    }
+
+
 def run(
     model_name: str,
     out_dir: str,
@@ -318,6 +572,7 @@ def run(
     num_workers: int = 4,
     implicit: bool = False,
     oracle_spec: bool = False,
+    max_llm_attempts: int = 1,
     include_tags: set[str] | None = None,
     exclude_tags: set[str] | None = None,
 ):
@@ -350,243 +605,63 @@ def run(
 
     jsonl_path = out_path / "full_results.jsonl"
     jsonl_path.unlink(missing_ok=True)
-    results = []
+    results: list[dict | None] = [None] * len(episodes)
 
-    print(f"Stage 1/1  Online CP-SAT formalization ({len(episodes)} episodes) ...\n")
-    progress = OnlineSubsetProgress(episodes)
-    for episode in episodes:
-        difficulty = episode.get("difficulty", "online")
-        progress.start_episode(episode)
-        working = copy.deepcopy(episode["initial_task"])
-        working["difficulty"] = difficulty
-        committed_steps: list[PlanStep] = []
-        stage_records = []
-        current_state = _initial_world(working)
-        current_completed_steps: list[PlanStep] = []
-        current_ongoing_steps: list[PlanStep] = []
-        error_type = None
-        error = ""
-        continuation_oracle: dict = {}
-
-        event_times = [float(ev["trigger_time"]) for ev in episode.get("events", [])]
-        for stage_idx in range(len(event_times) + 1):
-            now = 0.0 if stage_idx == 0 else event_times[stage_idx - 1]
-            snapshot = copy.deepcopy(working) if stage_idx == 0 else _snapshot_for_replan(
-                working,
-                current_state,
-                now,
-            )
-            snapshot["difficulty"] = episode.get("difficulty", "")
-            stage_task, nl = _stage_nl(
-                snapshot,
-                episode["id"],
-                current_completed_steps,
-                current_ongoing_steps,
-                now,
-                implicit,
-            )
-
-            if oracle_spec:
-                spec = oracle_schedule_spec(stage_task)
-                raw_response = None
-            else:
-                response = llm.chat([
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": _build_user_prompt(nl, list(stage_task["items"].keys()))},
-                ])
-                raw_response = response if isinstance(response, str) else response.content
-                spec = _parse_llm_json(raw_response or "")
-
-            if spec is None:
-                error_type = "llm_error"
-                error = f"stage {stage_idx}: LLM failed to return valid scheduling JSON"
-                stage_records.append({
-                    "stage": stage_idx,
-                    "time": now,
-                    "nl": nl,
-                    "llm_response": raw_response,
-                    "error_type": error_type,
-                    "error": error,
-                })
-                break
-
-            try:
-                if (
-                    str(spec.get("mode", "")).strip().lower() == "optimize"
-                    or stage_task.get("objective_type") == "maximize_reward_under_deadline"
-                    and "candidate_goals" in spec
-                ):
-                    normalized_spec, sched = _solve_online_optimization_spec(
-                        spec,
-                        stage_task,
-                        current_ongoing_steps,
-                        now,
-                        solver_timeout=solver_timeout,
-                    )
-                else:
-                    actions, deps = parse_schedule_spec(
-                        spec,
-                        valid_items=set(stage_task["items"].keys()),
-                        station_capacities=stage_task.get("stations", {}),
-                        robots=stage_task.get("robots"),
-                    )
-                    actions, deps = _augment_with_ongoing_constraints(
-                        actions,
-                        deps,
-                        current_ongoing_steps,
-                        now,
-                    )
-                    deadline_objectives = _build_deadline_objectives(snapshot, actions, now)
-                    sched = solve_schedule(
-                        actions,
-                        deps,
-                        station_capacities=stage_task.get("stations", {}),
-                        robots=stage_task.get("robots"),
-                        timeout=solver_timeout,
-                        deadline_objectives=deadline_objectives,
-                    )
-                    normalized_spec = {
-                        "actions": [a.__dict__ for a in actions],
-                        "dependencies": [
-                            {
-                                "before": dep.before,
-                                "after": dep.after,
-                                **({"min_lag": dep.min_lag} if dep.min_lag else {}),
-                            }
-                            for dep in deps
-                        ],
-                        "deadline_objectives": deadline_objectives,
-                    }
-            except Exception as exc:
-                error_type = "spec_error"
-                error = f"stage {stage_idx}: {exc}"
-                stage_records.append({
-                    "stage": stage_idx,
-                    "time": now,
-                    "nl": nl,
-                    "llm_response": raw_response,
-                    "schedule_spec": spec,
-                    "error_type": error_type,
-                    "error": error,
-                })
-                break
-
-            if sched is None or (sched.error and not sched.plan):
-                error_type = "solver_error"
-                error = f"stage {stage_idx}: {sched.error if sched else 'solver returned None'}"
-                stage_records.append({
-                    "stage": stage_idx,
-                    "time": now,
-                    "nl": nl,
-                    "llm_response": raw_response,
-                    "schedule_spec": normalized_spec,
-                    "error_type": error_type,
-                    "error": error,
-                })
-                break
-
-            rel_plan_text = sched.to_plan_text()
-            rel_steps = parse_optic_plan(rel_plan_text)
-            if not rel_steps:
-                error_type = "parse_error"
-                error = f"stage {stage_idx}: solver returned no parseable suffix plan"
-                stage_records.append({
-                    "stage": stage_idx,
-                    "time": now,
-                    "nl": nl,
-                    "llm_response": raw_response,
-                    "schedule_spec": normalized_spec,
-                    "solver_plan": rel_plan_text,
-                    "error_type": error_type,
-                    "error": error,
-                })
-                break
-
-            shift = 0.0
-            abs_steps = _shift_relative_steps(rel_steps, now)
-            combined_steps = sorted(
-                committed_steps + abs_steps,
-                key=lambda s: (s.t_start, s.action, tuple(s.args)),
-            )
-            stage_records.append({
-                "stage": stage_idx,
-                "time": now,
-                "nl": nl,
-                "llm_response": raw_response,
-                "schedule_spec": normalized_spec,
-                "solver_status": getattr(sched, "status", None),
-                "solver_optimal": getattr(sched, "optimal", False),
-                "solver_plan": rel_plan_text,
-                "planned_steps": len(rel_steps),
-                "shift_seconds": shift,
-            })
-
-            if stage_idx < len(event_times):
-                horizon = event_times[stage_idx]
-                partial = _run_events_until(combined_steps, working, horizon)
-                if not partial.success:
-                    error_type = "eval_error"
-                    error = partial.error
-                    committed_steps = combined_steps
-                    break
-                committed_steps = partial.started_steps
-                current_state = partial.state
-                current_completed_steps = partial.completed_steps
-                current_ongoing_steps = partial.ongoing_steps
-                working = _apply_event(working, episode["events"][stage_idx])
-                working["difficulty"] = difficulty
-                oracle_snapshot = _snapshot_for_replan(working, current_state, horizon)
-                oracle_snapshot["difficulty"] = difficulty
-                continuation_oracle = _continuation_oracle(
-                    oracle_snapshot,
-                    current_ongoing_steps,
-                    horizon,
-                    solver_timeout=solver_timeout,
-                )
-                stage_records[-1]["continuation_oracle"] = continuation_oracle
-            else:
-                committed_steps = combined_steps
-                break
-
-        final_steps = committed_steps
-        final_plan_text = _render_plan_text(final_steps)
-        final_task = copy.deepcopy(working)
-        eval_oracle = {**episode.get("oracle", {}), **continuation_oracle}
-        evaluation = evaluate_episode_plan(final_steps, final_task, eval_oracle)
-        success = evaluation.success and error_type not in {"llm_error", "spec_error", "solver_error", "parse_error"}
-        if error_type is None and not evaluation.success:
-            error_type = "eval_error"
-            error = evaluation.error
-        elif error_type is None:
-            error = ""
-
-        result = {
-            "id": episode["id"],
-            "online_mode": "strict",
-            "difficulty": episode.get("difficulty"),
-            "source_split": episode.get("source_split"),
-            "n_events": len(episode.get("events", [])),
-            "oracle_spec": oracle_spec,
-            "stage_records": stage_records,
-            "final_plan": final_plan_text,
-            "success": success,
-            "error_type": error_type,
-            "error": error,
-            "makespan": evaluation.makespan if success or final_steps else None,
-            "makespan_ratio": evaluation.makespan_ratio if success else None,
-            "oracle_final_makespan": episode.get("oracle", {}).get("oracle_final_makespan"),
-            "continuation_oracle_makespan": evaluation.continuation_oracle_makespan,
-            "selected_reward": evaluation.selected_reward,
-            "reward_ratio": evaluation.reward_ratio,
-            "optimal_reward": episode.get("oracle", {}).get("optimal_reward"),
-            "continuation_oracle_reward": evaluation.continuation_oracle_reward,
-            "delivery_completion_times": evaluation.delivery_completion_times,
+    print(
+        f"Stage 1/1  Online CP-SAT formalization "
+        f"({len(episodes)} episodes, {num_workers} workers) ...\n"
+    )
+    with ThreadPoolExecutor(max_workers=max(1, int(num_workers))) as executor:
+        future_to_index = {
+            executor.submit(
+                _run_episode,
+                episode,
+                llm,
+                solver_timeout=solver_timeout,
+                implicit=implicit,
+                oracle_spec=oracle_spec,
+                max_llm_attempts=max_llm_attempts,
+            ): i
+            for i, episode in enumerate(episodes)
         }
-        progress.update()
-        results.append(result)
-        with jsonl_path.open("a", encoding="utf-8") as handle:
+        completed = 0
+        for future in as_completed(future_to_index):
+            idx = future_to_index[future]
+            episode = episodes[idx]
+            try:
+                result = future.result()
+            except Exception as exc:
+                result = {
+                    "id": episode["id"],
+                    "online_mode": "strict",
+                    "difficulty": episode.get("difficulty"),
+                    "source_split": episode.get("source_split"),
+                    "n_events": len(episode.get("events", [])),
+                    "oracle_spec": oracle_spec,
+                    "stage_records": [],
+                    "final_plan": "",
+                    "success": False,
+                    "error_type": "runner_error",
+                    "error": str(exc),
+                    "makespan": None,
+                    "makespan_ratio": None,
+                    "oracle_final_makespan": episode.get("oracle", {}).get("oracle_final_makespan"),
+                    "continuation_oracle_makespan": None,
+                    "selected_reward": None,
+                    "reward_ratio": None,
+                    "optimal_reward": episode.get("oracle", {}).get("optimal_reward"),
+                    "continuation_oracle_reward": None,
+                    "delivery_completion_times": None,
+                }
+            results[idx] = result
+            completed += 1
+            status = "ok" if result.get("success") else result.get("error_type")
+            print(f"  [{completed:3d}/{len(episodes):3d}] {episode['id']} ... {status}", flush=True)
+
+    results = [r for r in results if r is not None]
+    with jsonl_path.open("w", encoding="utf-8") as handle:
+        for result in results:
             handle.write(json.dumps(result, ensure_ascii=False) + "\n")
-    progress.close()
 
     n_success = sum(1 for r in results if r["success"])
     makespans = [r["makespan"] for r in results if r["success"] and r["makespan"] is not None]
@@ -606,6 +681,7 @@ def run(
         "n_solver_error": sum(1 for r in results if r["error_type"] == "solver_error"),
         "n_parse_error": sum(1 for r in results if r["error_type"] == "parse_error"),
         "n_eval_error": sum(1 for r in results if r["error_type"] == "eval_error"),
+        "n_runner_error": sum(1 for r in results if r["error_type"] == "runner_error"),
         "by_tag": summarize_by_tag(episodes, results),
     }
     (out_path / "summary.json").write_text(json.dumps(summary, indent=2))
@@ -625,6 +701,12 @@ def main():
     parser.add_argument("--timeout", type=float, default=120.0)
     parser.add_argument("--max", type=int, default=None, help="limit number of tasks")
     parser.add_argument("--num-workers", type=int, default=4, help="parallel LLM workers")
+    parser.add_argument(
+        "--max-llm-attempts",
+        type=int,
+        default=1,
+        help="LLM attempts per online stage; 1 disables retry",
+    )
     parser.add_argument("--implicit", action="store_true", help="hide dependency hints in NL")
     parser.add_argument("--oracle-spec", action="store_true", help="use gold task JSON instead of LLM")
     parser.add_argument("--include-tags", default="", help="comma-separated online tags to include")
@@ -641,6 +723,7 @@ def main():
     print(f"Out:         {out_dir}")
     print(f"Timeout:     {args.timeout}s")
     print(f"LLM workers: {args.num_workers}")
+    print(f"LLM attempts:{args.max_llm_attempts}")
     print(f"Oracle spec: {args.oracle_spec}")
     if args.include_tags:
         print(f"Include tags:{args.include_tags}")
@@ -655,6 +738,7 @@ def main():
         solver_timeout=args.timeout,
         max_tasks=args.max,
         num_workers=args.num_workers,
+        max_llm_attempts=args.max_llm_attempts,
         implicit=args.implicit,
         oracle_spec=args.oracle_spec,
         include_tags=parse_tag_arg(args.include_tags),

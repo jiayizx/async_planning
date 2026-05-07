@@ -5,12 +5,13 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-openrouter/gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 TASKS_DIR="${TASKS_DIR:-data/robo_async_online/episodes}"
 RESULTS_ROOT="${RESULTS_ROOT:-results/robo_async_online_strict}"
 TIMEOUT="${TIMEOUT:-120}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
+MAX_LLM_ATTEMPTS="${MAX_LLM_ATTEMPTS:-1}"
 MAX_TASKS="${MAX_TASKS:-}"
 IMPLICIT="${IMPLICIT:-false}"
 ORACLE_SPEC="${ORACLE_SPEC:-false}"
@@ -48,4 +49,5 @@ EXTRA_ARGS=""
     --out         "${OUT_DIR}" \
     --timeout     "${TIMEOUT}" \
     --num-workers "${NUM_WORKERS}" \
+    --max-llm-attempts "${MAX_LLM_ATTEMPTS}" \
     ${EXTRA_ARGS}

@@ -67,6 +67,9 @@ Action semantics:
 
 Important rules:
 1. Use item names EXACTLY as listed by the user, including underscores and numeric suffixes.
+   Each action id must be exactly "<action>_<item>", for example
+   "grill_chicken" or "stack_bun_top". Dependency endpoints must use those
+   exact ids.
 2. Include one action object for every processing action needed to reach the required states.
 3. Include stack actions ONLY for items explicitly listed in the final stack order,
    including ready items. Do NOT create stack actions for prepared side items that
@@ -84,14 +87,16 @@ Important rules:
    null, None, an empty string, or an id you did not define.
 10. If the task states a temporal waiting constraint, include it as a dependency
    with "min_lag" equal to the required wait in seconds. Example:
-   {"before": "grill_patty", "after": "stack_patty", "min_lag": 3}
+   {"predecessor": "grill_patty", "successor": "stack_patty", "min_lag": 3}
 11. If the task lists robots, every action requires one robot. Put
    "eligible_robots": ["robot1", "robot2"] on each action unless the task
    explicitly restricts an action to a smaller robot set. Do not put robot names
    in the item field or action id.
 12. Before output, verify this checklist:
-   - every dependency.before appears exactly as an actions[].id
-   - every dependency.after appears exactly as an actions[].id
+   - every dependency.predecessor appears exactly as an actions[].id
+   - every dependency.successor appears exactly as an actions[].id
+   - predecessor means the action that must finish first
+   - successor means the action that starts later
    - every action has eligible_robots when robots are listed in the task
    - every marinate action has a cut-before-marinate dependency for the same item
    - every fry action for an item marked "must be cut before frying" has a cut-before-fry dependency
@@ -103,9 +108,12 @@ Important rules:
     non-rush work, even if total makespan is slightly worse.
 
 Common mistakes to avoid:
-- Do NOT write {"before": "mash_yam", "after": null}. If yam is not in the
+- Do NOT write {"predecessor": "mash_yam", "successor": null}. If yam is not in the
   stack order, the chain ends at mash_yam and no dependency is needed after it.
-- Do NOT write {"before": "fry_potato1", "after": "stack_potato1"} unless
+- Do NOT write {"predecessor": "stack_chicken", "successor": "grill_chicken"}.
+  That means stack before grill and is invalid. The correct direction is
+  {"predecessor": "grill_chicken", "successor": "stack_chicken"}.
+- Do NOT write {"predecessor": "fry_potato1", "successor": "stack_potato1"} unless
   stack_potato1 is present in actions because potato1 appears in the stack order.
 - Do NOT start marinate from raw. Add cut_item -> marinate_item.
 
@@ -116,7 +124,7 @@ For ordinary scheduling tasks:
   "mode": "schedule",
   "actions": [
     {
-      "id": "short_unique_id",
+      "id": "cut_potato",
       "action": "cut",
       "item": "potato",
       "duration": 3,
@@ -132,8 +140,8 @@ For ordinary scheduling tasks:
     }
   ],
   "dependencies": [
-    {"before": "cut_potato", "after": "fry_potato"},
-    {"before": "grill_patty", "after": "stack_patty", "min_lag": 3}
+    {"predecessor": "cut_potato", "successor": "fry_potato"},
+    {"predecessor": "grill_patty", "successor": "stack_patty", "min_lag": 3}
   ]
 }
 
@@ -171,8 +179,12 @@ Important:
   stack action and no dependency to a stack action.
 - Dependency endpoints must be existing action ids. Never output null/None in
   dependencies.
+- Every action id must be exactly "<action>_<item>", using the exact item value.
+  Example: action="cut", item="online_fry_03_11" requires id="cut_online_fry_03_11".
 - If an item must be cut before frying or marinating, include the cut action and
   the dependency from cut to fry/marinate.
+- Use "predecessor" for the action that must finish first and "successor" for
+  the action that starts later. Do not reverse these fields.
 - If the task includes temporal wait constraints, copy each wait as a dependency
   with a numeric "min_lag" in seconds.
 - If the task includes robots, include an "eligible_robots" list for every
