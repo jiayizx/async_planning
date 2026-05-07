@@ -1,0 +1,5 @@
+0.000: (source_cedar step1) [10800.000]
+10800.001: (assemble_hull step2) [432000.000]
+442800.002: (sand_exterior step3) [21600.000]
+442800.002: (install_seats step4) [14400.000]
+442800.002: (apply_varnish step5) [172800.000]

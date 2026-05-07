@@ -1,0 +1,5 @@
+0.000: (tape_paper step1) [120.000]
+120.001: (sharpen_pencils step2) [180.000]
+120.001: (sketch_horizon step3) [300.000]
+420.002: (layer_washes step4) [7200.000]
+7620.003: (apply_varnish step5) [600.000]

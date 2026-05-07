@@ -1,0 +1,5 @@
+0.000: (do_step1_retrieve_cup step1) [20.000]
+20.001: (do_step3_fill_cup step2) [15.000]
+35.002: (do_step2_screw_lid step3) [10.000]
+45.003: (do_step5_remove_cap step4) [5.000]
+50.004: (do_step4_drink step5) [30.000]

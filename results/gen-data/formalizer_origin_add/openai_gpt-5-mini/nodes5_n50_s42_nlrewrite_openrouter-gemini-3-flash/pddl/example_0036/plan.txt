@@ -1,0 +1,5 @@
+0.000: (do_step3_contact_vet) [900.000]
+0.000: (do_step1_research) [7200.000]
+900.001: (do_step5_consultation) [259200.000]
+7200.001: (do_step2_purchase) [2700.000]
+260100.002: (do_step4_groom_and_check) [1800.000]

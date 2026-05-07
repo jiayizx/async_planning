@@ -1,0 +1,38 @@
+(define (domain dha_production)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (done ?s - step)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 2700)
+    :condition (and (at start (step_pending step1)) (at start (done step3)))
+    :effect (and (at start (not (step_pending step1))) (at end (done step1)))
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 172800)
+    :condition (and (at start (step_pending step2)) (at start (done step5)))
+    :effect (and (at start (not (step_pending step2))) (at end (done step2)))
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 14400)
+    :condition (and (at start (step_pending step3)) (at start (done step4)))
+    :effect (and (at start (not (step_pending step3))) (at end (done step3)))
+  )
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (at start (step_pending step4))
+    :effect (and (at start (not (step_pending step4))) (at end (done step4)))
+  )
+  (:durative-action do_step5
+    :parameters ()
+    :duration (= ?duration 21600)
+    :condition (and (at start (step_pending step5)) (at start (done step3)))
+    :effect (and (at start (not (step_pending step5))) (at end (done step5)))
+  )
+)

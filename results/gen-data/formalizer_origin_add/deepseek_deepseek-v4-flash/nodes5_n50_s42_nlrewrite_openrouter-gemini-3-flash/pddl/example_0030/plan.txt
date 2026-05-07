@@ -1,0 +1,5 @@
+0.000: (do_source_planks) [10800.000]
+10800.001: (do_assemble_hull) [432000.000]
+442800.002: (do_sand_exterior) [21600.000]
+442800.002: (do_install_seats) [14400.000]
+442800.002: (do_apply_varnish) [172800.000]

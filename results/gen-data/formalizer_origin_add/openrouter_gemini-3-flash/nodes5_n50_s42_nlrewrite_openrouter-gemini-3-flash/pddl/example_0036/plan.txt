@@ -1,0 +1,5 @@
+0.000: (research_health_needs step1) [7200.000]
+0.000: (contact_vet step5) [900.000]
+900.001: (attend_consultation step3) [259200.000]
+7200.001: (purchase_supplies step2) [2700.000]
+260100.002: (conduct_grooming_check step4) [1800.000]

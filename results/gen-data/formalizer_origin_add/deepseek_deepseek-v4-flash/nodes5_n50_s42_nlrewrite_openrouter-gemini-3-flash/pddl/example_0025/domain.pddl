@@ -1,0 +1,38 @@
+(define (domain leave_school)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (packed)
+    (located)
+    (unlocked)
+    (walked)
+    (drove)
+  )
+  (:durative-action do_pack
+    :duration (= ?duration 120)
+    :condition (at start (step_pending step2))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (packed)))
+  )
+  (:durative-action do_locate
+    :duration (= ?duration 30)
+    :condition (at start (step_pending step4))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (located)))
+  )
+  (:durative-action do_unlock
+    :duration (= ?duration 45)
+    :condition (and (at start (step_pending step5)) (at start (located)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (unlocked)))
+  )
+  (:durative-action do_walk
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending step1)) (at start (packed)))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (walked)))
+  )
+  (:durative-action do_drive
+    :duration (= ?duration 60)
+    :condition (and (at start (step_pending step3)) (at start (unlocked)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (drove)))
+  )
+)

@@ -1,0 +1,11 @@
+(define (problem make_canoe)
+  (:domain canoe_making)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5) (varnish_applied)))
+)

@@ -1,0 +1,5 @@
+0.000: (purchase_colors step1) [2700.000]
+0.000: (locate_stick step5) [30.000]
+30.001: (prepare_workspace step4) [300.000]
+2700.001: (pour_yellow step2) [120.000]
+2820.002: (add_red step3) [60.000]

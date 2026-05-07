@@ -1,0 +1,45 @@
+(define (problem fishing_problem)
+  (:domain fishing)
+  (:objects step-1 - step step-2 - step step-3 - step step-4 - step step-5 - step step-6 - step step-7 - step step-8 - step step-9 - step step-10 - step
+            step-11 - step step-12 - step step-13 - step step-14 - step step-15 - step step-16 - step step-17 - step step-18 - step step-19 - step step-20 - step
+            step-21 - step step-22 - step step-23 - step step-24 - step step-25 - step step-26 - step step-27 - step step-28 - step step-29 - step step-30 - step
+            step-31 - step step-32 - step step-33 - step step-34 - step step-35 - step step-36 - step step-37 - step step-38 - step step-39 - step step-40 - step
+            step-41 - step step-42 - step step-43 - step step-44 - step step-45 - step step-46 - step step-47 - step step-48 - step step-49 - step step-50 - step
+            step-51 - step step-52 - step step-53 - step step-54 - step step-55 - step step-56 - step step-57 - step step-58 - step step-59 - step step-60 - step
+            step-61 - step step-62 - step step-63 - step step-64 - step step-65 - step step-66 - step step-67 - step step-68 - step step-69 - step step-70 - step
+            step-71 - step step-72 - step step-73 - step step-74 - step step-75 - step step-76 - step step-77 - step step-78 - step step-79 - step step-80 - step)
+  (:init
+    (step-pending step-1) (step-pending step-2) (step-pending step-3) (step-pending step-4) (step-pending step-5)
+    (step-pending step-6) (step-pending step-7) (step-pending step-8) (step-pending step-9) (step-pending step-10)
+    (step-pending step-11) (step-pending step-12) (step-pending step-13) (step-pending step-14) (step-pending step-15)
+    (step-pending step-16) (step-pending step-17) (step-pending step-18) (step-pending step-19) (step-pending step-20)
+    (step-pending step-21) (step-pending step-22) (step-pending step-23) (step-pending step-24) (step-pending step-25)
+    (step-pending step-26) (step-pending step-27) (step-pending step-28) (step-pending step-29) (step-pending step-30)
+    (step-pending step-31) (step-pending step-32) (step-pending step-33) (step-pending step-34) (step-pending step-35)
+    (step-pending step-36) (step-pending step-37) (step-pending step-38) (step-pending step-39) (step-pending step-40)
+    (step-pending step-41) (step-pending step-42) (step-pending step-43) (step-pending step-44) (step-pending step-45)
+    (step-pending step-46) (step-pending step-47) (step-pending step-48) (step-pending step-49) (step-pending step-50)
+    (step-pending step-51) (step-pending step-52) (step-pending step-53) (step-pending step-54) (step-pending step-55)
+    (step-pending step-56) (step-pending step-57) (step-pending step-58) (step-pending step-59) (step-pending step-60)
+    (step-pending step-61) (step-pending step-62) (step-pending step-63) (step-pending step-64) (step-pending step-65)
+    (step-pending step-66) (step-pending step-67) (step-pending step-68) (step-pending step-69) (step-pending step-70)
+    (step-pending step-71) (step-pending step-72) (step-pending step-73) (step-pending step-74) (step-pending step-75)
+    (step-pending step-76) (step-pending step-77) (step-pending step-78) (step-pending step-79) (step-pending step-80))
+  (:goal (and (step-done step-1) (step-done step-2) (step-done step-3) (step-done step-4) (step-done step-5)
+              (step-done step-6) (step-done step-7) (step-done step-8) (step-done step-9) (step-done step-10)
+              (step-done step-11) (step-done step-12) (step-done step-13) (step-done step-14) (step-done step-15)
+              (step-done step-16) (step-done step-17) (step-done step-18) (step-done step-19) (step-done step-20)
+              (step-done step-21) (step-done step-22) (step-done step-23) (step-done step-24) (step-done step-25)
+              (step-done step-26) (step-done step-27) (step-done step-28) (step-done step-29) (step-done step-30)
+              (step-done step-31) (step-done step-32) (step-done step-33) (step-done step-34) (step-done step-35)
+              (step-done step-36) (step-done step-37) (step-done step-38) (step-done step-39) (step-done step-40)
+              (step-done step-41) (step-done step-42) (step-done step-43) (step-done step-44) (step-done step-45)
+              (step-done step-46) (step-done step-47) (step-done step-48) (step-done step-49) (step-done step-50)
+              (step-done step-51) (step-done step-52) (step-done step-53) (step-done step-54) (step-done step-55)
+              (step-done step-56) (step-done step-57) (step-done step-58) (step-done step-59) (step-done step-60)
+              (step-done step-61) (step-done step-62) (step-done step-63) (step-done step-64) (step-done step-65)
+              (step-done step-66) (step-done step-67) (step-done step-68) (step-done step-69) (step-done step-70)
+              (step-done step-71) (step-done step-72) (step-done step-73) (step-done step-74) (step-done step-75)
+              (step-done step-76) (step-done step-77) (step-done step-78) (step-done step-79) (step-done step-80)
+              (fishing-ready)))
+)

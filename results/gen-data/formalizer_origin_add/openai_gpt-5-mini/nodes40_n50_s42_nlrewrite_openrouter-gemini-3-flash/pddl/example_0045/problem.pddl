@@ -1,0 +1,43 @@
+(define (problem read-emotion-problem) (:domain read-emotion)
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 step8 step9 step10
+    step11 step12 step13 step14 step15 step16 step17 step18 step19 step20
+    step21 step22 step23 step24 step25 step26 step27 step28 step29 step30
+    step31 step32 step33 step34 step35 step36 step37 step38 step39 step40 - step
+  )
+
+  (:init
+    ; all steps start pending
+    (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4) (step_pending step5)
+    (step_pending step6) (step_pending step7) (step_pending step8) (step_pending step9) (step_pending step10)
+    (step_pending step11) (step_pending step12) (step_pending step13) (step_pending step14) (step_pending step15)
+    (step_pending step16) (step_pending step17) (step_pending step18) (step_pending step19) (step_pending step20)
+    (step_pending step21) (step_pending step22) (step_pending step23) (step_pending step24) (step_pending step25)
+    (step_pending step26) (step_pending step27) (step_pending step28) (step_pending step29) (step_pending step30)
+    (step_pending step31) (step_pending step32) (step_pending step33) (step_pending step34) (step_pending step35)
+    (step_pending step36) (step_pending step37) (step_pending step38) (step_pending step39) (step_pending step40)
+
+    ; bind each domain action to its specific problem object
+    (is_step1 step1) (is_step2 step2) (is_step3 step3) (is_step4 step4) (is_step5 step5)
+    (is_step6 step6) (is_step7 step7) (is_step8 step8) (is_step9 step9) (is_step10 step10)
+    (is_step11 step11) (is_step12 step12) (is_step13 step13) (is_step14 step14) (is_step15 step15)
+    (is_step16 step16) (is_step17 step17) (is_step18 step18) (is_step19 step19) (is_step20 step20)
+    (is_step21 step21) (is_step22 step22) (is_step23 step23) (is_step24 step24) (is_step25 step25)
+    (is_step26 step26) (is_step27 step27) (is_step28 step28) (is_step29 step29) (is_step30 step30)
+    (is_step31 step31) (is_step32 step32) (is_step33 step33) (is_step34 step34) (is_step35 step35)
+    (is_step36 step36) (is_step37 step37) (is_step38 step38) (is_step39 step39) (is_step40 step40)
+  )
+
+  (:goal (and
+    (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+    (step_done step6) (step_done step7) (step_done step8) (step_done step9) (step_done step10)
+    (step_done step11) (step_done step12) (step_done step13) (step_done step14) (step_done step15)
+    (step_done step16) (step_done step17) (step_done step18) (step_done step19) (step_done step20)
+    (step_done step21) (step_done step22) (step_done step23) (step_done step24) (step_done step25)
+    (step_done step26) (step_done step27) (step_done step28) (step_done step29) (step_done step30)
+    (step_done step31) (step_done step32) (step_done step33) (step_done step34) (step_done step35)
+    (step_done step36) (step_done step37) (step_done step38) (step_done step39) (step_done step40)
+    ; require final semantic predicate to enforce causal chain completeness
+    (s21_complete)
+  ))
+)

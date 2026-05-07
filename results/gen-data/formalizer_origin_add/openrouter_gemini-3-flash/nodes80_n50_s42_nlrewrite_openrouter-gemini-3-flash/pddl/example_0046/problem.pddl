@@ -1,0 +1,41 @@
+(define (problem trip_to_tibet)
+  (:domain trip_planning)
+  (:objects
+    sid1 sid2 sid3 sid4 sid5 sid6 sid7 sid8 sid9 sid10
+    sid11 sid12 sid13 sid14 sid15 sid16 sid17 sid18 sid19 sid20
+    sid21 sid22 sid23 sid24 sid25 sid26 sid27 sid28 sid29 sid30
+    sid31 sid32 sid33 sid34 sid35 sid36 sid37 sid38 sid39 sid40
+    sid41 sid42 sid43 sid44 sid45 sid46 sid47 sid48 sid49 sid50
+    sid51 sid52 sid53 sid54 sid55 sid56 sid57 sid58 sid59 sid60
+    sid61 sid62 sid63 sid64 sid65 sid66 sid67 sid68 sid69 sid70
+    sid71 sid72 sid73 sid74 sid75 sid76 sid77 sid78 sid79 sid80 - step
+  )
+  (:init
+    (step_pending sid1) (step_pending sid2) (step_pending sid3) (step_pending sid4) (step_pending sid5)
+    (step_pending sid6) (step_pending sid7) (step_pending sid8) (step_pending sid9) (step_pending sid10)
+    (step_pending sid11) (step_pending sid12) (step_pending sid13) (step_pending sid14) (step_pending sid15)
+    (step_pending sid16) (step_pending sid17) (step_pending sid18) (step_pending sid19) (step_pending sid20)
+    (step_pending sid21) (step_pending sid22) (step_pending sid23) (step_pending sid24) (step_pending sid25)
+    (step_pending sid26) (step_pending sid27) (step_pending sid28) (step_pending sid29) (step_pending sid30)
+    (step_pending sid31) (step_pending sid32) (step_pending sid33) (step_pending sid34) (step_pending sid35)
+    (step_pending sid36) (step_pending sid37) (step_pending sid38) (step_pending sid39) (step_pending sid40)
+    (step_pending sid41) (step_pending sid42) (step_pending sid43) (step_pending sid44) (step_pending sid45)
+    (step_pending sid46) (step_pending sid47) (step_pending sid48) (step_pending sid49) (step_pending sid50)
+    (step_pending sid51) (step_pending sid52) (step_pending sid53) (step_pending sid54) (step_pending sid55)
+    (step_pending sid56) (step_pending sid57) (step_pending sid58) (step_pending sid59) (step_pending sid60)
+    (step_pending sid61) (step_pending sid62) (step_pending sid63) (step_pending sid64) (step_pending sid65)
+    (step_pending sid66) (step_pending sid67) (step_pending sid68) (step_pending sid69) (step_pending sid70)
+    (step_pending sid71) (step_pending sid72) (step_pending sid73) (step_pending sid74) (step_pending sid75)
+    (step_pending sid76) (step_pending sid77) (step_pending sid78) (step_pending sid79) (step_pending sid80)
+  )
+  (:goal (and
+    (s1_done) (s2_done) (s3_done) (s4_done) (s5_done) (s6_done) (s7_done) (s8_done) (s9_done) (s10_done)
+    (s11_done) (s12_done) (s13_done) (s14_done) (s15_done) (s16_done) (s17_done) (s18_done) (s19_done) (s20_done)
+    (s21_done) (s22_done) (s23_done) (s24_done) (s25_done) (s26_done) (s27_done) (s28_done) (s29_done) (s30_done)
+    (s31_done) (s32_done) (s33_done) (s34_done) (s35_done) (s36_done) (s37_done) (s38_done) (s39_done) (s40_done)
+    (s41_done) (s42_done) (s43_done) (s44_done) (s45_done) (s46_done) (s47_done) (s48_done) (s49_done) (s50_done)
+    (s51_done) (s52_done) (s53_done) (s54_done) (s55_done) (s56_done) (s57_done) (s58_done) (s59_done) (s60_done)
+    (s61_done) (s62_done) (s63_done) (s64_done) (s65_done) (s66_done) (s67_done) (s68_done) (s69_done) (s70_done)
+    (s71_done) (s72_done) (s73_done) (s74_done) (s75_done) (s76_done) (s77_done) (s78_done) (s79_done) (s80_done)
+  ))
+)

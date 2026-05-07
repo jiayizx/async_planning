@@ -1,0 +1,14 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "qwen3.6-35b-a3b",
+  "accuracy": 0.1,
+  "num_correct": 5,
+  "num_syntax_errors": 42,
+  "num_semantic_errors": 3,
+  "num_data_points": 50,
+  "plan_valid_rate": 0.0,
+  "num_plan_valid": 0,
+  "num_correct_and_valid": 0,
+  "num_correct_but_invalid": 5,
+  "num_incorrect_but_valid": 0
+}

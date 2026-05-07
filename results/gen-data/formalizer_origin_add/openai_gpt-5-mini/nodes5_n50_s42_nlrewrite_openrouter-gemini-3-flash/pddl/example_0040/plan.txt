@@ -1,0 +1,5 @@
+0.000: (temper_eggs) [3600.000]
+0.000: (buy_ginger) [1800.000]
+1800.001: (grate_ginger) [600.000]
+3600.001: (whisk_eggs) [300.000]
+3900.002: (combine_batter) [480.000]

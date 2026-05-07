@@ -1,0 +1,5 @@
+0.000: (do_withdraw step5) [300.000]
+0.000: (do_research step1) [10800.000]
+300.001: (do_drive step3) [1200.000]
+1500.002: (do_purchase step4) [1800.000]
+10800.001: (do_measure step2) [600.000]

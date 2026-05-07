@@ -1,0 +1,85 @@
+(define (domain fighter_pilot_domain)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step1_complete) (step2_complete) (step3_complete) (step4_complete) (step5_complete)
+    (step6_complete) (step7_complete) (step8_complete) (step9_complete) (step10_complete)
+    (step11_complete) (step12_complete) (step13_complete) (step14_complete) (step15_complete)
+  )
+  (:durative-action do_step1
+    :duration (= ?duration 1209600)
+    :condition (and (at start (step_pending step1)) (at start (step15_complete)))
+    :effect (and (at start (not (step_pending step1))) (at end (step1_complete)))
+  )
+  (:durative-action do_step2
+    :duration (= ?duration 10368000)
+    :condition (and (at start (step_pending step2)) (at start (step4_complete)))
+    :effect (and (at start (not (step_pending step2))) (at end (step2_complete)))
+  )
+  (:durative-action do_step3
+    :duration (= ?duration 1814400)
+    :condition (and (at start (step_pending step3)) (at start (step6_complete)) (at start (step13_complete)))
+    :effect (and (at start (not (step_pending step3))) (at end (step3_complete)))
+  )
+  (:durative-action do_step4
+    :duration (= ?duration 31536000)
+    :condition (and (at start (step_pending step4)) (at start (step7_complete)))
+    :effect (and (at start (not (step_pending step4))) (at end (step4_complete)))
+  )
+  (:durative-action do_step5
+    :duration (= ?duration 172800)
+    :condition (at start (step_pending step5))
+    :effect (and (at start (not (step_pending step5))) (at end (step5_complete)))
+  )
+  (:durative-action do_step6
+    :duration (= ?duration 126144000)
+    :condition (at start (step_pending step6))
+    :effect (and (at start (not (step_pending step6))) (at end (step6_complete)))
+  )
+  (:durative-action do_step7
+    :duration (= ?duration 5443200)
+    :condition (at start (step_pending step7))
+    :effect (and (at start (not (step_pending step7))) (at end (step7_complete)))
+  )
+  (:durative-action do_step8
+    :duration (= ?duration 180000)
+    :condition (and (at start (step_pending step8)) (at start (step1_complete)))
+    :effect (and (at start (not (step_pending step8))) (at end (step8_complete)))
+  )
+  (:durative-action do_step9
+    :duration (= ?duration 86400)
+    :condition (and (at start (step_pending step9)) (at start (step2_complete)) (at start (step3_complete)) (at start (step14_complete)))
+    :effect (and (at start (not (step_pending step9))) (at end (step9_complete)))
+  )
+  (:durative-action do_step10
+    :duration (= ?duration 15552000)
+    :condition (and (at start (step_pending step10)) (at start (step5_complete)) (at start (step14_complete)))
+    :effect (and (at start (not (step_pending step10))) (at end (step10_complete)))
+  )
+  (:durative-action do_step11
+    :duration (= ?duration 7200)
+    :condition (and (at start (step_pending step11)) (at start (step14_complete)))
+    :effect (and (at start (not (step_pending step11))) (at end (step11_complete)))
+  )
+  (:durative-action do_step12
+    :duration (= ?duration 7776000)
+    :condition (and (at start (step_pending step12)) (at start (step1_complete)) (at start (step8_complete)))
+    :effect (and (at start (not (step_pending step12))) (at end (step12_complete)))
+  )
+  (:durative-action do_step13
+    :duration (= ?duration 14400)
+    :condition (and (at start (step_pending step13)) (at start (step6_complete)))
+    :effect (and (at start (not (step_pending step13))) (at end (step13_complete)))
+  )
+  (:durative-action do_step14
+    :duration (= ?duration 2592000)
+    :condition (at start (step_pending step14))
+    :effect (and (at start (not (step_pending step14))) (at end (step14_complete)))
+  )
+  (:durative-action do_step15
+    :duration (= ?duration 3600)
+    :condition (and (at start (step_pending step15)) (at start (step6_complete)))
+    :effect (and (at start (not (step_pending step15))) (at end (step15_complete)))
+  )
+)

@@ -1,0 +1,61 @@
+(define (domain polish_jewelry)
+  (:requirements :durative-actions :typing)
+  (:predicates
+    (pending_step1) (done_step1)
+    (pending_step2) (done_step2)
+    (pending_step3) (done_step3)
+    (pending_step4) (done_step4)
+    (pending_step5) (done_step5)
+    (soak_done) (buff_done) (rinse_done) (prepare_done) (scrub_done)
+  )
+  (:durative-action do_prepare
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (pending_step4))
+    :effect (and
+      (at start (not (pending_step4)))
+      (at end (done_step4))
+      (at end (prepare_done))
+    )
+  )
+  (:durative-action do_soak
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (pending_step1)) (at start (prepare_done)))
+    :effect (and
+      (at start (not (pending_step1)))
+      (at end (done_step1))
+      (at end (soak_done))
+    )
+  )
+  (:durative-action do_scrub
+    :parameters ()
+    :duration (= ?duration 480)
+    :condition (and (at start (pending_step5)) (at start (prepare_done)))
+    :effect (and
+      (at start (not (pending_step5)))
+      (at end (done_step5))
+      (at end (scrub_done))
+    )
+  )
+  (:durative-action do_rinse
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (pending_step3)) (at start (soak_done)))
+    :effect (and
+      (at start (not (pending_step3)))
+      (at end (done_step3))
+      (at end (rinse_done))
+    )
+  )
+  (:durative-action do_buff
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (and (at start (pending_step2)) (at start (scrub_done)))
+    :effect (and
+      (at start (not (pending_step2)))
+      (at end (done_step2))
+      (at end (buff_done))
+    )
+  )
+)

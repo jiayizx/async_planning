@@ -1,0 +1,5 @@
+0.000: (purchase_rope step1) [2700.000]
+0.000: (locate_stud step5) [120.000]
+120.001: (secure_hook step4) [900.000]
+2700.001: (measure_cords step2) [600.000]
+3300.002: (tie_tassel step3) [300.000]

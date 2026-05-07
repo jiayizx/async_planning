@@ -1,0 +1,5 @@
+0.000: (boil_water step1) [480.000]
+480.001: (prepare_table step2) [300.000]
+480.001: (whisk_grains step3) [120.000]
+600.002: (measure_grains step4) [30.000]
+630.003: (simmer_mixture step5) [180.000]
