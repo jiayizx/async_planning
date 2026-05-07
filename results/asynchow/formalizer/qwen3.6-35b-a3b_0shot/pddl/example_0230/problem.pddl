@@ -1,0 +1,7 @@
+(define (problem contact_leah)
+  (:domain contact_leah)
+  (:objects step1 step2 step3 step4 step5 - step)
+  (:init (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4) (step_pending step5))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+              (tweet_done) (instagram_done) (facebook_done) (reddit_done) (watchout_done)))
+)

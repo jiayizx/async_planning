@@ -1,0 +1,6 @@
+0.000: (find_recipes step1) [1800.000]
+1800.001: (buy_ingredients step2) [3600.000]
+1800.001: (buy_molds step3) [3600.000]
+5400.002: (make_mixture step4) [7200.000]
+12600.003: (pour_mixture step5) [600.000]
+13200.004: (harden_candy step6) [3600.000]

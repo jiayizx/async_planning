@@ -1,0 +1,36 @@
+(define (domain build-raft)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (boards_acquired)
+    (pieces_laid_out)
+    (pieces_attached)
+    (tools_acquired)
+    (buoyancy_tested))
+  (:durative-action acquire_wooden_boards
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (boards_acquired))))
+  (:durative-action lay_out_pieces
+    :parameters (?s - step)
+    :duration (= ?duration 1800)
+    :condition (and (at start (step_pending ?s)) (at start (boards_acquired)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (pieces_laid_out))))
+  (:durative-action begin_attaching_pieces
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (and (at start (step_pending ?s)) (at start (pieces_laid_out)) (at start (tools_acquired)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (pieces_attached))))
+  (:durative-action acquire_construction_tools
+    :parameters (?s - step)
+    :duration (= ?duration 7200)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (tools_acquired))))
+  (:durative-action test_buoyancy
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (and (at start (step_pending ?s)) (at start (pieces_attached)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (buoyancy_tested)))))

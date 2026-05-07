@@ -1,0 +1,6 @@
+0.000: (heat_saucepan step1) [180.000]
+0.000: (fill_bowl step6) [60.000]
+180.001: (add_sugar step2) [300.000]
+480.002: (boil_and_milk step3) [120.000]
+600.003: (cool_saucepan step4) [900.000]
+1500.004: (add_powdered_sugar step5) [300.000]

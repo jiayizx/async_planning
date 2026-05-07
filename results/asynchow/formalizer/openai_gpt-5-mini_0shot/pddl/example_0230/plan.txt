@@ -1,0 +1,5 @@
+0.000: (do_watch_step5 step5) [60.000]
+60.001: (do_reddit_step4 step4) [120.000]
+60.001: (do_fb_step3 step3) [120.000]
+60.001: (do_insta_step2 step2) [120.000]
+60.001: (do_tweet_step1 step1) [120.000]

@@ -1,0 +1,7 @@
+0.000: (learn_phrases step1) [600.000]
+600.001: (choose_ellos_ellas_pueden step2) [300.000]
+600.001: (use_ustedes_pueden step3) [300.000]
+600.001: (add_emos step4) [300.000]
+600.001: (choose_el_ella_puede step5) [300.000]
+600.001: (use_tu_puedes step6) [300.000]
+600.001: (say_yo_puedo step7) [300.000]

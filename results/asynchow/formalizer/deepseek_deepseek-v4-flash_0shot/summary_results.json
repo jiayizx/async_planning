@@ -1,0 +1,14 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "deepseek/deepseek-v4-flash",
+  "accuracy": 0.8,
+  "num_correct": 256,
+  "num_syntax_errors": 35,
+  "num_semantic_errors": 29,
+  "num_data_points": 320,
+  "plan_valid_rate": null,
+  "num_plan_valid": null,
+  "num_correct_and_valid": null,
+  "num_correct_but_invalid": null,
+  "num_incorrect_but_valid": null
+}

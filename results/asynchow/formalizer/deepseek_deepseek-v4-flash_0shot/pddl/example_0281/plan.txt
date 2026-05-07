@@ -1,0 +1,5 @@
+0.000: (do_stretch step5) [30.000]
+0.000: (do_stretch step4) [30.000]
+0.000: (do_stretch step3) [30.000]
+0.000: (do_stretch step2) [30.000]
+30.001: (do_hamstring step1) [30.000]

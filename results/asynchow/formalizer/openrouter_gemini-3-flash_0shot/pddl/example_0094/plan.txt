@@ -1,0 +1,5 @@
+647.000: (confess_commitment step2) [3600.000]
+647.000: (show_skills step4) [259200.000]
+647.000: (perform_preseason step5) [10800.000]
+647.000: (receive_varsity_spot step6) [3600.000]
+647.000: (head_to_field step7) [300.000]

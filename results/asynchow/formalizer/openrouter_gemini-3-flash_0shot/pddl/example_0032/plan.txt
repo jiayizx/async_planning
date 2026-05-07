@@ -1,0 +1,6 @@
+0.000: (preheat_oven step1) [300.000]
+0.000: (take_chicken step6) [5.000]
+300.001: (get_pan step2) [5.000]
+305.002: (lay_tinfoil step3) [10.000]
+315.003: (arrange_nuggets step4) [60.000]
+375.004: (cook_nuggets step5) [600.000]

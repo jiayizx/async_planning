@@ -1,0 +1,15 @@
+(define (problem air_dry_thick_hair_problem)
+  (:domain air_dry_thick_hair)
+  (:objects step1 step2 step3 - step)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+  )
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (comb_in_shower_done)
+  ))
+)

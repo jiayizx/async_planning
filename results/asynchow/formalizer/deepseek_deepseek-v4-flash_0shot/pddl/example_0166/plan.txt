@@ -1,0 +1,4 @@
+0.000: (do_choose step1) [300.000]
+0.000: (do_circle step4) [240.000]
+300.001: (do_trim step2) [120.000]
+420.002: (do_tape step3) [180.000]

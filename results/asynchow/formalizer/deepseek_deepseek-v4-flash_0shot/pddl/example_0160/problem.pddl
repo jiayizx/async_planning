@@ -1,0 +1,11 @@
+(define (problem bumped_flight_problem)
+  (:domain bumped_flight)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+  )
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4)
+              (gate_agent_spoken) (flight_confirmed) (cash_asked) (vouchers_asked)))
+)

@@ -1,0 +1,5 @@
+0.000: (research_trip step1) [14400.000]
+14400.001: (plan_budget step2) [14400.000]
+28800.002: (split_costs step3) [3600.000]
+28800.002: (invite_others step4) [3600.000]
+32400.003: (meet_at_airport step5) [3600.000]

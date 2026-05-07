@@ -1,0 +1,5 @@
+0.000: (call_about_animal step1) [900.000]
+900.001: (drive_to_zoo step2) [2100.000]
+3000.002: (setup_area step3) [1800.000]
+3000.002: (setup_paperwork step4) [600.000]
+3600.003: (receive_animal step5) [1800.000]

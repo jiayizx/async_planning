@@ -1,0 +1,5 @@
+0.000: (do_go_car step1) [180.000]
+0.000: (do_go_car step5) [180.000]
+180.001: (do_drive step2) [1200.000]
+1380.002: (do_wait_actors step3) [3600.000]
+4980.003: (do_direct_actors step4) [28800.000]

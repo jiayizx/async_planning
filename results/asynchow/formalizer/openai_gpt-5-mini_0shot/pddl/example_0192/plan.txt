@@ -1,0 +1,4 @@
+0.000: (do_step4_rinse) [60.000]
+0.000: (do_step1_sanitize) [60.000]
+60.001: (do_step2_apply_cleanser) [30.000]
+90.002: (do_step3_rub_brows) [120.000]

@@ -1,0 +1,1 @@
+(define (problem sort_out_life_problem) (:domain sort_out_life) (:init (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4)) (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (change_made))))

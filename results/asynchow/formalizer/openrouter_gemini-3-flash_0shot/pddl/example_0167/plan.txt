@@ -1,0 +1,4 @@
+0.000: (weekly_cleaning step1) [1800.000]
+0.000: (mix_solution step4) [300.000]
+300.001: (rub_tub step2) [600.000]
+900.002: (rinse_tub step3) [300.000]

@@ -1,0 +1,47 @@
+(define (domain sleepover)
+  (:requirements :durative-actions :typing)
+  (:predicates
+    (step1_pending) (step1_done) (free_time_found)
+    (step2_pending) (step2_done) (friends_asked)
+    (step3_pending) (step3_done) (list_made)
+    (step4_pending) (step4_done) (store_reached)
+    (step5_pending) (step5_done) (supplies_bought)
+    (step6_pending) (step6_done) (food_made)
+    (step7_pending) (step7_done) (supplies_gotten)
+  )
+  (:durative-action do_step1
+    :duration (= ?duration 900)
+    :condition (at start (step1_pending))
+    :effect (and (at start (not (step1_pending))) (at end (step1_done)) (at end (free_time_found)))
+  )
+  (:durative-action do_step2
+    :duration (= ?duration 900)
+    :condition (and (at start (step2_pending)) (at start (free_time_found)))
+    :effect (and (at start (not (step2_pending))) (at end (step2_done)) (at end (friends_asked)))
+  )
+  (:durative-action do_step3
+    :duration (= ?duration 900)
+    :condition (and (at start (step3_pending)) (at start (friends_asked)))
+    :effect (and (at start (not (step3_pending))) (at end (step3_done)) (at end (list_made)))
+  )
+  (:durative-action do_step4
+    :duration (= ?duration 900)
+    :condition (and (at start (step4_pending)) (at start (list_made)))
+    :effect (and (at start (not (step4_pending))) (at end (step4_done)) (at end (store_reached)))
+  )
+  (:durative-action do_step5
+    :duration (= ?duration 1800)
+    :condition (and (at start (step5_pending)) (at start (store_reached)))
+    :effect (and (at start (not (step5_pending))) (at end (step5_done)) (at end (supplies_bought)))
+  )
+  (:durative-action do_step6
+    :duration (= ?duration 3600)
+    :condition (and (at start (step6_pending)) (at start (supplies_bought)))
+    :effect (and (at start (not (step6_pending))) (at end (step6_done)) (at end (food_made)))
+  )
+  (:durative-action do_step7
+    :duration (= ?duration 1800)
+    :condition (and (at start (step7_pending)) (at start (supplies_bought)))
+    :effect (and (at start (not (step7_pending))) (at end (step7_done)) (at end (supplies_gotten)))
+  )
+)

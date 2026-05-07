@@ -1,0 +1,6 @@
+0.000: (do_step2_call_friends) [1800.000]
+0.000: (do_step1_dress) [900.000]
+1800.001: (do_step3_arrange_time) [1200.000]
+3000.002: (do_step4_drive_to_venue) [600.000]
+3600.003: (do_step5_exit_car) [60.000]
+3660.004: (do_step6_walk_to_field) [120.000]

@@ -1,0 +1,3 @@
+0.000: (stuff_newspapers step1) [172800.000]
+0.000: (stuff_socks step3) [86400.000]
+172800.001: (freeze_shoes step2) [36000.000]

@@ -1,0 +1,5 @@
+0.000: (step4_set_oven step1) [300.000]
+0.000: (step1_scoop_margarine step5) [120.000]
+120.001: (step2_mash_ingredients step2) [180.000]
+300.002: (step3_spread_mixture step3) [60.000]
+360.003: (step5_enjoy_toast step4) [300.000]

@@ -1,0 +1,7 @@
+0.000: (find_water step1) [3600.000]
+0.000: (purchase_gear step7) [300.000]
+300.001: (put_gear_on step2) [900.000]
+3600.001: (dive step3) [60.000]
+3660.002: (enter_caves step4) [300.000]
+3960.003: (explore_caves step5) [3600.000]
+7560.004: (return_surface step6) [120.000]

@@ -1,0 +1,56 @@
+(define (domain get_ahead_work)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step)
+               (step_done ?s - step)
+               (decide_done)
+               (come_early_done)
+               (monitor_done)
+               (boss_sees_done)
+               (vacation_done))
+
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (decide_done))))
+
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 2592000)
+    :condition (and (at start (step_pending ?s))
+                    (at start (decide_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (come_early_done))))
+
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 864000)
+    :condition (and (at start (step_pending ?s))
+                    (at start (decide_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (monitor_done))))
+
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 2592000)
+    :condition (and (at start (step_pending ?s))
+                    (at start (come_early_done))
+                    (at start (monitor_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (boss_sees_done))))
+
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 2592000)
+    :condition (and (at start (step_pending ?s))
+                    (at start (boss_sees_done)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (vacation_done))))
+)

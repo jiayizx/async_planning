@@ -1,0 +1,25 @@
+(define (domain pregnancy_detection)
+  (:requirements :durative-actions)
+  (:predicates (step1_pending) (step2_pending) (step3_pending) (step4_pending)
+               (observe_done) (physical_changes_done) (scientific_diagnosis_done) (fetal_responsiveness_done))
+  (:durative-action do_observe
+    :parameters ()
+    :duration (= ?duration 2)
+    :condition (at start (step1_pending))
+    :effect (and (at start (not (step1_pending))) (at end (observe_done))))
+  (:durative-action do_physical_changes
+    :parameters ()
+    :duration (= ?duration 3)
+    :condition (at start (step2_pending))
+    :effect (and (at start (not (step2_pending))) (at end (physical_changes_done))))
+  (:durative-action do_scientific_diagnosis
+    :parameters ()
+    :duration (= ?duration 0.5)
+    :condition (at start (and (step4_pending) (observe_done) (physical_changes_done)))
+    :effect (and (at start (not (step4_pending))) (at end (scientific_diagnosis_done))))
+  (:durative-action do_fetal_responsiveness
+    :parameters ()
+    :duration (= ?duration 1)
+    :condition (at start (and (step3_pending) (scientific_diagnosis_done)))
+    :effect (and (at start (not (step3_pending))) (at end (fetal_responsiveness_done))))
+)

@@ -1,0 +1,5 @@
+0.000: (speak_to_classmates step1) [18000.000]
+0.000: (identify_issues step2) [18000.000]
+0.000: (make_posters step5) [10800.000]
+18000.001: (write_platform step3) [10800.000]
+28800.002: (make_speeches step4) [7200.000]

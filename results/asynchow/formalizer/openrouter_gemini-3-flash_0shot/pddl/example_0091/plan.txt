@@ -1,0 +1,6 @@
+0.000: (buy_tickets step1) [600.000]
+600.001: (get_dressed step2) [1800.000]
+2400.002: (do_makeup step3) [1800.000]
+2400.002: (style_hair step4) [3600.000]
+6000.003: (get_directions step5) [600.000]
+6600.004: (drive_to_concert step6) [1800.000]

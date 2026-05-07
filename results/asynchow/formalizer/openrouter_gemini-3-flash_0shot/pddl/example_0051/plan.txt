@@ -1,0 +1,5 @@
+0.000: (find_wood step1) [300.000]
+0.000: (find_matches step5) [300.000]
+300.001: (place_wood step2) [300.000]
+600.002: (place_newspaper step3) [120.000]
+720.003: (ignite_fire step4) [780.000]

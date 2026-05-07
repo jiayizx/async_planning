@@ -1,0 +1,3 @@
+0.000: (understand_phrases step1) [1800.000]
+1800.001: (learn_praise step2) [3600.000]
+1800.001: (practice_greetings step3) [3600.000]

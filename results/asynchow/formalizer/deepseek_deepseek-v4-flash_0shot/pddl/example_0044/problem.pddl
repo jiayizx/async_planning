@@ -1,0 +1,12 @@
+(define (problem musical_problem)
+  (:domain musical)
+  (:init
+    (sign_up_pending)
+    (audition_pending)
+    (get_picked_pending)
+    (rehearse_part_pending)
+    (show_up_pending)
+    (rehearse_with_others_pending)
+  )
+  (:goal (show_up_done))
+)

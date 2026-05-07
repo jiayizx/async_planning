@@ -1,0 +1,36 @@
+(define (domain eat_gouda_cheese)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (preheated)
+    (macaroni_boiled)
+    (sauce_prepared)
+    (gouda_added)
+    (meal_ready))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (preheated))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (macaroni_boiled))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (sauce_prepared))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending ?s)) (at start (sauce_prepared)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (gouda_added))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (and (at start (step_pending ?s)) (at start (preheated)) (at start (macaroni_boiled)) (at start (gouda_added)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (meal_ready)))))

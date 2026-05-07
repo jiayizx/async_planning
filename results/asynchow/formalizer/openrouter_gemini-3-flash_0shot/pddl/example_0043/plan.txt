@@ -1,0 +1,5 @@
+0.000: (get_into_car step1) [60.000]
+60.001: (drive_to_store step2) [900.000]
+960.002: (show_id step3) [60.000]
+960.002: (count_money step4) [600.000]
+1560.003: (give_money step5) [120.000]

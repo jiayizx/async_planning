@@ -1,0 +1,3 @@
+0.000: (sense_attention step1) [604800.000]
+0.000: (watch_others step3) [604800.000]
+604800.001: (put_clues_together step2) [172800.000]

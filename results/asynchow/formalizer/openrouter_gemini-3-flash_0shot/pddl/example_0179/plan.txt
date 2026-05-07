@@ -1,0 +1,4 @@
+0.000: (talk_to_medical_professional step1) [1800.000]
+1800.001: (consider_mild_astringent step2) [600.000]
+1800.001: (use_blotting_pads step3) [300.000]
+1800.001: (try_face_masks step4) [1200.000]

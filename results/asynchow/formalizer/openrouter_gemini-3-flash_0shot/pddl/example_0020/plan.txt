@@ -1,0 +1,3 @@
+0.000: (research_genres step1) [72000.000]
+0.000: (research_skills step7) [18000.000]
+72000.001: (take_class step2) [36000.000]

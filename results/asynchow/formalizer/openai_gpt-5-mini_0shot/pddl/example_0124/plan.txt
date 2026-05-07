@@ -1,0 +1,7 @@
+0.000: (do_step1_locate step1) [3.000]
+3.001: (do_step2_turn step2) [2.000]
+5.002: (do_step4_lift_right step3) [1.000]
+5.002: (do_step3_lift_left step4) [1.000]
+6.003: (do_step6_move_right step5) [1.000]
+6.003: (do_step5_move_left step6) [1.000]
+7.004: (do_step7_move_forward_until_door step7) [6.000]

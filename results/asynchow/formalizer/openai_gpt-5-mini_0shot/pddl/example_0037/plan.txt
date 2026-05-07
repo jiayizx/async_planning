@@ -1,0 +1,7 @@
+0.000: (do_step1_drive_to_pet_shop step1) [900.000]
+900.001: (do_step2_look_at_rabbits step2) [900.000]
+1800.002: (do_step3_pick_out_rabbit step3) [900.000]
+2700.003: (do_step5_shop_for_pet_supplies step4) [420.000]
+2700.003: (do_step4_shop_for_pet_food step5) [420.000]
+3120.004: (do_step6_wait_in_line step6) [900.000]
+4020.005: (do_step7_make_the_purchase step7) [180.000]

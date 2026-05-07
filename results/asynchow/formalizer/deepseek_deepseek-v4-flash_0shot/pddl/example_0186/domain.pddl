@@ -1,0 +1,32 @@
+(define (domain remove_old_caulking)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (pending ?s - step)
+    (done ?s - step)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (at start (pending step1))
+    :effect (and (at start (not (pending step1))) (at end (done step1)))
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (pending step2))
+    :effect (and (at start (not (pending step2))) (at end (done step2)))
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step3)) (at start (done step4)))
+    :effect (and (at start (not (pending step3))) (at end (done step3)))
+  )
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (and (at start (pending step4)) (at start (done step2)))
+    :effect (and (at start (not (pending step4))) (at end (done step4)))
+  )
+)

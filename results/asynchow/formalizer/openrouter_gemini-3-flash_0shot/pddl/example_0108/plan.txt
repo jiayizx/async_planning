@@ -1,0 +1,5 @@
+0.000: (look_up_map step1) [3600.000]
+0.000: (look_up_attractions step5) [3600.000]
+3600.001: (drive_to_yellowstone step2) [21600.000]
+25200.002: (go_to_entrance step3) [3600.000]
+28800.003: (visit_attractions step4) [18000.000]

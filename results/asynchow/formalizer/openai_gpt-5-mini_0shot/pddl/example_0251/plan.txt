@@ -1,0 +1,6 @@
+0.000: (do_step1_locate) [60.000]
+60.001: (do_step3_atomic_weight) [60.000]
+60.001: (do_step2_atomic_number) [60.000]
+120.002: (do_step4_round) [60.000]
+180.003: (do_step5_subtract) [60.000]
+240.004: (do_step6_remember) [60.000]

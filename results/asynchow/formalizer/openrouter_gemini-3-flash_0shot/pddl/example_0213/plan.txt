@@ -1,0 +1,5 @@
+0.000: (preheat_oven step1) [300.000]
+0.000: (blend_sugars step2) [240.000]
+0.000: (combine_dry_ingredients step5) [120.000]
+240.001: (mix_dough step3) [360.000]
+600.002: (place_dough step4) [600.000]

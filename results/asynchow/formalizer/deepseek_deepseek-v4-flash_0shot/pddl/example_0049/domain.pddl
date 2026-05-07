@@ -1,0 +1,36 @@
+(define (domain little_league)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (sign_up_done)
+    (buy_gear_done)
+    (get_driven_done)
+    (wake_up_done)
+    (pay_fees_done))
+  (:durative-action do_sign_up
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (sign_up_done))))
+  (:durative-action do_buy_gear
+    :parameters ()
+    :duration (= ?duration 86400)
+    :condition (at start (step_pending step2))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (buy_gear_done))))
+  (:durative-action do_get_driven
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending step3)) (at start (buy_gear_done)) (at start (pay_fees_done)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (get_driven_done))))
+  (:durative-action do_wake_up
+    :parameters ()
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending step4)) (at start (get_driven_done)))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (wake_up_done))))
+  (:durative-action do_pay_fees
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending step5)) (at start (sign_up_done)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (pay_fees_done)))))

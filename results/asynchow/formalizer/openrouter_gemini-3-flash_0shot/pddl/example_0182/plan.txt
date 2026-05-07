@@ -1,0 +1,4 @@
+0.000: (cook_pasta step1) [600.000]
+600.001: (prepare_pasta_salad step2) [1800.000]
+600.001: (prepare_tomato_sauce step3) [1200.000]
+600.001: (prepare_oil_garlic step4) [900.000]

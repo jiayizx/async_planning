@@ -1,0 +1,33 @@
+(define (problem service_brakes_prob)
+  (:domain service_brakes)
+  (:objects
+    s1 s2 s3 s4 s5 - step
+  )
+  (:init
+    (step_pending s1)
+    (step_pending s2)
+    (step_pending s3)
+    (step_pending s4)
+    (step_pending s5)
+    (is_step1 s1)
+    (is_step2 s2)
+    (is_step3 s3)
+    (is_step4 s4)
+    (is_step5 s5)
+  )
+  (:goal
+    (and
+      (step_done s1)
+      (step_done s2)
+      (step_done s3)
+      (step_done s4)
+      (step_done s5)
+      (wheels_removed)
+      (drum_removed)
+      (shoes_inspected)
+      (springs_inspected)
+      (cylinder_changed)
+    )
+  )
+  (:metric minimize (total-time))
+)

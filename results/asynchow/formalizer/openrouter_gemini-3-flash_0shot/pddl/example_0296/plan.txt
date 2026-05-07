@@ -1,0 +1,5 @@
+0.000: (prepare_mushrooms step1) [300.000]
+0.000: (heat_oil step5) [120.000]
+300.001: (add_mushrooms step2) [180.000]
+480.002: (cook_mushrooms step3) [600.000]
+1080.003: (season_and_serve step4) [120.000]

@@ -1,0 +1,5 @@
+0.000: (check_fridge step1) [300.000]
+0.000: (check_cabinets step5) [180.000]
+300.001: (consider_requirements step2) [60.000]
+360.002: (jot_down_items step3) [180.000]
+360.002: (grab_pen_paper step4) [15.000]

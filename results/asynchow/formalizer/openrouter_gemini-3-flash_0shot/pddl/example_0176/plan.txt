@@ -1,0 +1,4 @@
+0.000: (get_tested step1) [14.000]
+14.001: (discuss_anti_androgen step2) [180.000]
+14.001: (get_hypoglycemic_med step3) [180.000]
+14.001: (discuss_birth_control step4) [90.000]

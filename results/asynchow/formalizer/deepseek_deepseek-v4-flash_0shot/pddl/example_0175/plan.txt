@@ -1,0 +1,4 @@
+0.000: (do_physical_changes) [3.000]
+0.000: (do_observe) [2.000]
+3.001: (do_scientific_diagnosis) [0.500]
+3.502: (do_fetal_responsiveness) [1.000]

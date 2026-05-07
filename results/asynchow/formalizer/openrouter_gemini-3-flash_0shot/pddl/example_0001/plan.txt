@@ -1,0 +1,5 @@
+0.000: (receive_invitation step1) [604800.000]
+604800.001: (get_directions step2) [900.000]
+604800.001: (prepare_gift step3) [3600.000]
+605700.002: (dress_up step4) [3600.000]
+609300.003: (drive_to_venue step5) [3600.000]

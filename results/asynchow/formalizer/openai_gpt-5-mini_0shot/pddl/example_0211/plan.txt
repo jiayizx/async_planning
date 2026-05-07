@@ -1,0 +1,5 @@
+0.000: (do_step2_read_guidelines step1) [600.000]
+0.000: (do_step1_calm_down step5) [600.000]
+600.001: (do_step3_research_topic step2) [1800.000]
+2400.002: (do_step4_find_sources step3) [1200.000]
+3600.003: (do_step5_pick_evidence step4) [1500.000]

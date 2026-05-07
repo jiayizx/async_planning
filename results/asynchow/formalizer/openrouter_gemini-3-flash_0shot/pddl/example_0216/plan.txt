@@ -1,0 +1,4 @@
+0.000: (give_music step1) [1800.000]
+0.000: (choose_dentist step4) [300.000]
+300.001: (offer_appointment step2) [600.000]
+900.002: (go_with_him step3) [7200.000]

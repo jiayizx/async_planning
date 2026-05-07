@@ -1,0 +1,4 @@
+0.000: (wear_clothing_more_skin step1) [600.000]
+0.000: (wear_hat step2) [300.000]
+0.000: (wear_sunglasses step4) [60.000]
+600.001: (test_clothing_protection step3) [900.000]

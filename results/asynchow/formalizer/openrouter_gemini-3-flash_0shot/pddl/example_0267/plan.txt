@@ -1,0 +1,5 @@
+0.000: (learn_emotional_points step1) [900.000]
+900.001: (find_love_center step2) [600.000]
+900.001: (find_anger_points step3) [300.000]
+900.001: (locate_depression_points step4) [300.000]
+900.001: (identify_sympathy_points step5) [300.000]

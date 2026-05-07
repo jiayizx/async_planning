@@ -1,0 +1,6 @@
+0.000: (get_supply_list step1) [600.000]
+0.000: (get_book_list step6) [300.000]
+300.001: (buy_books step3) [1800.000]
+600.001: (buy_supplies step2) [2700.000]
+3300.002: (organize_supplies step4) [3600.000]
+6900.003: (pack_backpack step5) [900.000]

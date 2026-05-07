@@ -1,0 +1,3 @@
+0.000: (lower_posture step1) [900.000]
+0.000: (raise_posture step3) [600.000]
+900.001: (position_handlebars step2) [120.000]

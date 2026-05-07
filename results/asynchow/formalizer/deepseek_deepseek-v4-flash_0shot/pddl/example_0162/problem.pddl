@@ -1,0 +1,10 @@
+(define (problem change_name_problem)
+  (:domain change_name)
+  (:init)
+  (:goal (and
+    (name_change_request_included)
+    (social_security_changed)
+    (drivers_license_changed)
+    (passport_changed)
+  ))
+)

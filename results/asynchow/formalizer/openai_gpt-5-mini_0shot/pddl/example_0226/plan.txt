@@ -1,0 +1,5 @@
+0.000: (do_step1_throw_out step1) [7200.000]
+7200.001: (do_step5_buy_kitchen_containers step2) [7200.000]
+7200.001: (do_step4_drawers_racks step3) [7200.000]
+7200.001: (do_step3_bookshelves step4) [14400.000]
+7200.001: (do_step2_buy_storage step5) [3600.000]

@@ -1,0 +1,4 @@
+0.000: (slice_halves step1) [60.000]
+60.001: (slice_wedges step2) [120.000]
+60.001: (remove_seeds step3) [120.000]
+180.002: (peel_wedges step4) [180.000]

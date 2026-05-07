@@ -1,0 +1,7 @@
+0.000: (measure_hip step1) [60.000]
+0.000: (measure_half_girth step2) [120.000]
+0.000: (measure_thigh step3) [60.000]
+0.000: (measure_inseam_with_trousers step4) [120.000]
+0.000: (identify_waist step7) [60.000]
+60.001: (find_waist_measurement step6) [120.000]
+120.001: (find_inseam_measurement step5) [120.000]

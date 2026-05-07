@@ -1,0 +1,3 @@
+0.000: (do_step1_sterilize step1) [900.000]
+0.000: (do_step2_measure step3) [300.000]
+900.001: (do_step3_cut_top step2) [1800.000]

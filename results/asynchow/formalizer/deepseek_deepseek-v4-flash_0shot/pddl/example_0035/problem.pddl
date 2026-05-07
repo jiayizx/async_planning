@@ -1,0 +1,11 @@
+(define (problem film_knowledge_problem)
+  (:domain film_knowledge)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5) (film_knowledge_gained)))
+)

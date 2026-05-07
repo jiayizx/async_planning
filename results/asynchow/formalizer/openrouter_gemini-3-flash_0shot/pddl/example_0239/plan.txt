@@ -1,0 +1,5 @@
+0.000: (prepare_balloons step1) [3600.000]
+0.000: (make_bow step2) [3600.000]
+0.000: (hang_cutouts step3) [2700.000]
+0.000: (get_supplies step5) [1200.000]
+3600.001: (prepare_centerpieces step4) [1800.000]

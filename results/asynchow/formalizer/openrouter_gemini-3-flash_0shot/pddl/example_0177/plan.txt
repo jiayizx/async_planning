@@ -1,0 +1,4 @@
+0.000: (use_caution step1) [300.000]
+300.001: (try_pepper step2) [1200.000]
+300.001: (use_ginger step3) [900.000]
+300.001: (massage_lavender step4) [600.000]

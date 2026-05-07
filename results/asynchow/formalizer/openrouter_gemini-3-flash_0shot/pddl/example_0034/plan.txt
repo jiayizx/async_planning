@@ -1,0 +1,7 @@
+0.000: (look_up_lines step1) [900.000]
+0.000: (look_at_wardrobe step7) [900.000]
+900.001: (memorize_lines step2) [900.000]
+900.001: (put_together_outfit step3) [900.000]
+1800.002: (look_in_mirror step4) [300.000]
+2100.003: (walk_to_school step5) [1500.000]
+3600.004: (talk_to_girl step6) [900.000]

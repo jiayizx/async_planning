@@ -1,0 +1,32 @@
+(define (domain change_name)
+  (:requirements :durative-actions)
+  (:predicates
+    (name_change_request_included)
+    (social_security_changed)
+    (drivers_license_changed)
+    (passport_changed)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 90)
+    :effect (at end (name_change_request_included))
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 28)
+    :condition (at start (name_change_request_included))
+    :effect (at end (social_security_changed))
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 42)
+    :condition (at start (name_change_request_included))
+    :effect (at end (drivers_license_changed))
+  )
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 42)
+    :condition (at start (name_change_request_included))
+    :effect (at end (passport_changed))
+  )
+)

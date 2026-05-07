@@ -1,0 +1,4 @@
+0.000: (speak_with_gate_agent step1) [600.000]
+600.001: (ask_for_vouchers step2) [600.000]
+600.001: (ask_for_reimbursement step3) [600.000]
+600.001: (confirm_flight step4) [1200.000]

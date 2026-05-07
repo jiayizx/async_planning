@@ -1,0 +1,12 @@
+(define (problem walk_in_swamp_problem)
+  (:domain walk_in_swamp)
+  (:init
+    (step_pending_step1)
+    (step_pending_step2)
+    (step_pending_step3)
+    (step_pending_step4)
+    (step_pending_step5)
+  )
+  (:goal (and (step_done_step1) (step_done_step2) (step_done_step3) (step_done_step4) (step_done_step5) (worn_hat)))
+  (:metric minimize (total-time))
+)

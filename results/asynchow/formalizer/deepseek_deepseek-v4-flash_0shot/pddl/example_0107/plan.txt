@@ -1,0 +1,4 @@
+0.000: (do_go_to_restaurant step1) [900.000]
+0.000: (do_pick_up step5) [900.000]
+900.001: (do_fill_out step2) [900.000]
+1800.002: (do_turn_in step3) [60.000]

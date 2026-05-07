@@ -1,0 +1,3 @@
+0.000: (learn_dose step1) [86400.000]
+86400.001: (consider_liquid step2) [300.000]
+86400.001: (take_pill step3) [120.000]

@@ -1,0 +1,2 @@
+647.000: (certify_building step3) [259200.000]
+647.000: (obtain_liquor_license step4) [1814400.000]

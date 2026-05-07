@@ -1,0 +1,3 @@
+0.000: (do_pay step1) [300.000]
+0.000: (do_make_note step3) [120.000]
+300.001: (do_store_receipt step2) [60.000]

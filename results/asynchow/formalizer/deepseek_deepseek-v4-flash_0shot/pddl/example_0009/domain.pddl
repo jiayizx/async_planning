@@ -1,0 +1,73 @@
+(define (domain vacation)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (hotel_prices_looked)
+    (flights_looked)
+    (tickets_bought)
+    (airport_arrived)
+    (plane_boarded)
+    (hotel_booked)
+  )
+  
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 1800)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (hotel_prices_looked)))
+  )
+  
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 3600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (flights_looked)))
+  )
+  
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s))
+                    (at start (flights_looked)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (tickets_bought)))
+  )
+  
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 2700)
+    :condition (and (at start (step_pending ?s))
+                    (at start (tickets_bought))
+                    (at start (hotel_booked)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (airport_arrived)))
+  )
+  
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s))
+                    (at start (airport_arrived)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (plane_boarded)))
+  )
+  
+  (:durative-action do_step6
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s))
+                    (at start (hotel_prices_looked)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (hotel_booked)))
+  )
+)

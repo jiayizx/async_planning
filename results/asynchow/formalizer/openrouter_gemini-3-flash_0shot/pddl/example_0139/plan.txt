@@ -1,0 +1,3 @@
+0.000: (roll_washcloth_body step1) [120.000]
+0.000: (fold_bunch_towel step3) [120.000]
+120.001: (decorate_butterfly step2) [300.000]

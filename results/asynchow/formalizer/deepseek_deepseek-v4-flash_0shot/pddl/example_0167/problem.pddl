@@ -1,0 +1,7 @@
+(define (problem clean_enumel_bathtub)
+  (:domain clean_bathtub)
+  (:objects step1 step2 step3 step4 - step)
+  (:init (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (rinsed) (weekly_cleaned)))
+  (:metric minimize (total-time))
+)

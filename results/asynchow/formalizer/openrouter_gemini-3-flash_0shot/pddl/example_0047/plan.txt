@@ -1,0 +1,6 @@
+0.000: (browse_styles step1) [7200.000]
+0.000: (ask_opinions step6) [1800.000]
+7200.001: (get_snapshot step2) [300.000]
+7500.002: (make_appointment step3) [300.000]
+7800.003: (drive_to_salon step4) [600.000]
+8400.004: (discuss_with_designer step5) [600.000]

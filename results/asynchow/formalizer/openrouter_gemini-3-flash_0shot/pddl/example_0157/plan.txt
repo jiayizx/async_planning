@@ -1,0 +1,3 @@
+0.000: (buy_vinegar step1) [300.000]
+300.001: (add_salt step2) [180.000]
+300.001: (add_soap step3) [120.000]

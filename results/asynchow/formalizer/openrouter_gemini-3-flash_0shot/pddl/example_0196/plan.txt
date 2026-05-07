@@ -1,0 +1,4 @@
+0.000: (make_french_toast step1) [900.000]
+0.000: (make_filling step2) [900.000]
+0.000: (add_toppings step4) [120.000]
+900.001: (assemble_sandwich step3) [300.000]

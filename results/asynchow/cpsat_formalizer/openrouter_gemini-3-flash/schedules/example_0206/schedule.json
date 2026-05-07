@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "step1",
+      "action": "task",
+      "item": "step1",
+      "duration": 7200
+    },
+    {
+      "id": "step2",
+      "action": "task",
+      "item": "step2",
+      "duration": 3600
+    },
+    {
+      "id": "step3",
+      "action": "task",
+      "item": "step3",
+      "duration": 2700
+    },
+    {
+      "id": "step4",
+      "action": "task",
+      "item": "step4",
+      "duration": 3600
+    },
+    {
+      "id": "step5",
+      "action": "task",
+      "item": "step5",
+      "duration": 2400
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "step1",
+      "after": "step2"
+    },
+    {
+      "before": "step1",
+      "after": "step3"
+    },
+    {
+      "before": "step1",
+      "after": "step4"
+    },
+    {
+      "before": "step1",
+      "after": "step5"
+    }
+  ]
+}

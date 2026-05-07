@@ -1,0 +1,11 @@
+(define (problem grill-problem)
+  (:domain grill)
+  (:init
+    (grill_pending)
+    (charcoal_pending)
+    (patties_pending)
+    (cook_pending)
+    (bun_pending)
+  )
+  (:goal (buns_on))
+)

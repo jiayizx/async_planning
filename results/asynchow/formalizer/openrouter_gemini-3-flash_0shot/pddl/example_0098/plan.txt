@@ -1,0 +1,7 @@
+0.000: (get_sim step1) [60.000]
+0.000: (get_screwdriver step7) [20.000]
+20.001: (unscrew_back step2) [60.000]
+80.002: (remove_back step3) [25.000]
+105.003: (remove_old_sim step4) [60.000]
+165.004: (install_new_sim step5) [60.000]
+225.005: (screw_back_in step6) [120.000]

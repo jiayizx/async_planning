@@ -1,0 +1,14 @@
+[
+  {
+    "role": "system",
+    "content": "You are an expert scheduling formalizer.\n\nTranslate each natural-language async planning problem into a JSON scheduling\nspecification for a CP-SAT solver.\n\nRules:\n1. Each numbered step in the problem becomes exactly one action.\n2. Use action=\"task\" for every action.\n3. Use the exact ids step1, step2, ..., stepN based on the step numbers in the\n   problem text.\n4. Use item values identical to the action ids: step1, step2, ..., stepN.\n5. Duration must be the integer number of seconds for that step.\n6. Add a dependency only when the problem states that one step must happen\n   before another. Do not add extra dependencies.\n7. Do not add stations, robots, or resources.\n8. Output only valid JSON in this exact shape:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"action\": \"task\", \"item\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"action\": \"task\", \"item\": \"step2\", \"duration\": 300}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ]\n}\n9. Before finishing, verify that:\n   - every step from 1..N appears exactly once in actions\n   - every dependency endpoint is an existing action id\n   - durations are integer seconds\n   - there are no duplicate actions\n"
+  },
+  {
+    "role": "user",
+    "content": "Translate this planning problem into a CP-SAT scheduling JSON spec.\n\nProblem:\nTo Recycle Wood, here are the steps and the times needed for each step.\nStep 1. Search for a place near you that accepts wood for recycling. (30 min)\nStep 2. Remove any screws or nails left on the wood. (15 min)\nStep 3. Cut down large pieces of wood to submit for recycling. (2 hour)\nStep 4. Transport the wood or have it picked up by a recycler. (1 hour)\n\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede step 4.\nStep 2 must precede step 4.\nStep 3 must precede step 4.\n\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to Recycle Wood?\n\nThe problem contains exactly 4 numbered steps. Your action ids must be:\nstep1, step2, step3, step4\n\nReturn only the JSON object.\n"
+  },
+  {
+    "role": "assistant",
+    "content": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"action\": \"task\", \"item\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"action\": \"task\", \"item\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"action\": \"task\", \"item\": \"step3\", \"duration\": 7200},\n    {\"id\": \"step4\", \"action\": \"task\", \"item\": \"step4\", \"duration\": 3600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step4\"}\n  ]\n}"
+  }
+]

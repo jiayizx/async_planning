@@ -1,0 +1,7 @@
+0.000: (search_stores step1) [300.000]
+300.001: (drive_to_store step2) [900.000]
+1200.002: (look_at_dogs step3) [600.000]
+1800.003: (pick_dog step4) [300.000]
+2100.004: (fill_paperwork step5) [600.000]
+2700.005: (shop_food step6) [900.000]
+2700.005: (shop_supplies step7) [900.000]

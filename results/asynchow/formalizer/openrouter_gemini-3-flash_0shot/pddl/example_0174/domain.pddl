@@ -1,0 +1,65 @@
+(define (domain art_project)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (materials_gathered)
+    (desk_caddy_made)
+    (drum_kit_made)
+    (bowling_game_made)
+  )
+
+  (:durative-action gather_materials
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (materials_gathered))
+    )
+  )
+
+  (:durative-action make_desk_caddy
+    :parameters (?s - step)
+    :duration (= ?duration 1800)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (materials_gathered))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (desk_caddy_made))
+    )
+  )
+
+  (:durative-action make_drum_kit
+    :parameters (?s - step)
+    :duration (= ?duration 2700)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (materials_gathered))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (drum_kit_made))
+    )
+  )
+
+  (:durative-action make_bowling_game
+    :parameters (?s - step)
+    :duration (= ?duration 1200)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (materials_gathered))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (bowling_game_made))
+    )
+  )
+)

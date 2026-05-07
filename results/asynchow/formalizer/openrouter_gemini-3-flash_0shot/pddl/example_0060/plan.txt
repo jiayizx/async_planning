@@ -1,0 +1,5 @@
+0.000: (pack_belongings step1) [86400.000]
+0.000: (rent_uhaul step5) [3600.000]
+86400.001: (load_uhaul step2) [21600.000]
+108000.002: (start_uhaul step3) [60.000]
+108060.003: (leave_town step4) [300.000]

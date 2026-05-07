@@ -1,0 +1,5 @@
+0.000: (get_dressed step1) [600.000]
+0.000: (pack_supplies step5) [120.000]
+600.001: (drive_to_beach step2) [1800.000]
+2400.002: (park_car step3) [1200.000]
+3600.003: (walk_to_sand step4) [600.000]

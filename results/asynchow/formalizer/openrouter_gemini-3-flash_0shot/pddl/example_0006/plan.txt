@@ -1,0 +1,3 @@
+0.000: (buy_piano step6) [3600.000]
+647.000: (create_ad step4) [3600.000]
+647.000: (find_student step5) [604800.000]

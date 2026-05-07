@@ -1,0 +1,7 @@
+0.000: (search_regulations step1) [1800.000]
+1800.001: (get_license step2) [7200.000]
+9000.002: (search_streams step3) [1800.000]
+9000.002: (buy_equipment step4) [10800.000]
+19800.003: (drive_to_streams step5) [3600.000]
+23400.004: (unpack_equipment step6) [1800.000]
+25200.005: (cast_line step7) [7200.000]

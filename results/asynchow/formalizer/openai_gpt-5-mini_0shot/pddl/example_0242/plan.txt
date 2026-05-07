@@ -1,0 +1,5 @@
+0.000: (do_step2_roll_dough step1) [600.000]
+0.000: (do_step1_preheat step5) [600.000]
+600.001: (do_step3_add_filling step2) [900.000]
+1500.002: (do_step4_fold_pinch step3) [300.000]
+1800.003: (do_step5_bake step4) [1500.000]

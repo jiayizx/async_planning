@@ -1,0 +1,6 @@
+(define (problem diagnose_geriatric_hamster)
+  (:domain diagnose_hamster)
+  (:objects dummy)
+  (:init (pending_step2) (pending_step3) (pending_step1))
+  (:goal (and (done_step1) (done_step2) (done_step3) (diagnosis_done)))
+)

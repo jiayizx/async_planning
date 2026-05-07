@@ -1,0 +1,17 @@
+(define (problem teach_cat_talk_problem)
+  (:domain teach_cat_talk)
+  (:objects step1 step2 step3 - step)
+  (:init 
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+  )
+  (:goal (and 
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (recognize_meow_done)
+    (understand_meow_done)
+    (pay_attention_done)
+  ))
+)

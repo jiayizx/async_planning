@@ -1,0 +1,56 @@
+(define (domain flower_planting)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (seeds_obtained)
+    (equipment_obtained)
+    (holes_dug)
+    (pots_placed)
+    (seeds_dirt_added)
+    (plants_watered)
+  )
+
+  (:durative-action get_seeds
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (seeds_obtained)))
+  )
+
+  (:durative-action get_equipment
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (equipment_obtained)))
+  )
+
+  (:durative-action dig_holes
+    :parameters (?s - step)
+    :duration (= ?duration 1500)
+    :condition (and (at start (step_pending ?s)) (at start (seeds_obtained)) (at start (equipment_obtained)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (holes_dug)))
+  )
+
+  (:durative-action place_pots
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s)) (at start (holes_dug)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (pots_placed)))
+  )
+
+  (:durative-action add_seeds_dirt
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (and (at start (step_pending ?s)) (at start (pots_placed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (seeds_dirt_added)))
+  )
+
+  (:durative-action water_plants
+    :parameters (?s - step)
+    :duration (= ?duration 1500)
+    :condition (and (at start (step_pending ?s)) (at start (seeds_dirt_added)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (plants_watered)))
+  )
+)

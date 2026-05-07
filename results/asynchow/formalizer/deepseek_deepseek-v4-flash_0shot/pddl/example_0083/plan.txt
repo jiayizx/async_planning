@@ -1,0 +1,7 @@
+0.000: (do_pick_paper step1) [35.000]
+0.000: (do_pick_pen step2) [35.000]
+0.000: (do_plug step7) [35.000]
+35.001: (do_turn_on_amp step3) [10.000]
+45.002: (do_come_up_riff step4) [3600.000]
+3645.003: (do_pen_riff step5) [900.000]
+4545.004: (do_revise step6) [3600.000]

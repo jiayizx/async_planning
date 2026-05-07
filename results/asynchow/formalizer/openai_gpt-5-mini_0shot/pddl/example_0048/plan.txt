@@ -1,0 +1,5 @@
+0.000: (do_light step1) [180.000]
+180.001: (do_make step2) [300.000]
+180.001: (do_warm step3) [1200.000]
+1380.002: (do_cook step4) [900.000]
+2280.003: (do_assemble step5) [300.000]

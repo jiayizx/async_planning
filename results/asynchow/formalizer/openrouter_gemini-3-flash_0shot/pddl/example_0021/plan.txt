@@ -1,0 +1,5 @@
+0.000: (pick_system step1) [1800.000]
+1800.001: (match_interests step2) [1800.000]
+1800.001: (search_games step3) [1800.000]
+3600.002: (order_online step4) [600.000]
+4200.003: (setup_system step5) [1800.000]

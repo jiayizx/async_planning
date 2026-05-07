@@ -1,0 +1,7 @@
+(define (problem identify_hornet_prob)
+  (:domain identify_hornet)
+  (:objects step1 step2 step3 - step)
+  (:init (step_pending step1) (step_pending step2) (step_pending step3)
+         (not (step_done step1)) (not (step_done step2)) (not (step_done step3)))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (s1_done)))
+)

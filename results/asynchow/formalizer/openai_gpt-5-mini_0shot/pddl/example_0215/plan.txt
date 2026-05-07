@@ -1,0 +1,4 @@
+0.000: (do_step1_boil step1) [300.000]
+0.000: (do_step4_cover step5) [60.000]
+300.001: (do_step2_chill step2) [3600.000]
+3900.002: (do_step3_combine step3) [600.000]

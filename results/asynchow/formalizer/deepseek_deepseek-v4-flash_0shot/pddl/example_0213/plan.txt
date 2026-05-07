@@ -1,0 +1,5 @@
+0.000: (do_blend_sugar step1) [240.000]
+0.000: (do_combine_flour step5) [120.000]
+0.000: (do_combine_flour step4) [120.000]
+240.001: (do_mix_dough step2) [360.000]
+600.002: (do_place_cookies step3) [600.000]

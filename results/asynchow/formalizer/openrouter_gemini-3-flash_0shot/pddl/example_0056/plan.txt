@@ -1,0 +1,6 @@
+0.000: (look_up_store step1) [18000.000]
+18000.001: (check_availability step2) [18000.000]
+18000.001: (browse_site step3) [18000.000]
+36000.002: (go_to_store step4) [18000.000]
+54000.003: (interact_with_pets step5) [10800.000]
+64800.004: (walk_to_cashier step6) [3600.000]

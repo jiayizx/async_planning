@@ -1,0 +1,7 @@
+0.000: (buy_bus_pass step1) [300.000]
+0.000: (think_destination step7) [60.000]
+60.001: (lookup_bus step3) [120.000]
+180.002: (map_bus_stop step4) [180.000]
+300.001: (collect_bus_pass step2) [120.000]
+420.002: (walk_to_bus_stop step5) [300.000]
+720.003: (check_bus_on_time step6) [120.000]

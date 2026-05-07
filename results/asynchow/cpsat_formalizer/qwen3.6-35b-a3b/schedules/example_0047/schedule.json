@@ -1,0 +1,62 @@
+{
+  "actions": [
+    {
+      "id": "step1",
+      "action": "task",
+      "item": "step1",
+      "duration": 1800
+    },
+    {
+      "id": "step2",
+      "action": "task",
+      "item": "step2",
+      "duration": 7200
+    },
+    {
+      "id": "step3",
+      "action": "task",
+      "item": "step3",
+      "duration": 300
+    },
+    {
+      "id": "step4",
+      "action": "task",
+      "item": "step4",
+      "duration": 300
+    },
+    {
+      "id": "step5",
+      "action": "task",
+      "item": "step5",
+      "duration": 600
+    },
+    {
+      "id": "step6",
+      "action": "task",
+      "item": "step6",
+      "duration": 600
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "step1",
+      "after": "step3"
+    },
+    {
+      "before": "step2",
+      "after": "step3"
+    },
+    {
+      "before": "step3",
+      "after": "step4"
+    },
+    {
+      "before": "step4",
+      "after": "step5"
+    },
+    {
+      "before": "step5",
+      "after": "step6"
+    }
+  ]
+}

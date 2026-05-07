@@ -1,0 +1,5 @@
+0.000: (do_step4_preheat step1) [900.000]
+0.000: (do_step1_locate step5) [900.000]
+900.001: (do_step2_cut step2) [120.000]
+1020.002: (do_step3_scoop step3) [300.000]
+1320.003: (do_step5_serve step4) [600.000]

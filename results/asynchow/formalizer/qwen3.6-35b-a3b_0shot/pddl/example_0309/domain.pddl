@@ -1,0 +1,51 @@
+(define (domain palm_reading)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step)
+               (pred_1) (pred_2) (pred_3) (pred_4) (pred_5) (pred_6) (pred_7) (pred_8) (pred_9))
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (step_pending step1)) (at start (pred_7)) (at start (pred_8)) (at start (pred_9)))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (pred_1))))
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending step2)) (at start (pred_1)))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (pred_2))))
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (step_pending step3)) (at start (pred_2)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (pred_3))))
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending step4)) (at start (pred_2)))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (pred_4))))
+  (:durative-action do_step5
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and (at start (step_pending step5)) (at start (pred_2)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (pred_5))))
+  (:durative-action do_step6
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (step_pending step6)) (at start (pred_2)))
+    :effect (and (at start (not (step_pending step6))) (at end (step_done step6)) (at end (pred_6))))
+  (:durative-action do_step7
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (step_pending step7))
+    :effect (and (at start (not (step_pending step7))) (at end (step_done step7)) (at end (pred_7))))
+  (:durative-action do_step8
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (at start (step_pending step8))
+    :effect (and (at start (not (step_pending step8))) (at end (step_done step8)) (at end (pred_8))))
+  (:durative-action do_step9
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (step_pending step9))
+    :effect (and (at start (not (step_pending step9))) (at end (step_done step9)) (at end (pred_9))))
+)

@@ -1,0 +1,3 @@
+0.000: (wear_comfortable_clothes step1) [300.000]
+0.000: (wear_hair_up step3) [180.000]
+300.001: (slip_on_dance_shoes step2) [120.000]

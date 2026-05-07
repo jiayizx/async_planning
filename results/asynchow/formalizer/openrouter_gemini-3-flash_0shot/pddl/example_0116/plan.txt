@@ -1,0 +1,5 @@
+0.000: (pack_backpacks step1) [86400.000]
+0.000: (drive_to_front step5) [86400.000]
+86400.001: (hike_out step2) [86400.000]
+172800.002: (camp_out step3) [86400.000]
+259200.003: (hike_back step4) [86400.000]

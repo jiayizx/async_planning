@@ -1,0 +1,7 @@
+0.000: (go_to_location step1) [300.000]
+300.001: (check_in step2) [900.000]
+1200.002: (review_strategies step3) [3600.000]
+1200.002: (find_spot step4) [300.000]
+4800.003: (go_to_chair step5) [60.000]
+4860.004: (play_game step6) [3600.000]
+8460.005: (congratulate_opponent step7) [60.000]

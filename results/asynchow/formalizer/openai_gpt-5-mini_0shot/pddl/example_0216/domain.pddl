@@ -1,0 +1,52 @@
+(define (domain tell_boyfriend_dentist)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (s1_completed)
+    (s2_completed)
+    (s3_completed)
+    (s4_completed)
+  )
+
+  (:durative-action do_step1 ()
+    :duration (= ?duration 300)
+    :condition (at start (step_pending step1))
+    :effect (and
+      (at start (not (step_pending step1)))
+      (at end (step_done step1))
+      (at end (s1_completed))
+    )
+  )
+
+  (:durative-action do_step2 ()
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending step2)) (at start (s1_completed)))
+    :effect (and
+      (at start (not (step_pending step2)))
+      (at end (step_done step2))
+      (at end (s2_completed))
+    )
+  )
+
+  (:durative-action do_step3 ()
+    :duration (= ?duration 7200)
+    :condition (and (at start (step_pending step3)) (at start (s2_completed)))
+    :effect (and
+      (at start (not (step_pending step3)))
+      (at end (step_done step3))
+      (at end (s3_completed))
+    )
+  )
+
+  (:durative-action do_step4 ()
+    :duration (= ?duration 1800)
+    :condition (at start (step_pending step4))
+    :effect (and
+      (at start (not (step_pending step4)))
+      (at end (step_done step4))
+      (at end (s4_completed))
+    )
+  )
+)

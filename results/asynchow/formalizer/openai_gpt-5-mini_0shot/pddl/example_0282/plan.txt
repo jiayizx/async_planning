@@ -1,0 +1,3 @@
+0.000: (do_prepare_whelping_box step1) [1800.000]
+1800.001: (do_place_heat_lamp step2) [600.000]
+1800.001: (do_line_whelping_box step3) [900.000]

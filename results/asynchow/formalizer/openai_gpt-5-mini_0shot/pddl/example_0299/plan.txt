@@ -1,0 +1,7 @@
+0.000: (do_step3_prepare_pads) [60.000]
+0.000: (do_step2_select_cigar) [120.000]
+0.000: (do_step1_choose_flavor) [300.000]
+300.001: (do_step4_soak_pads) [300.000]
+600.002: (do_step5_stash_cigar_with_pad) [60.000]
+660.003: (do_step6_place_in_humidor) [259200.000]
+259860.004: (do_step7_enjoy) [3600.000]

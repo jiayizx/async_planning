@@ -1,0 +1,7 @@
+0.000: (take_ingredients_out step1) [60.000]
+0.000: (put_pan_on_stove step7) [60.000]
+60.001: (put_butter_in_pan step2) [30.000]
+90.002: (turn_stove_on step3) [30.000]
+120.003: (add_egg_to_pan step4) [30.000]
+150.004: (cook_egg step5) [300.000]
+450.005: (serve_and_enjoy step6) [60.000]

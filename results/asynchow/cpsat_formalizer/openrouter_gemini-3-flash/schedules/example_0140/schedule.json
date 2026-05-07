@@ -1,0 +1,32 @@
+{
+  "actions": [
+    {
+      "id": "step1",
+      "action": "task",
+      "item": "step1",
+      "duration": 86400
+    },
+    {
+      "id": "step2",
+      "action": "task",
+      "item": "step2",
+      "duration": 3600
+    },
+    {
+      "id": "step3",
+      "action": "task",
+      "item": "step3",
+      "duration": 604800
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "step1",
+      "after": "step3"
+    },
+    {
+      "before": "step2",
+      "after": "step3"
+    }
+  ]
+}

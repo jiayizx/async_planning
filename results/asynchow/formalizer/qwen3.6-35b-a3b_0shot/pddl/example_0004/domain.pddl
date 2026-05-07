@@ -1,0 +1,59 @@
+(define (domain plant_flowers)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step)
+               (step_done ?s - step)
+               (seeds_obtained)
+               (equipment_obtained)
+               (holes_dug)
+               (pots_placed)
+               (seeds_added)
+               (plants_watered))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration 300
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (seeds_obtained))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration 900
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (equipment_obtained))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration 1500
+    :condition (and (at start (step_pending ?s))
+                    (at start (seeds_obtained))
+                    (at start (equipment_obtained)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (holes_dug))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration 300
+    :condition (and (at start (step_pending ?s))
+                    (at start (holes_dug)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (pots_placed))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration 900
+    :condition (and (at start (step_pending ?s))
+                    (at start (pots_placed)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (seeds_added))))
+  (:durative-action do_step6
+    :parameters (?s - step)
+    :duration 1500
+    :condition (and (at start (step_pending ?s))
+                    (at start (seeds_added)))
+    :effect (and (at start (not (step_pending ?s)))
+                 (at end (step_done ?s))
+                 (at end (plants_watered))))
+)

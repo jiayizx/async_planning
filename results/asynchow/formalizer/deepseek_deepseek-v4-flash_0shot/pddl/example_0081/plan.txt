@@ -1,0 +1,5 @@
+0.000: (do_research step1) [14400.000]
+14400.001: (do_plan step2) [14400.000]
+28800.002: (do_split_cost step3) [3600.000]
+28800.002: (do_invite step4) [3600.000]
+32400.003: (do_meet step5) [3600.000]
