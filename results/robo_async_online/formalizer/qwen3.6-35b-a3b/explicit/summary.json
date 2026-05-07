@@ -1,0 +1,57 @@
+{
+  "model": "qwen3.6-35b-a3b",
+  "online_mode": "strict",
+  "n_tasks": 140,
+  "n_success": 3,
+  "success_rate": 0.0214,
+  "avg_makespan": 20.7617,
+  "avg_makespan_ratio": 1.0,
+  "n_llm_error": 23,
+  "n_solver_error": 100,
+  "n_parse_error": 0,
+  "n_eval_error": 14,
+  "by_tag": {
+    "online_easy": {
+      "n": 20,
+      "n_success": 2,
+      "success_rate": 0.1,
+      "avg_makespan_ratio": 1.0001
+    },
+    "online_medium": {
+      "n": 20,
+      "n_success": 1,
+      "success_rate": 0.05,
+      "avg_makespan_ratio": 0.9998
+    },
+    "online_hard_station": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_temporal": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_multiagent": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_high_speedup": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    }
+  }
+}
