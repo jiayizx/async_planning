@@ -1,1 +1,17 @@
-(define (problem potato-soup-problem)(:domain robotouille-async)(:objects table_1 stove_1 table_2 board_1 sink_1 table_3 - station robot_1 - player potato_1 - item pot_1 bowl_1 - container water_1 - water)(:init (isrobot robot_1)(istable table_1)(isstove stove_1)(istable table_2)(isboard board_1)(issink sink_1)(istable table_3)(ispotato potato_1)(iscuttable potato_1)(ispottype pot_1)(isbowltype bowl_1)(loc robot_1 table_1)(vacant stove_1)(vacant table_2)(vacant board_1)(vacant sink_1)(vacant table_3)(nothing robot_1)(nocontainer robot_1)(at potato_1 table_1)(on potato_1 table_1)(clear potato_1)(container_at pot_1 sink_1)(container_on_station pot_1)(container_at bowl_1 table_2)(container_on_station bowl_1)(empty stove_1)(empty board_1)(empty table_3)(water_available water_1)(station_free stove_1)(station_free board_1)(station_free sink_1))(:goal (and (has_water bowl_1 water_1)(in water_1 bowl_1)(addedto potato_1 water_1)(isboiling water_1)(container_at bowl_1 table_2))))
+(define (problem robotouille-task)
+  (:domain robotouille)
+  (:objects
+    table_1 table_2 table_3 table_4 table_5 sink_1 stove_1 stove_2 - station
+    bread_1 bread_2 bread_3 chicken_1 cheese_1 - item
+    robot_1 - player
+  )
+  (:init (istable table_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5) (issink sink_1) (isstove stove_1) (isstove stove_2) (loc robot_1 table_1) (nothing robot_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant sink_1) (vacant stove_1) (vacant stove_2) (on bread_1 table_1) (at bread_1 table_1) (clear bread_1) (item-free bread_1) (on bread_2 table_2) (at bread_2 table_2) (clear bread_2) (item-free bread_2) (on bread_3 table_5) (at bread_3 table_5) (clear bread_3) (item-free bread_3) (on chicken_1 sink_1) (at chicken_1 sink_1) (clear chicken_1) (item-free chicken_1) (iscookable chicken_1) (on cheese_1 table_3) (at cheese_1 table_3) (clear cheese_1) (item-free cheese_1) (empty stove_1) (empty stove_2) (empty table_4))
+  (:goal (and
+    (on bread_1 table_1)
+    (iscooked chicken_1)
+    (at chicken_1 table_1)
+    (at cheese_1 table_1)
+    (at bread_2 table_1)
+    (clear bread_2)
+  ))
+)

@@ -1,5 +1,0 @@
-0.000: (measure_cereal_milk) [120.000]
-120.001: (prepare_bowls_toppings) [300.000]
-120.001: (whisk_farina_milk) [60.000]
-180.002: (boil_water_salt) [480.000]
-660.003: (pour_and_simmer) [180.000]

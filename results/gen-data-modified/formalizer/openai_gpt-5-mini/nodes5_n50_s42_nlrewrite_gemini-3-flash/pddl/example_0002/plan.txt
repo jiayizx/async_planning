@@ -1,5 +1,0 @@
-0.000: (do_lookup_numbers) [120.000]
-120.001: (do_write_flashcards) [600.000]
-120.001: (do_memorize_repetition) [1800.000]
-1920.002: (do_record_recitation) [300.000]
-2220.003: (do_listen_and_correct) [180.000]

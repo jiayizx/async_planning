@@ -1,5 +1,0 @@
-0.000: (logout_workstation) [60.000]
-0.000: (locate_keys) [30.000]
-30.001: (unlock_and_start) [45.000]
-60.001: (pack_backpack) [180.000]
-240.002: (walk_to_parking) [480.000]

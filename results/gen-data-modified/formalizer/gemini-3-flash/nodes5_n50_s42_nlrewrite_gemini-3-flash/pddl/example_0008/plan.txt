@@ -1,5 +1,0 @@
-0.000: (wait_transition) [345600.000]
-0.000: (clean_area) [180.000]
-180.001: (apply_cold_compress) [1200.000]
-1380.002: (massage_arnica) [120.000]
-345600.001: (apply_concealer) [300.000]

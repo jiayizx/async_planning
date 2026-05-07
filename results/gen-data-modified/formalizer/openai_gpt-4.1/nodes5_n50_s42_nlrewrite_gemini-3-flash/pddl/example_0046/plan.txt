@@ -1,5 +1,0 @@
-0.000: (purchase_fresh_produce) [7200.000]
-0.000: (gather_ribbons_and_crowns) [3600.000]
-3600.001: (dance_around_maypole) [1800.000]
-7200.001: (prepare_community_feast) [14400.000]
-21600.002: (host_neighborhood_picnic) [10800.000]

@@ -1,5 +1,0 @@
-0.000: (find_wallet) [900.000]
-900.001: (withdraw_cash) [300.000]
-1200.002: (purchase_pass) [120.000]
-1320.003: (register_serial) [600.000]
-1920.004: (wait_activation) [3600.000]

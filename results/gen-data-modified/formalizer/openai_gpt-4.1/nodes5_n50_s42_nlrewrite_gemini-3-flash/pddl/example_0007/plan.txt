@@ -1,5 +1,0 @@
-0.000: (find_wallet_phone) [300.000]
-300.001: (check_stove_lights) [120.000]
-420.002: (set_alarm) [30.000]
-420.002: (put_on_coat) [45.000]
-465.003: (put_keys_in_pocket) [10.000]

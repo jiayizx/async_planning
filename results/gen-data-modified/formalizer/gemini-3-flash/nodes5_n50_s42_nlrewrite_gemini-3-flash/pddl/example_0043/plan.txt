@@ -1,5 +1,0 @@
-0.000: (research_grooming) [7200.000]
-7200.001: (observe_child) [604800.000]
-7200.001: (attend_seminar) [10800.000]
-18000.002: (review_checklist) [1200.000]
-612000.002: (document_incidents) [2700.000]

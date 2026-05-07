@@ -1,5 +1,0 @@
-0.000: (sift_dry_ingredients) [180.000]
-0.000: (preheat_oven) [900.000]
-180.001: (whisk_dry_ingredients) [300.000]
-480.002: (combine_batter) [600.000]
-900.001: (prepare_cake_pan) [120.000]

@@ -1,5 +1,0 @@
-0.000: (prep_dice_veggies) [720.000]
-0.000: (husk_wash_corn) [300.000]
-720.001: (saute_onions_garlic) [480.000]
-1200.002: (simmer_corn_broth) [1200.000]
-2400.003: (blend_soup) [180.000]

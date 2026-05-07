@@ -1,5 +1,0 @@
-0.000: (connect_telephone_line_to_modem) [120.000]
-0.000: (purchase_usb_ethernet_adapter) [259200.000]
-120.001: (configure_internet_connection_sharing) [1200.000]
-259200.001: (plug_ethernet_from_wii_adapter_into_pc) [30.000]
-259230.002: (run_wii_connection_test_and_save_settings) [300.000]

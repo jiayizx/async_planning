@@ -1,0 +1,24 @@
+{
+  "model": "openai/gpt-5-mini",
+  "n_tasks": 10,
+  "n_success": 6,
+  "success_rate": 0.6,
+  "avg_makespan_ratio": 0.6667,
+  "n_llm_error": 0,
+  "n_solver_error": 1,
+  "n_eval_error": 3,
+  "by_difficulty": {
+    "easy": {
+      "n": 2,
+      "n_success": 2
+    },
+    "medium": {
+      "n": 5,
+      "n_success": 3
+    },
+    "hard": {
+      "n": 3,
+      "n_success": 1
+    }
+  }
+}
