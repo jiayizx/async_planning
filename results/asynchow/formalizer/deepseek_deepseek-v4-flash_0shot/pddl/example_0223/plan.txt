@@ -1,0 +1,5 @@
+0.000: (do_bathe step1) [1800.000]
+0.000: (do_setup step5) [300.000]
+300.001: (do_shampoo step2) [600.000]
+900.002: (do_rinse step3) [300.000]
+1200.003: (do_dry step4) [900.000]

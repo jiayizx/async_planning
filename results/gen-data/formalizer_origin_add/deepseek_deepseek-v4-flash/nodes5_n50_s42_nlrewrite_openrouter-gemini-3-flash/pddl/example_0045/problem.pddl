@@ -1,0 +1,18 @@
+(define (problem makeup-problem)
+  (:domain makeup)
+  (:init
+    (moisturizer_pending)
+    (primer_pending)
+    (foundation_pending)
+    (setting_powder_pending)
+    (mist_pending)
+  )
+  (:goal (and
+    (moisturizer_applied)
+    (primer_set)
+    (foundation_blended)
+    (setting_powder_buffed)
+    (finishing_mist_sprayed)
+  ))
+  (:metric minimize (total-time))
+)

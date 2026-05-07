@@ -1,0 +1,6 @@
+0.000: (step1_ask_assistant s1) [300.000]
+300.001: (step6_frozen_shoulder_test s2) [600.000]
+300.001: (step5_bicep_test s3) [300.000]
+300.001: (step4_ac_joint_test s4) [300.000]
+300.001: (step3_impingement_test s5) [300.000]
+300.001: (step2_slap_test s6) [600.000]

@@ -1,0 +1,5 @@
+0.000: (do_step4_strip_and_clean step1) [7200.000]
+0.000: (do_step2_research_order_heads step5) [1200.000]
+1200.001: (do_step3_wait_arrival step2) [432000.000]
+433200.002: (do_step1_apply_wraps step3) [10800.000]
+444000.003: (do_step5_install_and_tune step4) [2700.000]

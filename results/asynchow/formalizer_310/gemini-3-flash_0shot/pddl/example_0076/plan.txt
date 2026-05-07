@@ -1,6 +1,0 @@
-0.000: (put_on_socks) [30.000]
-0.000: (put_on_underwear) [30.000]
-0.000: (put_on_shirt) [30.000]
-30.001: (put_on_shoes) [120.000]
-30.001: (put_on_pants) [30.000]
-150.002: (check_mirror) [30.000]

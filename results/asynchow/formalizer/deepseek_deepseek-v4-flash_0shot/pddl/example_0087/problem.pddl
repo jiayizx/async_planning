@@ -1,0 +1,6 @@
+(define (problem race_problem)
+  (:domain race_planning)
+  (:init (signup_pending) (practice_pending) (eatwell_pending) (rest_pending) (arrive_pending))
+  (:goal (and (signup_done) (practice_done) (eatwell_done) (rest_done) (arrive_done)))
+  (:metric minimize (total-time))
+)

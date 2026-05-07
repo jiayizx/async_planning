@@ -1,0 +1,8 @@
+(define (problem sippy_cup_prob)
+  (:domain sippy_cup)
+  (:requirements :typing :durative-actions)
+  (:objects step1 step2 step3 step4 step5 - step)
+  (:init (step step1) (step step2) (step step3) (step step4) (step step5)
+         (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4) (step_pending step5))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+              (step4_done))))

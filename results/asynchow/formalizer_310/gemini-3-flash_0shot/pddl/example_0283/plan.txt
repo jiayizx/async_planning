@@ -1,7 +1,0 @@
-0.000: (heat_oil) [600.000]
-0.000: (combine_egg_water) [120.000]
-0.000: (prepare_shrimp) [300.000]
-120.001: (add_flour_to_egg) [180.000]
-300.001: (coat_shrimp_flour) [120.000]
-420.002: (dip_shrimp_batter) [180.000]
-600.003: (fry_shrimp) [300.000]

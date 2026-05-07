@@ -1,0 +1,7 @@
+0.000: (look_at_hint step1) [2.000]
+2.001: (give_fireman step2) [4.000]
+2.001: (give_doctor step3) [4.000]
+2.001: (give_chef step4) [4.000]
+2.001: (give_policeman step5) [4.000]
+6.002: (drag_object step6) [2.000]
+8.003: (get_starite step7) [2.000]

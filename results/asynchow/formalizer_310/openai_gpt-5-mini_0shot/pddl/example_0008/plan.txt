@@ -1,5 +1,0 @@
-0.000: (do_look_for_local_classes) [600.000]
-600.001: (do_call_to_enroll) [300.000]
-900.002: (do_wait_next_weekly_class) [604800.000]
-900.002: (do_attend_class) [60.000]
-605700.003: (do_practice_at_home) [1800.000]

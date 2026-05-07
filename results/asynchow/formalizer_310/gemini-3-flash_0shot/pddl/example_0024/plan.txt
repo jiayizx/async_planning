@@ -1,7 +1,0 @@
-0.000: (search_regulations) [1800.000]
-1800.001: (get_license) [7200.000]
-9000.002: (search_streams) [1800.000]
-9000.002: (buy_equipment) [10800.000]
-19800.003: (drive_to_streams) [3600.000]
-23400.004: (unpack_equipment) [1800.000]
-25200.005: (cast_line) [7200.000]

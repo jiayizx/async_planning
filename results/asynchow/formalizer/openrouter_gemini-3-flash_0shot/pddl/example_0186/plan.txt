@@ -1,0 +1,4 @@
+0.000: (work_slowly step1) [1800.000]
+0.000: (use_putty_knife step4) [600.000]
+600.001: (scrape_remnants step2) [1800.000]
+2400.002: (use_pliers step3) [900.000]

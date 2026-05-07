@@ -1,0 +1,5 @@
+0.000: (buy_console step1) [300.000]
+0.000: (buy_game step5) [300.000]
+300.001: (hook_up_tv step2) [600.000]
+900.002: (insert_game step3) [300.000]
+1200.003: (hit_play step4) [300.000]

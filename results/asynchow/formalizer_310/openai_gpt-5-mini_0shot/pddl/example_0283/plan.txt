@@ -1,7 +1,0 @@
-0.000: (step6_heat_oil) [600.000]
-0.000: (step2_mix_egg_water) [120.000]
-0.000: (step1_prepare_shrimp) [300.000]
-120.001: (step3_add_flour) [180.000]
-300.001: (step4_coat_shrimp) [120.000]
-420.002: (step5_dip_batter) [180.000]
-600.003: (step7_fry_shrimp) [300.000]

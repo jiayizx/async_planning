@@ -1,5 +1,0 @@
-0.000: (sterilize_tins) [900.000]
-0.000: (measure_beeswax) [300.000]
-300.001: (melt_wax) [600.000]
-900.002: (stir_essential) [120.000]
-1020.003: (pour_mixture) [3600.000]

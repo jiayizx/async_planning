@@ -1,5 +1,0 @@
-0.000: (record_measurements) [240.000]
-0.000: (put_on_clothing) [180.000]
-0.000: (locate_tape) [120.000]
-180.001: (measure_circumference) [300.000]
-240.001: (log_data) [60.000]

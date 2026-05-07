@@ -1,0 +1,310 @@
+{
+  "actions": [
+    {
+      "id": "step1",
+      "action": "task",
+      "item": "step1",
+      "duration": 1800
+    },
+    {
+      "id": "step2",
+      "action": "task",
+      "item": "step2",
+      "duration": 1200
+    },
+    {
+      "id": "step3",
+      "action": "task",
+      "item": "step3",
+      "duration": 300
+    },
+    {
+      "id": "step4",
+      "action": "task",
+      "item": "step4",
+      "duration": 600
+    },
+    {
+      "id": "step5",
+      "action": "task",
+      "item": "step5",
+      "duration": 2700
+    },
+    {
+      "id": "step6",
+      "action": "task",
+      "item": "step6",
+      "duration": 600
+    },
+    {
+      "id": "step7",
+      "action": "task",
+      "item": "step7",
+      "duration": 120
+    },
+    {
+      "id": "step8",
+      "action": "task",
+      "item": "step8",
+      "duration": 300
+    },
+    {
+      "id": "step9",
+      "action": "task",
+      "item": "step9",
+      "duration": 600
+    },
+    {
+      "id": "step10",
+      "action": "task",
+      "item": "step10",
+      "duration": 300
+    },
+    {
+      "id": "step11",
+      "action": "task",
+      "item": "step11",
+      "duration": 300
+    },
+    {
+      "id": "step12",
+      "action": "task",
+      "item": "step12",
+      "duration": 1500
+    },
+    {
+      "id": "step13",
+      "action": "task",
+      "item": "step13",
+      "duration": 120
+    },
+    {
+      "id": "step14",
+      "action": "task",
+      "item": "step14",
+      "duration": 300
+    },
+    {
+      "id": "step15",
+      "action": "task",
+      "item": "step15",
+      "duration": 180
+    },
+    {
+      "id": "step16",
+      "action": "task",
+      "item": "step16",
+      "duration": 900
+    },
+    {
+      "id": "step17",
+      "action": "task",
+      "item": "step17",
+      "duration": 600
+    },
+    {
+      "id": "step18",
+      "action": "task",
+      "item": "step18",
+      "duration": 1200
+    },
+    {
+      "id": "step19",
+      "action": "task",
+      "item": "step19",
+      "duration": 3600
+    },
+    {
+      "id": "step20",
+      "action": "task",
+      "item": "step20",
+      "duration": 240
+    },
+    {
+      "id": "step21",
+      "action": "task",
+      "item": "step21",
+      "duration": 300
+    },
+    {
+      "id": "step22",
+      "action": "task",
+      "item": "step22",
+      "duration": 60
+    },
+    {
+      "id": "step23",
+      "action": "task",
+      "item": "step23",
+      "duration": 900
+    },
+    {
+      "id": "step24",
+      "action": "task",
+      "item": "step24",
+      "duration": 600
+    },
+    {
+      "id": "step25",
+      "action": "task",
+      "item": "step25",
+      "duration": 180
+    },
+    {
+      "id": "step26",
+      "action": "task",
+      "item": "step26",
+      "duration": 600
+    },
+    {
+      "id": "step27",
+      "action": "task",
+      "item": "step27",
+      "duration": 120
+    },
+    {
+      "id": "step28",
+      "action": "task",
+      "item": "step28",
+      "duration": 600
+    },
+    {
+      "id": "step29",
+      "action": "task",
+      "item": "step29",
+      "duration": 480
+    },
+    {
+      "id": "step30",
+      "action": "task",
+      "item": "step30",
+      "duration": 120
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "step1",
+      "after": "step4"
+    },
+    {
+      "before": "step1",
+      "after": "step23"
+    },
+    {
+      "before": "step2",
+      "after": "step24"
+    },
+    {
+      "before": "step2",
+      "after": "step29"
+    },
+    {
+      "before": "step3",
+      "after": "step17"
+    },
+    {
+      "before": "step5",
+      "after": "step10"
+    },
+    {
+      "before": "step5",
+      "after": "step14"
+    },
+    {
+      "before": "step6",
+      "after": "step11"
+    },
+    {
+      "before": "step8",
+      "after": "step11"
+    },
+    {
+      "before": "step10",
+      "after": "step25"
+    },
+    {
+      "before": "step12",
+      "after": "step20"
+    },
+    {
+      "before": "step15",
+      "after": "step18"
+    },
+    {
+      "before": "step15",
+      "after": "step20"
+    },
+    {
+      "before": "step15",
+      "after": "step30"
+    },
+    {
+      "before": "step16",
+      "after": "step2"
+    },
+    {
+      "before": "step16",
+      "after": "step26"
+    },
+    {
+      "before": "step16",
+      "after": "step29"
+    },
+    {
+      "before": "step18",
+      "after": "step10"
+    },
+    {
+      "before": "step19",
+      "after": "step15"
+    },
+    {
+      "before": "step19",
+      "after": "step24"
+    },
+    {
+      "before": "step19",
+      "after": "step28"
+    },
+    {
+      "before": "step21",
+      "after": "step7"
+    },
+    {
+      "before": "step21",
+      "after": "step8"
+    },
+    {
+      "before": "step21",
+      "after": "step9"
+    },
+    {
+      "before": "step22",
+      "after": "step13"
+    },
+    {
+      "before": "step23",
+      "after": "step14"
+    },
+    {
+      "before": "step25",
+      "after": "step29"
+    },
+    {
+      "before": "step26",
+      "after": "step6"
+    },
+    {
+      "before": "step27",
+      "after": "step12"
+    },
+    {
+      "before": "step27",
+      "after": "step21"
+    },
+    {
+      "before": "step28",
+      "after": "step12"
+    }
+  ]
+}

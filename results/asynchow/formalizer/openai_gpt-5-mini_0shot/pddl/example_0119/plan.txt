@@ -1,0 +1,7 @@
+0.000: (do_step2_buy_detergent step1) [1200.000]
+0.000: (do_step1_buy_softener step7) [1200.000]
+1200.001: (do_step3_gather_clothes step2) [120.000]
+1320.002: (do_step4_open_washer step3) [20.000]
+1340.003: (do_step6_add_detergent step4) [30.000]
+1340.003: (do_step5_put_clothes_in_washer step5) [60.000]
+1400.004: (do_step7_turn_on_washer step6) [20.000]

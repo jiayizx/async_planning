@@ -1,0 +1,9 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "openrouter/gemini-3-flash",
+  "icl_examples": 0,
+  "cot": true,
+  "accuracy": 0.615625,
+  "num_correct": 197,
+  "num_data_points": 320
+}

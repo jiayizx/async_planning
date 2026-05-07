@@ -1,0 +1,17 @@
+(define (problem androgen_reduction_problem)
+  (:domain androgen_reduction)
+  (:init
+    (step1_pending)
+    (step2_pending)
+    (step3_pending)
+    (step4_pending)
+  )
+  (:goal (and
+    (step1_done)
+    (step2_done)
+    (step3_done)
+    (step4_done)
+    (tested_confirmed)
+  ))
+  (:metric minimize (total-time))
+)

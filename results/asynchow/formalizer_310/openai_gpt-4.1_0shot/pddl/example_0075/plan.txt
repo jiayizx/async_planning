@@ -1,6 +1,0 @@
-0.000: (mull_over_pros_cons) [172800.000]
-172800.001: (select_first_preference) [60.000]
-172800.001: (ask_husband_preference) [300.000]
-173100.002: (write_top_two_locations) [120.000]
-173220.003: (put_papers_in_hat) [60.000]
-173280.004: (draw_paper_from_hat) [60.000]

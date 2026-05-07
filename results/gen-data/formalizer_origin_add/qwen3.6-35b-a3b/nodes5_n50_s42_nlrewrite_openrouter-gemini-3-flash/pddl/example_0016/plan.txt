@@ -1,0 +1,5 @@
+0.000: (step3_research_regulations step1) [3600.000]
+3600.001: (step1_renew_license step2) [1800.000]
+5400.002: (step5_pack_gear step3) [1200.000]
+5400.002: (step2_purchase_bait step4) [900.000]
+6600.003: (step4_cast_line step5) [14400.000]

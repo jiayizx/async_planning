@@ -1,5 +1,0 @@
-0.000: (light_grill) [180.000]
-180.001: (make_patties) [300.000]
-180.001: (charcoal_warmup) [1200.000]
-1380.002: (cook_hamburgers) [900.000]
-2280.003: (put_on_bun) [300.000]

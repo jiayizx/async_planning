@@ -1,4 +1,0 @@
-0.000: (do_visit_doctor) [3600.000]
-3600.001: (do_try_antifungal) [604800.000]
-3600.001: (do_take_antihistamine) [1800.000]
-3600.001: (do_apply_cortisone) [300.000]

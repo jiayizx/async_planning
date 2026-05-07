@@ -1,0 +1,5 @@
+0.000: (blend_foundation step1) [300.000]
+0.000: (apply_moisturizer step5) [120.000]
+0.000: (apply_moisturizer step4) [120.000]
+300.001: (buff_powder step2) [240.000]
+540.002: (spray_mist step3) [30.000]

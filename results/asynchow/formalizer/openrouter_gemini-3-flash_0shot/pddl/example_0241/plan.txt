@@ -1,0 +1,5 @@
+0.000: (buy_pretty_item step1) [3600.000]
+0.000: (give_card step2) [900.000]
+0.000: (write_poem step3) [1800.000]
+0.000: (sing_song step5) [600.000]
+3600.001: (have_photo_shoot step4) [10800.000]

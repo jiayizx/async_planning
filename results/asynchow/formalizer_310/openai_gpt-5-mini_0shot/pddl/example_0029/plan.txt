@@ -1,6 +1,0 @@
-0.000: (do_decide) [60.000]
-60.001: (do_find_keys_wallet) [180.000]
-60.001: (do_put_on_clothing) [300.000]
-360.002: (do_put_on_shoes) [120.000]
-360.002: (do_check_mirror) [60.000]
-480.003: (do_step_outside) [60.000]

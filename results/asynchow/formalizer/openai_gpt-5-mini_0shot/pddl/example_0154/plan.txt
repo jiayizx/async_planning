@@ -1,0 +1,3 @@
+0.000: (do_step1_learn_dose step3) [86400.000]
+0.000: (do_step1_learn_dose step2) [86400.000]
+86400.001: (do_step3_consider_liquid step1) [300.000]

@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-8192}"
-NUM_WORKERS="${NUM_WORKERS:-4}"
+NUM_WORKERS="${NUM_WORKERS:-8}"
 MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 
 # for MODEL_NAME in "GPT-4.1"; do
@@ -24,7 +24,7 @@ MAX_EXAMPLES="${MAX_EXAMPLES:-99999}" # for whole dataset
 # done
 
 
-MODEL_NAME="${MODEL_NAME:-gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 python -m src.experiments.run_baselines \
     --model-name $MODEL_NAME \
     --temperature $TEMPERATURE \

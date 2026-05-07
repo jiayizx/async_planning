@@ -1,0 +1,5 @@
+0.000: (mix_turkey_spices s1) [300.000]
+0.000: (heat_oil s5) [120.000]
+300.001: (shape_patties s2) [300.000]
+600.002: (cook_burgers s3) [600.000]
+1200.003: (serve_burgers s4) [60.000]

@@ -1,0 +1,6 @@
+0.000: (do_buy_scale step1) [3600.000]
+3600.001: (do_place_scale step2) [60.000]
+3660.002: (do_begin_undress step3) [300.000]
+3960.003: (do_remove_pants step4) [60.000]
+3960.003: (do_remove_shirt step5) [60.000]
+4020.004: (do_stand_on_scale step6) [60.000]

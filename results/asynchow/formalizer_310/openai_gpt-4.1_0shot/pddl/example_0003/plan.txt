@@ -1,5 +1,0 @@
-0.000: (fill_up_bath_tub) [300.000]
-0.000: (take_off_clothes) [180.000]
-180.001: (add_bubble_bath) [5.000]
-300.001: (set_out_towel) [180.000]
-480.002: (turn_off_running_water) [5.000]

@@ -1,0 +1,6 @@
+0.000: (do_step5_light step1) [120.000]
+0.000: (do_step3_mild step2) [1800.000]
+0.000: (do_step1_try_realize step6) [30.000]
+0.000: (do_step1_try_realize step5) [30.000]
+0.000: (do_step1_try_realize step4) [30.000]
+1800.001: (do_step6_combine step3) [900.000]

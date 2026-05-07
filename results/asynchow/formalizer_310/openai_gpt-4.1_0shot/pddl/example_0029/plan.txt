@@ -1,6 +1,0 @@
-0.000: (decide_where_to_go) [60.000]
-60.001: (find_keys_wallet) [180.000]
-60.001: (put_on_clothing) [300.000]
-360.002: (put_on_shoes) [120.000]
-360.002: (check_mirror) [60.000]
-480.003: (step_outside) [60.000]

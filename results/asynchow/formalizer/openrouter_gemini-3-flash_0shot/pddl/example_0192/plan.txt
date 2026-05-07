@@ -1,0 +1,4 @@
+0.000: (rinse_brows step1) [60.000]
+0.000: (sanitize_toothbrush step4) [60.000]
+60.001: (apply_cleanser step2) [30.000]
+90.002: (rub_brush step3) [120.000]

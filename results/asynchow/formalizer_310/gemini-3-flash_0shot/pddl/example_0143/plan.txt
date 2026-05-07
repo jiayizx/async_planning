@@ -1,3 +1,0 @@
-0.000: (tuck_tie_away) [120.000]
-0.000: (hand_wash_tie) [600.000]
-600.001: (spray_fabric_protector) [300.000]

@@ -1,0 +1,4 @@
+0.000: (gather_materials step1) [600.000]
+600.001: (make_bowling_game step2) [1200.000]
+600.001: (make_drum_kit step3) [2700.000]
+600.001: (make_desk_caddy step4) [1800.000]

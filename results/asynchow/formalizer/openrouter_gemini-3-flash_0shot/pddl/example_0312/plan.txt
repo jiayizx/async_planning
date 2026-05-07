@@ -1,0 +1,4 @@
+0.000: (get_juice step1) [600.000]
+0.000: (make_syrup step4) [300.000]
+600.001: (combine_ingredients step2) [120.000]
+720.002: (refrigerate_and_serve step3) [3600.000]

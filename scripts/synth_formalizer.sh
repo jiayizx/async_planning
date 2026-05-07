@@ -35,11 +35,11 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-# DATA_DIR="data/async_planning"
-DATA_DIR="data/async_planning/nodes5_n50_s42_nlrewrite_gemini-3-flash.json"
+# DATA_DIR="data/async_planning_ds"
+DATA_DIR="data/async_planning/nodes30_n50_s42_nlrewrite_openrouter-gemini-3-flash.json"
 # MODEL="openai/gpt-4.1"
-MODEL="gemini-3-pro"
-SAVE_DIR="results/gen-data-modified/formalizer_origin"
+MODEL="openai/gpt-5-mini"
+SAVE_DIR="results/gen-data/formalizer"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
@@ -50,9 +50,9 @@ TEMPERATURE=0.0
 MAX_TOKENS=32768
 # MAX_TOKENS=65536
 TWO_PHASE=1      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
-EFFECT_GOAL=0    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
+EFFECT_GOAL=1    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 # PATTERN="*_nlrewrite_*.json"
-PATTERN="*nlrewrite_*.json"
+PATTERN="*nlrewrite_openrouter*.json"
 
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -86,6 +86,7 @@ fi
 
 SAFE_MODEL="${MODEL//\//_}"
 SAFE_MODEL="${SAFE_MODEL//:/_}"
+VARIANT_DIR=$([[ "$EFFECT_GOAL" == "1" ]] && echo "formalizer_plus" || echo "formalizer")
 
 echo "============================================================"
 echo " Formalizer on gen-data"
@@ -93,6 +94,7 @@ echo "============================================================"
 echo "  data-dir      : $DATA_DIR"
 echo "  model         : $MODEL"
 echo "  save-dir      : $SAVE_DIR"
+echo "  variant       : $VARIANT_DIR"
 echo "  history-mode  : $HISTORY_MODE"
 echo "  max-examples  : $MAX_EXAMPLES"
 echo "  num-shots     : $NUM_SHOTS"
@@ -107,7 +109,7 @@ FAILED=()
 
 for DATA_PATH in "${FILES[@]}"; do
     STEM="$(basename "$DATA_PATH" .json)"
-    SAVE_PATH="${SAVE_DIR}/${SAFE_MODEL}/${STEM}"
+    SAVE_PATH="${SAVE_DIR}/${VARIANT_DIR}/${SAFE_MODEL}/${STEM}"
 
     echo "────────────────────────────────────────────────────────────"
     echo " File   : $DATA_PATH"

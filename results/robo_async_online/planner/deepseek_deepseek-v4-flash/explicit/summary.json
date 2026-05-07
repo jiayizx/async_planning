@@ -1,0 +1,55 @@
+{
+  "model": "deepseek/deepseek-v4-flash",
+  "online_mode": "strict",
+  "n_tasks": 140,
+  "n_success": 12,
+  "success_rate": 0.0857,
+  "avg_makespan": 19.0475,
+  "avg_makespan_ratio": 0.9993,
+  "n_parse_error": 126,
+  "n_eval_error": 2,
+  "by_tag": {
+    "online_easy": {
+      "n": 20,
+      "n_success": 10,
+      "success_rate": 0.5,
+      "avg_makespan_ratio": 0.997
+    },
+    "online_medium": {
+      "n": 20,
+      "n_success": 2,
+      "success_rate": 0.1,
+      "avg_makespan_ratio": 1.011
+    },
+    "online_hard_station": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_temporal": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_multiagent": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_high_speedup": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    }
+  }
+}

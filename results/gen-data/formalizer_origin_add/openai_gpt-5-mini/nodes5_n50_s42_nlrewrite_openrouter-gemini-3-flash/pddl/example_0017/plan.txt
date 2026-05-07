@@ -1,0 +1,5 @@
+0.000: (do_step4_prepare_medium step1) [3600.000]
+0.000: (do_step4_prepare_medium step5) [3600.000]
+3600.001: (do_step3_harvest step2) [14400.000]
+18000.002: (do_step5_solve_extract step3) [21600.000]
+39600.003: (do_step2_refine step4) [172800.000]

@@ -1,0 +1,3 @@
+0.000: (introduce_self step1) [120.000]
+120.001: (highlight_demeanor step2) [120.000]
+120.001: (emphasize_reliability step3) [120.000]

@@ -1,0 +1,3 @@
+0.000: (obtain_cracker) [1.000]
+0.000: (wear_eye_protection) [1.000]
+1.001: (shell_nuts) [10.000]

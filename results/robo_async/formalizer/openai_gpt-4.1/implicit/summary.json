@@ -1,0 +1,24 @@
+{
+  "model": "openai/gpt-4.1",
+  "n_tasks": 10,
+  "n_success": 7,
+  "success_rate": 0.7,
+  "avg_makespan_ratio": 0.7001,
+  "n_llm_error": 0,
+  "n_solver_error": 0,
+  "n_eval_error": 3,
+  "by_difficulty": {
+    "easy": {
+      "n": 3,
+      "n_success": 3
+    },
+    "medium": {
+      "n": 4,
+      "n_success": 3
+    },
+    "hard": {
+      "n": 3,
+      "n_success": 1
+    }
+  }
+}

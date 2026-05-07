@@ -1,5 +1,0 @@
-0.000: (open_fridge) [300.000]
-0.000: (open_cabinets) [180.000]
-300.001: (consider_required) [60.000]
-360.002: (jot_down_items) [180.000]
-360.002: (grab_pen_paper) [15.000]

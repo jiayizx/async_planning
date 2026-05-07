@@ -1,0 +1,7 @@
+0.000: (bake_sweets step1) [18000.000]
+0.000: (setup_social_media step7) [3600.000]
+3600.001: (send_page step4) [300.000]
+18000.001: (setup_table step2) [1800.000]
+19800.002: (offer_goods step3) [120.000]
+19920.003: (collect_money step5) [120.000]
+20040.004: (repeat_until_goal step6) [1728000.000]

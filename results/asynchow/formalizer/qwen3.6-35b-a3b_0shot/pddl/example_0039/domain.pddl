@@ -1,0 +1,42 @@
+(define (domain movies)
+  (:requirements :typing :durative-actions)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step)
+               (shower_dressed) (movie_found) (tickets_bought) (tickets_printed)
+               (house_locked) (arrived_at_theatre) (entered_theater))
+  (:durative-action step1 () :duration 900
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1)))
+                 (at end (step_done step1))
+                 (at end (shower_dressed))))
+  (:durative-action step2 () :duration 300
+    :condition (at start (step_pending step2))
+    :effect (and (at start (not (step_pending step2)))
+                 (at end (step_done step2))
+                 (at end (movie_found))))
+  (:durative-action step3 () :duration 60
+    :condition (and (at start (step_pending step3)) (at start (movie_found)))
+    :effect (and (at start (not (step_pending step3)))
+                 (at end (step_done step3))
+                 (at end (tickets_bought))))
+  (:durative-action step4 () :duration 60
+    :condition (and (at start (step_pending step4)) (at start (tickets_bought)))
+    :effect (and (at start (not (step_pending step4)))
+                 (at end (step_done step4))
+                 (at end (tickets_printed))))
+  (:durative-action step5 () :duration 300
+    :condition (and (at start (step_pending step5)) (at start (shower_dressed)) (at start (tickets_printed)))
+    :effect (and (at start (not (step_pending step5)))
+                 (at end (step_done step5))
+                 (at end (house_locked))))
+  (:durative-action step6 () :duration 1200
+    :condition (and (at start (step_pending step6)) (at start (house_locked)))
+    :effect (and (at start (not (step_pending step6)))
+                 (at end (step_done step6))
+                 (at end (arrived_at_theatre))))
+  (:durative-action step7 () :duration 60
+    :condition (and (at start (step_pending step7)) (at start (arrived_at_theatre)))
+    :effect (and (at start (not (step_pending step7)))
+                 (at end (step_done step7))
+                 (at end (entered_theater))))
+)

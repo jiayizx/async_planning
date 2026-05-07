@@ -1,0 +1,5 @@
+0.000: (cut_fish step1) [1200.000]
+0.000: (heat_grill step5) [600.000]
+1200.001: (season_fish step2) [300.000]
+1500.002: (grill_fish step3) [1200.000]
+2700.003: (rest_fish step4) [600.000]

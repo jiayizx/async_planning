@@ -1,0 +1,6 @@
+0.000: (do_put_on_underwear step1) [30.000]
+0.000: (do_put_on_socks step2) [30.000]
+0.000: (do_put_on_shirt step6) [30.000]
+30.001: (do_put_on_shoes step3) [120.000]
+30.001: (do_put_on_pants step4) [30.000]
+150.002: (do_check_appearance step5) [30.000]

@@ -1,5 +1,0 @@
-0.000: (transfer_funds) [172800.000]
-0.000: (research_models) [10800.000]
-10800.001: (measure_wall) [600.000]
-172800.001: (drive_to_store) [2700.000]
-175500.002: (unbox_and_mount) [3600.000]

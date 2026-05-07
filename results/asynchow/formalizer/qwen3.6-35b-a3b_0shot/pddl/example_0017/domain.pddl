@@ -1,0 +1,50 @@
+(define (domain gym_planning)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step) (step1_done) (step2_done) (step3_done) (step4_done) (step5_done))
+
+  (:durative-action search_internet
+    :duration 1200
+    :parameters ()
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1)))
+                 (at end (step_done step1))
+                 (at end (step1_done))))
+
+  (:durative-action compare_prices
+    :duration 900
+    :parameters ()
+    :condition (and (at start (step_pending step2))
+                    (at start (step1_done)))
+    :effect (and (at start (not (step_pending step2)))
+                 (at end (step_done step2))
+                 (at end (step2_done))))
+
+  (:durative-action find_compatible_hours
+    :duration 1200
+    :parameters ()
+    :condition (and (at start (step_pending step3))
+                    (at start (step1_done)))
+    :effect (and (at start (not (step_pending step3)))
+                 (at end (step_done step3))
+                 (at end (step3_done))))
+
+  (:durative-action drive_to_gym
+    :duration 900
+    :parameters ()
+    :condition (and (at start (step_pending step4))
+                    (at start (step2_done))
+                    (at start (step3_done)))
+    :effect (and (at start (not (step_pending step4)))
+                 (at end (step_done step4))
+                 (at end (step4_done))))
+
+  (:durative-action get_membership
+    :duration 1200
+    :parameters ()
+    :condition (and (at start (step_pending step5))
+                    (at start (step4_done)))
+    :effect (and (at start (not (step_pending step5)))
+                 (at end (step_done step5))
+                 (at end (step5_done))))
+)

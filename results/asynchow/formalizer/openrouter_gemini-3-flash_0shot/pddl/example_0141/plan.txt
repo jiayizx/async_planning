@@ -1,0 +1,3 @@
+0.000: (sterilize_sharpen step1) [900.000]
+0.000: (measure_tree step3) [300.000]
+900.001: (cut_trunk step2) [1800.000]

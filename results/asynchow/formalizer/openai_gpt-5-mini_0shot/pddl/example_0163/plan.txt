@@ -1,0 +1,4 @@
+0.000: (do_step3_get_small_tv) [7200.000]
+0.000: (do_step1_put_couch) [1800.000]
+1800.001: (do_step4_put_waste_can) [300.000]
+1800.001: (do_step2_put_coffee_table) [900.000]

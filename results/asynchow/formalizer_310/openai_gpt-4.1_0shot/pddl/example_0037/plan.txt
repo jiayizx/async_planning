@@ -1,7 +1,0 @@
-0.000: (drive_to_pet_shop) [900.000]
-900.001: (look_at_rabbits) [900.000]
-1800.002: (pick_rabbit) [900.000]
-2700.003: (shop_pet_supplies) [420.000]
-2700.003: (shop_pet_food) [420.000]
-3120.004: (wait_in_line) [900.000]
-4020.005: (make_purchase) [180.000]

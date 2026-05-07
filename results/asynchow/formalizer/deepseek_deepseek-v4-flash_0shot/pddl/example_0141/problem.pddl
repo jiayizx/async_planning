@@ -1,0 +1,12 @@
+(define (problem prune_cherry_tree)
+  (:domain cherry_tree_pruning)
+  (:objects
+    step1 step2 step3 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+  )
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (tree_pruned)))
+)

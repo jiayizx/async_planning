@@ -1,0 +1,4 @@
+0.000: (go_for_extra_help step1) [3600.000]
+0.000: (hire_tutor step2) [10800.000]
+0.000: (look_to_peer step4) [1800.000]
+10800.001: (practice_on_own step3) [7200.000]

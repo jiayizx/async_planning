@@ -1,0 +1,57 @@
+(define (domain cook_squash)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (preheat_done)
+    (scoop_done)
+    (combine_done)
+    (cooked_done)
+  )
+  (:durative-action preheat
+    :parameters (?s1 - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s1))
+    :effect (and
+      (at start (not (step_pending ?s1)))
+      (at end (step_done ?s1))
+      (at end (preheat_done))
+    )
+  )
+  (:durative-action scoop
+    :parameters (?s2 - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s2))
+    :effect (and
+      (at start (not (step_pending ?s2)))
+      (at end (step_done ?s2))
+      (at end (scoop_done))
+    )
+  )
+  (:durative-action combine
+    :parameters (?s3 - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s3))
+    :effect (and
+      (at start (not (step_pending ?s3)))
+      (at end (step_done ?s3))
+      (at end (combine_done))
+    )
+  )
+  (:durative-action bake
+    :parameters (?s4 - step)
+    :duration (= ?duration 2400)
+    :condition (and
+      (at start (step_pending ?s4))
+      (at start (preheat_done))
+      (at start (scoop_done))
+      (at start (combine_done))
+    )
+    :effect (and
+      (at start (not (step_pending ?s4)))
+      (at end (step_done ?s4))
+      (at end (cooked_done))
+    )
+  )
+)

@@ -1,3 +1,0 @@
-0.000: (understand_risks) [600.000]
-600.001: (warmed_honey) [1200.000]
-600.001: (egg_white_mask) [1200.000]

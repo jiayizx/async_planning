@@ -1,0 +1,37 @@
+(define (domain leave_school)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (packed)
+    (lights_off)
+    (assignment_submitted)
+    (walked)
+    (door_locked))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s)) (at start (assignment_submitted)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (packed))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 60)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (lights_off))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 1200)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (assignment_submitted))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending ?s)) (at start (packed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (walked))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending ?s)) (at start (lights_off)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (door_locked))))
+)

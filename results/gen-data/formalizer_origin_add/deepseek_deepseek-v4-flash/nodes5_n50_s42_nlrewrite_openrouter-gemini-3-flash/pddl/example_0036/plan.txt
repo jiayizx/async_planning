@@ -1,0 +1,5 @@
+0.000: (do_research step1) [7200.000]
+0.000: (do_contact step5) [900.000]
+900.001: (do_schedule step3) [259200.000]
+7200.001: (do_purchase step2) [2700.000]
+260100.002: (do_conduct step4) [1800.000]

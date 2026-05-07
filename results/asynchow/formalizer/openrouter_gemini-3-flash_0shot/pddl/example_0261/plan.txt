@@ -1,0 +1,6 @@
+0.000: (choose_paper step1) [300.000]
+0.000: (measure_drawer step6) [120.000]
+300.001: (cut_paper step2) [180.000]
+480.002: (place_paper step3) [300.000]
+780.003: (trim_excess step4) [600.000]
+1380.004: (add_decoration step5) [900.000]

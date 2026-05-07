@@ -1,3 +1,0 @@
-0.000: (prepare_docs_b) [3600.000]
-0.000: (prepare_docs_a) [3600.000]
-3600.001: (fill_sinarm) [1800.000]

@@ -1,0 +1,7 @@
+0.000: (find_body_of_water step1) [3600.000]
+0.000: (purchase_scuba_gear step7) [300.000]
+300.001: (put_scuba_gear_on step2) [900.000]
+3600.001: (dive_into_water step3) [60.000]
+3660.002: (enter_underwater_caves step4) [300.000]
+3960.003: (explore_caves step5) [3600.000]
+7560.004: (return_to_surface step6) [120.000]

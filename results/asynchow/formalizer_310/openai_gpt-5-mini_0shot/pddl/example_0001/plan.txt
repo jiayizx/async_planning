@@ -1,5 +1,0 @@
-0.000: (do_receive_invitation) [604800.000]
-604800.001: (do_get_directions) [900.000]
-604800.001: (do_prepare_gift) [3600.000]
-605700.002: (do_dress_up) [3600.000]
-609300.003: (do_drive) [3600.000]

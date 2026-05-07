@@ -1,0 +1,3 @@
+0.000: (ask_version step1) [300.000]
+300.001: (number_alphabetical step2) [900.000]
+300.001: (number_individual step3) [600.000]

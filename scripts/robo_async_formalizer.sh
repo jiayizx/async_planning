@@ -10,6 +10,8 @@
 # Usage:
 #   bash scripts/robo_async_formalizer.sh
 #   MODEL_NAME=gemini-3-flash bash scripts/robo_async_formalizer.sh
+#   MODEL_NAME=deepseek-v4-flash bash scripts/robo_async_formalizer.sh
+#   MODEL_NAME=deepseek-v4-pro bash scripts/robo_async_formalizer.sh
 #   MODEL_NAME=openai/gpt-5-mini MAX_TASKS=3 bash scripts/robo_async_formalizer.sh
 #   IMPLICIT=true MODEL_NAME=gemini-3-flash bash scripts/robo_async_formalizer.sh
 #   DATASET=challenge IMPLICIT=true MODEL_NAME=openai/gpt-5-mini bash scripts/robo_async_formalizer.sh
@@ -22,6 +24,8 @@
 #   TIMEOUT      OPTIC solver timeout (seconds)       [120]
 #   NUM_WORKERS  Parallel LLM workers (batch_chat)    [8]
 #   BATCH        Parallel OPTIC solver workers        [8]
+#   REPAIR_ROUNDS LLM repair rounds after failures    [1]
+#   REPAIR_WORKERS Parallel repair workers            [8]
 #   MAX_TASKS    Limit number of tasks (for tests)    [unset = all]
 #   IMPLICIT     Hide dependency hints in NL          [false]
 #   INCLUDE_TAGS Comma-separated tags to include      [unset = all]
@@ -31,7 +35,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-openrouter/gemini-3-flash}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 DATASET="${DATASET:-challenge_v2}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 case "${DATASET}" in
@@ -56,8 +60,10 @@ TASKS_DIR="${TASKS_DIR:-${DEFAULT_TASKS_DIR}}"
 TIMEOUT="${TIMEOUT:-120}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
 BATCH="${BATCH:-8}"
+REPAIR_ROUNDS="${REPAIR_ROUNDS:-1}"
+REPAIR_WORKERS="${REPAIR_WORKERS:-8}"
 MAX_TASKS="${MAX_TASKS:-}"
-IMPLICIT="${IMPLICIT:-true}"
+IMPLICIT="${IMPLICIT:-false}"
 # Tag filters are comma-separated split tags. Supported split tags:
 #   easy, medium, hard_station, hard_temporal, hard_multiagent,
 #   hard_optimization, hard_high_speedup
@@ -88,4 +94,6 @@ EXTRA_ARGS=""
     --timeout     "${TIMEOUT}" \
     --num-workers "${NUM_WORKERS}" \
     --batch       "${BATCH}" \
+    --repair-rounds "${REPAIR_ROUNDS}" \
+    --repair-workers "${REPAIR_WORKERS}" \
     ${EXTRA_ARGS}

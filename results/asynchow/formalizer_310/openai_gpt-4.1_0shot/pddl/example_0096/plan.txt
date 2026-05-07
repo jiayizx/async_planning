@@ -1,5 +1,0 @@
-0.000: (make_posters) [10800.000]
-0.000: (identify_issues) [18000.000]
-0.000: (speak_classmates) [18000.000]
-18000.001: (write_platform) [10800.000]
-28800.002: (make_speeches) [7200.000]

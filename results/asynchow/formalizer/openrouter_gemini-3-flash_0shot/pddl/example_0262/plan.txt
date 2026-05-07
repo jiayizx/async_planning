@@ -1,0 +1,6 @@
+0.000: (pull_hair_up step1) [300.000]
+300.001: (twist_braids step2) [600.000]
+900.002: (wrap_left_bun step3) [180.000]
+900.002: (wrap_right_bun step4) [180.000]
+1080.003: (secure_bun step5) [120.000]
+1200.004: (finish_off step6) [60.000]

@@ -1,1 +1,0 @@
-(define (problem marshmallow_desserts_prob)(:domain marshmallow_desserts)(:init (melt_chocolate_pending) (prepare_kebabs_pending) (drizzle_chocolate_pending))(:goal (and (melt_chocolate_done) (prepare_kebabs_done) (drizzle_chocolate_done))))

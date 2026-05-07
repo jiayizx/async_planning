@@ -1,5 +1,0 @@
-0.000: (do_remove_steak) [2700.000]
-2700.001: (do_sear_steak) [360.000]
-3060.002: (do_rest_steak) [600.000]
-3060.002: (do_season_steak) [120.000]
-3180.003: (do_serve_steak) [60.000]

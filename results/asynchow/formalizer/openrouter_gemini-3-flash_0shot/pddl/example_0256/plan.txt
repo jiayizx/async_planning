@@ -1,0 +1,4 @@
+0.000: (choose_exercises step1) [1200.000]
+1200.001: (delt_raise step2) [600.000]
+1200.001: (dumbbell_row step3) [900.000]
+1200.001: (do_chinups step4) [600.000]

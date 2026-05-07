@@ -1,4 +1,0 @@
-0.000: (get_tested) [14.000]
-14.001: (anti_androgen_medication) [180.000]
-14.001: (hypoglycemic_medication) [180.000]
-14.001: (oral_birth_control) [90.000]

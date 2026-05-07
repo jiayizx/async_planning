@@ -1,0 +1,5 @@
+(define (problem tell_pregnancy)
+  (:domain pregnancy_detection)
+  (:init (step1_pending) (step2_pending) (step3_pending) (step4_pending))
+  (:goal (and (observe_done) (physical_changes_done) (scientific_diagnosis_done) (fetal_responsiveness_done)))
+)

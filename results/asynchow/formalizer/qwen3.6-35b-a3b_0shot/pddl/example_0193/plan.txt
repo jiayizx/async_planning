@@ -1,0 +1,4 @@
+0.000: (visit_doctor step1) [3600.000]
+3600.001: (try_anti_fungal step2) [604800.000]
+3600.001: (take_antihistamine step3) [1800.000]
+3600.001: (apply_cortisone step4) [300.000]

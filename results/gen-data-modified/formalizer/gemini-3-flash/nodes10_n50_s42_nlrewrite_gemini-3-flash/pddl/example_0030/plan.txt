@@ -1,8 +1,0 @@
-0.000: (purchase_guidebook) [1200.000]
-0.000: (confirm_pregnancy) [172800.000]
-1200.001: (verify_insurance) [86400.000]
-87600.002: (select_provider) [259200.000]
-172800.001: (schedule_screening) [1800.000]
-174600.002: (ultrasound_scans) [7200.000]
-346800.003: (physical_examination) [3600.000]
-350400.004: (follow_up_consultation) [2700.000]

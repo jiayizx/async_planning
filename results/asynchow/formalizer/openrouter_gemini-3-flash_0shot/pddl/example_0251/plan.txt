@@ -1,0 +1,6 @@
+0.000: (remember_formula step1) [60.000]
+0.000: (locate_element step6) [60.000]
+60.001: (find_atomic_weight step2) [60.000]
+60.001: (find_atomic_number step3) [60.000]
+120.002: (calculate_atomic_mass step4) [60.000]
+180.003: (subtract_number_from_mass step5) [60.000]

@@ -1,0 +1,5 @@
+0.000: (do_step3_research_guidelines) [2700.000]
+2700.001: (do_step4_download_checklist) [600.000]
+2700.001: (do_step1_attend_seminar) [14400.000]
+17100.002: (do_step5_cross_reference) [1800.000]
+17100.002: (do_step2_review_case_studies) [7200.000]

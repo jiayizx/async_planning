@@ -1,0 +1,3 @@
+0.000: (make_coffee step1) [300.000]
+0.000: (prepare_milk step3) [120.000]
+300.001: (add_chocolate step2) [60.000]

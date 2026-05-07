@@ -1,3 +1,0 @@
-0.000: (do_pay_attention_nonverbal) [1814400.000]
-0.000: (do_recognize_meow) [604800.000]
-604800.001: (do_understand_meow) [1209600.000]

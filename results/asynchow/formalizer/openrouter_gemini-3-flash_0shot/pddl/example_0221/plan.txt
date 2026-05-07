@@ -1,0 +1,2 @@
+0.000: (obtain_report step3) [604800.000]
+604800.001: (find_rate step2) [86400.000]

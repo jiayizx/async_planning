@@ -1,0 +1,5 @@
+0.000: (discuss_cleaning step1) [1800.000]
+0.000: (determine_lights_out step2) [1800.000]
+0.000: (develop_visitor_plan step3) [3600.000]
+0.000: (discuss_phone_policy step5) [900.000]
+3600.001: (sign_agreement step4) [3600.000]

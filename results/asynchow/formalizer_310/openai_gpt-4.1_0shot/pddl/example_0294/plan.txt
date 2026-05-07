@@ -1,5 +1,0 @@
-0.000: (remove_wheels) [600.000]
-600.001: (remove_drum) [900.000]
-1500.002: (change_wheel_cylinder) [1800.000]
-1500.002: (inspect_return_springs) [900.000]
-1500.002: (inspect_brake_shoes) [1200.000]

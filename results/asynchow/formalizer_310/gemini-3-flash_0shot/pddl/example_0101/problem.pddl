@@ -1,1 +1,0 @@
-(define (problem car_prep_prob)(:domain car_prep)(:init (shirt_pending) (pants_pending) (rsock_pending) (lsock_pending) (rshoe_pending) (lshoe_pending) (keys_pending))(:goal (and (shirt_done) (pants_done) (rsock_done) (lsock_done) (rshoe_done) (lshoe_done) (keys_done))))

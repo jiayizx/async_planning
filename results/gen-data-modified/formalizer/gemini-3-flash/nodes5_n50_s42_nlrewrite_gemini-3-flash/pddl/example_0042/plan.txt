@@ -1,5 +1,0 @@
-0.000: (chill_concentrated_juices) [7200.000]
-0.000: (wash_and_slice_fruit) [900.000]
-900.001: (macerate_fruit) [1800.000]
-2700.002: (add_ice_and_ginger_ale) [120.000]
-7200.001: (stir_juices_and_fruit) [300.000]

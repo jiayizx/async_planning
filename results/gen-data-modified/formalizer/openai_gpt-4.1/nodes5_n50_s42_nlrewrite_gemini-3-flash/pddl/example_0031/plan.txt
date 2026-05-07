@@ -1,5 +1,0 @@
-0.000: (prepare_quarantine) [900.000]
-900.001: (setup_drip) [600.000]
-900.001: (float_bag) [1200.000]
-2100.002: (add_tank_water) [3600.000]
-5700.003: (transfer_starfish) [300.000]

@@ -1,0 +1,4 @@
+0.000: (find_vet step1) [172800.000]
+0.000: (recognize_symptoms step4) [86400.000]
+172800.001: (get_diagnosis step2) [1209600.000]
+1382400.002: (discuss_care_plan step3) [172800.000]

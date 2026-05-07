@@ -1,6 +1,0 @@
-0.000: (take_out_laptop) [30.000]
-30.001: (go_on_internet) [10.000]
-40.002: (look_up_website) [60.000]
-100.003: (check_date) [30.000]
-100.003: (check_payment_options) [20.000]
-130.004: (enter_personal_info) [60.000]

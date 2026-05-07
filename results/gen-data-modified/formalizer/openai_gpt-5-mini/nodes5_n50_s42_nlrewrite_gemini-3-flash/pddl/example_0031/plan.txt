@@ -1,5 +1,0 @@
-0.000: (prepare_quarantine_and_tests) [900.000]
-900.001: (setup_drip_line) [600.000]
-900.001: (float_sealed_bag) [1200.000]
-1500.002: (transfer_starfish_to_display) [300.000]
-2100.002: (gradual_add_tank_water) [3600.000]

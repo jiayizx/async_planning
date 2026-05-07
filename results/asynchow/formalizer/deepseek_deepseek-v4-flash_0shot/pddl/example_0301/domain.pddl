@@ -1,0 +1,37 @@
+(define (domain iron_shirt_domain)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_done ?s - step)
+    (iron_obtained)
+    (water_filled)
+    (board_adjusted)
+    (hanging_place_ready)
+    (towels_obtained)
+  )
+  (:durative-action do_step1
+    :duration (= ?duration 5)
+    :condition (and)
+    :effect (and (at end (step_done step1)) (at end (iron_obtained)))
+  )
+  (:durative-action do_step2
+    :duration (= ?duration 1)
+    :condition (at start (iron_obtained))
+    :effect (and (at end (step_done step2)) (at end (water_filled)))
+  )
+  (:durative-action do_step3
+    :duration (= ?duration 2)
+    :condition (and)
+    :effect (and (at end (step_done step3)) (at end (board_adjusted)))
+  )
+  (:durative-action do_step4
+    :duration (= ?duration 1)
+    :condition (and)
+    :effect (and (at end (step_done step4)) (at end (hanging_place_ready)))
+  )
+  (:durative-action do_step5
+    :duration (= ?duration 3)
+    :condition (and)
+    :effect (and (at end (step_done step5)) (at end (towels_obtained)))
+  )
+)

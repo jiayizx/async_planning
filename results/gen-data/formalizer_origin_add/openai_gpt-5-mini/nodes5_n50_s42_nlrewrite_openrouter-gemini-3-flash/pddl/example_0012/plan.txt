@@ -1,0 +1,5 @@
+0.000: (pack_lunch step1) [720.000]
+0.000: (turn_off_alarm step5) [60.000]
+60.001: (do_shower step2) [600.000]
+660.002: (get_dressed step3) [300.000]
+960.003: (walk_to_bus_stop step4) [480.000]

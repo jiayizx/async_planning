@@ -1,5 +1,0 @@
-0.000: (grab_keys) [20.000]
-0.000: (grab_wallet) [30.000]
-30.001: (exit_house) [30.000]
-60.002: (get_in_car) [30.000]
-90.003: (drive_to_store) [600.000]

@@ -1,5 +1,0 @@
-0.000: (do_zest_and_juice_lemon) [120.000]
-0.000: (do_melt_butter) [120.000]
-120.001: (do_whisk_sauce) [180.000]
-300.002: (do_pour_sauce_over_tilapia) [60.000]
-360.003: (do_bake_fish) [720.000]

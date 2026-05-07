@@ -1,0 +1,5 @@
+0.000: (go_to_store step1) [1800.000]
+0.000: (ask_neighbor step2) [600.000]
+0.000: (check_closet step3) [180.000]
+0.000: (check_sink step5) [120.000]
+1800.001: (use_pad step4) [300.000]

@@ -1,5 +1,0 @@
-0.000: (decide_area) [3600.000]
-3600.001: (go_library) [7200.000]
-3600.001: (research_online) [7200.000]
-10800.002: (read_research) [7200.000]
-18000.003: (enjoy_respect) [600.000]

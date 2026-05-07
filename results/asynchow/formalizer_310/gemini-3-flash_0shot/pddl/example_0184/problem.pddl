@@ -1,1 +1,0 @@
-(define (problem coconut_skincare_prob)(:domain coconut_skincare)(:init (wash_face_pending) (moisturize_pending) (remove_makeup_pending) (refresh_pending))(:goal (and (wash_face_done) (moisturize_done) (remove_makeup_done) (refresh_done))))

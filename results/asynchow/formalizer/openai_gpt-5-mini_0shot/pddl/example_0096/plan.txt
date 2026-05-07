@@ -1,0 +1,5 @@
+0.000: (do_step2_identify_issues step1) [18000.000]
+0.000: (do_step5_make_posters step5) [10800.000]
+0.000: (do_step5_make_posters step4) [10800.000]
+18000.001: (do_step3_write_platform step2) [10800.000]
+28800.002: (do_step4_make_speeches step3) [7200.000]

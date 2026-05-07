@@ -1,0 +1,3 @@
+0.000: (add_water step1) [120.000]
+0.000: (put_powder step3) [60.000]
+120.001: (finish_mixing step2) [60.000]

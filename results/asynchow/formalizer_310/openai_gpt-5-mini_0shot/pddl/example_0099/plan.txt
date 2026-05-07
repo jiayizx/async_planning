@@ -1,7 +1,0 @@
-0.000: (buy_snacks) [1800.000]
-1800.001: (turn_on_tv) [3.000]
-1800.001: (put_snacks_in_bowls) [600.000]
-1800.001: (change_clothes) [120.000]
-1803.002: (flip_channel) [60.000]
-2400.002: (put_bowls_on_table) [60.000]
-2460.003: (sit_couch) [2.000]

@@ -1,0 +1,7 @@
+0.000: (get_out_of_bed step1) [300.000]
+300.001: (prepare_outfit step2) [600.000]
+900.002: (go_to_bathroom step3) [300.000]
+1200.003: (get_out_of_shower step4) [300.000]
+1200.003: (take_shower step5) [900.000]
+2100.004: (put_on_clothes step6) [900.000]
+3000.005: (go_to_car step7) [300.000]

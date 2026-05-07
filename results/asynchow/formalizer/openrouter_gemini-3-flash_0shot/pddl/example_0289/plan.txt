@@ -1,0 +1,7 @@
+0.000: (get_wig step1) [1800.000]
+0.000: (get_shoes step2) [1800.000]
+0.000: (get_gloves step3) [1800.000]
+0.000: (get_leggings step4) [1800.000]
+0.000: (prepare_sewing step5) [3600.000]
+0.000: (get_shades step7) [900.000]
+3600.001: (recreate_shirt step6) [3600.000]

@@ -1,4 +1,0 @@
-0.000: (research_computer) [1209600.000]
-1209600.001: (wait_for_sale) [432000.000]
-647.000: (go_to_website) [300.000]
-647.000: (complete_purchase) [180.000]

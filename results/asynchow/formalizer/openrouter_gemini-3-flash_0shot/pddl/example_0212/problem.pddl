@@ -1,0 +1,28 @@
+(define (problem turn_bad_day_around_prob)
+  (:domain turn_bad_day_around)
+  (:objects
+    step1 step2 step3 step4 step5 - step
+  )
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+  )
+  (:goal
+    (and
+      (step_done step1)
+      (step_done step2)
+      (step_done step3)
+      (step_done step4)
+      (step_done step5)
+      (source_identified)
+      (small_step_planned)
+      (ongoing_solutions_found)
+      (positive_focus_achieved)
+      (perspective_gained)
+    )
+  )
+  (:metric minimize (total-time))
+)

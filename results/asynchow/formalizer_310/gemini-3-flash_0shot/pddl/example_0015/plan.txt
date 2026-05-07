@@ -1,7 +1,0 @@
-0.000: (decide_to_build_snowman) [60.000]
-60.001: (put_on_hat) [10.000]
-60.001: (put_on_coat) [60.000]
-60.001: (put_on_boots) [180.000]
-60.001: (put_on_gloves) [30.000]
-240.002: (walk_outside) [20.000]
-260.003: (roll_snow) [1200.000]

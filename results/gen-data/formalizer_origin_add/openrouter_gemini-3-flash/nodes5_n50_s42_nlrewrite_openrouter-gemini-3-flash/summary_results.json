@@ -1,0 +1,14 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "openrouter/gemini-3-flash",
+  "accuracy": 0.76,
+  "num_correct": 38,
+  "num_syntax_errors": 12,
+  "num_semantic_errors": 0,
+  "num_data_points": 50,
+  "plan_valid_rate": 0.18421052631578946,
+  "num_plan_valid": 7,
+  "num_correct_and_valid": 7,
+  "num_correct_but_invalid": 31,
+  "num_incorrect_but_valid": 0
+}

@@ -1,0 +1,4 @@
+0.000: (get_financed step1) [604800.000]
+0.000: (hire_contractor step5) [259200.000]
+604800.001: (make_contract step2) [86400.000]
+691200.002: (transfer_money step3) [86400.000]

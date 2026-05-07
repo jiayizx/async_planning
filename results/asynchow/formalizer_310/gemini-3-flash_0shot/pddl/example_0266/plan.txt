@@ -1,6 +1,0 @@
-0.000: (prepare_items) [300.000]
-300.001: (recite_candle) [60.000]
-300.001: (recite_spices) [60.000]
-300.001: (recite_wine) [60.000]
-360.002: (recite_concluding) [120.000]
-480.003: (extinguish_candle) [60.000]

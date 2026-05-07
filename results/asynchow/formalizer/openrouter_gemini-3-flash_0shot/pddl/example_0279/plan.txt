@@ -1,0 +1,4 @@
+0.000: (work_with_trainer step1) [3600.000]
+3600.001: (try_board_exercises step2) [1800.000]
+3600.001: (incorporate_split_stance step3) [2700.000]
+3600.001: (use_balls step4) [1800.000]

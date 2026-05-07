@@ -1,0 +1,4 @@
+0.000: (do_step1_calculate_total step1) [300.000]
+0.000: (do_step2_decide_percent step4) [120.000]
+300.001: (do_step3_multiply_percent_by_total step2) [120.000]
+420.002: (do_step4_subtract_discount step3) [120.000]

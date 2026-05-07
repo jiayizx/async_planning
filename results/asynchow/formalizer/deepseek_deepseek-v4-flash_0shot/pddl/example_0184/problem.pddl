@@ -1,0 +1,11 @@
+(define (problem coconut-water-skincare)
+  (:domain skincare)
+  (:objects step1 step2 step3 step4 - step)
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+  )
+  (:goal (and (wash_done) (moisturize_done) (remove_makeup_done) (refresh_done)))
+)

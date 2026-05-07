@@ -1,0 +1,7 @@
+0.000: (do_step1_buy_snacks step1) [1800.000]
+1800.001: (do_step5_turn_on_tv step2) [3.000]
+1800.001: (do_step4_put_snacks_in_bowls step3) [600.000]
+1800.001: (do_step2_change_clothes step4) [120.000]
+1803.002: (do_step7_flip_channel step5) [60.000]
+2400.002: (do_step6_put_bowls_on_table step6) [60.000]
+2460.003: (do_step3_sit_couch step7) [2.000]

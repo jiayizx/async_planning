@@ -1,0 +1,7 @@
+0.000: (gather_materials step1) [300.000]
+300.001: (add_oil step2) [60.000]
+300.001: (add_sugar step3) [60.000]
+360.002: (mix_ingredients step4) [120.000]
+480.003: (apply_scrub step5) [300.000]
+780.004: (rinse_scrub step6) [180.000]
+960.005: (dry_skin step7) [180.000]

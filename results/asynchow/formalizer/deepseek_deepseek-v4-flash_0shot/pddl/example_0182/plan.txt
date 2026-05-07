@@ -1,0 +1,4 @@
+0.000: (cook_pasta step1) [600.000]
+600.001: (make_salad step2) [1800.000]
+600.001: (make_tomato step3) [1200.000]
+600.001: (make_olive_oil step4) [900.000]

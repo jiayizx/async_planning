@@ -1,0 +1,5 @@
+0.000: (take_shower step1) [1200.000]
+1200.001: (put_on_shoes step2) [120.000]
+1200.001: (put_on_clothes step3) [300.000]
+1500.002: (drive_to_bookstore step4) [1800.000]
+3300.003: (find_books step5) [300.000]

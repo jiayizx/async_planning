@@ -1,0 +1,3 @@
+0.000: (make_baffle step1) [900.000]
+0.000: (buy_baffle step3) [600.000]
+900.001: (hang_feeder step2) [300.000]

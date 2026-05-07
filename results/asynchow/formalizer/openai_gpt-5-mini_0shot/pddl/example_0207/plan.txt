@@ -1,0 +1,4 @@
+0.000: (do_schedule) [900.000]
+0.000: (do_groom) [3600.000]
+900.001: (do_travel_planning) [1800.000]
+900.001: (do_hair_appointment) [7200.000]

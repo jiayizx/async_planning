@@ -1,5 +1,0 @@
-0.000: (stretch_right_time) [30.000]
-30.001: (hamstring_stretch) [30.000]
-30.001: (leg_to_chest) [30.000]
-30.001: (piriformis_stretch) [30.000]
-30.001: (stretch_itb) [30.000]

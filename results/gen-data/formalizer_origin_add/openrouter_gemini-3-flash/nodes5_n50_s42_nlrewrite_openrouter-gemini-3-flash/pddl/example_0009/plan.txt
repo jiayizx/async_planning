@@ -1,0 +1,5 @@
+0.000: (text_neighbor step1) [300.000]
+0.000: (ask_permission step5) [60.000]
+60.001: (put_on_clothes step3) [120.000]
+180.002: (walk_across step4) [180.000]
+300.001: (pack_bag step2) [600.000]

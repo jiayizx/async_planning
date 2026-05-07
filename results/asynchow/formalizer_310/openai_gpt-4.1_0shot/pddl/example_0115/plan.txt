@@ -1,5 +1,0 @@
-0.000: (search_youtube) [3600.000]
-3600.001: (watch_videos) [7200.000]
-10800.002: (contact_gym) [300.000]
-11100.003: (book_trainer) [300.000]
-11100.003: (ask_if_teachable) [300.000]

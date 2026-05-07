@@ -1,5 +1,0 @@
-0.000: (buy_ball) [1200.000]
-0.000: (hire_coach) [172800.000]
-1200.001: (find_court) [900.000]
-172800.001: (practice_shooting) [10800.000]
-172800.001: (practice_dribbling) [7200.000]

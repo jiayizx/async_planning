@@ -1,0 +1,7 @@
+0.000: (get_school_permission step1) [86400.000]
+86400.001: (create_schedule step2) [7200.000]
+86400.001: (schedule_driver step3) [3600.000]
+86400.001: (send_permission_slips step4) [86400.000]
+172800.002: (organize_groups step5) [600.000]
+173400.003: (board_bus step6) [600.000]
+174000.004: (head_to_jamestown step7) [30.000]

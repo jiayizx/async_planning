@@ -1,0 +1,27 @@
+(define (domain air_dry_hair)
+  (:requirements :durative-actions :typing)
+  (:predicates
+    (step1_done)
+    (step2_done)
+    (step3_done)
+    (cut_down_shampooing)
+    (roots_only_shampooed)
+    (hair_combed_in_shower)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 3)
+    :effect (and (at end (step1_done)) (at end (cut_down_shampooing)))
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 2)
+    :effect (and (at end (step2_done)) (at end (roots_only_shampooed)))
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 5)
+    :condition (at start (roots_only_shampooed))
+    :effect (and (at end (step3_done)) (at end (hair_combed_in_shower)))
+  )
+)

@@ -1,0 +1,428 @@
+(define (domain optimism_plan)
+  (:requirements :typing :durative-actions)
+  (:types step)
+  (:predicates
+    (pending ?s - step)
+    (done ?s - step)
+    (s1_done)
+    (s2_done)
+    (s3_done)
+    (s4_done)
+    (s5_done)
+    (s6_done)
+    (s7_done)
+    (s8_done)
+    (s9_done)
+    (s10_done)
+    (s11_done)
+    (s12_done)
+    (s13_done)
+    (s14_done)
+    (s15_done)
+    (s16_done)
+    (s17_done)
+    (s18_done)
+    (s19_done)
+    (s20_done)
+    (s21_done)
+    (s22_done)
+    (s23_done)
+    (s24_done)
+    (s25_done)
+    (s26_done)
+    (s27_done)
+    (s28_done)
+    (s29_done)
+    (s30_done)
+    (s31_done)
+    (s32_done)
+    (s33_done)
+    (s34_done)
+    (s35_done)
+    (s36_done)
+    (s37_done)
+    (s38_done)
+    (s39_done)
+    (s40_done)
+    (s41_done)
+    (s42_done)
+    (s43_done)
+    (s44_done)
+    (s45_done)
+    (s46_done)
+    (s47_done)
+    (s48_done)
+    (s49_done)
+    (s50_done)
+    (s51_done)
+    (s52_done)
+    (s53_done)
+    (s54_done)
+    (s55_done)
+    (s56_done)
+    (s57_done)
+    (s58_done)
+    (s59_done)
+    (s60_done)
+  )
+
+  (:durative-action do_step1
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step1)) (at start (s10_done)) (at start (s20_done)) (at start (s33_done)) (at start (s35_done)) (at start (s50_done)))
+    :effect (and (at start (not (pending step1))) (at end (done step1)) (at end (s1_done)))
+  )
+
+  (:durative-action do_step2
+    :duration (= ?duration 3600)
+    :condition (at start (pending step2))
+    :effect (and (at start (not (pending step2))) (at end (done step2)) (at end (s2_done)))
+  )
+
+  (:durative-action do_step3
+    :duration (= ?duration 7200)
+    :condition (at start (pending step3))
+    :effect (and (at start (not (pending step3))) (at end (done step3)) (at end (s3_done)))
+  )
+
+  (:durative-action do_step4
+    :duration (= ?duration 600)
+    :condition (at start (pending step4))
+    :effect (and (at start (not (pending step4))) (at end (done step4)) (at end (s4_done)))
+  )
+
+  (:durative-action do_step5
+    :duration (= ?duration 1200)
+    :condition (at start (pending step5))
+    :effect (and (at start (not (pending step5))) (at end (done step5)) (at end (s5_done)))
+  )
+
+  (:durative-action do_step6
+    :duration (= ?duration 300)
+    :condition (at start (pending step6))
+    :effect (and (at start (not (pending step6))) (at end (done step6)) (at end (s6_done)))
+  )
+
+  (:durative-action do_step7
+    :duration (= ?duration 1800)
+    :condition (at start (pending step7))
+    :effect (and (at start (not (pending step7))) (at end (done step7)) (at end (s7_done)))
+  )
+
+  (:durative-action do_step8
+    :duration (= ?duration 1800)
+    :condition (and (at start (pending step8)) (at start (s23_done)))
+    :effect (and (at start (not (pending step8))) (at end (done step8)) (at end (s8_done)))
+  )
+
+  (:durative-action do_step9
+    :duration (= ?duration 604800)
+    :condition (at start (pending step9))
+    :effect (and (at start (not (pending step9))) (at end (done step9)) (at end (s9_done)))
+  )
+
+  (:durative-action do_step10
+    :duration (= ?duration 2700)
+    :condition (and (at start (pending step10)) (at start (s8_done)) (at start (s14_done)) (at start (s22_done)) (at start (s56_done)))
+    :effect (and (at start (not (pending step10))) (at end (done step10)) (at end (s10_done)))
+  )
+
+  (:durative-action do_step11
+    :duration (= ?duration 14400)
+    :condition (and (at start (pending step11)) (at start (s34_done)))
+    :effect (and (at start (not (pending step11))) (at end (done step11)) (at end (s11_done)))
+  )
+
+  (:durative-action do_step12
+    :duration (= ?duration 3600)
+    :condition (and (at start (pending step12)) (at start (s50_done)))
+    :effect (and (at start (not (pending step12))) (at end (done step12)) (at end (s12_done)))
+  )
+
+  (:durative-action do_step13
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step13)) (at start (s31_done)))
+    :effect (and (at start (not (pending step13))) (at end (done step13)) (at end (s13_done)))
+  )
+
+  (:durative-action do_step14
+    :duration (= ?duration 14400)
+    :condition (and (at start (pending step14)) (at start (s47_done)) (at start (s60_done)))
+    :effect (and (at start (not (pending step14))) (at end (done step14)) (at end (s14_done)))
+  )
+
+  (:durative-action do_step15
+    :duration (= ?duration 3600)
+    :condition (at start (pending step15))
+    :effect (and (at start (not (pending step15))) (at end (done step15)) (at end (s15_done)))
+  )
+
+  (:durative-action do_step16
+    :duration (= ?duration 1800)
+    :condition (and (at start (pending step16)) (at start (s26_done)))
+    :effect (and (at start (not (pending step16))) (at end (done step16)) (at end (s16_done)))
+  )
+
+  (:durative-action do_step17
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step17)) (at start (s9_done)))
+    :effect (and (at start (not (pending step17))) (at end (done step17)) (at end (s17_done)))
+  )
+
+  (:durative-action do_step18
+    :duration (= ?duration 300)
+    :condition (and (at start (pending step18)) (at start (s36_done)) (at start (s55_done)))
+    :effect (and (at start (not (pending step18))) (at end (done step18)) (at end (s18_done)))
+  )
+
+  (:durative-action do_step19
+    :duration (= ?duration 604800)
+    :condition (and (at start (pending step19)) (at start (s14_done)) (at start (s26_done)) (at start (s35_done)))
+    :effect (and (at start (not (pending step19))) (at end (done step19)) (at end (s19_done)))
+  )
+
+  (:durative-action do_step20
+    :duration (= ?duration 604800)
+    :condition (and (at start (pending step20)) (at start (s30_done)))
+    :effect (and (at start (not (pending step20))) (at end (done step20)) (at end (s20_done)))
+  )
+
+  (:durative-action do_step21
+    :duration (= ?duration 3600)
+    :condition (and (at start (pending step21)) (at start (s14_done)) (at start (s18_done)) (at start (s32_done)))
+    :effect (and (at start (not (pending step21))) (at end (done step21)) (at end (s21_done)))
+  )
+
+  (:durative-action do_step22
+    :duration (= ?duration 1800)
+    :condition (and (at start (pending step22)) (at start (s24_done)) (at start (s31_done)) (at start (s48_done)))
+    :effect (and (at start (not (pending step22))) (at end (done step22)) (at end (s22_done)))
+  )
+
+  (:durative-action do_step23
+    :duration (= ?duration 5400)
+    :condition (and (at start (pending step23)) (at start (s48_done)))
+    :effect (and (at start (not (pending step23))) (at end (done step23)) (at end (s23_done)))
+  )
+
+  (:durative-action do_step24
+    :duration (= ?duration 600)
+    :condition (at start (pending step24))
+    :effect (and (at start (not (pending step24))) (at end (done step24)) (at end (s24_done)))
+  )
+
+  (:durative-action do_step25
+    :duration (= ?duration 120)
+    :condition (and (at start (pending step25)) (at start (s6_done)) (at start (s17_done)))
+    :effect (and (at start (not (pending step25))) (at end (done step25)) (at end (s25_done)))
+  )
+
+  (:durative-action do_step26
+    :duration (= ?duration 10800)
+    :condition (at start (pending step26))
+    :effect (and (at start (not (pending step26))) (at end (done step26)) (at end (s26_done)))
+  )
+
+  (:durative-action do_step27
+    :duration (= ?duration 3600)
+    :condition (and (at start (pending step27)) (at start (s7_done)) (at start (s40_done)) (at start (s58_done)))
+    :effect (and (at start (not (pending step27))) (at end (done step27)) (at end (s27_done)))
+  )
+
+  (:durative-action do_step28
+    :duration (= ?duration 18000)
+    :condition (and (at start (pending step28)) (at start (s14_done)) (at start (s53_done)))
+    :effect (and (at start (not (pending step28))) (at end (done step28)) (at end (s28_done)))
+  )
+
+  (:durative-action do_step29
+    :duration (= ?duration 60)
+    :condition (and (at start (pending step29)) (at start (s6_done)) (at start (s43_done)) (at start (s44_done)))
+    :effect (and (at start (not (pending step29))) (at end (done step29)) (at end (s29_done)))
+  )
+
+  (:durative-action do_step30
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step30)) (at start (s38_done)) (at start (s26_done)))
+    :effect (and (at start (not (pending step30))) (at end (done step30)) (at end (s30_done)))
+  )
+
+  (:durative-action do_step31
+    :duration (= ?duration 10800)
+    :condition (and (at start (pending step31)) (at start (s40_done)))
+    :effect (and (at start (not (pending step31))) (at end (done step31)) (at end (s31_done)))
+  )
+
+  (:durative-action do_step32
+    :duration (= ?duration 3600)
+    :condition (and (at start (pending step32)) (at start (s15_done)) (at start (s47_done)))
+    :effect (and (at start (not (pending step32))) (at end (done step32)) (at end (s32_done)))
+  )
+
+  (:durative-action do_step33
+    :duration (= ?duration 10800)
+    :condition (and (at start (pending step33)) (at start (s8_done)) (at start (s35_done)) (at start (s60_done)))
+    :effect (and (at start (not (pending step33))) (at end (done step33)) (at end (s33_done)))
+  )
+
+  (:durative-action do_step34
+    :duration (= ?duration 864000)
+    :condition (and (at start (pending step34)) (at start (s3_done)) (at start (s5_done)) (at start (s35_done)))
+    :effect (and (at start (not (pending step34))) (at end (done step34)) (at end (s34_done)))
+  )
+
+  (:durative-action do_step35
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step35)) (at start (s38_done)) (at start (s48_done)))
+    :effect (and (at start (not (pending step35))) (at end (done step35)) (at end (s35_done)))
+  )
+
+  (:durative-action do_step36
+    :duration (= ?duration 7200)
+    :condition (at start (pending step36))
+    :effect (and (at start (not (pending step36))) (at end (done step36)) (at end (s36_done)))
+  )
+
+  (:durative-action do_step37
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step37)) (at start (s17_done)) (at start (s28_done)) (at start (s46_done)))
+    :effect (and (at start (not (pending step37))) (at end (done step37)) (at end (s37_done)))
+  )
+
+  (:durative-action do_step38
+    :duration (= ?duration 2700)
+    :condition (and (at start (pending step38)) (at start (s16_done)) (at start (s47_done)))
+    :effect (and (at start (not (pending step38))) (at end (done step38)) (at end (s38_done)))
+  )
+
+  (:durative-action do_step39
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step39)) (at start (s2_done)))
+    :effect (and (at start (not (pending step39))) (at end (done step39)) (at end (s39_done)))
+  )
+
+  (:durative-action do_step40
+    :duration (= ?duration 600)
+    :condition (and (at start (pending step40)) (at start (s41_done)))
+    :effect (and (at start (not (pending step40))) (at end (done step40)) (at end (s40_done)))
+  )
+
+  (:durative-action do_step41
+    :duration (= ?duration 3600)
+    :condition (at start (pending step41))
+    :effect (and (at start (not (pending step41))) (at end (done step41)) (at end (s41_done)))
+  )
+
+  (:durative-action do_step42
+    :duration (= ?duration 10800)
+    :condition (and (at start (pending step42)) (at start (s23_done)) (at start (s46_done)) (at start (s57_done)))
+    :effect (and (at start (not (pending step42))) (at end (done step42)) (at end (s42_done)))
+  )
+
+  (:durative-action do_step43
+    :duration (= ?duration 86400)
+    :condition (and (at start (pending step43)) (at start (s18_done)) (at start (s36_done)))
+    :effect (and (at start (not (pending step43))) (at end (done step43)) (at end (s43_done)))
+  )
+
+  (:durative-action do_step44
+    :duration (= ?duration 5400)
+    :condition (and (at start (pending step44)) (at start (s18_done)) (at start (s46_done)) (at start (s53_done)) (at start (s54_done)) (at start (s59_done)))
+    :effect (and (at start (not (pending step44))) (at end (done step44)) (at end (s44_done)))
+  )
+
+  (:durative-action do_step45
+    :duration (= ?duration 1800)
+    :condition (and (at start (pending step45)) (at start (s60_done)))
+    :effect (and (at start (not (pending step45))) (at end (done step45)) (at end (s45_done)))
+  )
+
+  (:durative-action do_step46
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step46)) (at start (s14_done)))
+    :effect (and (at start (not (pending step46))) (at end (done step46)) (at end (s46_done)))
+  )
+
+  (:durative-action do_step47
+    :duration (= ?duration 3600)
+    :condition (at start (pending step47))
+    :effect (and (at start (not (pending step47))) (at end (done step47)) (at end (s47_done)))
+  )
+
+  (:durative-action do_step48
+    :duration (= ?duration 1200)
+    :condition (at start (pending step48))
+    :effect (and (at start (not (pending step48))) (at end (done step48)) (at end (s48_done)))
+  )
+
+  (:durative-action do_step49
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step49)) (at start (s18_done)))
+    :effect (and (at start (not (pending step49))) (at end (done step49)) (at end (s49_done)))
+  )
+
+  (:durative-action do_step50
+    :duration (= ?duration 600)
+    :condition (and (at start (pending step50)) (at start (s16_done)))
+    :effect (and (at start (not (pending step50))) (at end (done step50)) (at end (s50_done)))
+  )
+
+  (:durative-action do_step51
+    :duration (= ?duration 1200)
+    :condition (and (at start (pending step51)) (at start (s16_done)) (at start (s30_done)) (at start (s35_done)) (at start (s46_done)))
+    :effect (and (at start (not (pending step51))) (at end (done step51)) (at end (s51_done)))
+  )
+
+  (:durative-action do_step52
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step52)) (at start (s36_done)))
+    :effect (and (at start (not (pending step52))) (at end (done step52)) (at end (s52_done)))
+  )
+
+  (:durative-action do_step53
+    :duration (= ?duration 900)
+    :condition (and (at start (pending step53)) (at start (s5_done)))
+    :effect (and (at start (not (pending step53))) (at end (done step53)) (at end (s53_done)))
+  )
+
+  (:durative-action do_step54
+    :duration (= ?duration 7200)
+    :condition (and (at start (pending step54)) (at start (s57_done)))
+    :effect (and (at start (not (pending step54))) (at end (done step54)) (at end (s54_done)))
+  )
+
+  (:durative-action do_step55
+    :duration (= ?duration 3600)
+    :condition (at start (pending step55))
+    :effect (and (at start (not (pending step55))) (at end (done step55)) (at end (s55_done)))
+  )
+
+  (:durative-action do_step56
+    :duration (= ?duration 3600)
+    :condition (and (at start (pending step56)) (at start (s55_done)))
+    :effect (and (at start (not (pending step56))) (at end (done step56)) (at end (s56_done)))
+  )
+
+  (:durative-action do_step57
+    :duration (= ?duration 10800)
+    :condition (and (at start (pending step57)) (at start (s17_done)))
+    :effect (and (at start (not (pending step57))) (at end (done step57)) (at end (s57_done)))
+  )
+
+  (:durative-action do_step58
+    :duration (= ?duration 300)
+    :condition (and (at start (pending step58)) (at start (s11_done)) (at start (s26_done)) (at start (s35_done)) (at start (s43_done)))
+    :effect (and (at start (not (pending step58))) (at end (done step58)) (at end (s58_done)))
+  )
+
+  (:durative-action do_step59
+    :duration (= ?duration 86400)
+    :condition (and (at start (pending step59)) (at start (s4_done)))
+    :effect (and (at start (not (pending step59))) (at end (done step59)) (at end (s59_done)))
+  )
+
+  (:durative-action do_step60
+    :duration (= ?duration 600)
+    :condition (at start (pending step60))
+    :effect (and (at start (not (pending step60))) (at end (done step60)) (at end (s60_done)))
+  )
+)

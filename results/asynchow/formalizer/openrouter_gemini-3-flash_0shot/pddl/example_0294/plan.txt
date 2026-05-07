@@ -1,0 +1,5 @@
+0.000: (remove_wheels s1) [600.000]
+600.001: (remove_drum s2) [900.000]
+1500.002: (change_cylinder s5) [1800.000]
+1500.002: (inspect_springs s4) [900.000]
+1500.002: (inspect_shoes s3) [1200.000]

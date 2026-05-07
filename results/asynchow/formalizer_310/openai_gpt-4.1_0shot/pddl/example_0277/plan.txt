@@ -1,3 +1,0 @@
-0.000: (do_lower_handlebars) [900.000]
-0.000: (do_raise_handlebars) [600.000]
-900.001: (do_position_handlebars) [120.000]

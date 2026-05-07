@@ -1,0 +1,6 @@
+0.000: (buy_equipment step1) [7200.000]
+0.000: (pick_site step6) [600.000]
+7200.001: (pack_equipment step2) [3600.000]
+10800.002: (drive step3) [7200.000]
+18000.003: (park_car step4) [300.000]
+18300.004: (enter_site step5) [1200.000]

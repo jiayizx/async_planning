@@ -36,6 +36,9 @@ OPENROUTER_MODELS_MAPPING = {
     # Qwen models
     "qwen3-235b":            "qwen/qwen3-235b-a22b-2507",
     "openrouter/qwen3-235b": "qwen/qwen3-235b-a22b-2507",
+    "qwen3.6-35b-a3b":       "qwen/qwen3.6-35b-a3b",
+    "qwen/qwen3.6-35b-a3b":  "qwen/qwen3.6-35b-a3b",
+    "openrouter/qwen3.6-35b-a3b": "qwen/qwen3.6-35b-a3b",
 }
 
 
@@ -51,8 +54,9 @@ class OpenRouterLLM(BaseLLM):
     ):
         super().__init__(model_name, config, num_workers, strict_json)
 
-        if model_name in OPENROUTER_MODELS_MAPPING:
-            self.model_name = OPENROUTER_MODELS_MAPPING[model_name]
+        lookup_name = model_name.lower()
+        if lookup_name in OPENROUTER_MODELS_MAPPING:
+            self.model_name = OPENROUTER_MODELS_MAPPING[lookup_name]
 
         # if "gemini-2.5-flash" in model_name:
         #     config["reasoning"] = {"exclude": "true"}

@@ -1,5 +1,0 @@
-0.000: (gather_ingredients) [300.000]
-0.000: (dice_aromatics) [600.000]
-300.001: (saute_aromatics) [240.000]
-600.001: (brown_chicken) [480.000]
-1080.002: (simmer_curry) [1500.000]

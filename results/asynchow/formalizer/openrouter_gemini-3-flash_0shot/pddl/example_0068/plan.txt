@@ -1,0 +1,4 @@
+0.000: (research_computer step1) [1209600.000]
+1209600.001: (wait_for_sale step2) [432000.000]
+647.000: (visit_website step4) [300.000]
+647.000: (complete_purchase step5) [180.000]

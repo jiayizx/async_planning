@@ -1,1 +1,0 @@
-(define (problem anxiety_food_ordering_problem) (:domain anxiety_food_ordering) (:init (order_phone_pending) (drive_thru_pending) (friend_order_pending) (app_order_pending) (receive_food_pending)) (:goal (and (order_phone_done) (drive_thru_done) (friend_order_done) (app_order_done) (receive_food_done))) (:metric minimize (total-time)))

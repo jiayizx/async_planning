@@ -1,4 +1,0 @@
-0.000: (cut_wood) [7200.000]
-0.000: (remove_screws) [900.000]
-0.000: (search_place) [1800.000]
-7200.001: (transport_wood) [3600.000]

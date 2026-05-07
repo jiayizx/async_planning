@@ -1,0 +1,4 @@
+0.000: (do_refresh step1) [60.000]
+0.000: (do_remove_makeup step1) [180.000]
+180.001: (do_wash step1) [120.000]
+300.002: (do_moisturize step1) [120.000]

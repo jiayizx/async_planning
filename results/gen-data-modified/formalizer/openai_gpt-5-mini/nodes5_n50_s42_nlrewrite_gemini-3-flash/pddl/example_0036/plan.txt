@@ -1,5 +1,0 @@
-0.000: (do_setup_recovery_area) [1800.000]
-0.000: (do_research) [7200.000]
-1800.001: (do_vet_wellness_exam) [259200.000]
-7200.001: (do_purchase_food_supplies) [2700.000]
-261000.002: (do_feed_and_groom) [1200.000]

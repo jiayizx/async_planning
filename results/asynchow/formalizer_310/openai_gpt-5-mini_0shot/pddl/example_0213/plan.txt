@@ -1,5 +1,0 @@
-0.000: (step3_blend_sugars) [240.000]
-0.000: (step2_combine_flour) [120.000]
-0.000: (step1_preheat) [300.000]
-240.001: (step4_add_and_blend) [360.000]
-600.002: (step5_place_dough) [600.000]

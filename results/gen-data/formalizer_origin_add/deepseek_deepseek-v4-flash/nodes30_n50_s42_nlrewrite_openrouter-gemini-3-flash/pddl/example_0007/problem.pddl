@@ -1,0 +1,4 @@
+(define (problem dress_problem)
+  (:domain make_dress)
+  (:init (pending s1) (pending s2) (pending s3) (pending s4) (pending s5) (pending s6) (pending s7) (pending s8) (pending s9) (pending s10) (pending s11) (pending s12) (pending s13) (pending s14) (pending s15) (pending s16) (pending s17) (pending s18) (pending s19) (pending s20) (pending s21) (pending s22) (pending s23) (pending s24) (pending s25) (pending s26) (pending s27) (pending s28) (pending s29) (pending s30))
+  (:goal (and (done s1) (done s2) (done s3) (done s4) (done s5) (done s6) (done s7) (done s8) (done s9) (done s10) (done s11) (done s12) (done s13) (done s14) (done s15) (done s16) (done s17) (done s18) (done s19) (done s20) (done s21) (done s22) (done s23) (done s24) (done s25) (done s26) (done s27) (done s28) (done s29) (done s30)))

@@ -1,0 +1,5 @@
+0.000: (install_fence step1) [172800.000]
+0.000: (build_enclosure step2) [259200.000]
+0.000: (attach_net step5) [7200.000]
+172800.001: (remove_objects step3) [7200.000]
+172800.001: (install_pvc step4) [10800.000]

@@ -1,0 +1,3 @@
+0.000: (do_step1_purchase step1) [300.000]
+0.000: (do_step3_check_firmware step3) [120.000]
+300.001: (do_step2_format step2) [600.000]

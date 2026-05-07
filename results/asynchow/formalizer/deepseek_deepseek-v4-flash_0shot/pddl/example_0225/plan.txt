@@ -1,0 +1,5 @@
+0.000: (do_buy_steamer step1) [600.000]
+0.000: (do_hang_clothes step2) [600.000]
+0.000: (do_hang_item step5) [60.000]
+600.001: (do_fill_steamer step3) [120.000]
+720.002: (do_steam_wrinkles step4) [600.000]

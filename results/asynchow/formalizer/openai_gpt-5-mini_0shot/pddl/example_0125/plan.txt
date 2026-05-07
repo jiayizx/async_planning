@@ -1,0 +1,7 @@
+0.000: (do_step7_pay_catering) [900.000]
+0.000: (do_step6_invite_guests) [600.000]
+0.000: (do_step1_pay_band) [1200.000]
+1200.001: (do_step5_dress_up) [300.000]
+1500.002: (do_step2_go_church) [120.000]
+1620.003: (do_step3_exchange_vows) [3600.000]
+5220.004: (do_step4_kiss_and_dance) [7200.000]

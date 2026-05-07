@@ -1,0 +1,35 @@
+(define (domain pasta)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step) (step1_completed) (step2_completed) (step3_completed) (step4_completed) (step5_completed) (step6_completed))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step1_completed))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending ?s)) (at start (step1_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step2_completed))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending ?s)) (at start (step2_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step3_completed))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 10)
+    :condition (and (at start (step_pending ?s)) (at start (step3_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step4_completed))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending ?s)) (at start (step3_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step5_completed))))
+  (:durative-action do_step6
+    :parameters (?s - step)
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending ?s)) (at start (step3_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (step6_completed))))
+)

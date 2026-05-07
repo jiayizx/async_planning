@@ -1,0 +1,5 @@
+0.000: (decide_area step1) [3600.000]
+3600.001: (go_library step2) [7200.000]
+3600.001: (research_online step3) [7200.000]
+10800.002: (read_research step4) [7200.000]
+18000.003: (enjoy_respect step5) [600.000]

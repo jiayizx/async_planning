@@ -1,0 +1,32 @@
+(define (domain create-poetry-book)
+  (:requirements :durative-actions :typing)
+  (:predicates
+    (pending1) (pending2) (pending3) (pending4)
+    (done1) (done2) (done3) (done4)
+    (manuscript_ready) (route_found) (collection_assembled) (materials_sent)
+  )
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 8)
+    :condition (and (at start (pending1)) (at start (collection_assembled)))
+    :effect (and (at start (not (pending1))) (at end (done1)) (at end (manuscript_ready)))
+  )
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 2)
+    :condition (at start (pending2))
+    :effect (and (at start (not (pending2))) (at end (done2)) (at end (route_found)))
+  )
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 8)
+    :condition (at start (pending3))
+    :effect (and (at start (not (pending3))) (at end (done3)) (at end (collection_assembled)))
+  )
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 2)
+    :condition (and (at start (pending4)) (at start (manuscript_ready)) (at start (route_found)))
+    :effect (and (at start (not (pending4))) (at end (done4)) (at end (materials_sent)))
+  )
+)

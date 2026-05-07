@@ -1,0 +1,6 @@
+0.000: (step1_put_ingredients s1) [300.000]
+0.000: (step3_whisk_slurry s6) [60.000]
+300.001: (step2_boil_mixture s2) [180.000]
+480.002: (step4_add_slurry s3) [60.000]
+540.003: (step5_whisk_sauce s4) [300.000]
+840.004: (step6_cool_sauce s5) [900.000]

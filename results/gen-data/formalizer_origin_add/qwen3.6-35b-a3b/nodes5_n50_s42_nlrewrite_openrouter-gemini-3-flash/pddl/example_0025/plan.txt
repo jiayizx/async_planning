@@ -1,0 +1,5 @@
+0.000: (step2_pack_textbooks step1) [120.000]
+120.001: (step1_walk_parking step2) [300.000]
+420.002: (step4_locate_keys step3) [30.000]
+450.003: (step5_start_car step4) [45.000]
+495.004: (step3_drive_out step5) [60.000]

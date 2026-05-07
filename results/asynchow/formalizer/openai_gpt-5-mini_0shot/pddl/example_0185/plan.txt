@@ -1,0 +1,4 @@
+0.000: (do_step2_find_vet step1) [172800.000]
+0.000: (do_step1_recognize step4) [86400.000]
+172800.001: (do_step3_diagnosis step2) [1209600.000]
+1382400.002: (do_step4_careplan step3) [172800.000]

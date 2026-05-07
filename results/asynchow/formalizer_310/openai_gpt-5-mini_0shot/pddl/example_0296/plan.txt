@@ -1,5 +1,0 @@
-0.000: (prepare_mushrooms) [300.000]
-0.000: (heat_oil) [120.000]
-300.001: (add_shiitake) [180.000]
-480.002: (cook) [600.000]
-1080.003: (season_serve) [120.000]

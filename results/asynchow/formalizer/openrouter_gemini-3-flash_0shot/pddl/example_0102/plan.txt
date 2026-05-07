@@ -1,0 +1,5 @@
+0.000: (take_clothes_off step1) [60.000]
+0.000: (turn_on_shower step5) [5.000]
+60.001: (take_shower step2) [600.000]
+660.002: (dry_off step3) [60.000]
+720.003: (apply_lotion step4) [60.000]

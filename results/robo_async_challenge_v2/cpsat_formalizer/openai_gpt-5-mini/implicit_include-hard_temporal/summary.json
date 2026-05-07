@@ -1,0 +1,28 @@
+{
+  "model": "openai/gpt-5-mini",
+  "backend": "cp-sat",
+  "oracle_spec": false,
+  "n_tasks": 20,
+  "n_success": 13,
+  "success_rate": 0.65,
+  "avg_makespan_ratio": 1.0,
+  "n_llm_error": 0,
+  "n_spec_error": 0,
+  "n_solver_error": 0,
+  "n_solver_not_optimal": 0,
+  "n_eval_error": 7,
+  "by_difficulty": {
+    "easy": {
+      "n": 0,
+      "n_success": 0
+    },
+    "medium": {
+      "n": 0,
+      "n_success": 0
+    },
+    "hard": {
+      "n": 20,
+      "n_success": 13
+    }
+  }
+}

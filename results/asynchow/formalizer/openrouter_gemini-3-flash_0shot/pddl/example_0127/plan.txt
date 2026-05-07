@@ -1,0 +1,5 @@
+0.000: (grab_keys step1) [120.000]
+0.000: (grab_wallet step5) [120.000]
+120.001: (check_money step2) [60.000]
+180.002: (exit_garage step3) [60.000]
+240.003: (unlock_car step4) [35.000]

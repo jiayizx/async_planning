@@ -1,0 +1,6 @@
+0.000: (pick_up_device step1) [1.000]
+1.001: (search_nearby step2) [20.000]
+21.002: (narrow_options step3) [120.000]
+141.003: (look_at_ratings step4) [600.000]
+141.003: (look_at_menus step5) [600.000]
+741.004: (look_at_pricing step6) [600.000]

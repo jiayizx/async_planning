@@ -1,0 +1,50 @@
+(define (domain guessing_box_factory)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (box_found)
+    (rectangle_cut)
+    (circle_cut)
+  )
+
+  (:durative-action find_box
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (box_found))
+    )
+  )
+
+  (:durative-action cut_rectangle
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (box_found))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (rectangle_cut))
+    )
+  )
+
+  (:durative-action cut_circle
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (and
+      (at start (step_pending ?s))
+      (at start (box_found))
+    )
+    :effect (and
+      (at start (not (step_pending ?s)))
+      (at end (step_done ?s))
+      (at end (circle_cut))
+    )
+  )
+)

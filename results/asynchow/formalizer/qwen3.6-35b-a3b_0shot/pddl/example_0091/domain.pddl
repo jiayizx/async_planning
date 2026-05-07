@@ -1,0 +1,42 @@
+(define (domain concert)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (tickets_bought)
+    (dressed)
+    (hair_styled)
+    (makeup_done)
+    (directions_found)
+    (arrived))
+  (:durative-action buy_tickets
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (tickets_bought))))
+  (:durative-action get_dressed
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (and (at start (step_pending step2)) (at start (tickets_bought)))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (dressed))))
+  (:durative-action style_hair
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (and (at start (step_pending step3)) (at start (dressed)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (hair_styled))))
+  (:durative-action do_makeup
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (and (at start (step_pending step4)) (at start (dressed)))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (makeup_done))))
+  (:durative-action get_directions
+    :parameters ()
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending step5)) (at start (hair_styled)) (at start (makeup_done)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (directions_found))))
+  (:durative-action drive_to_concert
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (and (at start (step_pending step6)) (at start (directions_found)))
+    :effect (and (at start (not (step_pending step6))) (at end (step_done step6)) (at end (arrived)))))

@@ -1,0 +1,5 @@
+0.000: (put_on_shoes step1) [25.000]
+0.000: (put_on_jacket step2) [25.000]
+0.000: (grab_keys step5) [25.000]
+25.001: (go_through_door step3) [25.000]
+50.002: (lock_door step4) [35.000]

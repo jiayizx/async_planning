@@ -1,0 +1,7 @@
+0.000: (do_step7_get_shades) [900.000]
+0.000: (do_step6_get_shoes) [1800.000]
+0.000: (do_step5_get_gloves) [1800.000]
+0.000: (do_step3_get_leggings) [1800.000]
+0.000: (do_step2_prepare_sew) [3600.000]
+0.000: (do_step1_get_wig) [1800.000]
+3600.001: (do_step4_recreate_shirt) [3600.000]

@@ -7,6 +7,8 @@
 # Usage:
 #   bash scripts/robo_async_planner.sh
 #   MODEL_NAME=gemini-3-flash bash scripts/robo_async_planner.sh
+#   MODEL_NAME=deepseek-v4-flash bash scripts/robo_async_planner.sh
+#   MODEL_NAME=deepseek-v4-pro bash scripts/robo_async_planner.sh
 #   MODEL_NAME=openai/gpt-5-mini MAX_TASKS=3 bash scripts/robo_async_planner.sh
 #   IMPLICIT=true MODEL_NAME=gemini-3-flash bash scripts/robo_async_planner.sh
 #   DATASET=challenge IMPLICIT=true MODEL_NAME=openai/gpt-5-mini bash scripts/robo_async_planner.sh
@@ -26,7 +28,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 DATASET="${DATASET:-challenge_v2}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 case "${DATASET}" in
@@ -50,7 +52,7 @@ esac
 TASKS_DIR="${TASKS_DIR:-${DEFAULT_TASKS_DIR}}"
 NUM_WORKERS="${NUM_WORKERS:-8}"
 MAX_TASKS="${MAX_TASKS:-}"
-IMPLICIT="${IMPLICIT:-true}"
+IMPLICIT="${IMPLICIT:-false}"
 # Tag filters are comma-separated split tags. Supported split tags:
 #   easy, medium, hard_station, hard_temporal, hard_multiagent,
 #   hard_optimization, hard_high_speedup

@@ -1,0 +1,5 @@
+0.000: (wear_shirt_pants step1) [300.000]
+0.000: (protect_feet step2) [180.000]
+0.000: (wear_gloves step3) [120.000]
+0.000: (wear_hat step5) [60.000]
+300.001: (cover_waterproof step4) [600.000]

@@ -1,0 +1,5 @@
+0.000: (buy_gear step1) [86400.000]
+0.000: (sign_up step5) [3600.000]
+3600.001: (pay_fees step2) [600.000]
+86400.001: (get_driven step3) [600.000]
+87000.002: (wake_up step4) [300.000]

@@ -1,0 +1,5 @@
+0.000: (make_plan step1) [1800.000]
+1800.001: (grocery_shopping step2) [3600.000]
+1800.001: (invite_friends step3) [1800.000]
+5400.002: (fill_gas step4) [600.000]
+6000.003: (pickup_friends step5) [1800.000]

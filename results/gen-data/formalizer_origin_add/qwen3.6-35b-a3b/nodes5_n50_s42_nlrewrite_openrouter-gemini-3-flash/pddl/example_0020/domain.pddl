@@ -1,0 +1,37 @@
+(define (domain chicken_curry)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_done ?s - step)
+    (step_pending ?s - step)
+    (saute_done)
+    (simmer_done)
+    (grind_done)
+    (thaw_done)
+    (marinate_done))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= (?duration) 600)
+    :condition (and (at start (step_pending ?s)) (at start (grind_done)) (at start (thaw_done)) (at start (marinate_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (saute_done))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= (?duration) 1500)
+    :condition (and (at start (step_pending ?s)) (at start (saute_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (simmer_done))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= (?duration) 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (grind_done))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= (?duration) 7200)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (thaw_done))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= (?duration) 3600)
+    :condition (and (at start (step_pending ?s)) (at start (thaw_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (marinate_done))))
+)

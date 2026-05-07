@@ -1,0 +1,7 @@
+0.000: (do_step1_get_permission step1) [86400.000]
+86400.001: (do_step4_create_schedule step2) [7200.000]
+86400.001: (do_step3_schedule_driver step3) [3600.000]
+86400.001: (do_step2_send_slips step4) [86400.000]
+172800.002: (do_step5_organize_groups step5) [600.000]
+173400.003: (do_step6_board_bus step6) [600.000]
+174000.004: (do_step7_head_to_jamestown step7) [30.000]

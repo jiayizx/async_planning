@@ -1,0 +1,64 @@
+(define (domain body_fat_calculation)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_pending ?s - step) (step_done ?s - step)
+               (s1_done) (s2_done) (s3_done) (s4_done) (s5_done)
+               (s6_done) (s7_done) (s8_done) (s9_done) (s10_done)
+               (s11_done) (s12_done) (s13_done) (s14_done))
+  (:durative-action do_step1
+    :duration 120
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s1_done))))
+  (:durative-action do_step2
+    :duration 120
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s2_done))))
+  (:durative-action do_step3
+    :duration 60
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s3_done))))
+  (:durative-action do_step4
+    :duration 60
+    :condition (and (at start (step_pending ?s)) (at start (s1_done)) (at start (s2_done)) (at start (s3_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s4_done))))
+  (:durative-action do_step5
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s4_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s5_done))))
+  (:durative-action do_step6
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s5_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s6_done))))
+  (:durative-action do_step7
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s5_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s7_done))))
+  (:durative-action do_step8
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s5_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s8_done))))
+  (:durative-action do_step9
+    :duration 60
+    :condition (and (at start (step_pending ?s)) (at start (s5_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s9_done))))
+  (:durative-action do_step10
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s6_done)) (at start (s7_done)) (at start (s8_done)) (at start (s9_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s10_done))))
+  (:durative-action do_step11
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s10_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s11_done))))
+  (:durative-action do_step12
+    :duration 60
+    :condition (and (at start (step_pending ?s)) (at start (s11_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s12_done))))
+  (:durative-action do_step13
+    :duration 120
+    :condition (and (at start (step_pending ?s)) (at start (s12_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s13_done))))
+  (:durative-action do_step14
+    :duration 180
+    :condition (and (at start (step_pending ?s)) (at start (s13_done)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (s14_done))))
+)

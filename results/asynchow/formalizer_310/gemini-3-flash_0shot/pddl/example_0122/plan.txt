@@ -1,5 +1,0 @@
-0.000: (find_out_tryouts) [600.000]
-600.001: (improve_skills) [18000.000]
-600.001: (practice_for_tryouts) [18000.000]
-18600.002: (stay_after_school) [7200.000]
-25800.003: (go_to_tryouts) [7200.000]

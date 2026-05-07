@@ -1,0 +1,6 @@
+0.000: (lift_pinky step1) [10.000]
+0.000: (bend_waist step2) [10.000]
+0.000: (extend_knees step3) [3.000]
+0.000: (push_thumb step4) [5.000]
+0.000: (open_elbow step6) [3.000]
+10.001: (calculate_score step5) [60.000]

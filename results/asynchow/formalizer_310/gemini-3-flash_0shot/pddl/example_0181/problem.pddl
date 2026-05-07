@@ -1,1 +1,0 @@
-(define (problem recycle_wood_prob)(:domain recycle_wood)(:init (search_pending) (remove_hardware_pending) (cut_wood_pending) (transport_pending))(:goal (and (search_done) (remove_hardware_done) (cut_wood_done) (transport_done)))(:metric minimize (total-time)))

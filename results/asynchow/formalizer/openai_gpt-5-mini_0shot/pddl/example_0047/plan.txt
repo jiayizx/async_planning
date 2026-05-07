@@ -1,0 +1,6 @@
+0.000: (do_browse step2) [7200.000]
+0.000: (do_ask step1) [1800.000]
+7200.001: (do_snapshot step3) [300.000]
+7500.002: (do_appoint step4) [300.000]
+7800.003: (do_drive step5) [600.000]
+8400.004: (do_show step6) [600.000]

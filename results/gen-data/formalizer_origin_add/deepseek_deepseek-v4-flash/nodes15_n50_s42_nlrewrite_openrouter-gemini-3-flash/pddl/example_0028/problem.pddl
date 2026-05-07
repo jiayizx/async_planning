@@ -1,0 +1,6 @@
+(define (problem flag_football_problem)
+  (:domain flag_football)
+  (:objects step1 step2 step3 step4 step5 step6 step7 step8 step9 step10 step11 step12 step13 step14 step15 - step)
+  (:init (pending step1) (pending step2) (pending step3) (pending step4) (pending step5) (pending step6) (pending step7) (pending step8) (pending step9) (pending step10) (pending step11) (pending step12) (pending step13) (pending step14) (pending step15))
+  (:goal (and (completed step1) (completed step2) (completed step3) (completed step4) (completed step5) (completed step6) (completed step7) (completed step8) (completed step9) (completed step10) (completed step11) (completed step12) (completed step13) (completed step14) (completed step15)))
+)

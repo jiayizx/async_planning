@@ -1,0 +1,32 @@
+(define (domain deter_squirrels)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (baffle_bought)
+    (baffle_made)
+    (feeder_hung)
+  )
+
+  (:durative-action buy_baffle
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (baffle_bought)))
+  )
+
+  (:durative-action make_baffle
+    :parameters (?s - step)
+    :duration (= ?duration 900)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (baffle_made)))
+  )
+
+  (:durative-action hang_feeder
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (and (at start (step_pending ?s)) (at start (baffle_bought)) (at start (baffle_made)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (feeder_hung)))
+  )
+)

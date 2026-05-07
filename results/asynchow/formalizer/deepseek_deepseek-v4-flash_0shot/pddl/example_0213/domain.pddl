@@ -1,0 +1,37 @@
+(define (domain cookie-domain)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (preheated)
+    (combined_flour)
+    (blended_sugar)
+    (mixed_dough)
+    (placed_cookies))
+  (:durative-action do_preheat
+    :parameters (?s - step)
+    :duration (= ?duration 300)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (preheated))))
+  (:durative-action do_combine_flour
+    :parameters (?s - step)
+    :duration (= ?duration 120)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (combined_flour))))
+  (:durative-action do_blend_sugar
+    :parameters (?s - step)
+    :duration (= ?duration 240)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (blended_sugar))))
+  (:durative-action do_mix_dough
+    :parameters (?s - step)
+    :duration (= ?duration 360)
+    :condition (and (at start (step_pending ?s)) (at start (combined_flour)) (at start (blended_sugar)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (mixed_dough))))
+  (:durative-action do_place_cookies
+    :parameters (?s - step)
+    :duration (= ?duration 600)
+    :condition (and (at start (step_pending ?s)) (at start (mixed_dough)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (placed_cookies))))
+)

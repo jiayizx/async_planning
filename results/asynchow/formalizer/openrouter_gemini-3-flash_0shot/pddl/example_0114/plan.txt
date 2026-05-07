@@ -1,0 +1,5 @@
+0.000: (search_for_ice_rink step1) [120.000]
+120.001: (drive_to_ice_rink step2) [1200.000]
+1320.002: (rent_ice_skates step3) [300.000]
+1620.003: (put_right_skate_on step4) [30.000]
+1620.003: (put_left_skate_on step5) [30.000]

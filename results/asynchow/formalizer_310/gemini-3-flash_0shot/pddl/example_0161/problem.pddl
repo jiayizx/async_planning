@@ -1,1 +1,0 @@
-(define (problem nail_polish_problem)(:domain nail_polish_maintenance)(:init (step1_pending) (step2_pending) (step3_pending) (step4_pending))(:goal (and (step1_done) (step2_done) (step3_done) (step4_done)))(:metric minimize (total-time)))

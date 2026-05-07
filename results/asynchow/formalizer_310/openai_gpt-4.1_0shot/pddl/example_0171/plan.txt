@@ -1,3 +1,0 @@
-0.000: (do_physical_exam) [1800.000]
-1800.001: (do_xray_leg) [3600.000]
-5400.002: (do_undergo_surgery) [10800.000]

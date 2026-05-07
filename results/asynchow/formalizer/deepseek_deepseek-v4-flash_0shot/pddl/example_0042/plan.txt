@@ -1,0 +1,7 @@
+0.000: (crack_eggs) [180.000]
+0.000: (heat_pan) [300.000]
+180.001: (whisk_eggs) [180.000]
+300.001: (add_butter) [10.000]
+360.002: (pour_eggs) [10.000]
+370.003: (scramble_cooking) [600.000]
+970.004: (put_eggs_on_plate) [10.000]

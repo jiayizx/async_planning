@@ -1,0 +1,45 @@
+(define (domain roast-macadamia)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (eye_protection_worn)
+    (cracker_obtained)
+    (nuts_shelled)
+  )
+  (:durative-action wear_eye_protection
+    :parameters ()
+    :duration (= ?duration 1)
+    :condition (at start (step_pending step1))
+    :effect (and
+      (at start (not (step_pending step1)))
+      (at end (step_done step1))
+      (at end (eye_protection_worn))
+    )
+  )
+  (:durative-action obtain_cracker
+    :parameters ()
+    :duration (= ?duration 1)
+    :condition (at start (step_pending step2))
+    :effect (and
+      (at start (not (step_pending step2)))
+      (at end (step_done step2))
+      (at end (cracker_obtained))
+    )
+  )
+  (:durative-action shell_nuts
+    :parameters ()
+    :duration (= ?duration 10)
+    :condition (and
+      (at start (step_pending step3))
+      (at start (eye_protection_worn))
+      (at start (cracker_obtained))
+    )
+    :effect (and
+      (at start (not (step_pending step3)))
+      (at end (step_done step3))
+      (at end (nuts_shelled))
+    )
+  )
+)

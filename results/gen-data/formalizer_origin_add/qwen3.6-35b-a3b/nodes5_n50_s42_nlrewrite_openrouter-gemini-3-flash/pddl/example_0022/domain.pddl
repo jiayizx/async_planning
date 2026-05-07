@@ -1,0 +1,37 @@
+(define (domain dental_assistant)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates 
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (registration_submitted)
+    (enrolled_in_program)
+    (cpr_completed)
+    (radiography_passed)
+    (jurisprudence_passed))
+  (:durative-action do_step1
+    :parameters (?s - step)
+    :duration (= ?duration 1209600)
+    :condition (and (at start (step_pending ?s)) (at start (cpr_completed)) (at start (radiography_passed)) (at start (jurisprudence_passed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (registration_submitted))))
+  (:durative-action do_step2
+    :parameters (?s - step)
+    :duration (= ?duration 86400)
+    :condition (and (at start (step_pending ?s)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (enrolled_in_program))))
+  (:durative-action do_step3
+    :parameters (?s - step)
+    :duration (= ?duration 21600)
+    :condition (and (at start (step_pending ?s)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (cpr_completed))))
+  (:durative-action do_step4
+    :parameters (?s - step)
+    :duration (= ?duration 259200)
+    :condition (and (at start (step_pending ?s)) (at start (enrolled_in_program)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (radiography_passed))))
+  (:durative-action do_step5
+    :parameters (?s - step)
+    :duration (= ?duration 7200)
+    :condition (and (at start (step_pending ?s)) (at start (cpr_completed)))
+    :effect (and (at start (not (step_pending ?s))) (at end (step_done ?s)) (at end (jurisprudence_passed))))
+)

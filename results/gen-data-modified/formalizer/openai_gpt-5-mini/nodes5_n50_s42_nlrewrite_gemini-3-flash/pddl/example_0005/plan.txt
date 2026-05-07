@@ -1,5 +1,0 @@
-0.000: (remove_from_fridge) [2700.000]
-2700.001: (sear_steak) [360.000]
-3060.002: (rest_steak) [600.000]
-3060.002: (season_steak) [120.000]
-3180.003: (serve_steak) [60.000]

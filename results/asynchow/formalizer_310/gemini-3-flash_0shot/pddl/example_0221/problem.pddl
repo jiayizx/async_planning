@@ -1,1 +1,0 @@
-(define (problem annualize_return_prob)(:domain annualize_return)(:init (step1_pending) (step2_pending) (step3_pending))(:goal (and (step1_done) (step2_done) (step3_done)))(:metric minimize (total-time)))

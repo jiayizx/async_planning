@@ -1,0 +1,33 @@
+(define (domain understand_math)
+  (:requirements :durative-actions)
+  (:predicates 
+    (help_pending) (help_done)
+    (practice_pending) (practice_done)
+    (tutor_pending) (tutor_done)
+    (friend_pending) (friend_done)
+  )
+  (:durative-action do_help
+    :parameters ()
+    :duration (= ?duration 3600)
+    :condition (at start (help_pending))
+    :effect (and (at start (not (help_pending))) (at end (help_done)))
+  )
+  (:durative-action do_tutor
+    :parameters ()
+    :duration (= ?duration 10800)
+    :condition (at start (tutor_pending))
+    :effect (and (at start (not (tutor_pending))) (at end (tutor_done)))
+  )
+  (:durative-action do_friend
+    :parameters ()
+    :duration (= ?duration 1800)
+    :condition (at start (friend_pending))
+    :effect (and (at start (not (friend_pending))) (at end (friend_done)))
+  )
+  (:durative-action do_practice
+    :parameters ()
+    :duration (= ?duration 7200)
+    :condition (and (at start (practice_pending)) (at start (help_done)) (at start (tutor_done)) (at start (friend_done)))
+    :effect (and (at start (not (practice_pending))) (at end (practice_done)))
+  )
+)

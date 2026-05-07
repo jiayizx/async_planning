@@ -1,5 +1,0 @@
-0.000: (research_orgs) [7200.000]
-7200.001: (contact_coordinator) [86400.000]
-93600.002: (gather_items) [604800.000]
-93600.002: (design_flyers) [10800.000]
-698400.003: (deliver_donations) [1800.000]

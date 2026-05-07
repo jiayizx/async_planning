@@ -1,0 +1,75 @@
+(define (domain hangglide)
+  (:requirements :durative-actions :typing)
+  (:types step)
+
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (watched_videos_done)
+    (looked_articles_done)
+    (looked_classes_done)
+    (signed_up_done)
+    (drove_done)
+    (took_class_done)
+  )
+
+  (:durative-action do_watch_videos ()
+    :duration (= ?duration 7200)
+    :condition (at start (step_pending step1))
+    :effect (and
+      (at start (not (step_pending step1)))
+      (at end (step_done step1))
+      (at end (watched_videos_done))
+    )
+  )
+
+  (:durative-action do_look_articles ()
+    :duration (= ?duration 900)
+    :condition (at start (step_pending step2))
+    :effect (and
+      (at start (not (step_pending step2)))
+      (at end (step_done step2))
+      (at end (looked_articles_done))
+    )
+  )
+
+  (:durative-action do_look_classes ()
+    :duration (= ?duration 2700)
+    :condition (and (at start (step_pending step3)) (at start (watched_videos_done)) (at start (looked_articles_done)))
+    :effect (and
+      (at start (not (step_pending step3)))
+      (at end (step_done step3))
+      (at end (looked_classes_done))
+    )
+  )
+
+  (:durative-action do_sign_up ()
+    :duration (= ?duration 900)
+    :condition (and (at start (step_pending step4)) (at start (looked_classes_done)))
+    :effect (and
+      (at start (not (step_pending step4)))
+      (at end (step_done step4))
+      (at end (signed_up_done))
+    )
+  )
+
+  (:durative-action do_drive_to_class ()
+    :duration (= ?duration 1500)
+    :condition (and (at start (step_pending step5)) (at start (signed_up_done)))
+    :effect (and
+      (at start (not (step_pending step5)))
+      (at end (step_done step5))
+      (at end (drove_done))
+    )
+  )
+
+  (:durative-action do_take_class ()
+    :duration (= ?duration 7200)
+    :condition (and (at start (step_pending step6)) (at start (drove_done)))
+    :effect (and
+      (at start (not (step_pending step6)))
+      (at end (step_done step6))
+      (at end (took_class_done))
+    )
+  )
+)

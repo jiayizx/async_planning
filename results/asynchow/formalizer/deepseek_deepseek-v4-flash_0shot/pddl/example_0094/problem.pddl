@@ -1,0 +1,13 @@
+(define (problem varsity_problem)
+  (:domain start_varsity)
+  (:init
+    (step_pending1)
+    (step_pending2)
+    (step_pending3)
+    (step_pending4)
+    (step_pending5)
+    (step_pending6)
+    (step_pending7)
+  )
+  (:goal (and (step1_done) (step2_done) (step3_done) (step4_done) (step5_done) (step6_done) (step7_done)))
+)

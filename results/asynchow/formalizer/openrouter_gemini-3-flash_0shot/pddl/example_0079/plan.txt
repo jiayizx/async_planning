@@ -1,0 +1,7 @@
+0.000: (step1_decide s1) [30.000]
+30.001: (step2_sit s2) [30.000]
+60.002: (step3_turn_on s3) [60.000]
+120.003: (step4_navigate s4) [120.000]
+240.004: (step6_decide_recipe s6) [300.000]
+240.004: (step5_search s5) [1800.000]
+2040.005: (step7_print s7) [120.000]

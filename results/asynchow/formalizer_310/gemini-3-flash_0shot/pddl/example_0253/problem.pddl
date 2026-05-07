@@ -1,1 +1,0 @@
-(define (problem buy_fishing_rod_prob)(:domain buy_fishing_rod)(:init (step1_pending) (step2_pending) (step3_pending))(:goal (and (step1_done) (step2_done) (step3_done)))(:metric minimize (total-time)))

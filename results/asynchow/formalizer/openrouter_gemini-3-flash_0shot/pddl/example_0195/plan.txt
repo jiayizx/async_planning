@@ -1,0 +1,4 @@
+0.000: (prepare_chili step1) [120.000]
+0.000: (slice_strawberry step4) [60.000]
+60.001: (pull_wings step3) [60.000]
+120.001: (assemble_butterfly step2) [60.000]

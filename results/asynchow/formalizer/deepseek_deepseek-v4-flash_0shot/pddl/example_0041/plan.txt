@@ -1,0 +1,5 @@
+0.000: (do_find_park step1) [300.000]
+0.000: (do_get_money step5) [30.000]
+300.001: (do_travel step2) [900.000]
+1200.002: (do_purchase_pass step3) [60.000]
+1260.003: (do_enter_park step4) [60.000]

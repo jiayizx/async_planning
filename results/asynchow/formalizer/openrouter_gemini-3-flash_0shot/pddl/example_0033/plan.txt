@@ -1,0 +1,7 @@
+0.000: (go_to_website step1) [120.000]
+120.001: (register_account step2) [240.000]
+360.002: (verify_account step3) [60.000]
+420.003: (customize_theme step4) [900.000]
+1320.004: (edit_video step5) [600.000]
+1920.005: (upload_video step6) [300.000]
+1920.005: (click_post step7) [30.000]

@@ -1,5 +1,0 @@
-0.000: (research_varieties) [1800.000]
-1800.001: (purchase_supplies) [2700.000]
-1800.001: (install_lights) [7200.000]
-4500.002: (sow_seeds) [864000.000]
-868500.003: (transplant_seedlings) [3600.000]

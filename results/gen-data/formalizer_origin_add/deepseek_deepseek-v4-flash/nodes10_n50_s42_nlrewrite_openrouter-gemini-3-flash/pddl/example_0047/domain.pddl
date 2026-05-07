@@ -1,0 +1,110 @@
+(define (domain kilotopounds)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (locate_scale_done)
+    (record_weight_done)
+    (open_calc_done)
+    (type_conversion_done)
+    (place_object_done)
+    (search_conversion_done)
+    (multiply_done)
+    (double_check_done)
+    (clear_history_done)
+    (find_pen_done))
+
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1)))
+                 (at end (step_done step1))
+                 (at end (locate_scale_done))))
+
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (and (at start (step_pending step2))
+                    (at start (multiply_done))
+                    (at start (find_pen_done)))
+    :effect (and (at start (not (step_pending step2)))
+                 (at end (step_done step2))
+                 (at end (record_weight_done))))
+
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 5)
+    :condition (and (at start (step_pending step3))
+                    (at start (search_conversion_done)))
+    :effect (and (at start (not (step_pending step3)))
+                 (at end (step_done step3))
+                 (at end (open_calc_done))))
+
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 10)
+    :condition (and (at start (step_pending step4))
+                    (at start (open_calc_done))
+                    (at start (search_conversion_done)))
+    :effect (and (at start (not (step_pending step4)))
+                 (at end (step_done step4))
+                 (at end (type_conversion_done))))
+
+  (:durative-action do_step5
+    :parameters ()
+    :duration (= ?duration 15)
+    :condition (and (at start (step_pending step5))
+                    (at start (locate_scale_done)))
+    :effect (and (at start (not (step_pending step5)))
+                 (at end (step_done step5))
+                 (at end (place_object_done))))
+
+  (:durative-action do_step6
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (at start (step_pending step6))
+    :effect (and (at start (not (step_pending step6)))
+                 (at end (step_done step6))
+                 (at end (search_conversion_done))))
+
+  (:durative-action do_step7
+    :parameters ()
+    :duration (= ?duration 20)
+    :condition (and (at start (step_pending step7))
+                    (at start (type_conversion_done))
+                    (at start (place_object_done))
+                    (at start (search_conversion_done)))
+    :effect (and (at start (not (step_pending step7)))
+                 (at end (step_done step7))
+                 (at end (multiply_done))))
+
+  (:durative-action do_step8
+    :parameters ()
+    :duration (= ?duration 45)
+    :condition (and (at start (step_pending step8))
+                    (at start (place_object_done)))
+    :effect (and (at start (not (step_pending step8)))
+                 (at end (step_done step8))
+                 (at end (double_check_done))))
+
+  (:durative-action do_step9
+    :parameters ()
+    :duration (= ?duration 5)
+    :condition (and (at start (step_pending step9))
+                    (at start (place_object_done))
+                    (at start (search_conversion_done))
+                    (at start (multiply_done)))
+    :effect (and (at start (not (step_pending step9)))
+                 (at end (step_done step9))
+                 (at end (clear_history_done))))
+
+  (:durative-action do_step10
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (at start (step_pending step10))
+    :effect (and (at start (not (step_pending step10)))
+                 (at end (step_done step10))
+                 (at end (find_pen_done))))
+)

@@ -1,0 +1,30 @@
+(define (domain cure_breath)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates (step_done ?s - step))
+  (:durative-action do_step1
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (at start (step_done step3))
+    :effect (at end (step_done step1)))
+  (:durative-action do_step2
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (and)
+    :effect (at end (step_done step2)))
+  (:durative-action do_step3
+    :parameters ()
+    :duration (= ?duration 240)
+    :condition (at start (step_done step2))
+    :effect (at end (step_done step3)))
+  (:durative-action do_step4
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (at start (step_done step5))
+    :effect (at end (step_done step4)))
+  (:durative-action do_step5
+    :parameters ()
+    :duration (= ?duration 1200)
+    :condition (and)
+    :effect (at end (step_done step5)))
+)

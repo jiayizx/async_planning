@@ -34,7 +34,7 @@
 set -euo pipefail
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-NUM_NODES=(5 10 15 20 30 40 50 100)
+NUM_NODES=(5 10 15 20 30 40 50 60 70 80 90 100)
 EDGE_PROBS=(0.2)
 MIN_WIDTH=2
 LONG_RANGE_PROB=0.05
@@ -44,7 +44,7 @@ OUTPUT_DIR="data/async_planning"
 SEED=42
 COMBINED=""
 
-REWRITE_MODEL="gemini-3-flash"
+REWRITE_MODEL="openrouter/gemini-3-flash"
 REWRITE_TEMPERATURE=0.8
 REWRITE_MAX_TOKENS=0
 REWRITE_WORKERS=16

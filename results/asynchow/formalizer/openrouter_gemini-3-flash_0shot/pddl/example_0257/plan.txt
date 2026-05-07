@@ -1,0 +1,3 @@
+0.000: (find_vet step1) [1209600.000]
+1209600.001: (remove_parasites step2) [1209600.000]
+1209600.001: (vaccinate step3) [1209600.000]

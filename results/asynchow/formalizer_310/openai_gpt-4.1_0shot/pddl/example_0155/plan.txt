@@ -1,3 +1,0 @@
-0.000: (stuff_socks) [86400.000]
-0.000: (stuff_newspapers) [172800.000]
-172800.001: (freeze_shoes) [36000.000]

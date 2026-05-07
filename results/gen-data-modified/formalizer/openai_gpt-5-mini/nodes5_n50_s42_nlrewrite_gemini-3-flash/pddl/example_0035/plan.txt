@@ -1,5 +1,0 @@
-0.000: (do_step4_research_stamp_price_online) [180.000]
-0.000: (do_step2_locate_wallet_and_check_cash) [120.000]
-180.001: (do_step1_drive_to_post_office) [900.000]
-1080.002: (do_step5_stand_in_line_and_purchase_book_of_stamps) [600.000]
-1680.003: (do_step3_affix_stamps_to_mail) [300.000]

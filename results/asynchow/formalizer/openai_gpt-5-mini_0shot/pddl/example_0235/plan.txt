@@ -1,0 +1,3 @@
+0.000: (do_step1_hang_nest_box step1) [1800.000]
+0.000: (do_step3_provide_nesting_materials step3) [900.000]
+1800.001: (do_step2_install_nest_box step2) [3600.000]

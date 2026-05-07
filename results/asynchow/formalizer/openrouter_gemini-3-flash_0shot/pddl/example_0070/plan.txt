@@ -1,0 +1,6 @@
+0.000: (take_out_laptop step1) [30.000]
+30.001: (go_on_internet step2) [10.000]
+40.002: (look_up_website step3) [60.000]
+100.003: (check_date step4) [30.000]
+100.003: (check_payment step5) [20.000]
+130.004: (enter_personal_info step6) [60.000]

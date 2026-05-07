@@ -1,0 +1,5 @@
+0.000: (find_materials step1) [1800.000]
+1800.001: (cut_item step2) [1200.000]
+1800.001: (make_case step3) [900.000]
+3000.002: (sew_together step4) [2700.000]
+5700.003: (acclimate_pet step5) [1209600.000]

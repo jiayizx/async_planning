@@ -1,0 +1,40 @@
+(define (domain kidney_donor)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (hospital_recovered)
+    (pain_managed)
+    (followups_prepared)
+  )
+
+  (:durative-action recover_hospital
+    :parameters (?s - step)
+    :duration (= ?duration 604800)
+    :condition (at start (step_pending ?s))
+    :effect (and (at start (not (step_pending ?s))) 
+                 (at end (step_done ?s)) 
+                 (at end (hospital_recovered)))
+  )
+
+  (:durative-action manage_pain
+    :parameters (?s - step)
+    :duration (= ?duration 1209600)
+    :condition (and (at start (step_pending ?s)) 
+                    (at start (hospital_recovered)))
+    :effect (and (at start (not (step_pending ?s))) 
+                 (at end (step_done ?s)) 
+                 (at end (pain_managed)))
+  )
+
+  (:durative-action prepare_followups
+    :parameters (?s - step)
+    :duration (= ?duration 4838400)
+    :condition (and (at start (step_pending ?s)) 
+                    (at start (hospital_recovered)))
+    :effect (and (at start (not (step_pending ?s))) 
+                 (at end (step_done ?s)) 
+                 (at end (followups_prepared)))
+  )
+)

@@ -1,3 +1,0 @@
-0.000: (look_for_nest) [600.000]
-600.001: (estimate_number) [120.000]
-600.001: (observe_object) [300.000]

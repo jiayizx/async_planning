@@ -1,0 +1,5 @@
+0.000: (prepare_lemon step1) [120.000]
+0.000: (melt_butter step5) [120.000]
+120.001: (whisk_sauce step2) [180.000]
+300.002: (pour_sauce step3) [60.000]
+360.003: (bake_fish step4) [720.000]

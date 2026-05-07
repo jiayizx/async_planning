@@ -1,1 +1,0 @@
-(define (problem laundry_problem)(:domain laundry_domain)(:init (buy_softener_pending) (buy_detergent_pending) (gather_clothes_pending) (open_machine_pending) (put_clothes_pending) (add_detergent_pending) (turn_on_pending))(:goal (and (buy_softener_done) (buy_detergent_done) (gather_clothes_done) (open_machine_done) (put_clothes_done) (add_detergent_done) (turn_on_done))))

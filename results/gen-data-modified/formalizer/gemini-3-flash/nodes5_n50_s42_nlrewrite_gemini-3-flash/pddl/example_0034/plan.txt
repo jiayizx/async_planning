@@ -1,5 +1,0 @@
-0.000: (select_place) [300.000]
-300.001: (draft_opening) [3600.000]
-300.001: (reflect_memory) [1800.000]
-3900.002: (complete_verses) [7200.000]
-11100.003: (read_aloud) [600.000]

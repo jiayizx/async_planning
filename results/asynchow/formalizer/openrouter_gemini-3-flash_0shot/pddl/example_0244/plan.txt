@@ -1,0 +1,5 @@
+0.000: (step2_bracelets s1) [300.000]
+0.000: (step5_bag s2) [300.000]
+0.000: (step3_necklaces s3) [180.000]
+0.000: (step4_belt s5) [120.000]
+300.001: (step1_pins_buttons s4) [600.000]

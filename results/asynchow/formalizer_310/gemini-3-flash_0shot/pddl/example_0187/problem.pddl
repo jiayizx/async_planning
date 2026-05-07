@@ -1,1 +1,0 @@
-(define (problem identify_strengths_problem)(:domain identify_strengths)(:init (step1_pending) (step2_pending) (step3_pending) (step4_pending))(:goal (and (step1_done) (step2_done) (step3_done) (step4_done)))(:metric minimize (total-time)))

@@ -1,2 +1,0 @@
-0.000: (find_property_value) [3600.000]
-647.000: (calculate_gross_yield) [120.000]

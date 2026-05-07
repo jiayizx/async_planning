@@ -1,0 +1,3 @@
+647.000: (do_homework step4) [216000.000]
+647.000: (prepare_tests step5) [144000.000]
+647.000: (get_high_scores step6) [57600.000]

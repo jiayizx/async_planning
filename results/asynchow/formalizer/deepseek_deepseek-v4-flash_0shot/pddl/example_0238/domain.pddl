@@ -1,0 +1,38 @@
+(define (domain fix_countertop)
+  (:requirements :durative-actions :typing)
+  (:types step)
+  (:predicates
+    (step_pending ?s - step)
+    (step_done ?s - step)
+    (cleaned)
+    (taped)
+    (cracks_fixed)
+    (epoxy_done)
+    (file_done)
+  )
+  (:durative-action do_clean
+    :duration (= ?duration 15)
+    :condition (at start (step_pending step1))
+    :effect (and (at start (not (step_pending step1))) (at end (step_done step1)) (at end (cleaned)))
+  )
+  (:durative-action do_tape
+    :duration (= ?duration 5)
+    :condition (and (at start (step_pending step2)) (at start (cleaned)))
+    :effect (and (at start (not (step_pending step2))) (at end (step_done step2)) (at end (taped)))
+  )
+  (:durative-action do_superglue
+    :duration (= ?duration 10)
+    :condition (and (at start (step_pending step3)) (at start (taped)))
+    :effect (and (at start (not (step_pending step3))) (at end (step_done step3)) (at end (cracks_fixed)))
+  )
+  (:durative-action do_epoxy
+    :duration (= ?duration 15)
+    :condition (and (at start (step_pending step4)) (at start (taped)))
+    :effect (and (at start (not (step_pending step4))) (at end (step_done step4)) (at end (epoxy_done)))
+  )
+  (:durative-action do_file
+    :duration (= ?duration 20)
+    :condition (and (at start (step_pending step5)) (at start (cracks_fixed)) (at start (epoxy_done)))
+    :effect (and (at start (not (step_pending step5))) (at end (step_done step5)) (at end (file_done)))
+  )
+)
