@@ -1,0 +1,54 @@
+{
+  "model": "qwen3.6-35b-a3b",
+  "n_tasks": 140,
+  "n_success": 95,
+  "success_rate": 0.6786,
+  "avg_makespan_ratio": 1.1957,
+  "n_llm_error": 17,
+  "n_solver_error": 17,
+  "n_eval_error": 11,
+  "by_tag": {
+    "easy": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.0002
+    },
+    "medium": {
+      "n": 20,
+      "n_success": 19,
+      "success_rate": 0.95,
+      "avg_makespan_ratio": 1.0002
+    },
+    "hard_station": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.0723
+    },
+    "hard_temporal": {
+      "n": 20,
+      "n_success": 14,
+      "success_rate": 0.7,
+      "avg_makespan_ratio": 1.0001
+    },
+    "hard_multiagent": {
+      "n": 20,
+      "n_success": 5,
+      "success_rate": 0.25,
+      "avg_makespan_ratio": 1.0269
+    },
+    "hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "hard_high_speedup": {
+      "n": 20,
+      "n_success": 17,
+      "success_rate": 0.85,
+      "avg_makespan_ratio": 2.0001
+    }
+  }
+}

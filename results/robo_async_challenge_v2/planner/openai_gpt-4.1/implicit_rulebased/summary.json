@@ -1,0 +1,53 @@
+{
+  "model": "openai/gpt-4.1",
+  "n_tasks": 140,
+  "n_success": 25,
+  "success_rate": 0.1786,
+  "avg_makespan_ratio": 1.0943,
+  "n_parse_error": 0,
+  "n_eval_error": 115,
+  "by_tag": {
+    "easy": {
+      "n": 20,
+      "n_success": 19,
+      "success_rate": 0.95,
+      "avg_makespan_ratio": 1.1033
+    },
+    "medium": {
+      "n": 20,
+      "n_success": 4,
+      "success_rate": 0.2,
+      "avg_makespan_ratio": 1.0469
+    },
+    "hard_station": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "hard_temporal": {
+      "n": 20,
+      "n_success": 2,
+      "success_rate": 0.1,
+      "avg_makespan_ratio": 1.1035
+    },
+    "hard_multiagent": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "hard_high_speedup": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    }
+  }
+}
