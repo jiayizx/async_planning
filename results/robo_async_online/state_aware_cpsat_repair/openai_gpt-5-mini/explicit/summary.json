@@ -1,0 +1,60 @@
+{
+  "model": "openai/gpt-5-mini",
+  "backend": "state-aware-cp-sat-repair",
+  "online_mode": "state_aware_repair",
+  "n_tasks": 140,
+  "n_success": 117,
+  "success_rate": 0.8357,
+  "avg_makespan": 38.2146,
+  "avg_makespan_ratio": 1.0041,
+  "n_llm_error": 0,
+  "n_spec_error": 23,
+  "n_solver_error": 0,
+  "n_parse_error": 0,
+  "n_eval_error": 0,
+  "n_runner_error": 0,
+  "by_tag": {
+    "online_easy": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.0049
+    },
+    "online_medium": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.007
+    },
+    "online_hard_station": {
+      "n": 20,
+      "n_success": 19,
+      "success_rate": 0.95,
+      "avg_makespan_ratio": 1.0
+    },
+    "online_hard_temporal": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_multiagent": {
+      "n": 20,
+      "n_success": 18,
+      "success_rate": 0.9,
+      "avg_makespan_ratio": 1.0089
+    },
+    "online_hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_high_speedup": {
+      "n": 20,
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.0
+    }
+  }
+}

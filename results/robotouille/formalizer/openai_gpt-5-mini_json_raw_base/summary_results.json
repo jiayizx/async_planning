@@ -1,0 +1,33 @@
+{
+  "benchmark": "robotouille",
+  "model_name": "openai/gpt-5-mini",
+  "generate_domain": true,
+  "effect_goal": false,
+  "pddl_repairs": false,
+  "num_examples": 10,
+  "num_syntax_errors": 0,
+  "num_planning_failures": 2,
+  "num_solver_errors": 6,
+  "accuracy": 0.2,
+  "num_done": 2,
+  "average_steps": 33.0,
+  "avg_steps_ratio": 1.380952380952381,
+  "simulation_success_rate": 1.0,
+  "num_simulation_tested": 2,
+  "num_simulation_success": 2,
+  "env_simulation_success_rate": 1.0,
+  "num_env_simulation_tested": 2,
+  "num_env_simulation_success": 2,
+  "avg_goal_predicate_recall": 1.0,
+  "goal_count_match_rate": 1.0,
+  "plan_action_type_totals": {
+    "wait": 6,
+    "move": 29,
+    "pick-up": 9,
+    "place": 5,
+    "cook": 2,
+    "unstack": 4,
+    "stack": 8,
+    "cut": 3
+  }
+}

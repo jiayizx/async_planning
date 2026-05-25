@@ -4,57 +4,57 @@
   "online_mode": "strict",
   "oracle_spec": false,
   "n_tasks": 140,
-  "n_success": 69,
-  "success_rate": 0.4929,
-  "avg_makespan": 30.9694,
-  "avg_makespan_ratio": 1.0065,
-  "n_llm_error": 0,
-  "n_spec_error": 16,
+  "n_success": 101,
+  "success_rate": 0.7214,
+  "avg_makespan": 36.0653,
+  "avg_makespan_ratio": 1.0039,
+  "n_llm_error": 2,
+  "n_spec_error": 31,
   "n_solver_error": 0,
   "n_parse_error": 0,
-  "n_eval_error": 53,
+  "n_eval_error": 4,
   "n_runner_error": 2,
   "by_tag": {
     "online_easy": {
       "n": 20,
-      "n_success": 17,
-      "success_rate": 0.85,
-      "avg_makespan_ratio": 1.0029
+      "n_success": 20,
+      "success_rate": 1.0,
+      "avg_makespan_ratio": 1.0049
     },
     "online_medium": {
       "n": 20,
-      "n_success": 15,
-      "success_rate": 0.75,
-      "avg_makespan_ratio": 1.0093
+      "n_success": 18,
+      "success_rate": 0.9,
+      "avg_makespan_ratio": 1.0077
     },
     "online_hard_station": {
       "n": 20,
-      "n_success": 18,
-      "success_rate": 0.9,
+      "n_success": 19,
+      "success_rate": 0.95,
       "avg_makespan_ratio": 1.0
     },
     "online_hard_temporal": {
+      "n": 20,
+      "n_success": 8,
+      "success_rate": 0.4,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_multiagent": {
+      "n": 20,
+      "n_success": 17,
+      "success_rate": 0.85,
+      "avg_makespan_ratio": 1.0073
+    },
+    "online_hard_optimization": {
       "n": 20,
       "n_success": 0,
       "success_rate": 0.0,
       "avg_makespan_ratio": 0
     },
-    "online_hard_multiagent": {
-      "n": 20,
-      "n_success": 9,
-      "success_rate": 0.45,
-      "avg_makespan_ratio": 1.0146
-    },
-    "online_hard_optimization": {
-      "n": 20,
-      "n_success": 3,
-      "success_rate": 0.15,
-      "avg_makespan_ratio": 1.0439
-    },
     "online_hard_high_speedup": {
       "n": 20,
-      "n_success": 7,
-      "success_rate": 0.35,
+      "n_success": 19,
+      "success_rate": 0.95,
       "avg_makespan_ratio": 1.0
     }
   }

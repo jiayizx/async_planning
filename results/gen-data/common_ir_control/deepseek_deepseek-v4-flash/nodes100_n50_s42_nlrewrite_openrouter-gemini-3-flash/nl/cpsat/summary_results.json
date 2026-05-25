@@ -1,0 +1,17 @@
+{
+  "benchmark": "AsyncPlan-XXL",
+  "data_path": "data/async_planning/nodes100_n50_s42_nlrewrite_openrouter-gemini-3-flash.json",
+  "method": "nl_ir_to_cpsat",
+  "model_name": "deepseek/deepseek-v4-flash",
+  "ir_source": "nl",
+  "target": "cpsat",
+  "makespan_accuracy": 0.22,
+  "plan_accuracy": 0.22,
+  "num_correct": 11,
+  "num_data_points": 50,
+  "num_ir_errors": 39,
+  "num_solver_errors": 0,
+  "num_semantic_errors": 0,
+  "num_plan_valid": 11,
+  "plan_valid_rate": 1.0
+}

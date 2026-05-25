@@ -1,0 +1,126 @@
+Number of literals: 119
+Constructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+Post filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+[01;34mNo analytic limits found, not considering limit effects of goal-only operators[00m
+55% of the ground temporal actions in this problem are compression-safe
+Initial heuristic = 32.000, admissible cost estimate 0.000
+b (30.000 | 2.001)b (29.000 | 2.001)b (28.000 | 7.005)b (27.000 | 9.007)b (25.000 | 14.009)b (23.000 | 14.009)b (22.000 | 14.010)b (21.000 | 14.010)b (20.000 | 14.013)b (19.000 | 17.018)b (18.000 | 20.024)b (17.000 | 22.027)b (16.000 | 23.029)b (15.000 | 23.029)b (14.000 | 26.034)b (13.000 | 28.038)b (12.000 | 32.045)b (11.000 | 33.046)b (10.000 | 34.047)
+Resorting to best-first search
+Running WA* with W = 5.000, not restarting with goal states
+b (30.000 | 2.001)b (29.000 | 2.001)b (28.000 | 7.005)b (27.000 | 9.007)b (25.000 | 13.008)b (23.000 | 13.008)b (22.000 | 13.009)b (21.000 | 13.009)b (20.000 | 13.009)b (19.000 | 14.015)b (17.000 | 16.019)b (16.000 | 17.020)b (15.000 | 18.022)b (13.000 | 20.027)b (13.000 | 18.023)b (12.000 | 24.029)b (12.000 | 24.028)b (11.000 | 24.029)b (10.000 | 25.030)b (9.000 | 26.032)b (8.000 | 28.036)b (8.000 | 28.035)b (8.000 | 26.033)b (7.000 | 34.041)b (6.000 | 34.041)b (5.000 | 34.041)b (4.000 | 35.041)b (2.000 | 36.043)b (1.000 | 37.044)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 40.046
+; States evaluated so far: 2182
+; States pruned based on pre-heuristic cost lower bound: 0
+; Time 2.49
+0.000: (move robot_1 table_1 table_2)  [1.000]
+1.001: (pick-up robot_1 onion_1 table_2)  [1.000]
+1.002: (move robot_1 table_2 table_4)  [1.000]
+2.003: (move robot_1 table_4 board_1)  [1.000]
+3.004: (place robot_1 onion_1 board_1)  [1.000]
+4.005: (cut robot_1 onion_1 board_1)  [3.000]
+7.005: (move robot_1 board_1 table_4)  [1.000]
+8.006: (pick-up-container robot_1 pot_1 table_4)  [1.000]
+8.007: (move robot_1 table_4 sink_1)  [1.000]
+9.008: (place-container robot_1 pot_1 sink_1)  [1.000]
+10.009: (fill-pot robot_1 pot_1 water_1 sink_1)  [3.000]
+10.010: (move robot_1 sink_1 table_5)  [1.000]
+11.011: (pick-up robot_1 onion_3 table_5)  [1.000]
+11.012: (move robot_1 table_5 stove_1)  [1.000]
+12.013: (place robot_1 onion_3 stove_1)  [1.000]
+12.014: (move robot_1 stove_1 sink_1)  [1.000]
+13.015: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+13.016: (move robot_1 sink_1 table_1)  [1.000]
+14.017: (fill-bowl robot_1 bowl_1 pot_1 water_1 table_1)  [1.000]
+14.018: (move robot_1 table_1 board_1)  [1.000]
+15.019: (pick-up robot_1 onion_1 board_1)  [1.000]
+15.020: (move robot_1 board_1 table_1)  [1.000]
+16.021: (add-to robot_1 onion_1 water_1 pot_1 table_1)  [1.000]
+16.022: (move robot_1 table_1 table_3)  [1.000]
+17.023: (pick-up robot_1 onion_2 table_3)  [1.000]
+17.024: (move robot_1 table_3 table_1)  [1.000]
+18.025: (move robot_1 table_1 board_1)  [1.000]
+19.026: (place robot_1 onion_2 board_1)  [1.000]
+20.027: (cut robot_1 onion_2 board_1)  [3.000]
+23.028: (pick-up robot_1 onion_2 board_1)  [1.000]
+23.029: (move robot_1 board_1 table_1)  [1.000]
+24.030: (add-to robot_1 onion_2 water_1 pot_1 table_1)  [1.000]
+25.031: (pick-up-container robot_1 pot_1 table_1)  [1.000]
+25.032: (move robot_1 table_1 sink_1)  [1.000]
+26.033: (place-container robot_1 pot_1 sink_1)  [1.000]
+26.034: (move robot_1 sink_1 stove_1)  [1.000]
+27.035: (pick-up robot_1 onion_3 stove_1)  [1.000]
+27.036: (move robot_1 stove_1 sink_1)  [1.000]
+28.037: (move robot_1 sink_1 board_1)  [1.000]
+29.038: (place robot_1 onion_3 board_1)  [1.000]
+30.039: (cut robot_1 onion_3 board_1)  [3.000]
+33.040: (pick-up robot_1 onion_3 board_1)  [1.000]
+33.041: (move robot_1 board_1 sink_1)  [1.000]
+34.042: (add-to robot_1 onion_3 water_1 pot_1 sink_1)  [1.000]
+35.043: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+35.044: (move robot_1 sink_1 stove_1)  [1.000]
+36.045: (place-container robot_1 pot_1 stove_1)  [1.000]
+37.046: (boil-water robot_1 pot_1 water_1 stove_1)  [3.000]
+
+ * All goal deadlines now no later than 40.046
+b (0.000 | 40.045)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 39.047
+; States evaluated so far: 2507
+; States pruned based on pre-heuristic cost lower bound: 8
+; Time 3.04
+0.000: (move robot_1 table_1 table_2)  [1.000]
+1.001: (pick-up robot_1 onion_1 table_2)  [1.000]
+1.002: (move robot_1 table_2 table_4)  [1.000]
+2.003: (move robot_1 table_4 board_1)  [1.000]
+3.004: (place robot_1 onion_1 board_1)  [1.000]
+4.005: (cut robot_1 onion_1 board_1)  [3.000]
+7.005: (move robot_1 board_1 table_4)  [1.000]
+8.006: (pick-up-container robot_1 pot_1 table_4)  [1.000]
+8.007: (move robot_1 table_4 sink_1)  [1.000]
+9.008: (place-container robot_1 pot_1 sink_1)  [1.000]
+10.009: (fill-pot robot_1 pot_1 water_1 sink_1)  [3.000]
+10.010: (move robot_1 sink_1 table_5)  [1.000]
+11.011: (pick-up robot_1 onion_3 table_5)  [1.000]
+11.012: (move robot_1 table_5 stove_1)  [1.000]
+12.013: (place robot_1 onion_3 stove_1)  [1.000]
+12.014: (move robot_1 stove_1 sink_1)  [1.000]
+13.015: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+13.016: (move robot_1 sink_1 table_1)  [1.000]
+14.017: (fill-bowl robot_1 bowl_1 pot_1 water_1 table_1)  [1.000]
+14.018: (move robot_1 table_1 board_1)  [1.000]
+15.019: (pick-up robot_1 onion_1 board_1)  [1.000]
+15.020: (move robot_1 board_1 table_1)  [1.000]
+16.021: (add-to robot_1 onion_1 water_1 pot_1 table_1)  [1.000]
+16.022: (move robot_1 table_1 table_3)  [1.000]
+17.023: (pick-up robot_1 onion_2 table_3)  [1.000]
+17.024: (move robot_1 table_3 table_1)  [1.000]
+18.025: (move robot_1 table_1 board_1)  [1.000]
+19.026: (place robot_1 onion_2 board_1)  [1.000]
+20.027: (cut robot_1 onion_2 board_1)  [3.000]
+23.028: (pick-up robot_1 onion_2 board_1)  [1.000]
+23.029: (move robot_1 board_1 table_1)  [1.000]
+24.030: (add-to robot_1 onion_2 water_1 pot_1 table_1)  [1.000]
+25.031: (pick-up-container robot_1 pot_1 table_1)  [1.000]
+25.032: (move robot_1 table_1 sink_1)  [1.000]
+26.033: (place-container robot_1 pot_1 sink_1)  [1.000]
+26.034: (move robot_1 sink_1 stove_1)  [1.000]
+27.035: (pick-up robot_1 onion_3 stove_1)  [1.000]
+27.036: (move robot_1 stove_1 sink_1)  [1.000]
+28.037: (move robot_1 sink_1 board_1)  [1.000]
+29.038: (place robot_1 onion_3 board_1)  [1.000]
+30.039: (cut robot_1 onion_3 board_1)  [3.000]
+33.039: (move robot_1 board_1 sink_1)  [1.000]
+34.040: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+34.041: (move robot_1 sink_1 stove_1)  [1.000]
+35.042: (place-container robot_1 pot_1 stove_1)  [1.000]
+36.043: (boil-water robot_1 pot_1 water_1 stove_1)  [3.000]
+36.044: (move robot_1 stove_1 board_1)  [1.000]
+37.045: (pick-up robot_1 onion_3 board_1)  [1.000]
+37.046: (move robot_1 board_1 stove_1)  [1.000]
+38.047: (add-to robot_1 onion_3 water_1 pot_1 stove_1)  [1.000]
+
+ * All goal deadlines now no later than 39.047
+b (0.000 | 39.046)

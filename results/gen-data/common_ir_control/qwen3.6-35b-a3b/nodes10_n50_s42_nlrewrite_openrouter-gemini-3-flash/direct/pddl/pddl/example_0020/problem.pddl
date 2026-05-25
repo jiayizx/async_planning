@@ -1,0 +1,13 @@
+(define (problem nintendo_ds_play)
+  (:domain nintendo_ds)
+  (:objects step1 step2 step3 step4 step5 step6 step7 step8 step9 step10 - step)
+  (:init 
+    (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4) (step_pending step5)
+    (step_pending step6) (step_pending step7) (step_pending step8) (step_pending step9) (step_pending step10)
+    (not (step_done step1)) (not (step_done step2)) (not (step_done step3)) (not (step_done step4)) (not (step_done step5))
+    (not (step_done step6)) (not (step_done step7)) (not (step_done step8)) (not (step_done step9)) (not (step_done step10))
+    (not (cartridge_inserted)) (not (touch_calibrated)) (not (console_located)) (not (power_toggled)) (not (battery_charged))
+    (not (profile_selected)) (not (start_pressed)) (not (exterior_cleaned)) (not (volume_adjusted)) (not (lid_opened)))
+  (:goal (and (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+              (step_done step6) (step_done step7) (step_done step8) (step_done step9) (step_done step10)
+              (start_pressed))))

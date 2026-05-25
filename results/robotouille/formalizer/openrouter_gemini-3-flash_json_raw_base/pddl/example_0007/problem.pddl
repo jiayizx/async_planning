@@ -1,0 +1,40 @@
+(define (problem robotouille-task)
+    (:domain robotouille)
+    (:objects
+        table_1 stove_1 board_1 sink_1 table_2 table_3 table_4 table_5 table_6 - station
+        tomato_1 lettuce_1 chicken_1 bread_1 bread_2 - item
+        pot_1 bowl_1 - container
+        water_1 - meal
+        robot_1 - player
+    )
+    (:init
+        (istable table_1) (istable table_2) (istable table_3) (istable table_4) (istable table_5) (istable table_6)
+        (isstove stove_1) (isboard board_1) (issink sink_1)
+        (iscuttable tomato_1) (iscuttable lettuce_1) (iscookable chicken_1)
+        (item-free tomato_1) (item-free lettuce_1) (item-free chicken_1) (item-free bread_1) (item-free bread_2)
+        (on tomato_1 table_2) (at tomato_1 table_2) (clear tomato_1)
+        (on lettuce_1 table_3) (at lettuce_1 table_3) (clear lettuce_1)
+        (on chicken_1 table_5) (at chicken_1 table_5) (clear chicken_1)
+        (on bread_1 table_6) (at bread_1 table_6)
+        (atop bread_2 bread_1) (at bread_2 table_6) (clear bread_2)
+        (ispot pot_1) (container_at pot_1 table_4) (container_empty pot_1) (container-free pot_1)
+        (isbowl bowl_1) (container_at bowl_1 table_1) (container_empty bowl_1) (container-free bowl_1)
+        (iswater water_1)
+        (loc robot_1 table_1) (nothing robot_1)
+        (vacant stove_1) (vacant board_1) (vacant sink_1) (vacant table_2) (vacant table_3) (vacant table_4) (vacant table_5) (vacant table_6)
+        (empty stove_1) (empty board_1) (empty sink_1)
+    )
+    (:goal (and
+        (in water_1 bowl_1)
+        (isboiling water_1)
+        (addedto tomato_1 water_1)
+        (container_at bowl_1 table_1)
+        (on bread_1 table_2)
+        (iscooked chicken_1)
+        (at chicken_1 table_2)
+        (iscut lettuce_1)
+        (at lettuce_1 table_2)
+        (at bread_2 table_2)
+        (clear bread_2)
+    ))
+)

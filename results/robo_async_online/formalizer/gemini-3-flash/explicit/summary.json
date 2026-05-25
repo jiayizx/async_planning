@@ -1,0 +1,57 @@
+{
+  "model": "gemini-3-flash",
+  "online_mode": "strict",
+  "n_tasks": 140,
+  "n_success": 4,
+  "success_rate": 0.0286,
+  "avg_makespan": 45.541,
+  "avg_makespan_ratio": 1.0322,
+  "n_llm_error": 0,
+  "n_solver_error": 110,
+  "n_parse_error": 0,
+  "n_eval_error": 26,
+  "by_tag": {
+    "online_easy": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_medium": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_station": {
+      "n": 20,
+      "n_success": 1,
+      "success_rate": 0.05,
+      "avg_makespan_ratio": 1.0322
+    },
+    "online_hard_temporal": {
+      "n": 20,
+      "n_success": 3,
+      "success_rate": 0.15,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_multiagent": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_optimization": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    },
+    "online_hard_high_speedup": {
+      "n": 20,
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
+    }
+  }
+}

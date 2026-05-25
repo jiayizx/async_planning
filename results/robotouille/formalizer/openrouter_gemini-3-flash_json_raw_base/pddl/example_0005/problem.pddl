@@ -1,0 +1,48 @@
+(define (problem robotouille-problem)
+    (:domain robotouille)
+    (:objects
+        table_1 stove_1 table_3 board_1 sink_1 table_2 - station
+        potato_1 - item
+        pot_1 bowl_1 - container
+        water_1 - meal
+        robot_1 - player
+    )
+    (:init
+        (istable table_1)
+        (isstove stove_1)
+        (istable table_3)
+        (isboard board_1)
+        (issink sink_1)
+        (istable table_2)
+        (loc robot_1 table_1)
+        (nothing robot_1)
+        (vacant stove_1)
+        (vacant table_3)
+        (vacant board_1)
+        (vacant sink_1)
+        (vacant table_2)
+        (on potato_1 table_1)
+        (at potato_1 table_1)
+        (clear potato_1)
+        (item-free potato_1)
+        (iscuttable potato_1)
+        (container_at pot_1 table_3)
+        (container_empty pot_1)
+        (container-free pot_1)
+        (ispot pot_1)
+        (container_at bowl_1 table_2)
+        (container_empty bowl_1)
+        (container-free bowl_1)
+        (isbowl bowl_1)
+        (iswater water_1)
+        (empty stove_1)
+        (empty board_1)
+        (empty sink_1)
+    )
+    (:goal (and
+        (in water_1 bowl_1)
+        (addedto potato_1 water_1)
+        (isboiling water_1)
+        (container_at bowl_1 table_1)
+    ))
+)

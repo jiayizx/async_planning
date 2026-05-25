@@ -1,0 +1,102 @@
+Number of literals: 57
+Constructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+Post filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+[01;34mNo analytic limits found, not considering limit effects of goal-only operators[00m
+91% of the ground temporal actions in this problem are compression-safe
+Initial heuristic = 19.000, admissible cost estimate 0.000
+b (18.000 | 1.000)b (17.000 | 3.004)b (15.000 | 8.007)b (13.000 | 8.007)b (12.000 | 8.008)b (11.000 | 8.012)b (10.000 | 8.012)b (9.000 | 9.013)b (7.000 | 10.014)b (6.000 | 12.017)b (5.000 | 13.018)b (4.000 | 16.019)b (3.000 | 16.019)b (2.000 | 16.019)b (1.000 | 16.019)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 16.024
+; States evaluated so far: 121
+; States pruned based on pre-heuristic cost lower bound: 0
+; Time 0.13
+0.000: (pick-up robot_1 potato_1 table_1)  [1.000]
+0.001: (move robot_1 table_1 stove_1)  [1.000]
+1.002: (place robot_1 potato_1 stove_1)  [1.000]
+1.003: (move robot_1 stove_1 table_3)  [1.000]
+2.004: (pick-up-container robot_1 pot_1 table_3)  [1.000]
+2.005: (move robot_1 table_3 table_2)  [1.000]
+3.006: (move robot_1 table_2 sink_1)  [1.000]
+4.007: (place-container robot_1 pot_1 sink_1)  [1.000]
+5.008: (fill-pot robot_1 pot_1 water_1 sink_1)  [3.000]
+5.009: (move robot_1 sink_1 table_1)  [1.000]
+6.010: (move robot_1 table_1 stove_1)  [1.000]
+7.011: (pick-up robot_1 potato_1 stove_1)  [1.000]
+7.012: (move robot_1 stove_1 sink_1)  [1.000]
+8.013: (add-to robot_1 potato_1 water_1 pot_1 sink_1)  [1.000]
+9.014: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+9.015: (move robot_1 sink_1 table_2)  [1.000]
+10.016: (fill-bowl robot_1 bowl_1 pot_1 water_1 table_2)  [1.000]
+11.017: (pick-up-container robot_1 pot_1 table_2)  [1.000]
+11.018: (move robot_1 table_2 stove_1)  [1.000]
+12.019: (place-container robot_1 pot_1 stove_1)  [1.000]
+13.020: (boil-water robot_1 pot_1 water_1 stove_1)  [3.000]
+13.021: (move robot_1 stove_1 table_2)  [1.000]
+14.022: (pick-up-container robot_1 bowl_1 table_2)  [1.000]
+14.023: (move robot_1 table_2 table_1)  [1.000]
+15.024: (place-container robot_1 bowl_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 16.024
+
+Resorting to best-first search
+Running WA* with W = 5.000, not restarting with goal states
+b (18.000 | 1.000)b (17.000 | 2.001)b (15.000 | 6.004)b (13.000 | 6.004)b (12.000 | 6.004)b (11.000 | 6.004)b (10.000 | 6.004)b (9.000 | 7.005)b (7.000 | 8.007)b (6.000 | 10.009)b (5.000 | 11.010)b (4.000 | 14.011)b (3.000 | 14.011)b (2.000 | 14.011)b (1.000 | 14.011)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 14.016
+; States evaluated so far: 421
+; States pruned based on pre-heuristic cost lower bound: 0
+; Time 0.24
+0.000: (move robot_1 table_1 table_3)  [1.000]
+1.001: (pick-up-container robot_1 pot_1 table_3)  [1.000]
+1.002: (move robot_1 table_3 sink_1)  [1.000]
+2.003: (place-container robot_1 pot_1 sink_1)  [1.000]
+3.004: (fill-pot robot_1 pot_1 water_1 sink_1)  [3.000]
+3.005: (move robot_1 sink_1 table_1)  [1.000]
+4.006: (pick-up robot_1 potato_1 table_1)  [1.000]
+4.007: (move robot_1 table_1 sink_1)  [1.000]
+6.005: (add-to robot_1 potato_1 water_1 pot_1 sink_1)  [1.000]
+7.006: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+7.007: (move robot_1 sink_1 table_2)  [1.000]
+8.008: (fill-bowl robot_1 bowl_1 pot_1 water_1 table_2)  [1.000]
+9.009: (pick-up-container robot_1 pot_1 table_2)  [1.000]
+9.010: (move robot_1 table_2 stove_1)  [1.000]
+10.011: (place-container robot_1 pot_1 stove_1)  [1.000]
+11.012: (boil-water robot_1 pot_1 water_1 stove_1)  [3.000]
+11.013: (move robot_1 stove_1 table_2)  [1.000]
+12.014: (pick-up-container robot_1 bowl_1 table_2)  [1.000]
+12.015: (move robot_1 table_2 table_1)  [1.000]
+13.016: (place-container robot_1 bowl_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 14.016
+b (0.000 | 14.015)(G)(G)(G)(G)(G)(G)b (0.000 | 14.013)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 13.016
+; States evaluated so far: 8791
+; States pruned based on pre-heuristic cost lower bound: 291
+; Time 4.22
+0.000: (move robot_1 table_1 table_3)  [1.000]
+1.001: (pick-up-container robot_1 pot_1 table_3)  [1.000]
+1.002: (move robot_1 table_3 sink_1)  [1.000]
+2.003: (place-container robot_1 pot_1 sink_1)  [1.000]
+3.004: (fill-pot robot_1 pot_1 water_1 sink_1)  [3.000]
+3.005: (move robot_1 sink_1 table_2)  [1.000]
+4.006: (pick-up-container robot_1 bowl_1 table_2)  [1.000]
+4.007: (move robot_1 table_2 stove_1)  [1.000]
+5.008: (place-container robot_1 bowl_1 stove_1)  [1.000]
+5.009: (move robot_1 stove_1 table_1)  [1.000]
+6.010: (pick-up robot_1 potato_1 table_1)  [1.000]
+6.011: (move robot_1 table_1 sink_1)  [1.000]
+7.012: (add-to robot_1 potato_1 water_1 pot_1 sink_1)  [1.000]
+8.013: (pick-up-container robot_1 pot_1 sink_1)  [1.000]
+8.014: (move robot_1 sink_1 stove_1)  [1.000]
+9.015: (fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1)  [1.000]
+10.016: (boil-water robot_1 pot_1 water_1 stove_1)  [3.000]
+10.017: (pick-up-container robot_1 bowl_1 stove_1)  [1.000]
+10.018: (move robot_1 stove_1 table_1)  [1.000]
+11.019: (place-container robot_1 bowl_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 13.016
+b (0.000 | 13.015)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)(G)

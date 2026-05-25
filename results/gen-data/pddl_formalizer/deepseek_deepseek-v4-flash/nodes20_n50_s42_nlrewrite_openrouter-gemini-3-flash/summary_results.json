@@ -1,0 +1,16 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "deepseek/deepseek-v4-flash",
+  "makespan_accuracy": 0.56,
+  "plan_accuracy": 0.0,
+  "num_correct": 28,
+  "num_plan_correct": 0,
+  "num_syntax_errors": 19,
+  "num_semantic_errors": 3,
+  "num_data_points": 50,
+  "plan_valid_rate": 0.0,
+  "num_plan_valid": 0,
+  "num_correct_and_valid": 0,
+  "num_correct_but_invalid": 28,
+  "num_incorrect_but_valid": 0
+}

@@ -6,10 +6,10 @@
   "success_rate": 0.0,
   "avg_makespan": null,
   "avg_makespan_ratio": 0,
-  "n_llm_error": 138,
-  "n_solver_error": 2,
+  "n_llm_error": 96,
+  "n_solver_error": 43,
   "n_parse_error": 0,
-  "n_eval_error": 0,
+  "n_eval_error": 1,
   "by_tag": {
     "online_easy": {
       "n": 20,

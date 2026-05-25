@@ -1,0 +1,12 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "qwen3.6-35b-a3b",
+  "icl_examples": 0,
+  "cot": true,
+  "structured_output": true,
+  "makespan_accuracy": 0.78,
+  "plan_accuracy": 0.72,
+  "num_correct": 39,
+  "num_plan_correct": 36,
+  "num_data_points": 50
+}
