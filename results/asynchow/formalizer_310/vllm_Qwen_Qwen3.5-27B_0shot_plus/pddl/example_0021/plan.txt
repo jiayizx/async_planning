@@ -1,0 +1,5 @@
+0.000: (pick_system) [1800.000]
+1800.001: (find_interesting_games) [1800.000]
+1800.001: (search_games) [1800.000]
+3600.002: (order_items) [600.000]
+4200.003: (setup_system) [1800.000]

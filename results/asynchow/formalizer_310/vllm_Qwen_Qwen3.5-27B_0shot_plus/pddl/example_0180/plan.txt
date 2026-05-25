@@ -1,0 +1,4 @@
+0.000: (boil_water) [300.000]
+0.000: (rinse_carrots) [120.000]
+300.001: (cook_carrots) [600.000]
+900.002: (plate_carrots) [120.000]

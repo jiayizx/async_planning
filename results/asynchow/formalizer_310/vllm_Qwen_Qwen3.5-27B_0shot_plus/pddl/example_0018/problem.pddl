@@ -1,0 +1,21 @@
+(define (problem school_preparation_problem)
+  (:domain school_preparation)
+  
+  (:init
+    (get_supplies_list_pending)
+    (buy_supplies_pending)
+    (organize_supplies_pending)
+    (get_books_list_pending)
+    (buy_books_pending)
+    (pack_backpack_pending)
+  )
+
+  (:goal (and
+    (get_supplies_list_done)
+    (buy_supplies_done)
+    (organize_supplies_done)
+    (get_books_list_done)
+    (buy_books_done)
+    (pack_backpack_done)
+  ))
+)

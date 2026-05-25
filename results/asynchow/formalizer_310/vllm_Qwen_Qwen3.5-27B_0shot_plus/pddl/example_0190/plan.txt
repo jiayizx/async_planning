@@ -1,0 +1,4 @@
+0.000: (catch_cinccino) [900.000]
+900.001: (trade_for_munchlax) [600.000]
+1500.002: (use_rare_candy) [120.000]
+1500.002: (raise_friendship) [3600.000]

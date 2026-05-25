@@ -1,0 +1,5 @@
+0.000: (find_wood) [300.000]
+0.000: (find_matches) [300.000]
+300.001: (ignite_newspaper) [780.000]
+300.001: (place_wood) [300.000]
+600.002: (tear_newspaper) [120.000]

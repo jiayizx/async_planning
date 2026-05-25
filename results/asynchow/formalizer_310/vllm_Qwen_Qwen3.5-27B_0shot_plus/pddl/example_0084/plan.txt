@@ -1,0 +1,7 @@
+0.000: (walk_into_garage) [120.000]
+0.000: (unlock_garage) [5.000]
+120.001: (get_into_truck) [30.000]
+150.002: (start_truck) [5.000]
+155.003: (drive_to_area) [3600.000]
+3755.004: (pay_fee) [120.000]
+3875.005: (drive_onto_trails) [300.000]

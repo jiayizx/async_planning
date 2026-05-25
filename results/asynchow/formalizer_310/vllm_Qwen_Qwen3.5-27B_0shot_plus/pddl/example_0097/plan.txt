@@ -1,0 +1,6 @@
+0.000: (gather_clothing) [300.000]
+300.001: (get_ready) [1200.000]
+1500.002: (drive_to_church) [900.000]
+2400.003: (wait_for_singing) [3000.000]
+2400.003: (warm_up_voice) [900.000]
+5400.004: (sing_verses) [3600.000]

@@ -1,0 +1,21 @@
+(define (problem travel_to_europe)
+  (:domain europe_travel)
+  
+  (:init
+    (apply_passport_pending)
+    (retrieve_passport_pending)
+    (research_destinations_pending)
+    (book_ticket_pending)
+    (pack_bags_pending)
+    (prepare_departure_pending)
+  )
+
+  (:goal (and
+    (apply_passport_done)
+    (retrieve_passport_done)
+    (research_destinations_done)
+    (book_ticket_done)
+    (pack_bags_done)
+    (prepare_departure_done)
+  ))
+)

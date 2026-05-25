@@ -1,0 +1,23 @@
+(define (problem off_roading_task)
+    (:domain off_roading)
+    
+    (:init
+        (unlock_garage_pending)
+        (walk_into_garage_pending)
+        (get_into_truck_pending)
+        (start_truck_pending)
+        (drive_to_area_pending)
+        (pay_fee_pending)
+        (drive_onto_trails_pending)
+    )
+
+    (:goal (and
+        (unlock_garage_done)
+        (walk_into_garage_done)
+        (get_into_truck_done)
+        (start_truck_done)
+        (drive_to_area_done)
+        (pay_fee_done)
+        (drive_onto_trails_done)
+    ))
+)

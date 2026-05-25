@@ -1,0 +1,7 @@
+0.000: (decide_to_learn) [30.000]
+30.001: (sit_down) [30.000]
+60.002: (turn_on_computer) [60.000]
+120.003: (navigate_to_site) [120.000]
+240.004: (decide_on_recipe) [300.000]
+240.004: (search_recipes) [1800.000]
+2040.005: (print_recipe) [120.000]

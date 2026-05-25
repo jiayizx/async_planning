@@ -1,0 +1,27 @@
+(define (problem bake_blueberry_pie_instance)
+  (:domain bake_blueberry_pie)
+  
+  (:init
+    (preheat_oven_pending)
+    (prepare_crust_pending)
+    (mix_blueberries_pending)
+    (pour_mixture_pending)
+    (top_crust_pending)
+    (crimp_seal_pending)
+    (cut_slits_pending)
+    (bake_pie_pending)
+    (finished_pending)
+  )
+
+  (:goal (and
+    (preheat_oven_done)
+    (prepare_crust_done)
+    (mix_blueberries_done)
+    (pour_mixture_done)
+    (top_crust_done)
+    (crimp_seal_done)
+    (cut_slits_done)
+    (bake_pie_done)
+    (finished_done)
+  ))
+)

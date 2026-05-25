@@ -1,0 +1,6 @@
+0.000: (find_recipes) [1800.000]
+1800.001: (buy_ingredients) [3600.000]
+1800.001: (buy_molds) [3600.000]
+5400.002: (make_mixture) [7200.000]
+12600.003: (pour_mixture) [600.000]
+13200.004: (harden_cool) [3600.000]

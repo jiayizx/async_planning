@@ -20,24 +20,25 @@ class VLLMOpenAI(BaseLLM):
         super().__init__(model_name, config, num_workers, strict_json)
         self.client = OpenAI(
             base_url=config.get("base_url", "http://localhost:8000/v1"),
+            api_key=config.get("api_key", "vllm"),
         )
+        # Remove client-init-only keys so they don't get forwarded to create()
+        for k in ("base_url", "api_key"):
+            self.config.pop(k, None)
 
     def _chat(self, messages: List[Dict[str, str]]) -> str:
         """Basic chat functionality without structured response format."""
-        # if 'max_tokens' not in self.config:
-        #     self.config['max_tokens'] = 4096
-
-        response = self.client.chat.completions.create(
-            model=self.model_name, messages=messages, **self.config
+        completion = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=messages,
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
+            **self.config,
         )
-        response = response.choices[0].message.content
-        # if response:
-        #     response = response.replace("\n", "")
-        return response
+        return completion.choices[0].message.content
 
 
     def _chat_with_format(self, messages: List[Dict[str, str]], schema: BaseModel) -> str:
-        pass
+        return self._chat(messages)
 
 
     # def _chat_with_format(

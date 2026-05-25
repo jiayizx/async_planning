@@ -1,0 +1,3 @@
+0.000: (prepare_lavender) [120.000]
+0.000: (boil_water) [300.000]
+300.001: (steep_tea) [600.000]

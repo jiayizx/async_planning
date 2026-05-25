@@ -1,0 +1,7 @@
+0.000: (measure_torso) [120.000]
+0.000: (measure_thigh) [60.000]
+0.000: (use_trousers) [120.000]
+0.000: (measure_hips) [60.000]
+0.000: (identify_waist) [60.000]
+60.001: (find_waist_measurement) [120.000]
+120.001: (find_inseam) [120.000]

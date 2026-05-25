@@ -1,0 +1,19 @@
+(define (problem sculpt_concrete_task)
+    (:domain sculpt_concrete)
+    
+    (:init
+        (cut_mesh_pending)
+        (wrap_mesh_pending)
+        (mix_concrete_pending)
+        (apply_concrete_pending)
+        (dry_concrete_pending)
+    )
+
+    (:goal (and
+        (cut_mesh_done)
+        (wrap_mesh_done)
+        (mix_concrete_done)
+        (apply_concrete_done)
+        (dry_concrete_done)
+    ))
+)

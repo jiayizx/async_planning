@@ -1,0 +1,3 @@
+0.000: (look_for_symptoms) [300.000]
+0.000: (watch_hamster) [604800.000]
+604800.001: (take_hamster_to_vet) [1800.000]

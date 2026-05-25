@@ -1,0 +1,7 @@
+0.000: (gather_materials) [300.000]
+300.001: (add_coconut_oil) [60.000]
+300.001: (add_sugar) [60.000]
+360.002: (mix_ingredients) [120.000]
+480.003: (apply_scrub) [300.000]
+780.004: (rinse_scrub) [180.000]
+960.005: (dry_skin) [180.000]

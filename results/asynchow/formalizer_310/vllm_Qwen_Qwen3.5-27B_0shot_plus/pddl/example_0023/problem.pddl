@@ -1,0 +1,21 @@
+(define (problem anger_date_problem)
+  (:domain anger_date)
+  
+  (:init
+    (find_single_pending)
+    (find_attractive_pending)
+    (ask_out_pending)
+    (plan_day_pending)
+    (drive_to_location_pending)
+    (get_angry_pending)
+  )
+
+  (:goal (and
+    (find_single_done)
+    (find_attractive_done)
+    (ask_out_done)
+    (plan_day_done)
+    (drive_to_location_done)
+    (get_angry_done)
+  ))
+)

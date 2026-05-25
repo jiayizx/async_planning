@@ -1,0 +1,27 @@
+(define (problem read_palms_instance)
+  (:domain read_palms)
+  
+  (:init
+    (choose_hand_pending)
+    (identify_lines_pending)
+    (interpret_heart_pending)
+    (examine_head_pending)
+    (evaluate_life_pending)
+    (study_fate_pending)
+    (determine_shape_pending)
+    (look_mounts_pending)
+    (examine_size_pending)
+  )
+
+  (:goal (and
+    (choose_hand_done)
+    (identify_lines_done)
+    (interpret_heart_done)
+    (examine_head_done)
+    (evaluate_life_done)
+    (study_fate_done)
+    (determine_shape_done)
+    (look_mounts_done)
+    (examine_size_done)
+  ))
+)

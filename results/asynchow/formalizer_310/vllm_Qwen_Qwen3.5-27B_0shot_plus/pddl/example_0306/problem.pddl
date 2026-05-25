@@ -1,0 +1,27 @@
+(define (problem make_chevron_bracelet)
+  (:domain chevron_bracelet)
+  
+  (:init
+    (prepare_floss_pending)
+    (secure_strands_pending)
+    (arrange_strands_pending)
+    (begin_right_knots_pending)
+    (begin_left_knots_pending)
+    (complete_other_half_pending)
+    (tie_middle_knots_pending)
+    (continue_pattern_pending)
+    (finish_bracelet_pending)
+  )
+
+  (:goal (and
+    (prepare_floss_done)
+    (secure_strands_done)
+    (arrange_strands_done)
+    (begin_right_knots_done)
+    (begin_left_knots_done)
+    (complete_other_half_done)
+    (tie_middle_knots_done)
+    (continue_pattern_done)
+    (finish_bracelet_done)
+  ))
+)

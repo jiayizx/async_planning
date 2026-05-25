@@ -32,6 +32,16 @@ def get_model(
     strict_json: bool = False,
 ) -> BaseLLM:
     """Get a model instance."""
+    # vllm/<model-id> prefix → local vLLM server (OpenAI-compatible)
+    if model_name.startswith("vllm/"):
+        model_name = model_name[len("vllm/"):]
+        base_url = os.environ.get("VLLM_BASE_URL", "http://localhost:8000/v1")
+        return VLLMOpenAI(
+            model_name=model_name,
+            config={**config, "base_url": base_url},
+            num_workers=num_workers,
+            strict_json=strict_json,
+        )
     if model_name.startswith("openrouter/"):
         model_name = model_name[len("openrouter/"):]
         model_class = LLM_REGISTRY["openrouter"]
@@ -39,10 +49,16 @@ def get_model(
         model_name = model_name[len("deepseek/"):]
         model_class = LLM_REGISTRY["deepseek"]
     elif "claude" in model_name:
-        if os.environ.get("ANTHROPIC_API_KEY") is None:
-            print("ANTHROPIC_API_KEY is not set, falling back to openrouter")
-        else:
+        has_anthropic_key = os.environ.get("ANTHROPIC_API_KEY") is not None
+        has_bedrock_bearer = bool(os.environ.get("AWS_BEARER_TOKEN_BEDROCK"))
+        if has_anthropic_key or has_bedrock_bearer:
             model_class = LLM_REGISTRY["claude"]
+        else:
+            print(
+                "ANTHROPIC_API_KEY and AWS_BEARER_TOKEN_BEDROCK are not set, "
+                "falling back to openrouter"
+            )
+            model_class = LLM_REGISTRY["openrouter"]
     elif "openai" in model_name:
         model_class = LLM_REGISTRY["openai"]
     elif "gemini" in model_name:

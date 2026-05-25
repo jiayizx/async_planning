@@ -1,0 +1,19 @@
+(define (problem prison_escape_problem)
+  (:domain prison_escape)
+  
+  (:init
+    (get_plans_pending)
+    (watch_guards_pending)
+    (run_tunnel_pending)
+    (steal_spoon_pending)
+    (dig_tunnel_pending)
+  )
+
+  (:goal (and
+    (get_plans_done)
+    (watch_guards_done)
+    (run_tunnel_done)
+    (steal_spoon_done)
+    (dig_tunnel_done)
+  ))
+)

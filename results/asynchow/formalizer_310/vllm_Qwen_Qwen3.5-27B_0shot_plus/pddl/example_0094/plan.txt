@@ -1,0 +1,5 @@
+647.000: (confess_commitment) [3600.000]
+647.000: (show_skills) [259200.000]
+647.000: (perform_preseason) [10800.000]
+647.000: (receive_spot) [3600.000]
+647.000: (head_field) [300.000]

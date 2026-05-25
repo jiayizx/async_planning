@@ -1,0 +1,19 @@
+(define (problem walmart_trip_problem)
+  (:domain walmart-trip)
+  
+  (:init
+    (put_on_clothes_pending)
+    (make_grocery_list_pending)
+    (get_in_car_pending)
+    (drive_to_walmart_pending)
+    (find_parking_spot_pending)
+  )
+
+  (:goal (and
+    (put_on_clothes_done)
+    (make_grocery_list_done)
+    (get_in_car_done)
+    (drive_to_walmart_done)
+    (find_parking_spot_done)
+  ))
+)

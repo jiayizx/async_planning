@@ -1,0 +1,7 @@
+0.000: (do_locate_front_door) [3.000]
+3.001: (do_turn_toward_door) [2.000]
+5.002: (do_lift_right_leg) [1.000]
+5.002: (do_lift_left_leg) [1.000]
+6.003: (do_move_right_leg) [1.000]
+6.003: (do_move_left_leg) [1.000]
+7.004: (do_move_forward) [6.000]

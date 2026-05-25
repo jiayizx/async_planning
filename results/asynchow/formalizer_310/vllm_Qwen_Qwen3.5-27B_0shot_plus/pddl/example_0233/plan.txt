@@ -1,0 +1,3 @@
+0.000: (do_shampoo_roots) [120.000]
+0.000: (do_cut_shampoo) [180.000]
+120.001: (do_comb_hair) [300.000]

@@ -1,0 +1,5 @@
+0.000: (pack_hiking_backpacks) [86400.000]
+0.000: (drive_to_hiking_front) [86400.000]
+86400.001: (hike_out_trails) [86400.000]
+172800.002: (camp_out_overnight) [86400.000]
+259200.003: (hike_trails_back) [86400.000]

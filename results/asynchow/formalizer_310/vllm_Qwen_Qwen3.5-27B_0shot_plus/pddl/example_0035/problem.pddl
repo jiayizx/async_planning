@@ -1,0 +1,19 @@
+(define (problem film_learning_task)
+  (:domain film_learning)
+  
+  (:init
+    (decide_area_pending)
+    (research_online_pending)
+    (go_library_pending)
+    (read_research_pending)
+    (enjoy_respect_pending)
+  )
+
+  (:goal (and
+    (decide_area_done)
+    (research_online_done)
+    (go_library_done)
+    (read_research_done)
+    (enjoy_respect_done)
+  ))
+)

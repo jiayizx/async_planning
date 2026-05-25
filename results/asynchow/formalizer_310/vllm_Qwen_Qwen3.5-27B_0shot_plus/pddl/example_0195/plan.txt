@@ -1,0 +1,4 @@
+0.000: (prepare_chili) [120.000]
+0.000: (slice_strawberry) [60.000]
+60.001: (pull_quarters) [60.000]
+120.001: (place_cap) [60.000]

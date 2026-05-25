@@ -1,0 +1,5 @@
+0.000: (blend_sugars) [240.000]
+0.000: (combine_dry_ingredients) [120.000]
+0.000: (preheat_oven) [300.000]
+240.001: (add_and_blend) [360.000]
+600.002: (place_dough) [600.000]

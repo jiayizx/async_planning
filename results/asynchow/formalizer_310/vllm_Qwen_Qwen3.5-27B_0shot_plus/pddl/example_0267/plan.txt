@@ -1,0 +1,5 @@
+0.000: (learn_emotional_points) [900.000]
+900.001: (find_love_openness) [600.000]
+900.001: (look_anger_fear_expression) [300.000]
+900.001: (locate_depression_overwhelmed) [300.000]
+900.001: (identify_sympathy_guilt_selfpity) [300.000]
