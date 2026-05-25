@@ -247,7 +247,7 @@ class PlanStep:
 
     @property
     def t_end(self) -> float:
-        return self.t_start + self.duration
+        return round(self.t_start + self.duration, 3)
 
     def __str__(self):
         args_str = " ".join(self.args)

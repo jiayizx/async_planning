@@ -200,6 +200,14 @@ def parse_pddl_response(response: str) -> Optional[tuple[str, str, List[str]]]:
         # Use raw_decode to parse the first JSON object and ignore any trailing text
         # (some models append explanations after the JSON block)
         data, _ = json.JSONDecoder().raw_decode(response)
+        if isinstance(data, dict) and "responses" not in data and {"domain_pddl", "problem_pddl"} <= set(data):
+            r = PDDLResult(**data)
+            domain, problem = _sanitize_pddl(r.domain_pddl, r.problem_pddl)
+            return domain, problem, r.step_actions
+        if isinstance(data, dict) and isinstance(data.get("responses"), dict):
+            r = PDDLResult(**data["responses"])
+            domain, problem = _sanitize_pddl(r.domain_pddl, r.problem_pddl)
+            return domain, problem, r.step_actions
         pddl_resp = PDDLResponse(**data)
         if pddl_resp.responses:
             r = pddl_resp.responses[0]

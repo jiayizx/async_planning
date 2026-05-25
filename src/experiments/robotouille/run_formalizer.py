@@ -974,6 +974,39 @@ def _fix_item_locations(
     return problem_pddl[:init_m.start()] + new_init + problem_pddl[init_m.end():]
 
 
+def _apply_pddl_repairs(
+    domain_pddl: str,
+    problem_pddl: str,
+    *,
+    original_json: dict | None = None,
+    enabled: bool,
+) -> tuple[str, str]:
+    """Apply Robotouille-specific PDDL repairs when enabled.
+
+    These repairs are useful for a stronger PDDL+repair ablation, but should be
+    disabled for raw formalizer comparisons against Planner and CP-SAT.
+    """
+    if not enabled:
+        return domain_pddl, problem_pddl
+
+    domain_pddl, problem_pddl = _normalize_predicate_names(domain_pddl, problem_pddl)
+    domain_pddl = _fix_move_effects(domain_pddl)
+    domain_pddl = _fix_unstack_empty_effect(domain_pddl)
+    domain_pddl = _fix_cook_fry_effects(domain_pddl)
+    problem_pddl = _strip_undeclared_init_facts(domain_pddl, problem_pddl)
+    problem_pddl = _fix_nothing_contradiction(problem_pddl)
+    problem_pddl = _fix_missing_capability_predicates(problem_pddl)
+    problem_pddl = _fix_stacked_clear_contradiction(problem_pddl)
+    problem_pddl = _fix_nothing_predicate(domain_pddl, problem_pddl)
+    problem_pddl = _fix_item_locations(domain_pddl, problem_pddl, original_json=original_json)
+    problem_pddl = _fix_empty_contradiction(domain_pddl, problem_pddl)
+    problem_pddl = _fix_container_empty_conflict(problem_pddl)
+    problem_pddl = _fix_empty_predicate(domain_pddl, problem_pddl)
+    problem_pddl = _fix_vacant_predicate(domain_pddl, problem_pddl)
+    problem_pddl = _fix_clear_predicate(domain_pddl, problem_pddl)
+    return domain_pddl, problem_pddl
+
+
 def _diagnose_unreachable(domain_pddl: str, problem_pddl: str) -> str:
     """Return a targeted hint for why OPTIC says 'Goals unreachable'.
 
@@ -1253,21 +1286,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     })
                 else:
                     d, p, _sa = pair
-                    d, p = _normalize_predicate_names(d, p)
-                    d = _fix_move_effects(d)
-                    d = _fix_unstack_empty_effect(d)
-                    d = _fix_cook_fry_effects(d)
-                    p = _strip_undeclared_init_facts(d, p)
-                    p = _fix_nothing_contradiction(p)
-                    p = _fix_missing_capability_predicates(p)
-                    p = _fix_stacked_clear_contradiction(p)
-                    p = _fix_nothing_predicate(d, p)
-                    p = _fix_item_locations(d, p, original_json=gold_data[i].get("original_json"))
-                    p = _fix_empty_contradiction(d, p)
-                    p = _fix_container_empty_conflict(p)
-                    p = _fix_empty_predicate(d, p)
-                    p = _fix_vacant_predicate(d, p)
-                    p = _fix_clear_predicate(d, p)
+                    d, p = _apply_pddl_repairs(
+                        d,
+                        p,
+                        original_json=gold_data[i].get("original_json"),
+                        enabled=args.pddl_repairs,
+                    )
                     domains[i] = d
                     problems[i] = p
                     solvable.append((i, p))
@@ -1323,21 +1347,12 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     if "unreachable" in sr.error.lower() and args.generate_domain:
                         d = domains[i] or ""
                         p_fixed = problems[i] or ""
-                        d, p_fixed = _normalize_predicate_names(d, p_fixed)
-                        d = _fix_move_effects(d)
-                        d = _fix_unstack_empty_effect(d)
-                        d = _fix_cook_fry_effects(d)
-                        p_fixed = _strip_undeclared_init_facts(d, p_fixed)
-                        p_fixed = _fix_nothing_contradiction(p_fixed)
-                        p_fixed = _fix_missing_capability_predicates(p_fixed)
-                        p_fixed = _fix_stacked_clear_contradiction(p_fixed)
-                        p_fixed = _fix_nothing_predicate(d, p_fixed)
-                        p_fixed = _fix_item_locations(d, p_fixed, original_json=gold_data[i].get("original_json"))
-                        p_fixed = _fix_empty_contradiction(d, p_fixed)
-                        p_fixed = _fix_container_empty_conflict(p_fixed)
-                        p_fixed = _fix_empty_predicate(d, p_fixed)
-                        p_fixed = _fix_vacant_predicate(d, p_fixed)
-                        p_fixed = _fix_clear_predicate(d, p_fixed)
+                        d, p_fixed = _apply_pddl_repairs(
+                            d,
+                            p_fixed,
+                            original_json=gold_data[i].get("original_json"),
+                            enabled=args.pddl_repairs,
+                        )
                         if p_fixed != problems[i]:
                             needs_refix.append((i, d, p_fixed))
                         else:
@@ -1390,7 +1405,11 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                 # Apply clear fix before submitting to TFD
                 tfd_pairs: list[tuple[str, str]] = []
                 for i in tfd_candidates:
-                    p_tfd = _fix_clear_predicate(domains[i], problems[i])
+                    p_tfd = (
+                        _fix_clear_predicate(domains[i], problems[i])
+                        if args.pddl_repairs
+                        else problems[i]
+                    )
                     tfd_pairs.append((domains[i], p_tfd))
                 tfd_outputs = batch_solve(
                     tfd_pairs,
@@ -1544,6 +1563,7 @@ def _save_summary(
         "model_name": args.model_name,
         "generate_domain": args.generate_domain,
         "effect_goal": args.effect_goal,
+        "pddl_repairs": args.pddl_repairs,
         "num_examples": n,
         "num_syntax_errors": n_syntax,
         "num_planning_failures": n_planning_failure,
@@ -1569,6 +1589,7 @@ def _save_summary(
 
     mode = "domain+problem" if args.generate_domain else "problem-only"
     print(f"\nResults saved to {save_path}  (mode: {mode})")
+    print(f"PDDL repairs          : {args.pddl_repairs}")
     print(f"Accuracy (done)       : {acc:.4f} ({n_done}/{n})")
     print(f"Syntax errors         : {n_syntax}/{n}")
     print(f"Planning failures     : {n_planning_failure}/{n}")
@@ -1661,6 +1682,16 @@ def parse_args() -> argparse.Namespace:
             "Input representation: 'json' passes the annotated environment JSON + domain PDDL reference; "
             "'nl' passes the natural_language field + domain PDDL reference; "
             "'robo' replaces the domain PDDL with the Robotouille io-cot prompt + annotated JSON."
+        ),
+    )
+    parser.add_argument(
+        "--pddl-repairs",
+        action="store_true",
+        default=False,
+        dest="pddl_repairs",
+        help=(
+            "Enable Robotouille-specific PDDL repairs. Leave disabled for raw "
+            "formalizer comparisons against Planner and CP-SAT."
         ),
     )
     return parser.parse_args()

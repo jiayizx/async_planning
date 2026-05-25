@@ -18,6 +18,8 @@ UNIT_SECONDS = {
     "seconds": 1,
     "sec": 1,
     "secs": 1,
+    "week": 604800,
+    "weeks": 604800,
 }
 
 def parse_gold_seconds(answer: Any) -> int:
@@ -40,31 +42,36 @@ def parse_gold_seconds(answer: Any) -> int:
     raise ValueError(f"Unrecognized answer format: {answer}")
 
 
-def parse_duration_text(text: str) -> Optional[int]:
+def parse_duration_text(text: str, month_seconds: Optional[int] = None) -> Optional[int]:
     if not text:
         return None
     text = text.lower().strip()
 
-    # Accept variants like "100 minutes", "100 min", and also "Match: 100 minutes"
-    # Try to extract a number and a valid time unit from anywhere in string
-    match = re.search(
-        r"(\d+(?:\.\d+)?)\s*(day|days|hour|hours|minute|minutes|min|mins|second|seconds|sec|secs)",
-        text
+    # Accept both single-unit answers ("100 minutes") and compound answers
+    # ("7 days 2 hours 15 minutes"). Planner outputs often include the latter.
+    unit_seconds = dict(UNIT_SECONDS)
+    unit_pattern = r"weeks?|days?|hours?|minutes?|mins?|seconds?|secs?"
+    if month_seconds is not None:
+        unit_seconds["month"] = month_seconds
+        unit_seconds["months"] = month_seconds
+        unit_pattern = r"months?|" + unit_pattern
+    matches = re.findall(
+        rf"(\d+(?:\.\d+)?)\s*({unit_pattern})",
+        text,
     )
-    if not match:
+    if not matches:
         return None
-    value, unit = match.groups()
-    total = float(value) * UNIT_SECONDS[unit]
+    total = sum(float(value) * unit_seconds[unit] for value, unit in matches)
     return int(round(total))
 
 
-def parse_prediction_seconds(text: str) -> Optional[int]:
+def parse_prediction_seconds(text: str, month_seconds: Optional[int] = None) -> Optional[int]:
     if not text:
         return None
     match = re.search(r"<answer>(.*?)</answer>", text, re.DOTALL | re.IGNORECASE)
     if match:
         text = match.group(1).strip()
-    parsed = parse_duration_text(text)
+    parsed = parse_duration_text(text, month_seconds=month_seconds)
     return parsed
 
 
