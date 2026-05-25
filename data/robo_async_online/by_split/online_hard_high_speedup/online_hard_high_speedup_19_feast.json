@@ -1,0 +1,338 @@
+{
+  "id": "online_hard_high_speedup_19_feast",
+  "protocol": "robo_async_online_v2",
+  "source_dataset": "robo_async_challenge_v2",
+  "source_task_id": "hard_high_speedup_19_feast",
+  "source_split": "hard_high_speedup",
+  "difficulty": "online_hard_high_speedup",
+  "challenge_features": [
+    "online",
+    "dynamic_goal_injection",
+    "replanning",
+    "hard_high_speedup",
+    "high_speedup",
+    "shared_station",
+    "capacity_gt_1"
+  ],
+  "initial_task": {
+    "items": {
+      "feast_plate": {
+        "state": "ready",
+        "predicates": []
+      },
+      "patty19": {
+        "state": "raw",
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      "salmon19": {
+        "state": "raw",
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      "chicken19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "ismarinatable",
+          "iscookableifmarinated"
+        ],
+        "grill_requires_marinated": true
+      },
+      "tofu19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "ismarinatable",
+          "iscookableifmarinated"
+        ],
+        "grill_requires_marinated": true
+      },
+      "fish19": {
+        "state": "raw",
+        "predicates": [
+          "isfryable"
+        ]
+      },
+      "falafel19": {
+        "state": "raw",
+        "predicates": [
+          "isfryable"
+        ]
+      },
+      "potato19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ],
+        "fry_requires_cut": true
+      },
+      "onion19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ],
+        "fry_requires_cut": true
+      },
+      "yam19": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ],
+        "mash_requires_boiled": true
+      },
+      "turnip19": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ],
+        "mash_requires_boiled": true
+      },
+      "stock19": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ]
+      },
+      "beans19": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ]
+      },
+      "lettuce19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      "tomato19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      "cucumber19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      "carrot19": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      }
+    },
+    "deliveries": [
+      {
+        "id": "source_order",
+        "required_states": {
+          "patty19": "grilled",
+          "salmon19": "grilled",
+          "chicken19": "grilled",
+          "tofu19": "grilled",
+          "fish19": "fried",
+          "falafel19": "fried",
+          "potato19": "fried",
+          "onion19": "fried",
+          "yam19": "mashed",
+          "turnip19": "mashed",
+          "stock19": "boiled",
+          "beans19": "boiled",
+          "lettuce19": "cut",
+          "tomato19": "cut",
+          "cucumber19": "cut",
+          "carrot19": "cut"
+        },
+        "stack_order": [
+          "feast_plate"
+        ],
+        "deadline": null,
+        "reward": null
+      }
+    ],
+    "action_durations": {
+      "grill": 10.0,
+      "cut": 3.0,
+      "fry": 8.0,
+      "boil": 12.0,
+      "toast": 5.0,
+      "marinate": 6.0,
+      "mash": 4.0,
+      "stack": 1.0
+    },
+    "stations": {
+      "grill": 3,
+      "cutting_board": 4,
+      "fryer": 3,
+      "boiler": 3,
+      "toaster": 1,
+      "marinator": 3
+    },
+    "temporal_constraints": [],
+    "robots": []
+  },
+  "events": [
+    {
+      "id": "event_1",
+      "trigger_time": 3.97,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_fry_19_11": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable",
+              "isfryableifcut"
+            ],
+            "fry_requires_cut": true
+          },
+          "online_grill_19_12": {
+            "state": "raw",
+            "predicates": [
+              "iscookable"
+            ]
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "event_1_order_1",
+            "required_states": {
+              "online_fry_19_11": "fried"
+            },
+            "stack_order": [],
+            "deadline": null,
+            "reward": null
+          },
+          {
+            "id": "event_1_order_2",
+            "required_states": {
+              "online_grill_19_12": "grilled"
+            },
+            "stack_order": [],
+            "deadline": null,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_2",
+      "trigger_time": 8.77,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_mash_19_21": {
+            "state": "raw",
+            "predicates": [
+              "isboilable"
+            ],
+            "mash_requires_boiled": true
+          },
+          "online_boil_19_22": {
+            "state": "raw",
+            "predicates": [
+              "isboilable"
+            ]
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "rush_event_2_order_1",
+            "required_states": {
+              "online_mash_19_21": "mashed"
+            },
+            "stack_order": [],
+            "deadline": 29.77,
+            "reward": null
+          },
+          {
+            "id": "rush_event_2_order_2",
+            "required_states": {
+              "online_boil_19_22": "boiled"
+            },
+            "stack_order": [],
+            "deadline": 29.77,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_3",
+      "trigger_time": 14.53,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_marinated_grill_19_31": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable",
+              "ismarinatable",
+              "iscookableifmarinated"
+            ],
+            "grill_requires_marinated": true
+          },
+          "online_cut_19_32": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable"
+            ]
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "rush_event_3_order_1",
+            "required_states": {
+              "online_marinated_grill_19_31": "grilled"
+            },
+            "stack_order": [
+              "online_marinated_grill_19_31"
+            ],
+            "deadline": 39.53,
+            "reward": null
+          },
+          {
+            "id": "rush_event_3_order_2",
+            "required_states": {
+              "online_cut_19_32": "cut"
+            },
+            "stack_order": [
+              "online_cut_19_32"
+            ],
+            "deadline": 39.53,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    }
+  ],
+  "oracle": {
+    "replan_points": [
+      3.97,
+      8.77,
+      14.53
+    ],
+    "source_task_id": "hard_high_speedup_19_feast",
+    "source_optimal_makespan": 24.0,
+    "oracle_final_makespan": null,
+    "source_sequential_makespan": 165,
+    "source_speedup_ratio": 6.875,
+    "notes": "Initial task is the full matching Robo-Async Challenge v2 task; online events add extra dynamic perturbations. Use continuation oracle fields computed during evaluation for final online optima."
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "id": "online_easy_15_boiled_stock_bowl",
+  "protocol": "robo_async_online_v2",
+  "source_dataset": "robo_async_challenge_v2",
+  "source_task_id": "easy_15_boiled_stock_bowl",
+  "source_split": "easy",
+  "difficulty": "online_easy",
+  "challenge_features": [
+    "online",
+    "dynamic_goal_injection",
+    "replanning",
+    "easy"
+  ],
+  "initial_task": {
+    "items": {
+      "stock15": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ]
+      },
+      "bowl": {
+        "state": "ready",
+        "predicates": []
+      }
+    },
+    "deliveries": [
+      {
+        "id": "source_order",
+        "required_states": {
+          "stock15": "boiled"
+        },
+        "stack_order": [
+          "bowl",
+          "stock15"
+        ],
+        "deadline": null,
+        "reward": null
+      }
+    ],
+    "action_durations": {
+      "grill": 10.0,
+      "cut": 3.0,
+      "fry": 8.0,
+      "boil": 12.0,
+      "toast": 5.0,
+      "marinate": 6.0,
+      "mash": 4.0,
+      "stack": 1.0
+    },
+    "stations": {
+      "grill": 1,
+      "cutting_board": 1,
+      "fryer": 1,
+      "boiler": 1,
+      "toaster": 1,
+      "marinator": 1
+    },
+    "temporal_constraints": [],
+    "robots": []
+  },
+  "events": [
+    {
+      "id": "event_1",
+      "trigger_time": 3.21,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_cut_15_11": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable"
+            ]
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "event_1_order_1",
+            "required_states": {
+              "online_cut_15_11": "cut"
+            },
+            "stack_order": [
+              "online_cut_15_11"
+            ],
+            "deadline": null,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_2",
+      "trigger_time": 6.33,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_grill_15_21": {
+            "state": "raw",
+            "predicates": [
+              "iscookable"
+            ]
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "rush_event_2_order_1",
+            "required_states": {
+              "online_grill_15_21": "grilled"
+            },
+            "stack_order": [
+              "online_grill_15_21"
+            ],
+            "deadline": null,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    }
+  ],
+  "oracle": {
+    "replan_points": [
+      3.21,
+      6.33
+    ],
+    "source_task_id": "easy_15_boiled_stock_bowl",
+    "source_optimal_makespan": 13.0,
+    "oracle_final_makespan": null,
+    "source_sequential_makespan": 14,
+    "source_speedup_ratio": 1.077,
+    "notes": "Initial task is the full matching Robo-Async Challenge v2 task; online events add extra dynamic perturbations. Use continuation oracle fields computed during evaluation for final online optima."
+  }
+}

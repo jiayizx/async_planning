@@ -1,0 +1,160 @@
+{
+  "id": "online_medium_10_patty_lettuce_yam_combo",
+  "protocol": "robo_async_online_v2",
+  "source_dataset": "robo_async_challenge_v2",
+  "source_task_id": "medium_10_patty_lettuce_yam_combo",
+  "source_split": "medium",
+  "difficulty": "online_medium",
+  "challenge_features": [
+    "online",
+    "dynamic_goal_injection",
+    "replanning",
+    "medium"
+  ],
+  "initial_task": {
+    "items": {
+      "patty10": {
+        "state": "raw",
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      "yam10": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ],
+        "mash_requires_boiled": true
+      },
+      "lettuce10": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      "bun_bot": {
+        "state": "ready",
+        "predicates": []
+      },
+      "bun_top": {
+        "state": "ready",
+        "predicates": []
+      }
+    },
+    "deliveries": [
+      {
+        "id": "source_order",
+        "required_states": {
+          "patty10": "grilled",
+          "yam10": "mashed",
+          "lettuce10": "cut"
+        },
+        "stack_order": [
+          "bun_bot",
+          "lettuce10",
+          "patty10",
+          "bun_top"
+        ],
+        "deadline": null,
+        "reward": null
+      }
+    ],
+    "action_durations": {
+      "grill": 10.0,
+      "cut": 3.0,
+      "fry": 8.0,
+      "boil": 12.0,
+      "toast": 5.0,
+      "marinate": 6.0,
+      "mash": 4.0,
+      "stack": 1.0
+    },
+    "stations": {
+      "grill": 1,
+      "cutting_board": 1,
+      "fryer": 1,
+      "boiler": 1,
+      "toaster": 1,
+      "marinator": 1
+    },
+    "temporal_constraints": [],
+    "robots": []
+  },
+  "events": [
+    {
+      "id": "event_1",
+      "trigger_time": 3.17,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_fry_10_11": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable",
+              "isfryableifcut"
+            ],
+            "fry_requires_cut": true
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "event_1_order_1",
+            "required_states": {
+              "online_fry_10_11": "fried"
+            },
+            "stack_order": [],
+            "deadline": null,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_2",
+      "trigger_time": 7.01,
+      "type": "add_delivery",
+      "description": "A new dynamic order arrives while the original static task is already underway.",
+      "delta": {
+        "add_items": {
+          "online_mash_10_21": {
+            "state": "raw",
+            "predicates": [
+              "isboilable"
+            ],
+            "mash_requires_boiled": true
+          }
+        },
+        "add_deliveries": [
+          {
+            "id": "rush_event_2_order_1",
+            "required_states": {
+              "online_mash_10_21": "mashed"
+            },
+            "stack_order": [
+              "online_mash_10_21"
+            ],
+            "deadline": null,
+            "reward": null
+          }
+        ],
+        "add_temporal_constraints": [],
+        "set_deadline": null
+      }
+    }
+  ],
+  "oracle": {
+    "replan_points": [
+      3.17,
+      7.01
+    ],
+    "source_task_id": "medium_10_patty_lettuce_yam_combo",
+    "source_optimal_makespan": 16.0,
+    "oracle_final_makespan": null,
+    "source_sequential_makespan": 33,
+    "source_speedup_ratio": 2.062,
+    "notes": "Initial task is the full matching Robo-Async Challenge v2 task; online events add extra dynamic perturbations. Use continuation oracle fields computed during evaluation for final online optima."
+  }
+}
