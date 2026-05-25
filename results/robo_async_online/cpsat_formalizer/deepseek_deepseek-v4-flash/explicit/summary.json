@@ -4,28 +4,28 @@
   "online_mode": "strict",
   "oracle_spec": false,
   "n_tasks": 140,
-  "n_success": 6,
-  "success_rate": 0.0429,
-  "avg_makespan": 20.73,
-  "avg_makespan_ratio": 1.0148,
-  "n_llm_error": 113,
-  "n_spec_error": 9,
+  "n_success": 5,
+  "success_rate": 0.0357,
+  "avg_makespan": 22.588,
+  "avg_makespan_ratio": 1.0097,
+  "n_llm_error": 115,
+  "n_spec_error": 20,
   "n_solver_error": 0,
   "n_parse_error": 0,
-  "n_eval_error": 12,
+  "n_eval_error": 0,
   "n_runner_error": 0,
   "by_tag": {
     "online_easy": {
       "n": 20,
-      "n_success": 3,
-      "success_rate": 0.15,
-      "avg_makespan_ratio": 1.0
+      "n_success": 4,
+      "success_rate": 0.2,
+      "avg_makespan_ratio": 1.0121
     },
     "online_medium": {
       "n": 20,
-      "n_success": 1,
-      "success_rate": 0.05,
-      "avg_makespan_ratio": 1.0
+      "n_success": 0,
+      "success_rate": 0.0,
+      "avg_makespan_ratio": 0
     },
     "online_hard_station": {
       "n": 20,
@@ -47,15 +47,15 @@
     },
     "online_hard_optimization": {
       "n": 20,
-      "n_success": 2,
-      "success_rate": 0.1,
-      "avg_makespan_ratio": 1.0444
-    },
-    "online_hard_high_speedup": {
-      "n": 20,
       "n_success": 0,
       "success_rate": 0.0,
       "avg_makespan_ratio": 0
+    },
+    "online_hard_high_speedup": {
+      "n": 20,
+      "n_success": 1,
+      "success_rate": 0.05,
+      "avg_makespan_ratio": 1.0
     }
   }
 }

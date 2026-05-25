@@ -985,7 +985,7 @@ def run(
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
             ])
-            plan_text = response if isinstance(response, str) else response.content
+            plan_text = response if isinstance(response, str) else (response.content if response is not None else "")
             plan_text = (plan_text or "").strip()
             if "```" in plan_text:
                 plan_text = plan_text.replace("```plaintext", "").replace("```", "").strip()

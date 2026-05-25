@@ -1,0 +1,12 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "qwen3.6-35b-a3b",
+  "icl_examples": 0,
+  "cot": true,
+  "structured_output": true,
+  "makespan_accuracy": 0.95625,
+  "plan_accuracy": 0.50625,
+  "num_correct": 306,
+  "num_plan_correct": 162,
+  "num_data_points": 320
+}

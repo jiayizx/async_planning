@@ -1,5 +1,6 @@
 datasets
 pydantic
+ortools
 tqdm
 anthropic
 boto3>=1.28.57

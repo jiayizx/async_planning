@@ -1,0 +1,12 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "openai/gpt-5-mini",
+  "icl_examples": 0,
+  "cot": true,
+  "structured_output": true,
+  "makespan_accuracy": 0.965625,
+  "plan_accuracy": 0.49375,
+  "num_correct": 309,
+  "num_plan_correct": 158,
+  "num_data_points": 320
+}

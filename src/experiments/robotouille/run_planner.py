@@ -93,10 +93,24 @@ Assign names by entity type and 1-based array order:
 
 ## Environment Rules
 
-- A Player can only hold a single Item at a time
-- An Item must be placed on a Station to perform an action on it
-- A Station must contain a single Item to perform an action on it
-- Items can only be stacked on top of one another
+These are the action semantics used by the evaluator:
+- The robot can only act at its current station.
+- To move, use `move robot_1 station_from station_to`; `station_from` must be
+  the robot's current location.
+- The robot can hold at most one item or container at a time.
+- `pick-up` requires the item to be on the current station, clear, and not
+  under another item.
+- `place` requires the robot to hold the item and the target station to be empty.
+- `stack` requires the robot to hold the top item; the bottom item must be clear
+  and at the robot's current station.
+- `unstack` requires the top item to be clear, stacked on the bottom item, and
+  at the robot's current station.
+- `cook`, `cut`, and `fry` require the item to be placed at the correct station
+  type; the robot must not be holding anything.
+- Cook/cut/fry take multiple simulator steps according to the task config; repeat
+  the corresponding action the required number of times.
+- Containers use container-specific actions. Do not use `pick-up` or `place` for
+  containers.
 
 Follow this recipe guide:
 Sandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.
@@ -114,16 +128,17 @@ The available actions and their EXACT formats are:
 - `move player station_from station_to`
 - `pick-up player item station`
 - `place player item station`
-- `stack player item_top item_bottom`
+- `stack player item_top item_bottom station`
 - `cook player item station`
 - `cut player item station`
 - `fry player item station`
-- `fill-water player container station`
-- `boil player container station`
-- `add player item container`
-- `fill-container player container_to container_from`
-- `unstack player item_top item_bottom`
-- `noop`
+- `pick-up-container player container station`
+- `place-container player container station`
+- `fill-pot player container water station`
+- `boil-water player container water station`
+- `add-to player item water container station`
+- `fill-bowl player bowl pot water station`
+- `unstack player item_top item_bottom station`
 
 ### Examples:
 ```
@@ -134,15 +149,24 @@ cook robot_1 chicken_1 stove_1
 cook robot_1 chicken_1 stove_1
 cook robot_1 chicken_1 stove_1
 pick-up robot_1 chicken_1 stove_1
-stack robot_1 chicken_1 bread_1
+stack robot_1 chicken_1 bread_1 table_1
 cut robot_1 lettuce_1 board_1
+pick-up-container robot_1 pot_1 table_2
+fill-pot robot_1 pot_1 water_1 sink_1
+boil-water robot_1 pot_1 water_1 stove_1
+add-to robot_1 potato_1 water_1 pot_1 stove_1
+fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1
 ```
 
 ### Common mistakes to avoid:
 - Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG
 - The player argument always comes FIRST after the action name
 - For `stack`, the first item is placed ON TOP of the second item
-- Cook/cut/fry take 3 timesteps each — repeat the action 3 times
+- Include the station argument for `stack` and `unstack`
+- Do not place an item onto an occupied station unless you are using `stack`
+- Do not move from a station where the robot is not currently located
+- Use the exact object names implied by the JSON arrays, such as `bread_1`,
+  `bread_2`, `table_1`, and `robot_1`
 
 Always format your response as follows:
 ```json
@@ -314,12 +338,13 @@ def _parse_plan_response(response: str) -> list[str] | None:
             pass
 
     # Try line-by-line: look for lines that match action patterns
-    # Updated regex to capture all action types including fill-water, boil, add, etc.
+    # Updated regex to capture all supported Robotouille/PDDL action names.
     action_pattern = re.compile(
         r'^\s*(?:\d+[\.\)]\s*)?'  # optional step number
         r'\(?\s*'                  # optional opening paren
         r'((?:move|pick-up|place|cook|cut|fry|stack|unstack|'
-        r'fill-water|fill-container|boil|add|noop)'
+        r'pick-up-container|place-container|fill-pot|boil-water|'
+        r'add-to|fill-bowl|fill-water|fill-container|boil|add|noop)'
         r'(?:\s+[^\s)]+)*)'       # args (no parens in tokens)
         r'\s*\)?\s*$',
         re.IGNORECASE,
@@ -366,10 +391,10 @@ def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None =
       "Fry onion_1 on fryer_1 using robot_1"         → "fry robot_1 onion_1 fryer_1"
       "Stack cheese_1 on top of chicken_1 using robot_1" → "stack robot_1 cheese_1 chicken_1"
       "Unstack bread_2 from bread_1 using robot_1"   → "unstack robot_1 bread_2 bread_1"
-      "Fill pot_1 with water from sink_1 using robot_1"  → "fill-water robot_1 pot_1 sink_1"
-      "Boil pot_1's contents on stove_1 using robot_1"   → "boil robot_1 pot_1 stove_1"
-      "Add potato_1 into pot_1 using robot_1"        → "add robot_1 potato_1 pot_1"
-      "Fill bowl_1 with pot_1's contents using robot_1"  → "fill-container robot_1 bowl_1 pot_1"
+      "Fill pot_1 with water_1 from sink_1 using robot_1"  → "fill-pot robot_1 pot_1 water_1 sink_1"
+      "Boil water_1 in pot_1 on stove_1 using robot_1"     → "boil-water robot_1 pot_1 water_1 stove_1"
+      "Add potato_1 into water_1 in pot_1 using robot_1"   → "add-to robot_1 potato_1 water_1 pot_1 stove_1"
+      "Fill bowl_1 with water_1 from pot_1 using robot_1"  → "fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1"
       "Do nothing"                                    → "noop"
     """
     s = action_str.strip()
@@ -383,8 +408,9 @@ def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None =
     first_token = lower.split()[0] if lower.split() else ""
     pddl_actions = {
         "move", "pick-up", "place", "cook", "cut", "fry",
-        "stack", "unstack", "fill-water", "fill-container",
-        "boil", "add", "noop",
+        "stack", "unstack", "pick-up-container", "place-container",
+        "fill-pot", "boil-water", "add-to", "fill-bowl",
+        "fill-water", "fill-container", "boil", "add", "noop",
     }
     # If the first token is a known PDDL action and there are no filler words,
     # it's likely already normalized
@@ -479,21 +505,45 @@ def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None =
     if m:
         return f"fry {m.group(3)} {m.group(1)} {m.group(2)}"
 
+    # Pick up / place containers
+    m = re.match(
+        r'^pick\s+up\s+container\s+(\S+)\s+from\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"pick-up-container {m.group(3)} {m.group(1)} {m.group(2)}"
+
+    m = re.match(
+        r'^place\s+container\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        return f"place-container {m.group(3)} {m.group(1)} {m.group(2)}"
+
     # Fill {container} with water from {station} using {player}
     m = re.match(
-        r'^fill\s+(\S+)\s+with\s+water\s+from\s+(\S+)\s+using\s+(\S+)$',
+        r'^fill\s+(\S+)\s+with\s+(\S+)\s+from\s+(\S+)\s+using\s+(\S+)$',
         s, re.IGNORECASE
     )
     if m:
-        return f"fill-water {m.group(3)} {m.group(1)} {m.group(2)}"
+        return f"fill-pot {m.group(4)} {m.group(1)} {m.group(2)} {m.group(3)}"
 
-    # Boil {container}'s contents on {station} using {player}
+    # Boil {water} in {container} on {station} using {player}
     m = re.match(
-        r'^boil\s+(\S+?)(?:\'s)?\s+(?:contents\s+)?on\s+(\S+)\s+using\s+(\S+)$',
+        r'^boil\s+(\S+)\s+in\s+(\S+)\s+on\s+(\S+)\s+using\s+(\S+)$',
         s, re.IGNORECASE
     )
     if m:
-        return f"boil {m.group(3)} {m.group(1)} {m.group(2)}"
+        return f"boil-water {m.group(4)} {m.group(2)} {m.group(1)} {m.group(3)}"
+
+    # Add {item} into {water} in {container} using {player}
+    m = re.match(
+        r'^add\s+(\S+)\s+into\s+(\S+)\s+in\s+(\S+)(?:\s+at\s+(\S+))?\s+using\s+(\S+)$',
+        s, re.IGNORECASE
+    )
+    if m:
+        station = m.group(4) or "stove_1"
+        return f"add-to {m.group(5)} {m.group(1)} {m.group(2)} {m.group(3)} {station}"
 
     # Add {item} into {container} using {player}
     m = re.match(
@@ -501,7 +551,7 @@ def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None =
         s, re.IGNORECASE
     )
     if m:
-        return f"add {m.group(3)} {m.group(1)} {m.group(2)}"
+        return f"add-to {m.group(3)} {m.group(1)} water_1 {m.group(2)} stove_1"
 
     # Fill {container1} with {container2}'s contents using {player}
     m = re.match(
@@ -509,7 +559,7 @@ def _normalize_action(action_str: str, coord_to_station: dict[str, str] | None =
         s, re.IGNORECASE
     )
     if m:
-        return f"fill-container {m.group(3)} {m.group(1)} {m.group(2)}"
+        return f"fill-bowl {m.group(3)} {m.group(1)} {m.group(2)} water_1 stove_1"
 
     # Fallback: try to at least lowercase and resolve coordinates
     result = s.lower()
@@ -709,7 +759,10 @@ def run_task(llm_client: BaseLLM, records: list[dict], args: argparse.Namespace)
                     "Your response could not be parsed as a valid plan. "
                     "Please output a JSON object with a single key 'plan' "
                     "containing a list of PDDL-style action strings. "
-                    "Use the format: action_name player arg1 arg2\n"
+                    "Use the exact Robotouille action formats from the prompt. "
+                    "For example, stack/unstack require a station argument, and "
+                    "containers require pick-up-container/place-container/fill-pot/"
+                    "boil-water/add-to/fill-bowl.\n"
                     "Example:\n"
                     '{"plan": ["move robot_1 table_1 stove_1", '
                     '"pick-up robot_1 chicken_1 table_2", '
@@ -851,6 +904,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seeds", type=int, nargs="*", default=[],
                         help="Seeds for procedural randomization. If omitted, use base layout only.")
     parser.add_argument(
+        "--exclude-envs", type=str, nargs="*", default=[],
+        dest="exclude_envs",
+        help="Record id prefixes to exclude, e.g. 3.1_.",
+    )
+    parser.add_argument(
         "--no-coordinates",
         action="store_true",
         help="When using --seeds, omit grid (x, y) from regenerated natural_language.",
@@ -867,6 +925,13 @@ def main() -> None:
 
     records = _load_records(data_path)
     print(f"Loaded {len(records)} records from {data_path}")
+    if args.exclude_envs:
+        before = len(records)
+        records = [r for r in records if not any(r["id"].startswith(p) for p in args.exclude_envs)]
+        print(
+            f"Excluded {before - len(records)} records matching prefixes "
+            f"{args.exclude_envs} ({len(records)} remaining)"
+        )
 
     if args.seeds:
         records = _expand_with_seeds(

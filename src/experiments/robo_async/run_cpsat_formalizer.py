@@ -149,8 +149,6 @@ For optimization tasks with candidate rewards, output an optimization model
 instead of listing all candidate actions as mandatory:
 {
   "mode": "optimize",
-  "objective": "maximize_reward_under_deadline",
-  "deadline": 24,
   "inventory_limits": {"protein": 2, "fryer_oil": 2},
   "candidate_goals": [
     {
@@ -189,10 +187,9 @@ Important:
   with a numeric "min_lag" in seconds.
 - If the task includes robots, include an "eligible_robots" list for every
   action. Use only the exact robot identifiers listed in the task.
-- If the task asks to maximize reward by a deadline, do NOT output mandatory
-  actions for every candidate reward. Output mode="optimize" with deadline,
-  inventory_limits, and candidate_goals. The CP-SAT backend will choose the
-  best subset.
+- If the task has candidate rewards with inventory limits, do NOT output mandatory
+  actions for every candidate reward. Output mode="optimize" with inventory_limits
+  and candidate_goals. The CP-SAT backend will choose the best subset.
 
 Return only the JSON object.
 """
@@ -376,6 +373,8 @@ def oracle_schedule_spec(task_dict: dict) -> dict:
 
 
 def _coerce_deadline(value) -> float:
+    if value is None:
+        return float("inf")
     if isinstance(value, str):
         value = value.strip().lower().replace("seconds", "").replace("second", "").strip()
     deadline = float(value)

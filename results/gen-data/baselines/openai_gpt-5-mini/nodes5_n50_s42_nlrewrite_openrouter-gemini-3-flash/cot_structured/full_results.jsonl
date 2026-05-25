@@ -1,0 +1,2582 @@
+{
+  "question": "To make eggless chocolate cake, here are the steps needed.\nStep 1. Whisk together the flour, cocoa powder, and sugar (5 minutes)\nStep 2. Preheat the oven to 350 degrees (15 minutes)\nStep 3. Sift the dry ingredients to remove lumps (3 minutes)\nStep 4. Grease and flour the baking pans (2 minutes)\nStep 5. Mix in the wet ingredients and bake (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make eggless chocolate cake?",
+  "gold_answer": 3180,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 180},\n    {\"id\": \"step4\", \"duration\": 120},\n    {\"id\": \"step5\", \"duration\": 2700}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 3180\n}",
+  "gold_seconds": 3180,
+  "pred_seconds": 3180,
+  "correct": true,
+  "user_prompt": "To make eggless chocolate cake, here are the steps needed.\nStep 1. Whisk together the flour, cocoa powder, and sugar (5 minutes)\nStep 2. Preheat the oven to 350 degrees (15 minutes)\nStep 3. Sift the dry ingredients to remove lumps (3 minutes)\nStep 4. Grease and flour the baking pans (2 minutes)\nStep 5. Mix in the wet ingredients and bake (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make eggless chocolate cake?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 180
+      },
+      {
+        "id": "step4",
+        "duration": 120
+      },
+      {
+        "id": "step5",
+        "duration": 2700
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 3180
+  }
+}
+{
+  "question": "To introduce friends to other friends, here are the steps needed.\nStep 1. Send out a group calendar invite (10 minutes)\nStep 2. Research a lively local restaurant (30 minutes)\nStep 3. Create a group chat for the initial introductions (5 minutes)\nStep 4. Call the restaurant to make a reservation (15 minutes)\nStep 5. Host the dinner party and facilitate introductions (3 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to introduce friends to other friends?",
+  "gold_answer": 13500,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 1800},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 900},\n    {\"id\": \"step5\", \"duration\": 10800}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 13500\n}",
+  "gold_seconds": 13500,
+  "pred_seconds": 13500,
+  "correct": true,
+  "user_prompt": "To introduce friends to other friends, here are the steps needed.\nStep 1. Send out a group calendar invite (10 minutes)\nStep 2. Research a lively local restaurant (30 minutes)\nStep 3. Create a group chat for the initial introductions (5 minutes)\nStep 4. Call the restaurant to make a reservation (15 minutes)\nStep 5. Host the dinner party and facilitate introductions (3 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to introduce friends to other friends?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 1800
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 900
+      },
+      {
+        "id": "step5",
+        "duration": 10800
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 13500
+  }
+}
+{
+  "question": "To count to ten in finnish, here are the steps needed.\nStep 1. Look up the Finnish numbers 1-10 in a translation dictionary (5 minutes)\nStep 2. Record yourself speaking the numbers to check pronunciation (10 minutes)\nStep 3. Listen back to the recording and correct any errors (15 minutes)\nStep 4. Write out the numbers phonetically on flashcards (20 minutes)\nStep 5. Memorize the numbers 1-5 (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to count to ten in finnish?",
+  "gold_answer": 3900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 600},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 1200},\n    {\"id\": \"step5\", \"duration\": 3600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step4\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 3900\n}",
+  "gold_seconds": 3900,
+  "pred_seconds": 3900,
+  "correct": true,
+  "user_prompt": "To count to ten in finnish, here are the steps needed.\nStep 1. Look up the Finnish numbers 1-10 in a translation dictionary (5 minutes)\nStep 2. Record yourself speaking the numbers to check pronunciation (10 minutes)\nStep 3. Listen back to the recording and correct any errors (15 minutes)\nStep 4. Write out the numbers phonetically on flashcards (20 minutes)\nStep 5. Memorize the numbers 1-5 (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to count to ten in finnish?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 600
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 1200
+      },
+      {
+        "id": "step5",
+        "duration": 3600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step4",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 3900
+  }
+}
+{
+  "question": "To hang planters with knotted rope, here are the steps needed.\nStep 1. Tie the final decorative tassel at the bottom of the rope (5 minutes)\nStep 2. Secure the heavy-duty hook into the ceiling joist (15 minutes)\nStep 3. Measure and cut four equal lengths of cotton cord (10 minutes)\nStep 4. Purchase a spool of macrame rope from the craft store (45 minutes)\nStep 5. Locate a sturdy stud in the ceiling using a sensor (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hang planters with knotted rope?",
+  "gold_answer": 3600,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 2700},\n    {\"id\": \"step5\", \"duration\": 120}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 3600\n}",
+  "gold_seconds": 3600,
+  "pred_seconds": 3600,
+  "correct": true,
+  "user_prompt": "To hang planters with knotted rope, here are the steps needed.\nStep 1. Tie the final decorative tassel at the bottom of the rope (5 minutes)\nStep 2. Secure the heavy-duty hook into the ceiling joist (15 minutes)\nStep 3. Measure and cut four equal lengths of cotton cord (10 minutes)\nStep 4. Purchase a spool of macrame rope from the craft store (45 minutes)\nStep 5. Locate a sturdy stud in the ceiling using a sensor (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hang planters with knotted rope?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 2700
+      },
+      {
+        "id": "step5",
+        "duration": 120
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 3600
+  }
+}
+{
+  "question": "To make farina, here are the steps needed.\nStep 1. Measure out the dry farina grains (30 seconds)\nStep 2. Bring a pot of salted water to a boil (8 minutes)\nStep 3. Slowly whisk the grains into the boiling water (2 minutes)\nStep 4. Set the table and prepare the toppings (5 minutes)\nStep 5. Simmer the mixture until thickened (3 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make farina?",
+  "gold_answer": 810,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 30},\n    {\"id\": \"step2\", \"duration\": 480},\n    {\"id\": \"step3\", \"duration\": 120},\n    {\"id\": \"step4\", \"duration\": 300},\n    {\"id\": \"step5\", \"duration\": 180}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 810\n}",
+  "gold_seconds": 810,
+  "pred_seconds": 810,
+  "correct": true,
+  "user_prompt": "To make farina, here are the steps needed.\nStep 1. Measure out the dry farina grains (30 seconds)\nStep 2. Bring a pot of salted water to a boil (8 minutes)\nStep 3. Slowly whisk the grains into the boiling water (2 minutes)\nStep 4. Set the table and prepare the toppings (5 minutes)\nStep 5. Simmer the mixture until thickened (3 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make farina?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 30
+      },
+      {
+        "id": "step2",
+        "duration": 480
+      },
+      {
+        "id": "step3",
+        "duration": 120
+      },
+      {
+        "id": "step4",
+        "duration": 300
+      },
+      {
+        "id": "step5",
+        "duration": 180
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 810
+  }
+}
+{
+  "question": "To cook new york strip steak, here are the steps needed.\nStep 1. Season the steak generously with kosher salt (2 minutes)\nStep 2. Let the steak rest and reach room temperature (45 minutes)\nStep 3. Remove the steak from its packaging (30 seconds)\nStep 4. Pat the surface of the meat dry with paper towels (1 minute)\nStep 5. Sear the steak in a hot cast-iron skillet (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook new york strip steak?",
+  "gold_answer": 2790,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 2700},\n    {\"id\": \"step3\", \"duration\": 30},\n    {\"id\": \"step4\", \"duration\": 60},\n    {\"id\": \"step5\", \"duration\": 480}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 2790\n}",
+  "gold_seconds": 2790,
+  "pred_seconds": 2790,
+  "correct": true,
+  "user_prompt": "To cook new york strip steak, here are the steps needed.\nStep 1. Season the steak generously with kosher salt (2 minutes)\nStep 2. Let the steak rest and reach room temperature (45 minutes)\nStep 3. Remove the steak from its packaging (30 seconds)\nStep 4. Pat the surface of the meat dry with paper towels (1 minute)\nStep 5. Sear the steak in a hot cast-iron skillet (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook new york strip steak?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 2700
+      },
+      {
+        "id": "step3",
+        "duration": 30
+      },
+      {
+        "id": "step4",
+        "duration": 60
+      },
+      {
+        "id": "step5",
+        "duration": 480
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 2790
+  }
+}
+{
+  "question": "To make beef stroganoff, here are the steps needed.\nStep 1. Slice the beef into thin strips (10 minutes)\nStep 2. Chop the onions and mushrooms (5 minutes)\nStep 3. Sear the beef in a hot skillet (6 minutes)\nStep 4. Simmer everything together in the cream sauce (15 minutes)\nStep 5. Sauté the vegetables until softened (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make beef stroganoff?",
+  "gold_answer": 1860,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 360},\n    {\"id\": \"step4\", \"duration\": 900},\n    {\"id\": \"step5\", \"duration\": 480}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 1860\n}",
+  "gold_seconds": 1860,
+  "pred_seconds": 1860,
+  "correct": true,
+  "user_prompt": "To make beef stroganoff, here are the steps needed.\nStep 1. Slice the beef into thin strips (10 minutes)\nStep 2. Chop the onions and mushrooms (5 minutes)\nStep 3. Sear the beef in a hot skillet (6 minutes)\nStep 4. Simmer everything together in the cream sauce (15 minutes)\nStep 5. Sauté the vegetables until softened (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make beef stroganoff?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 360
+      },
+      {
+        "id": "step4",
+        "duration": 900
+      },
+      {
+        "id": "step5",
+        "duration": 480
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 1860
+  }
+}
+{
+  "question": "To leave house and get into car., here are the steps needed.\nStep 1. Put on your shoes and tie the laces (2 minutes)\nStep 2. Walk out the front door and lock it (45 seconds)\nStep 3. Grab your car keys from the hook (10 seconds)\nStep 4. Open the garage door using the wall button (15 seconds)\nStep 5. Check that the stove and lights are turned off (3 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave house and get into car.?",
+  "gold_answer": 355,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 45},\n    {\"id\": \"step3\", \"duration\": 10},\n    {\"id\": \"step4\", \"duration\": 15},\n    {\"id\": \"step5\", \"duration\": 180}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 355\n}",
+  "gold_seconds": 355,
+  "pred_seconds": 355,
+  "correct": true,
+  "user_prompt": "To leave house and get into car., here are the steps needed.\nStep 1. Put on your shoes and tie the laces (2 minutes)\nStep 2. Walk out the front door and lock it (45 seconds)\nStep 3. Grab your car keys from the hook (10 seconds)\nStep 4. Open the garage door using the wall button (15 seconds)\nStep 5. Check that the stove and lights are turned off (3 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave house and get into car.?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 45
+      },
+      {
+        "id": "step3",
+        "duration": 10
+      },
+      {
+        "id": "step4",
+        "duration": 15
+      },
+      {
+        "id": "step5",
+        "duration": 180
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 355
+  }
+}
+{
+  "question": "To treat bruises on your face, here are the steps needed.\nStep 1. Apply a cold compress to reduce initial swelling (20 minutes)\nStep 2. Clean the skin gently with mild soap and water (5 minutes)\nStep 3. Apply a warm compress to increase blood flow after 48 hours (15 minutes)\nStep 4. Gently massage arnica gel onto the affected area (2 minutes)\nStep 5. Wait for the initial inflammation to subside (48 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 2 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat bruises on your face?",
+  "gold_answer": 345600,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1200},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 120},\n    {\"id\": \"step5\", \"duration\": 172800}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step1\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 173700\n}",
+  "gold_seconds": 345600,
+  "pred_seconds": 173700,
+  "correct": false,
+  "user_prompt": "To treat bruises on your face, here are the steps needed.\nStep 1. Apply a cold compress to reduce initial swelling (20 minutes)\nStep 2. Clean the skin gently with mild soap and water (5 minutes)\nStep 3. Apply a warm compress to increase blood flow after 48 hours (15 minutes)\nStep 4. Gently massage arnica gel onto the affected area (2 minutes)\nStep 5. Wait for the initial inflammation to subside (48 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 2 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat bruises on your face?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1200
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 120
+      },
+      {
+        "id": "step5",
+        "duration": 172800
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step1"
+      },
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 173700
+  }
+}
+{
+  "question": "To go play at the neighbor boy's house, here are the steps needed.\nStep 1. Put on your shoes and jacket (2 minutes)\nStep 2. Text the neighbor's parents to see if they are home (5 minutes)\nStep 3. Pack a bag with snacks and toys (10 minutes)\nStep 4. Walk across the street to their front door (3 minutes)\nStep 5. Ask your own parents for permission (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go play at the neighbor boy's house?",
+  "gold_answer": 900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 180},\n    {\"id\": \"step5\", \"duration\": 60}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 900\n}",
+  "gold_seconds": 900,
+  "pred_seconds": 900,
+  "correct": true,
+  "user_prompt": "To go play at the neighbor boy's house, here are the steps needed.\nStep 1. Put on your shoes and jacket (2 minutes)\nStep 2. Text the neighbor's parents to see if they are home (5 minutes)\nStep 3. Pack a bag with snacks and toys (10 minutes)\nStep 4. Walk across the street to their front door (3 minutes)\nStep 5. Ask your own parents for permission (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go play at the neighbor boy's house?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 180
+      },
+      {
+        "id": "step5",
+        "duration": 60
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 900
+  }
+}
+{
+  "question": "To get a new tv, here are the steps needed.\nStep 1. Research different models and read expert reviews (3 hours)\nStep 2. Measure the wall space in the living room (10 minutes)\nStep 3. Drive to the electronics store (20 minutes)\nStep 4. Purchase the television and load it into the car (30 minutes)\nStep 5. Withdraw the necessary cash from the bank (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new tv?",
+  "gold_answer": 11400,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 10800},\n    {\"id\": \"step2\", \"duration\": 600},\n    {\"id\": \"step3\", \"duration\": 1200},\n    {\"id\": \"step4\", \"duration\": 1800},\n    {\"id\": \"step5\", \"duration\": 300}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 11400\n}",
+  "gold_seconds": 11400,
+  "pred_seconds": 11400,
+  "correct": true,
+  "user_prompt": "To get a new tv, here are the steps needed.\nStep 1. Research different models and read expert reviews (3 hours)\nStep 2. Measure the wall space in the living room (10 minutes)\nStep 3. Drive to the electronics store (20 minutes)\nStep 4. Purchase the television and load it into the car (30 minutes)\nStep 5. Withdraw the necessary cash from the bank (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new tv?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 10800
+      },
+      {
+        "id": "step2",
+        "duration": 600
+      },
+      {
+        "id": "step3",
+        "duration": 1200
+      },
+      {
+        "id": "step4",
+        "duration": 1800
+      },
+      {
+        "id": "step5",
+        "duration": 300
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 11400
+  }
+}
+{
+  "question": "To buy a bus pass, here are the steps needed.\nStep 1. Purchase the pass at the transit kiosk (5 minutes)\nStep 2. Download the transit mobile app (2 minutes)\nStep 3. Create a digital rider profile (10 minutes)\nStep 4. Withdraw cash from an ATM (3 minutes)\nStep 5. Find a nearby bank branch (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 4 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy a bus pass?",
+  "gold_answer": 1380,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 120},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 180},\n    {\"id\": \"step5\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 1380\n}",
+  "gold_seconds": 1380,
+  "pred_seconds": 1380,
+  "correct": true,
+  "user_prompt": "To buy a bus pass, here are the steps needed.\nStep 1. Purchase the pass at the transit kiosk (5 minutes)\nStep 2. Download the transit mobile app (2 minutes)\nStep 3. Create a digital rider profile (10 minutes)\nStep 4. Withdraw cash from an ATM (3 minutes)\nStep 5. Find a nearby bank branch (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 4 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy a bus pass?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 120
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 180
+      },
+      {
+        "id": "step5",
+        "duration": 900
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 1380
+  }
+}
+{
+  "question": "To go to school today, here are the steps needed.\nStep 1. Take a quick morning shower (10 minutes)\nStep 2. Get dressed in school clothes (5 minutes)\nStep 3. Wake up and turn off the alarm (1 minute)\nStep 4. Pack a healthy lunch (12 minutes)\nStep 5. Walk to the bus stop (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go to school today?",
+  "gold_answer": 1440,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 60},\n    {\"id\": \"step4\", \"duration\": 720},\n    {\"id\": \"step5\", \"duration\": 480}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 1440\n}",
+  "gold_seconds": 1440,
+  "pred_seconds": 1440,
+  "correct": true,
+  "user_prompt": "To go to school today, here are the steps needed.\nStep 1. Take a quick morning shower (10 minutes)\nStep 2. Get dressed in school clothes (5 minutes)\nStep 3. Wake up and turn off the alarm (1 minute)\nStep 4. Pack a healthy lunch (12 minutes)\nStep 5. Walk to the bus stop (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go to school today?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 60
+      },
+      {
+        "id": "step4",
+        "duration": 720
+      },
+      {
+        "id": "step5",
+        "duration": 480
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 1440
+  }
+}
+{
+  "question": "To draw and paint a rustic cabin in two‐point perspective, here are the steps needed.\nStep 1. Tape the watercolor paper to a drawing board (2 minutes)\nStep 2. Apply a final protective varnish over the dried painting (10 minutes)\nStep 3. Sketch the horizon line and vanishing points (5 minutes)\nStep 4. Sharpen a set of graphite pencils for detailing (3 minutes)\nStep 5. Layer the watercolor washes for the cabin walls and roof (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to draw and paint a rustic cabin in two‐point perspective?",
+  "gold_answer": 8220,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 600},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 180},\n    {\"id\": \"step5\", \"duration\": 7200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 8220\n}",
+  "gold_seconds": 8220,
+  "pred_seconds": 8220,
+  "correct": true,
+  "user_prompt": "To draw and paint a rustic cabin in two‐point perspective, here are the steps needed.\nStep 1. Tape the watercolor paper to a drawing board (2 minutes)\nStep 2. Apply a final protective varnish over the dried painting (10 minutes)\nStep 3. Sketch the horizon line and vanishing points (5 minutes)\nStep 4. Sharpen a set of graphite pencils for detailing (3 minutes)\nStep 5. Layer the watercolor washes for the cabin walls and roof (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to draw and paint a rustic cabin in two‐point perspective?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 600
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 180
+      },
+      {
+        "id": "step5",
+        "duration": 7200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 8220
+  }
+}
+{
+  "question": "To cure alcohol breath, here are the steps needed.\nStep 1. Rinse with an alcohol-free mouthwash (1 minute)\nStep 2. Drink a large glass of water to hydrate (2 minutes)\nStep 3. Thoroughly brush teeth and tongue (4 minutes)\nStep 4. Chew on a piece of sugar-free menthol gum (15 minutes)\nStep 5. Eat a meal containing fresh parsley or garlic-neutralizing foods (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure alcohol breath?",
+  "gold_answer": 2100,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 60},\n    {\"id\": \"step2\", \"duration\": 120},\n    {\"id\": \"step3\", \"duration\": 240},\n    {\"id\": \"step4\", \"duration\": 900},\n    {\"id\": \"step5\", \"duration\": 1200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 2100\n}",
+  "gold_seconds": 2100,
+  "pred_seconds": 2100,
+  "correct": true,
+  "user_prompt": "To cure alcohol breath, here are the steps needed.\nStep 1. Rinse with an alcohol-free mouthwash (1 minute)\nStep 2. Drink a large glass of water to hydrate (2 minutes)\nStep 3. Thoroughly brush teeth and tongue (4 minutes)\nStep 4. Chew on a piece of sugar-free menthol gum (15 minutes)\nStep 5. Eat a meal containing fresh parsley or garlic-neutralizing foods (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure alcohol breath?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 60
+      },
+      {
+        "id": "step2",
+        "duration": 120
+      },
+      {
+        "id": "step3",
+        "duration": 240
+      },
+      {
+        "id": "step4",
+        "duration": 900
+      },
+      {
+        "id": "step5",
+        "duration": 1200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 2100
+  }
+}
+{
+  "question": "To make lemon bars, here are the steps needed.\nStep 1. Preheat the oven to 350 degrees (15 minutes)\nStep 2. Whisk together the lemon juice, sugar, and eggs for the filling (5 minutes)\nStep 3. Zest and juice the fresh lemons (10 minutes)\nStep 4. Prepare the shortbread crust dough (12 minutes)\nStep 5. Bake the crust and filling together (25 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make lemon bars?",
+  "gold_answer": 2400,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 900},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 720},\n    {\"id\": \"step5\", \"duration\": 1500}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 2400\n}",
+  "gold_seconds": 2400,
+  "pred_seconds": 2400,
+  "correct": true,
+  "user_prompt": "To make lemon bars, here are the steps needed.\nStep 1. Preheat the oven to 350 degrees (15 minutes)\nStep 2. Whisk together the lemon juice, sugar, and eggs for the filling (5 minutes)\nStep 3. Zest and juice the fresh lemons (10 minutes)\nStep 4. Prepare the shortbread crust dough (12 minutes)\nStep 5. Bake the crust and filling together (25 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make lemon bars?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 900
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 720
+      },
+      {
+        "id": "step5",
+        "duration": 1500
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 2400
+  }
+}
+{
+  "question": "To go fishing anymore, here are the steps needed.\nStep 1. Renew your annual fishing license (30 minutes)\nStep 2. Purchase fresh live bait from the tackle shop (15 minutes)\nStep 3. Research local fishing regulations and seasonal closures (1 hour)\nStep 4. Cast your line into the water at the lake (4 hours)\nStep 5. Pack the cooler and load the gear into the truck (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go fishing anymore?",
+  "gold_answer": 21000,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 3600},\n    {\"id\": \"step4\", \"duration\": 14400},\n    {\"id\": \"step5\", \"duration\": 1200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 21000\n}",
+  "gold_seconds": 21000,
+  "pred_seconds": 21000,
+  "correct": true,
+  "user_prompt": "To go fishing anymore, here are the steps needed.\nStep 1. Renew your annual fishing license (30 minutes)\nStep 2. Purchase fresh live bait from the tackle shop (15 minutes)\nStep 3. Research local fishing regulations and seasonal closures (1 hour)\nStep 4. Cast your line into the water at the lake (4 hours)\nStep 5. Pack the cooler and load the gear into the truck (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 1.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go fishing anymore?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1800
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 3600
+      },
+      {
+        "id": "step4",
+        "duration": 14400
+      },
+      {
+        "id": "step5",
+        "duration": 1200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 21000
+  }
+}
+{
+  "question": "To get dha, here are the steps needed.\nStep 1. Centrifuge the algae biomass (45 minutes)\nStep 2. Refine the extracted oil for purity (2 days)\nStep 3. Harvest the microalgae from the bioreactor (4 hours)\nStep 4. Prepare the nutrient growth medium (1 hour)\nStep 5. Perform solvent extraction on the biomass (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get dha?",
+  "gold_answer": 212400,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 2700},\n    {\"id\": \"step2\", \"duration\": 172800},\n    {\"id\": \"step3\", \"duration\": 14400},\n    {\"id\": \"step4\", \"duration\": 3600},\n    {\"id\": \"step5\", \"duration\": 21600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 212400\n}",
+  "gold_seconds": 212400,
+  "pred_seconds": 212400,
+  "correct": true,
+  "user_prompt": "To get dha, here are the steps needed.\nStep 1. Centrifuge the algae biomass (45 minutes)\nStep 2. Refine the extracted oil for purity (2 days)\nStep 3. Harvest the microalgae from the bioreactor (4 hours)\nStep 4. Prepare the nutrient growth medium (1 hour)\nStep 5. Perform solvent extraction on the biomass (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get dha?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 2700
+      },
+      {
+        "id": "step2",
+        "duration": 172800
+      },
+      {
+        "id": "step3",
+        "duration": 14400
+      },
+      {
+        "id": "step4",
+        "duration": 3600
+      },
+      {
+        "id": "step5",
+        "duration": 21600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 212400
+  }
+}
+{
+  "question": "To make orange, here are the steps needed.\nStep 1. Pour a measured amount of yellow paint into a mixing bowl (2 minutes)\nStep 2. Locate a clean wooden stirring stick in the supply cabinet (30 seconds)\nStep 3. Prepare the workspace with protective newspaper (5 minutes)\nStep 4. Add a small drop of red pigment to the yellow paint (1 minute)\nStep 5. Purchase the primary paint colors from the art store (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make orange?",
+  "gold_answer": 2880,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 30},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 60},\n    {\"id\": \"step5\", \"duration\": 2700}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 2880\n}",
+  "gold_seconds": 2880,
+  "pred_seconds": 2880,
+  "correct": true,
+  "user_prompt": "To make orange, here are the steps needed.\nStep 1. Pour a measured amount of yellow paint into a mixing bowl (2 minutes)\nStep 2. Locate a clean wooden stirring stick in the supply cabinet (30 seconds)\nStep 3. Prepare the workspace with protective newspaper (5 minutes)\nStep 4. Add a small drop of red pigment to the yellow paint (1 minute)\nStep 5. Purchase the primary paint colors from the art store (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make orange?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 30
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 60
+      },
+      {
+        "id": "step5",
+        "duration": 2700
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 2880
+  }
+}
+{
+  "question": "To have fresh herbs to enjoy year-round, here are the steps needed.\nStep 1. Install LED grow lights for winter use (2 hours)\nStep 2. Research and purchase organic herb seeds (3 days)\nStep 3. Sow seeds in starter trays and wait for germination (2 weeks)\nStep 4. Transplant seedlings into larger ceramic pots (45 minutes)\nStep 5. Clear a dedicated space on the sunny windowsill (30 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 4.\nStep 5 must precede Step 1.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to have fresh herbs to enjoy year-round?",
+  "gold_answer": 1473300,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 7200},\n    {\"id\": \"step2\", \"duration\": 259200},\n    {\"id\": \"step3\", \"duration\": 1209600},\n    {\"id\": \"step4\", \"duration\": 2700},\n    {\"id\": \"step5\", \"duration\": 1800}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step5\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1473300\n}",
+  "gold_seconds": 1473300,
+  "pred_seconds": 1473300,
+  "correct": true,
+  "user_prompt": "To have fresh herbs to enjoy year-round, here are the steps needed.\nStep 1. Install LED grow lights for winter use (2 hours)\nStep 2. Research and purchase organic herb seeds (3 days)\nStep 3. Sow seeds in starter trays and wait for germination (2 weeks)\nStep 4. Transplant seedlings into larger ceramic pots (45 minutes)\nStep 5. Clear a dedicated space on the sunny windowsill (30 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 4.\nStep 3 must precede Step 4.\nStep 5 must precede Step 1.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to have fresh herbs to enjoy year-round?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 7200
+      },
+      {
+        "id": "step2",
+        "duration": 259200
+      },
+      {
+        "id": "step3",
+        "duration": 1209600
+      },
+      {
+        "id": "step4",
+        "duration": 2700
+      },
+      {
+        "id": "step5",
+        "duration": 1800
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 1473300
+  }
+}
+{
+  "question": "To make chicken curry, here are the steps needed.\nStep 1. Sauté onions, ginger, and garlic (10 minutes)\nStep 2. Simmer the chicken in the sauce (25 minutes)\nStep 3. Grind the whole spices into a powder (5 minutes)\nStep 4. Thaw the frozen chicken (2 hours)\nStep 5. Marinate the chicken pieces (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chicken curry?",
+  "gold_answer": 12900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 1500},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 7200},\n    {\"id\": \"step5\", \"duration\": 3600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 12900\n}",
+  "gold_seconds": 12900,
+  "pred_seconds": 12900,
+  "correct": true,
+  "user_prompt": "To make chicken curry, here are the steps needed.\nStep 1. Sauté onions, ginger, and garlic (10 minutes)\nStep 2. Simmer the chicken in the sauce (25 minutes)\nStep 3. Grind the whole spices into a powder (5 minutes)\nStep 4. Thaw the frozen chicken (2 hours)\nStep 5. Marinate the chicken pieces (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chicken curry?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 1500
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 7200
+      },
+      {
+        "id": "step5",
+        "duration": 3600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 12900
+  }
+}
+{
+  "question": "To treat liver disease in older dogs, here are the steps needed.\nStep 1. Conduct a full abdominal ultrasound (45 minutes)\nStep 2. Schedule an initial veterinary consultation (2 days)\nStep 3. Monitor the dog's enzyme levels via follow-up blood work (1 week)\nStep 4. Administer a specialized prescription diet and supplements (1 month)\nStep 5. Perform a needle biopsy of the liver tissue (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 1.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat liver disease in older dogs?",
+  "gold_answer": 3196800,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 2700},\n    {\"id\": \"step2\", \"duration\": 172800},\n    {\"id\": \"step3\", \"duration\": 604800},\n    {\"id\": \"step4\", \"duration\": 2592000},\n    {\"id\": \"step5\", \"duration\": 7200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 3196800\n}",
+  "gold_seconds": 3196800,
+  "pred_seconds": 3196800,
+  "correct": true,
+  "user_prompt": "To treat liver disease in older dogs, here are the steps needed.\nStep 1. Conduct a full abdominal ultrasound (45 minutes)\nStep 2. Schedule an initial veterinary consultation (2 days)\nStep 3. Monitor the dog's enzyme levels via follow-up blood work (1 week)\nStep 4. Administer a specialized prescription diet and supplements (1 month)\nStep 5. Perform a needle biopsy of the liver tissue (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 1.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat liver disease in older dogs?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 2700
+      },
+      {
+        "id": "step2",
+        "duration": 172800
+      },
+      {
+        "id": "step3",
+        "duration": 604800
+      },
+      {
+        "id": "step4",
+        "duration": 2592000
+      },
+      {
+        "id": "step5",
+        "duration": 7200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 3196800
+  }
+}
+{
+  "question": "To become a dental assistant in texas, here are the steps needed.\nStep 1. Submit final registration application to the State Board (2 weeks)\nStep 2. Enroll in a state-approved certificate program (1 day)\nStep 3. Complete a mandatory Basic Life Support CPR course (6 hours)\nStep 4. Attend and pass the dental radiography course (3 days)\nStep 5. Pass the Texas Jurisprudence Assessment exam (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to become a dental assistant in texas?",
+  "gold_answer": 1555200,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1209600},\n    {\"id\": \"step2\", \"duration\": 86400},\n    {\"id\": \"step3\", \"duration\": 21600},\n    {\"id\": \"step4\", \"duration\": 259200},\n    {\"id\": \"step5\", \"duration\": 7200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 1555200\n}",
+  "gold_seconds": 1555200,
+  "pred_seconds": 1555200,
+  "correct": true,
+  "user_prompt": "To become a dental assistant in texas, here are the steps needed.\nStep 1. Submit final registration application to the State Board (2 weeks)\nStep 2. Enroll in a state-approved certificate program (1 day)\nStep 3. Complete a mandatory Basic Life Support CPR course (6 hours)\nStep 4. Attend and pass the dental radiography course (3 days)\nStep 5. Pass the Texas Jurisprudence Assessment exam (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 1.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to become a dental assistant in texas?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1209600
+      },
+      {
+        "id": "step2",
+        "duration": 86400
+      },
+      {
+        "id": "step3",
+        "duration": 21600
+      },
+      {
+        "id": "step4",
+        "duration": 259200
+      },
+      {
+        "id": "step5",
+        "duration": 7200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 1555200
+  }
+}
+{
+  "question": "To help your child help the community, here are the steps needed.\nStep 1. Research local non-profit organizations and volunteer opportunities (2 hours)\nStep 2. Deliver the final collection of donated goods to the community center (45 minutes)\nStep 3. Register your child for a specific neighborhood cleanup or donation drive (15 minutes)\nStep 4. Design and print flyers to recruit other neighborhood kids (3 hours)\nStep 5. Set up a collection bin on the porch and gather items for one week (7 days)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to help your child help the community?",
+  "gold_answer": 615600,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 7200},\n    {\"id\": \"step2\", \"duration\": 2700},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 10800},\n    {\"id\": \"step5\", \"duration\": 604800}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 615600\n}",
+  "gold_seconds": 615600,
+  "pred_seconds": 615600,
+  "correct": true,
+  "user_prompt": "To help your child help the community, here are the steps needed.\nStep 1. Research local non-profit organizations and volunteer opportunities (2 hours)\nStep 2. Deliver the final collection of donated goods to the community center (45 minutes)\nStep 3. Register your child for a specific neighborhood cleanup or donation drive (15 minutes)\nStep 4. Design and print flyers to recruit other neighborhood kids (3 hours)\nStep 5. Set up a collection bin on the porch and gather items for one week (7 days)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to help your child help the community?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 7200
+      },
+      {
+        "id": "step2",
+        "duration": 2700
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 10800
+      },
+      {
+        "id": "step5",
+        "duration": 604800
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 615600
+  }
+}
+{
+  "question": "To polish jewelry, here are the steps needed.\nStep 1. Soak the pieces in a warm soapy solution (15 minutes)\nStep 2. Buff the metal with a microfiber cloth (5 minutes)\nStep 3. Rinse the jewelry under lukewarm water (2 minutes)\nStep 4. Prepare the cleaning workstation and tools (10 minutes)\nStep 5. Gently scrub the crevices with a soft brush (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to polish jewelry?",
+  "gold_answer": 1620,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 900},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 120},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 480}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1620\n}",
+  "gold_seconds": 1620,
+  "pred_seconds": 1620,
+  "correct": true,
+  "user_prompt": "To polish jewelry, here are the steps needed.\nStep 1. Soak the pieces in a warm soapy solution (15 minutes)\nStep 2. Buff the metal with a microfiber cloth (5 minutes)\nStep 3. Rinse the jewelry under lukewarm water (2 minutes)\nStep 4. Prepare the cleaning workstation and tools (10 minutes)\nStep 5. Gently scrub the crevices with a soft brush (8 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to polish jewelry?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 900
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 120
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 480
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 1620
+  }
+}
+{
+  "question": "To leave school location., here are the steps needed.\nStep 1. Walk to the parking lot (5 minutes)\nStep 2. Pack textbooks into the backpack (2 minutes)\nStep 3. Drive out of the school gates (1 minute)\nStep 4. Locate the car keys in the bag (30 seconds)\nStep 5. Unlock and start the car engine (45 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?",
+  "gold_answer": 420,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 120},\n    {\"id\": \"step3\", \"duration\": 60},\n    {\"id\": \"step4\", \"duration\": 30},\n    {\"id\": \"step5\", \"duration\": 45}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 420\n}",
+  "gold_seconds": 420,
+  "pred_seconds": 420,
+  "correct": true,
+  "user_prompt": "To leave school location., here are the steps needed.\nStep 1. Walk to the parking lot (5 minutes)\nStep 2. Pack textbooks into the backpack (2 minutes)\nStep 3. Drive out of the school gates (1 minute)\nStep 4. Locate the car keys in the bag (30 seconds)\nStep 5. Unlock and start the car engine (45 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 120
+      },
+      {
+        "id": "step3",
+        "duration": 60
+      },
+      {
+        "id": "step4",
+        "duration": 30
+      },
+      {
+        "id": "step5",
+        "duration": 45
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 420
+  }
+}
+{
+  "question": "To customize a drum set, here are the steps needed.\nStep 1. Apply custom vinyl wraps to the shells (3 hours)\nStep 2. Research and order boutique drum heads (20 minutes)\nStep 3. Wait for the drum heads to arrive in the mail (5 days)\nStep 4. Strip the old hardware and clean the shells (2 hours)\nStep 5. Install the new heads and tune the kit (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to customize a drum set?",
+  "gold_answer": 446700,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 10800},\n    {\"id\": \"step2\", \"duration\": 1200},\n    {\"id\": \"step3\", \"duration\": 432000},\n    {\"id\": \"step4\", \"duration\": 7200},\n    {\"id\": \"step5\", \"duration\": 2700}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 446700\n}",
+  "gold_seconds": 446700,
+  "pred_seconds": 446700,
+  "correct": true,
+  "user_prompt": "To customize a drum set, here are the steps needed.\nStep 1. Apply custom vinyl wraps to the shells (3 hours)\nStep 2. Research and order boutique drum heads (20 minutes)\nStep 3. Wait for the drum heads to arrive in the mail (5 days)\nStep 4. Strip the old hardware and clean the shells (2 hours)\nStep 5. Install the new heads and tune the kit (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to customize a drum set?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 10800
+      },
+      {
+        "id": "step2",
+        "duration": 1200
+      },
+      {
+        "id": "step3",
+        "duration": 432000
+      },
+      {
+        "id": "step4",
+        "duration": 7200
+      },
+      {
+        "id": "step5",
+        "duration": 2700
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 446700
+  }
+}
+{
+  "question": "To connect your nintendo wii wifi to dial up, here are the steps needed.\nStep 1. Purchase a compatible USB Ethernet adapter (3 days)\nStep 2. Configure the Internet Connection Sharing settings on your PC (15 minutes)\nStep 3. Perform a connection test on the Wii console (2 minutes)\nStep 4. Install the dial-up modem drivers on your laptop (10 minutes)\nStep 5. Plug the adapter into the Wii and connect the crossover cable (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 4 must precede Step 2.\nStep 4 must precede Step 3.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to connect your nintendo wii wifi to dial up?",
+  "gold_answer": 259620,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 259200},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 120},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 300}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step2\"},\n    {\"before\": \"step4\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 259620\n}",
+  "gold_seconds": 259620,
+  "pred_seconds": 259620,
+  "correct": true,
+  "user_prompt": "To connect your nintendo wii wifi to dial up, here are the steps needed.\nStep 1. Purchase a compatible USB Ethernet adapter (3 days)\nStep 2. Configure the Internet Connection Sharing settings on your PC (15 minutes)\nStep 3. Perform a connection test on the Wii console (2 minutes)\nStep 4. Install the dial-up modem drivers on your laptop (10 minutes)\nStep 5. Plug the adapter into the Wii and connect the crossover cable (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 4 must precede Step 2.\nStep 4 must precede Step 3.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to connect your nintendo wii wifi to dial up?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 259200
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 120
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 300
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step2"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 259620
+  }
+}
+{
+  "question": "To cure gastritis, here are the steps needed.\nStep 1. Complete a full course of prescribed antibiotics (14 days)\nStep 2. Schedule an initial consultation with a gastroenterologist (30 minutes)\nStep 3. Switch to a bland, low-acid diet (1 month)\nStep 4. Undergo a diagnostic endoscopy procedure (2 hours)\nStep 5. Attend a follow-up breath test to confirm recovery (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure gastritis?",
+  "gold_answer": 2592900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1209600},\n    {\"id\": \"step2\", \"duration\": 1800},\n    {\"id\": \"step3\", \"duration\": 2592000},\n    {\"id\": \"step4\", \"duration\": 7200},\n    {\"id\": \"step5\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 2592900\n}",
+  "gold_seconds": 2592900,
+  "pred_seconds": 2592900,
+  "correct": true,
+  "user_prompt": "To cure gastritis, here are the steps needed.\nStep 1. Complete a full course of prescribed antibiotics (14 days)\nStep 2. Schedule an initial consultation with a gastroenterologist (30 minutes)\nStep 3. Switch to a bland, low-acid diet (1 month)\nStep 4. Undergo a diagnostic endoscopy procedure (2 hours)\nStep 5. Attend a follow-up breath test to confirm recovery (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cure gastritis?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1209600
+      },
+      {
+        "id": "step2",
+        "duration": 1800
+      },
+      {
+        "id": "step3",
+        "duration": 2592000
+      },
+      {
+        "id": "step4",
+        "duration": 7200
+      },
+      {
+        "id": "step5",
+        "duration": 900
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 2592900
+  }
+}
+{
+  "question": "To make solid perfume, here are the steps needed.\nStep 1. Pour the mixture into small tins to set (5 minutes)\nStep 2. Measure out the beeswax pellets and carrier oil (10 minutes)\nStep 3. Melt the wax and oil together in a double boiler (15 minutes)\nStep 4. Design and print custom labels for the containers (45 minutes)\nStep 5. Apply the labels to the finished tins (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make solid perfume?",
+  "gold_answer": 3300,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 600},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 2700},\n    {\"id\": \"step5\", \"duration\": 600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 3300\n}",
+  "gold_seconds": 3300,
+  "pred_seconds": 3300,
+  "correct": true,
+  "user_prompt": "To make solid perfume, here are the steps needed.\nStep 1. Pour the mixture into small tins to set (5 minutes)\nStep 2. Measure out the beeswax pellets and carrier oil (10 minutes)\nStep 3. Melt the wax and oil together in a double boiler (15 minutes)\nStep 4. Design and print custom labels for the containers (45 minutes)\nStep 5. Apply the labels to the finished tins (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make solid perfume?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 600
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 2700
+      },
+      {
+        "id": "step5",
+        "duration": 600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 3300
+  }
+}
+{
+  "question": "To make a canoe, here are the steps needed.\nStep 1. Apply waterproof marine varnish (2 days)\nStep 2. Source and select cedar planks (3 hours)\nStep 3. Assemble the hull and gunwales (5 days)\nStep 4. Install the woven cane seats (4 hours)\nStep 5. Sand the exterior surface (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a canoe?",
+  "gold_answer": 615600,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 172800},\n    {\"id\": \"step2\", \"duration\": 10800},\n    {\"id\": \"step3\", \"duration\": 432000},\n    {\"id\": \"step4\", \"duration\": 14400},\n    {\"id\": \"step5\", \"duration\": 21600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 615600\n}",
+  "gold_seconds": 615600,
+  "pred_seconds": 615600,
+  "correct": true,
+  "user_prompt": "To make a canoe, here are the steps needed.\nStep 1. Apply waterproof marine varnish (2 days)\nStep 2. Source and select cedar planks (3 hours)\nStep 3. Assemble the hull and gunwales (5 days)\nStep 4. Install the woven cane seats (4 hours)\nStep 5. Sand the exterior surface (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a canoe?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 172800
+      },
+      {
+        "id": "step2",
+        "duration": 10800
+      },
+      {
+        "id": "step3",
+        "duration": 432000
+      },
+      {
+        "id": "step4",
+        "duration": 14400
+      },
+      {
+        "id": "step5",
+        "duration": 21600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 615600
+  }
+}
+{
+  "question": "To acclimate starfish, here are the steps needed.\nStep 1. Float the sealed transport bag in the aquarium to equalize temperature (30 minutes)\nStep 2. Slowly drip-acclimate the aquarium water into the holding bucket (2 hours)\nStep 3. Prepare a clean acclimation bucket and airline tubing (10 minutes)\nStep 4. Carefully transfer the starfish from the bag into the acclimation bucket (5 minutes)\nStep 5. Net the starfish and gently place it onto a rock in the tank (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 3 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to acclimate starfish?",
+  "gold_answer": 7920,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"duration\": 7200},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 300},\n    {\"id\": \"step5\", \"duration\": 120}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 7920\n}",
+  "gold_seconds": 7920,
+  "pred_seconds": 7920,
+  "correct": true,
+  "user_prompt": "To acclimate starfish, here are the steps needed.\nStep 1. Float the sealed transport bag in the aquarium to equalize temperature (30 minutes)\nStep 2. Slowly drip-acclimate the aquarium water into the holding bucket (2 hours)\nStep 3. Prepare a clean acclimation bucket and airline tubing (10 minutes)\nStep 4. Carefully transfer the starfish from the bag into the acclimation bucket (5 minutes)\nStep 5. Net the starfish and gently place it onto a rock in the tank (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\nStep 3 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to acclimate starfish?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1800
+      },
+      {
+        "id": "step2",
+        "duration": 7200
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 300
+      },
+      {
+        "id": "step5",
+        "duration": 120
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 7920
+  }
+}
+{
+  "question": "To make a balloon pet, here are the steps needed.\nStep 1. Draw a face on the balloon with a marker (2 minutes)\nStep 2. Twist the inflated segments into a poodle shape (3 minutes)\nStep 3. Remove a fresh balloon from the package (10 seconds)\nStep 4. Inflate the balloon using a hand pump (45 seconds)\nStep 5. Select a colored marker from the craft bin (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 4.\nStep 4 must precede Step 2.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a balloon pet?",
+  "gold_answer": 235,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 180},\n    {\"id\": \"step3\", \"duration\": 10},\n    {\"id\": \"step4\", \"duration\": 45},\n    {\"id\": \"step5\", \"duration\": 60}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step4\", \"after\": \"step2\"},\n    {\"before\": \"step5\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 235\n}",
+  "gold_seconds": 235,
+  "pred_seconds": 235,
+  "correct": true,
+  "user_prompt": "To make a balloon pet, here are the steps needed.\nStep 1. Draw a face on the balloon with a marker (2 minutes)\nStep 2. Twist the inflated segments into a poodle shape (3 minutes)\nStep 3. Remove a fresh balloon from the package (10 seconds)\nStep 4. Inflate the balloon using a hand pump (45 seconds)\nStep 5. Select a colored marker from the craft bin (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 4.\nStep 4 must precede Step 2.\nStep 5 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a balloon pet?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 180
+      },
+      {
+        "id": "step3",
+        "duration": 10
+      },
+      {
+        "id": "step4",
+        "duration": 45
+      },
+      {
+        "id": "step5",
+        "duration": 60
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step4",
+        "after": "step2"
+      },
+      {
+        "before": "step5",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 235
+  }
+}
+{
+  "question": "To restrain a dog, here are the steps needed.\nStep 1. Clip the leash onto the collar (10 seconds)\nStep 2. Calm the dog down with a treat (1 minute)\nStep 3. Retrieve the harness from the closet (30 seconds)\nStep 4. Fasten the safety buckle (5 seconds)\nStep 5. Guide the dog's paws into the harness loops (45 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to restrain a dog?",
+  "gold_answer": 80,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 10},\n    {\"id\": \"step2\", \"duration\": 60},\n    {\"id\": \"step3\", \"duration\": 30},\n    {\"id\": \"step4\", \"duration\": 5},\n    {\"id\": \"step5\", \"duration\": 45}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 80\n}",
+  "gold_seconds": 80,
+  "pred_seconds": 80,
+  "correct": true,
+  "user_prompt": "To restrain a dog, here are the steps needed.\nStep 1. Clip the leash onto the collar (10 seconds)\nStep 2. Calm the dog down with a treat (1 minute)\nStep 3. Retrieve the harness from the closet (30 seconds)\nStep 4. Fasten the safety buckle (5 seconds)\nStep 5. Guide the dog's paws into the harness loops (45 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to restrain a dog?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 10
+      },
+      {
+        "id": "step2",
+        "duration": 60
+      },
+      {
+        "id": "step3",
+        "duration": 30
+      },
+      {
+        "id": "step4",
+        "duration": 5
+      },
+      {
+        "id": "step5",
+        "duration": 45
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 80
+  }
+}
+{
+  "question": "To write freeform poetry, here are the steps needed.\nStep 1. Reflect on a personal memory for inspiration (30 minutes)\nStep 2. Draft the opening stanza on a notepad (15 minutes)\nStep 3. Read the completed poem aloud to check the rhythm (5 minutes)\nStep 4. Select a central theme or emotion (1 hour)\nStep 5. Expand the draft with sensory metaphors (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to write freeform poetry?",
+  "gold_answer": 7500,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 3600},\n    {\"id\": \"step5\", \"duration\": 2700}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step2\"},\n    {\"before\": \"step4\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 7500\n}",
+  "gold_seconds": 7500,
+  "pred_seconds": 7500,
+  "correct": true,
+  "user_prompt": "To write freeform poetry, here are the steps needed.\nStep 1. Reflect on a personal memory for inspiration (30 minutes)\nStep 2. Draft the opening stanza on a notepad (15 minutes)\nStep 3. Read the completed poem aloud to check the rhythm (5 minutes)\nStep 4. Select a central theme or emotion (1 hour)\nStep 5. Expand the draft with sensory metaphors (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to write freeform poetry?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1800
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 3600
+      },
+      {
+        "id": "step5",
+        "duration": 2700
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step2"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 7500
+  }
+}
+{
+  "question": "To buy postage stamps, here are the steps needed.\nStep 1. Walk to the post office (15 minutes)\nStep 2. Check the balance on your debit card (2 minutes)\nStep 3. Affix the stamps to your envelopes (5 minutes)\nStep 4. Locate your wallet and keys (3 minutes)\nStep 5. Purchase a book of stamps from the clerk (4 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy postage stamps?",
+  "gold_answer": 1620,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 900},\n    {\"id\": \"step2\", \"duration\": 120},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 180},\n    {\"id\": \"step5\", \"duration\": 240}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 1620\n}",
+  "gold_seconds": 1620,
+  "pred_seconds": 1620,
+  "correct": true,
+  "user_prompt": "To buy postage stamps, here are the steps needed.\nStep 1. Walk to the post office (15 minutes)\nStep 2. Check the balance on your debit card (2 minutes)\nStep 3. Affix the stamps to your envelopes (5 minutes)\nStep 4. Locate your wallet and keys (3 minutes)\nStep 5. Purchase a book of stamps from the clerk (4 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 5.\nStep 4 must precede Step 1.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy postage stamps?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 900
+      },
+      {
+        "id": "step2",
+        "duration": 120
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 180
+      },
+      {
+        "id": "step5",
+        "duration": 240
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 1620
+  }
+}
+{
+  "question": "To care for manx cats, here are the steps needed.\nStep 1. Research specific health needs of the Manx breed (2 hours)\nStep 2. Purchase high-quality feline nutrition and grooming tools (45 minutes)\nStep 3. Contact a veterinarian specializing in Manx Syndrome (15 minutes)\nStep 4. Conduct a thorough physical grooming and spinal check (30 minutes)\nStep 5. Schedule and attend an initial wellness consultation (3 days)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to care for manx cats?",
+  "gold_answer": 261900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 7200},\n    {\"id\": \"step2\", \"duration\": 2700},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 1800},\n    {\"id\": \"step5\", \"duration\": 259200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step2\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 261900\n}",
+  "gold_seconds": 261900,
+  "pred_seconds": 261900,
+  "correct": true,
+  "user_prompt": "To care for manx cats, here are the steps needed.\nStep 1. Research specific health needs of the Manx breed (2 hours)\nStep 2. Purchase high-quality feline nutrition and grooming tools (45 minutes)\nStep 3. Contact a veterinarian specializing in Manx Syndrome (15 minutes)\nStep 4. Conduct a thorough physical grooming and spinal check (30 minutes)\nStep 5. Schedule and attend an initial wellness consultation (3 days)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 4.\nStep 3 must precede Step 5.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to care for manx cats?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 7200
+      },
+      {
+        "id": "step2",
+        "duration": 2700
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 1800
+      },
+      {
+        "id": "step5",
+        "duration": 259200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step2",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 261900
+  }
+}
+{
+  "question": "To choose flowers from the garden for making potpourri, here are the steps needed.\nStep 1. Sterilize the garden shears (5 minutes)\nStep 2. Strip the petals from the stems (15 minutes)\nStep 3. Harvest the blooming rosebuds (20 minutes)\nStep 4. Arrange the petals on a drying rack (10 minutes)\nStep 5. Select and cut the lavender sprigs (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to choose flowers from the garden for making potpourri?",
+  "gold_answer": 2100,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900},\n    {\"id\": \"step3\", \"duration\": 1200},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step1\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 2100\n}",
+  "gold_seconds": 2100,
+  "pred_seconds": 2100,
+  "correct": true,
+  "user_prompt": "To choose flowers from the garden for making potpourri, here are the steps needed.\nStep 1. Sterilize the garden shears (5 minutes)\nStep 2. Strip the petals from the stems (15 minutes)\nStep 3. Harvest the blooming rosebuds (20 minutes)\nStep 4. Arrange the petals on a drying rack (10 minutes)\nStep 5. Select and cut the lavender sprigs (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 5.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to choose flowers from the garden for making potpourri?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 900
+      },
+      {
+        "id": "step3",
+        "duration": 1200
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step1",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 2100
+  }
+}
+{
+  "question": "To make milanesa, here are the steps needed.\nStep 1. Pound the meat thin with a mallet (10 minutes)\nStep 2. Whisk eggs with garlic and parsley (3 minutes)\nStep 3. Dip the meat into the egg mixture (2 minutes)\nStep 4. Prepare the breading station with breadcrumbs (5 minutes)\nStep 5. Coat the meat in breadcrumbs and fry until golden (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make milanesa?",
+  "gold_answer": 1800,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 180},\n    {\"id\": \"step3\", \"duration\": 120},\n    {\"id\": \"step4\", \"duration\": 300},\n    {\"id\": \"step5\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step3\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 1800\n}",
+  "gold_seconds": 1800,
+  "pred_seconds": 1800,
+  "correct": true,
+  "user_prompt": "To make milanesa, here are the steps needed.\nStep 1. Pound the meat thin with a mallet (10 minutes)\nStep 2. Whisk eggs with garlic and parsley (3 minutes)\nStep 3. Dip the meat into the egg mixture (2 minutes)\nStep 4. Prepare the breading station with breadcrumbs (5 minutes)\nStep 5. Coat the meat in breadcrumbs and fry until golden (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 3.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make milanesa?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 180
+      },
+      {
+        "id": "step3",
+        "duration": 120
+      },
+      {
+        "id": "step4",
+        "duration": 300
+      },
+      {
+        "id": "step5",
+        "duration": 900
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step3"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 1800
+  }
+}
+{
+  "question": "To take body measurements, here are the steps needed.\nStep 1. Locate a flexible measuring tape (2 minutes)\nStep 2. Record the final dimensions on a chart (5 minutes)\nStep 3. Watch a tutorial on proper measurement techniques (10 minutes)\nStep 4. Measure the waist and hip circumference (3 minutes)\nStep 5. Remove any bulky outer clothing (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to take body measurements?",
+  "gold_answer": 900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 600},\n    {\"id\": \"step4\", \"duration\": 180},\n    {\"id\": \"step5\", \"duration\": 60}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 900\n}",
+  "gold_seconds": 900,
+  "pred_seconds": 900,
+  "correct": true,
+  "user_prompt": "To take body measurements, here are the steps needed.\nStep 1. Locate a flexible measuring tape (2 minutes)\nStep 2. Record the final dimensions on a chart (5 minutes)\nStep 3. Watch a tutorial on proper measurement techniques (10 minutes)\nStep 4. Measure the waist and hip circumference (3 minutes)\nStep 5. Remove any bulky outer clothing (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to take body measurements?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 600
+      },
+      {
+        "id": "step4",
+        "duration": 180
+      },
+      {
+        "id": "step5",
+        "duration": 60
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 900
+  }
+}
+{
+  "question": "To make steamed ginger pudding, here are the steps needed.\nStep 1. Peel and finely grate the fresh ginger (10 minutes)\nStep 2. Whisk the eggs and sugar until pale and fluffy (5 minutes)\nStep 3. Combine ginger with the batter and pour into molds (8 minutes)\nStep 4. Buy fresh ginger root from the market (30 minutes)\nStep 5. Take the eggs out of the refrigerator to reach room temperature (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make steamed ginger pudding?",
+  "gold_answer": 3900,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 300},\n    {\"id\": \"step3\", \"duration\": 480},\n    {\"id\": \"step4\", \"duration\": 1800},\n    {\"id\": \"step5\", \"duration\": 3600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step4\", \"after\": \"step1\"},\n    {\"before\": \"step4\", \"after\": \"step3\"},\n    {\"before\": \"step5\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 3900\n}",
+  "gold_seconds": 3900,
+  "pred_seconds": 3900,
+  "correct": true,
+  "user_prompt": "To make steamed ginger pudding, here are the steps needed.\nStep 1. Peel and finely grate the fresh ginger (10 minutes)\nStep 2. Whisk the eggs and sugar until pale and fluffy (5 minutes)\nStep 3. Combine ginger with the batter and pour into molds (8 minutes)\nStep 4. Buy fresh ginger root from the market (30 minutes)\nStep 5. Take the eggs out of the refrigerator to reach room temperature (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 4 must precede Step 1.\nStep 4 must precede Step 3.\nStep 5 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make steamed ginger pudding?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 300
+      },
+      {
+        "id": "step3",
+        "duration": 480
+      },
+      {
+        "id": "step4",
+        "duration": 1800
+      },
+      {
+        "id": "step5",
+        "duration": 3600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      },
+      {
+        "before": "step5",
+        "after": "step2"
+      }
+    ],
+    "final_answer_seconds": 3900
+  }
+}
+{
+  "question": "To drink from sippy cup, here are the steps needed.\nStep 1. Retrieve the clean sippy cup from the kitchen cabinet (20 seconds)\nStep 2. Screw the lid onto the cup tightly (10 seconds)\nStep 3. Fill the cup with fresh apple juice (15 seconds)\nStep 4. Tilt the cup and take a long drink (30 seconds)\nStep 5. Remove the protective travel cap from the spout (5 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to drink from sippy cup?",
+  "gold_answer": 45,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 20},\n    {\"id\": \"step2\", \"duration\": 10},\n    {\"id\": \"step3\", \"duration\": 15},\n    {\"id\": \"step4\", \"duration\": 30},\n    {\"id\": \"step5\", \"duration\": 5}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step5\", \"after\": \"step4\"}\n  ],\n  \"final_answer_seconds\": 45\n}",
+  "gold_seconds": 45,
+  "pred_seconds": 45,
+  "correct": true,
+  "user_prompt": "To drink from sippy cup, here are the steps needed.\nStep 1. Retrieve the clean sippy cup from the kitchen cabinet (20 seconds)\nStep 2. Screw the lid onto the cup tightly (10 seconds)\nStep 3. Fill the cup with fresh apple juice (15 seconds)\nStep 4. Tilt the cup and take a long drink (30 seconds)\nStep 5. Remove the protective travel cap from the spout (5 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 3 must precede Step 2.\nStep 5 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to drink from sippy cup?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 20
+      },
+      {
+        "id": "step2",
+        "duration": 10
+      },
+      {
+        "id": "step3",
+        "duration": 15
+      },
+      {
+        "id": "step4",
+        "duration": 30
+      },
+      {
+        "id": "step5",
+        "duration": 5
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step5",
+        "after": "step4"
+      }
+    ],
+    "final_answer_seconds": 45
+  }
+}
+{
+  "question": "To make fruit punch, here are the steps needed.\nStep 1. Wash and slice the fresh strawberries and oranges (10 minutes)\nStep 2. Pour the chilled mixture into the large crystal punch bowl (2 minutes)\nStep 3. Combine the fruit juices and ginger ale in a large pitcher (5 minutes)\nStep 4. Place the sliced fruit into the juice mixture to infuse (30 minutes)\nStep 5. Add decorative ice rings to the bowl just before serving (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 3 must precede Step 2.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make fruit punch?",
+  "gold_answer": 2460,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 600},\n    {\"id\": \"step2\", \"duration\": 120},\n    {\"id\": \"step3\", \"duration\": 300},\n    {\"id\": \"step4\", \"duration\": 1800},\n    {\"id\": \"step5\", \"duration\": 60}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 2460\n}",
+  "gold_seconds": 2460,
+  "pred_seconds": 2460,
+  "correct": true,
+  "user_prompt": "To make fruit punch, here are the steps needed.\nStep 1. Wash and slice the fresh strawberries and oranges (10 minutes)\nStep 2. Pour the chilled mixture into the large crystal punch bowl (2 minutes)\nStep 3. Combine the fruit juices and ginger ale in a large pitcher (5 minutes)\nStep 4. Place the sliced fruit into the juice mixture to infuse (30 minutes)\nStep 5. Add decorative ice rings to the bowl just before serving (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 3 must precede Step 2.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make fruit punch?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 600
+      },
+      {
+        "id": "step2",
+        "duration": 120
+      },
+      {
+        "id": "step3",
+        "duration": 300
+      },
+      {
+        "id": "step4",
+        "duration": 1800
+      },
+      {
+        "id": "step5",
+        "duration": 60
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 2460
+  }
+}
+{
+  "question": "To see the warning signs of child molestation, here are the steps needed.\nStep 1. Attend a professional seminar on behavioral indicators (4 hours)\nStep 2. Review case studies of grooming tactics (2 hours)\nStep 3. Research reputable child safety organization guidelines (45 minutes)\nStep 4. Download a checklist of physical and emotional symptoms (10 minutes)\nStep 5. Cross-reference the checklist with observed changes in behavior (30 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the warning signs of child molestation?",
+  "gold_answer": 24300,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 14400},\n    {\"id\": \"step2\", \"duration\": 7200},\n    {\"id\": \"step3\", \"duration\": 2700},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 1800}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step4\"},\n    {\"before\": \"step4\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 24300\n}",
+  "gold_seconds": 24300,
+  "pred_seconds": 24300,
+  "correct": true,
+  "user_prompt": "To see the warning signs of child molestation, here are the steps needed.\nStep 1. Attend a professional seminar on behavioral indicators (4 hours)\nStep 2. Review case studies of grooming tactics (2 hours)\nStep 3. Research reputable child safety organization guidelines (45 minutes)\nStep 4. Download a checklist of physical and emotional symptoms (10 minutes)\nStep 5. Cross-reference the checklist with observed changes in behavior (30 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the warning signs of child molestation?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 14400
+      },
+      {
+        "id": "step2",
+        "duration": 7200
+      },
+      {
+        "id": "step3",
+        "duration": 2700
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 1800
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step4"
+      },
+      {
+        "before": "step4",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 24300
+  }
+}
+{
+  "question": "To leave school location., here are the steps needed.\nStep 1. Pack textbooks and laptop into your backpack (5 minutes)\nStep 2. Turn off the classroom lights and computer (1 minute)\nStep 3. Finalize and submit your digital assignment (20 minutes)\nStep 4. Walk from the classroom to the parking lot (10 minutes)\nStep 5. Lock the classroom door with your key (30 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?",
+  "gold_answer": 2100,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 60},\n    {\"id\": \"step3\", \"duration\": 1200},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 30}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step3\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 2100\n}",
+  "gold_seconds": 2100,
+  "pred_seconds": 2100,
+  "correct": true,
+  "user_prompt": "To leave school location., here are the steps needed.\nStep 1. Pack textbooks and laptop into your backpack (5 minutes)\nStep 2. Turn off the classroom lights and computer (1 minute)\nStep 3. Finalize and submit your digital assignment (20 minutes)\nStep 4. Walk from the classroom to the parking lot (10 minutes)\nStep 5. Lock the classroom door with your key (30 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 3 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to leave school location.?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 60
+      },
+      {
+        "id": "step3",
+        "duration": 1200
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 30
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step3",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 2100
+  }
+}
+{
+  "question": "To apply powder makeup, here are the steps needed.\nStep 1. Apply a hydrating facial moisturizer (2 minutes)\nStep 2. Let the primer set on the skin (3 minutes)\nStep 3. Buff the setting powder onto the face (4 minutes)\nStep 4. Blend the liquid foundation (5 minutes)\nStep 5. Spray a finishing mist to lock the look (30 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to apply powder makeup?",
+  "gold_answer": 570,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 120},\n    {\"id\": \"step2\", \"duration\": 180},\n    {\"id\": \"step3\", \"duration\": 240},\n    {\"id\": \"step4\", \"duration\": 300},\n    {\"id\": \"step5\", \"duration\": 30}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 570\n}",
+  "gold_seconds": 570,
+  "pred_seconds": 570,
+  "correct": true,
+  "user_prompt": "To apply powder makeup, here are the steps needed.\nStep 1. Apply a hydrating facial moisturizer (2 minutes)\nStep 2. Let the primer set on the skin (3 minutes)\nStep 3. Buff the setting powder onto the face (4 minutes)\nStep 4. Blend the liquid foundation (5 minutes)\nStep 5. Spray a finishing mist to lock the look (30 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to apply powder makeup?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 120
+      },
+      {
+        "id": "step2",
+        "duration": 180
+      },
+      {
+        "id": "step3",
+        "duration": 240
+      },
+      {
+        "id": "step4",
+        "duration": 300
+      },
+      {
+        "id": "step5",
+        "duration": 30
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 570
+  }
+}
+{
+  "question": "To celebrate may day, here are the steps needed.\nStep 1. Dance around the maypole (30 minutes)\nStep 2. Gather wildflowers from the meadow (1 hour)\nStep 3. Weave the flowers into decorative crowns (45 minutes)\nStep 4. Deliver surprise flower baskets to neighbors' porches (2 hours)\nStep 5. Buy colorful ribbons and wire (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to celebrate may day?",
+  "gold_answer": 11100,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"duration\": 3600},\n    {\"id\": \"step3\", \"duration\": 2700},\n    {\"id\": \"step4\", \"duration\": 7200},\n    {\"id\": \"step5\", \"duration\": 1200}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step4\", \"after\": \"step3\"},\n    {\"before\": \"step3\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 11100\n}",
+  "gold_seconds": 11100,
+  "pred_seconds": 11100,
+  "correct": true,
+  "user_prompt": "To celebrate may day, here are the steps needed.\nStep 1. Dance around the maypole (30 minutes)\nStep 2. Gather wildflowers from the meadow (1 hour)\nStep 3. Weave the flowers into decorative crowns (45 minutes)\nStep 4. Deliver surprise flower baskets to neighbors' porches (2 hours)\nStep 5. Buy colorful ribbons and wire (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to celebrate may day?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1800
+      },
+      {
+        "id": "step2",
+        "duration": 3600
+      },
+      {
+        "id": "step3",
+        "duration": 2700
+      },
+      {
+        "id": "step4",
+        "duration": 7200
+      },
+      {
+        "id": "step5",
+        "duration": 1200
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step4",
+        "after": "step3"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 11100
+  }
+}
+{
+  "question": "To see the natural beauty of maine, here are the steps needed.\nStep 1. Book a scenic coastal rental cottage (30 minutes)\nStep 2. Research the best hiking trails in Acadia National Park (1 hour)\nStep 3. Watch the sunrise from the summit of Cadillac Mountain (2 hours)\nStep 4. Drive the length of the Park Loop Road (3 hours)\nStep 5. Drive from the airport to the park entrance (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the natural beauty of maine?",
+  "gold_answer": 14400,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 1800},\n    {\"id\": \"step2\", \"duration\": 3600},\n    {\"id\": \"step3\", \"duration\": 7200},\n    {\"id\": \"step4\", \"duration\": 10800},\n    {\"id\": \"step5\", \"duration\": 3600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step5\"},\n    {\"before\": \"step5\", \"after\": \"step3\"}\n  ],\n  \"final_answer_seconds\": 14400\n}",
+  "gold_seconds": 14400,
+  "pred_seconds": 14400,
+  "correct": true,
+  "user_prompt": "To see the natural beauty of maine, here are the steps needed.\nStep 1. Book a scenic coastal rental cottage (30 minutes)\nStep 2. Research the best hiking trails in Acadia National Park (1 hour)\nStep 3. Watch the sunrise from the summit of Cadillac Mountain (2 hours)\nStep 4. Drive the length of the Park Loop Road (3 hours)\nStep 5. Drive from the airport to the park entrance (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 5 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to see the natural beauty of maine?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 1800
+      },
+      {
+        "id": "step2",
+        "duration": 3600
+      },
+      {
+        "id": "step3",
+        "duration": 7200
+      },
+      {
+        "id": "step4",
+        "duration": 10800
+      },
+      {
+        "id": "step5",
+        "duration": 3600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step5"
+      },
+      {
+        "before": "step5",
+        "after": "step3"
+      }
+    ],
+    "final_answer_seconds": 14400
+  }
+}
+{
+  "question": "To make corn soup, here are the steps needed.\nStep 1. Sauté the onions and garlic (5 minutes)\nStep 2. Simmer the corn and broth (20 minutes)\nStep 3. Shuck and silk the fresh corn (4 minutes)\nStep 4. Prep and chop the vegetables (10 minutes)\nStep 5. Blend a portion of the soup for creaminess (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources available. What is the shortest possible time to make corn soup?",
+  "gold_answer": 2100,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 1200},\n    {\"id\": \"step3\", \"duration\": 240},\n    {\"id\": \"step4\", \"duration\": 600},\n    {\"id\": \"step5\", \"duration\": 120}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step5\"},\n    {\"before\": \"step4\", \"after\": \"step1\"}\n  ],\n  \"final_answer_seconds\": 2100\n}",
+  "gold_seconds": 2100,
+  "pred_seconds": 2100,
+  "correct": true,
+  "user_prompt": "To make corn soup, here are the steps needed.\nStep 1. Sauté the onions and garlic (5 minutes)\nStep 2. Simmer the corn and broth (20 minutes)\nStep 3. Shuck and silk the fresh corn (4 minutes)\nStep 4. Prep and chop the vegetables (10 minutes)\nStep 5. Blend a portion of the soup for creaminess (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 3 must precede Step 5.\nStep 4 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources available. What is the shortest possible time to make corn soup?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 300
+      },
+      {
+        "id": "step2",
+        "duration": 1200
+      },
+      {
+        "id": "step3",
+        "duration": 240
+      },
+      {
+        "id": "step4",
+        "duration": 600
+      },
+      {
+        "id": "step5",
+        "duration": 120
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      },
+      {
+        "before": "step4",
+        "after": "step1"
+      }
+    ],
+    "final_answer_seconds": 2100
+  }
+}
+{
+  "question": "To conduct a self analysis, here are the steps needed.\nStep 1. Review past journals and personal records (2 hours)\nStep 2. Create a list of core values and beliefs (45 minutes)\nStep 3. Purchase a dedicated reflection notebook (15 minutes)\nStep 4. Write a summary report of personal strengths and weaknesses (1 hour)\nStep 5. Schedule a follow-up session with a life coach (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 3 must precede Step 2.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to conduct a self analysis?",
+  "gold_answer": 14400,
+  "pred_answer": "{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 7200},\n    {\"id\": \"step2\", \"duration\": 2700},\n    {\"id\": \"step3\", \"duration\": 900},\n    {\"id\": \"step4\", \"duration\": 3600},\n    {\"id\": \"step5\", \"duration\": 600}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step4\"},\n    {\"before\": \"step2\", \"after\": \"step1\"},\n    {\"before\": \"step3\", \"after\": \"step2\"},\n    {\"before\": \"step3\", \"after\": \"step5\"}\n  ],\n  \"final_answer_seconds\": 14400\n}",
+  "gold_seconds": 14400,
+  "pred_seconds": 14400,
+  "correct": true,
+  "user_prompt": "To conduct a self analysis, here are the steps needed.\nStep 1. Review past journals and personal records (2 hours)\nStep 2. Create a list of core values and beliefs (45 minutes)\nStep 3. Purchase a dedicated reflection notebook (15 minutes)\nStep 4. Write a summary report of personal strengths and weaknesses (1 hour)\nStep 5. Schedule a follow-up session with a life coach (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 3 must precede Step 2.\nStep 3 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to conduct a self analysis?\n\nReturn ONLY valid JSON with this exact schema:\n{\n  \"actions\": [\n    {\"id\": \"step1\", \"duration\": 300},\n    {\"id\": \"step2\", \"duration\": 900}\n  ],\n  \"dependencies\": [\n    {\"before\": \"step1\", \"after\": \"step2\"}\n  ],\n  \"final_answer_seconds\": 1200\n}\n\nRules:\n- Include one action for every listed step.\n- Use ids exactly \"step1\", \"step2\", ..., matching the original step numbers.\n- Convert every duration to seconds.\n- Include every direct ordering constraint as a dependency.\n- \"before\" is the step that must finish first; \"after\" is the step that starts later.\n- final_answer_seconds is your computed shortest possible completion time under infinite resources.\n- Do not include markdown, prose, or explanation.\n",
+  "structured_output": true,
+  "planner_json": {
+    "actions": [
+      {
+        "id": "step1",
+        "duration": 7200
+      },
+      {
+        "id": "step2",
+        "duration": 2700
+      },
+      {
+        "id": "step3",
+        "duration": 900
+      },
+      {
+        "id": "step4",
+        "duration": 3600
+      },
+      {
+        "id": "step5",
+        "duration": 600
+      }
+    ],
+    "dependencies": [
+      {
+        "before": "step1",
+        "after": "step4"
+      },
+      {
+        "before": "step2",
+        "after": "step1"
+      },
+      {
+        "before": "step3",
+        "after": "step2"
+      },
+      {
+        "before": "step3",
+        "after": "step5"
+      }
+    ],
+    "final_answer_seconds": 14400
+  }
+}

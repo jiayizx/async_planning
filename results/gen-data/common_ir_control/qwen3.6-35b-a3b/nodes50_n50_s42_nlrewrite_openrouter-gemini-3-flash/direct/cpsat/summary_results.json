@@ -1,0 +1,15 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "qwen3.6-35b-a3b",
+  "solver": "cp-sat",
+  "makespan_accuracy": 0.98,
+  "plan_accuracy": 0.98,
+  "num_correct": 49,
+  "num_plan_correct": 49,
+  "num_syntax_errors": 0,
+  "num_semantic_errors": 1,
+  "num_solver_errors": 0,
+  "num_data_points": 50,
+  "plan_valid_rate": 1.0,
+  "num_plan_valid": 49
+}

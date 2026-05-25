@@ -1,0 +1,68 @@
+Number of literals: 82
+Constructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+Post filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+[01;34mNo analytic limits found, not considering limit effects of goal-only operators[00m
+23% of the ground temporal actions in this problem are compression-safe
+Initial heuristic = 16.000, admissible cost estimate 0.000
+b (15.000 | 1.000)
+Resorting to best-first search
+Running WA* with W = 5.000, not restarting with goal states
+b (15.000 | 1.000)b (14.000 | 1.002)b (13.000 | 5.003)b (12.000 | 6.004)b (11.000 | 6.005)b (11.000 | 6.004)b (10.000 | 6.005)b (9.000 | 8.006)b (6.000 | 9.007)b (5.000 | 9.007)b (4.000 | 15.010)b (3.000 | 15.011)b (3.000 | 15.011)b (2.000 | 15.011)b (1.000 | 16.011)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 16.012
+; States evaluated so far: 679
+; States pruned based on pre-heuristic cost lower bound: 0
+; Time 0.49
+0.000: (move robot_1 table_1 table_3)  [1.000]
+0.001: (pick-up robot_1 lettuce_1 table_3)  [1.000]
+0.002: (move robot_1 table_3 table_2)  [1.000]
+0.003: (move robot_1 table_2 board_1)  [1.000]
+1.002: (place robot_1 lettuce_1 board_1)  [1.000]
+2.003: (cut robot_1 lettuce_1 board_1)  [3.000]
+5.003: (move robot_1 board_1 table_2)  [1.000]
+5.004: (pick-up robot_1 chicken_1 table_2)  [1.000]
+5.005: (move robot_1 table_2 stove_1)  [1.000]
+5.006: (move robot_1 stove_1 table_1)  [1.000]
+6.005: (stack robot_1 chicken_1 bread_2 table_1)  [1.000]
+6.006: (move robot_1 table_1 board_1)  [1.000]
+7.006: (pick-up robot_1 lettuce_1 board_1)  [1.000]
+7.007: (move robot_1 board_1 table_1)  [1.000]
+8.007: (stack robot_1 lettuce_1 bread_1 table_1)  [1.000]
+9.008: (unstack robot_1 chicken_1 bread_2 table_1)  [1.000]
+9.009: (move robot_1 table_1 stove_1)  [1.000]
+10.009: (place robot_1 chicken_1 stove_1)  [1.000]
+11.010: (cook robot_1 chicken_1 stove_1)  [3.000]
+14.011: (pick-up robot_1 chicken_1 stove_1)  [1.000]
+14.012: (move robot_1 stove_1 table_1)  [1.000]
+15.012: (stack robot_1 chicken_1 lettuce_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 16.012
+b (0.000 | 16.012)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 14.010
+; States evaluated so far: 1408
+; States pruned based on pre-heuristic cost lower bound: 52
+; Time 1.02
+0.000: (move robot_1 table_1 table_3)  [1.000]
+0.001: (pick-up robot_1 lettuce_1 table_3)  [1.000]
+0.002: (move robot_1 table_3 table_2)  [1.000]
+0.003: (move robot_1 table_2 board_1)  [1.000]
+1.002: (place robot_1 lettuce_1 board_1)  [1.000]
+2.003: (cut robot_1 lettuce_1 board_1)  [3.000]
+5.003: (move robot_1 board_1 table_2)  [1.000]
+5.004: (pick-up robot_1 chicken_1 table_2)  [1.000]
+5.005: (move robot_1 table_2 stove_1)  [1.000]
+6.005: (place robot_1 chicken_1 stove_1)  [1.000]
+7.006: (cook robot_1 chicken_1 stove_1)  [3.000]
+10.007: (pick-up robot_1 chicken_1 stove_1)  [1.000]
+10.008: (move robot_1 stove_1 table_1)  [1.000]
+11.008: (stack robot_1 chicken_1 bread_1 table_1)  [1.000]
+11.009: (move robot_1 table_1 board_1)  [1.000]
+12.009: (pick-up robot_1 lettuce_1 board_1)  [1.000]
+12.010: (move robot_1 board_1 table_1)  [1.000]
+13.010: (stack robot_1 lettuce_1 chicken_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 14.010
+b (0.000 | 14.010)

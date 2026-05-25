@@ -9,6 +9,7 @@
 #   --max-examples N     Max examples per file (0 = all)             [500]
 #   --icl-examples N     Number of ICL (few-shot) examples           [0]
 #   --cot BOOL           Enable chain-of-thought                     [false]
+#   --structured BOOL    Output structured Planner JSON              [false]
 #   --num-workers N      Parallel workers                            [4]
 #   --temperature F      Sampling temperature                        [0.0]
 #   --max-tokens N       Max output tokens                           [2048]
@@ -43,6 +44,7 @@ SAVE_DIR="results/gen-data-modified/baselines"
 MAX_EXAMPLES=400
 ICL_EXAMPLES=0
 COT=true
+STRUCTURED_OUTPUT=true
 NUM_WORKERS=16 # how many concurrent LLM API calls are made at once
 TEMPERATURE=0.0
 MAX_TOKENS=4096
@@ -58,6 +60,7 @@ while [[ $# -gt 0 ]]; do
         --max-examples) MAX_EXAMPLES="$2"; shift 2 ;;
         --icl-examples) ICL_EXAMPLES="$2"; shift 2 ;;
         --cot)          COT="$2";          shift 2 ;;
+        --structured)   STRUCTURED_OUTPUT="$2"; shift 2 ;;
         --num-workers)  NUM_WORKERS="$2";  shift 2 ;;
         --temperature)  TEMPERATURE="$2";  shift 2 ;;
         --max-tokens)   MAX_TOKENS="$2";   shift 2 ;;
@@ -78,6 +81,7 @@ fi
 SAFE_MODEL="${MODEL//\//_}"
 SAFE_MODEL="${SAFE_MODEL//:/_}"
 COT_TAG=$([ "$COT" = "true" ] && echo "cot" || echo "no_cot")
+STRUCTURED_TAG=$([ "$STRUCTURED_OUTPUT" = "true" ] && echo "_structured" || echo "")
 ICL_TAG=$([ "$ICL_EXAMPLES" -gt 0 ] && echo "_icl_${ICL_EXAMPLES}" || echo "")
 
 echo "============================================================"
@@ -88,6 +92,7 @@ echo "  model        : $MODEL"
 echo "  save-dir     : $SAVE_DIR"
 echo "  max-examples : $MAX_EXAMPLES"
 echo "  cot          : $COT"
+echo "  structured   : $STRUCTURED_OUTPUT"
 echo "  icl-examples : $ICL_EXAMPLES"
 echo "  files found  : ${#FILES[@]}"
 for f in "${FILES[@]}"; do echo "    $f"; done
@@ -104,7 +109,7 @@ for DATA_PATH in "${FILES[@]}"; do
 
     echo "────────────────────────────────────────────────────────────"
     echo " File   : $DATA_PATH"
-    echo " Saving : ${SAVE_PATH}${COT_TAG}${ICL_TAG}"
+    echo " Saving : ${SAVE_PATH}${COT_TAG}${STRUCTURED_TAG}${ICL_TAG}"
     echo "────────────────────────────────────────────────────────────"
 
     mkdir -p "$SAVE_PATH"
@@ -118,8 +123,9 @@ for DATA_PATH in "${FILES[@]}"; do
         --save-path       "$SAVE_PATH" \
         --icl-examples    "$ICL_EXAMPLES" \
         --cot             "$COT" \
+        --structured-output "$STRUCTURED_OUTPUT" \
         --num-workers     "$NUM_WORKERS"; then
-        echo "  Done → ${SAVE_PATH}${COT_TAG}${ICL_TAG}"
+        echo "  Done → ${SAVE_PATH}${COT_TAG}${STRUCTURED_TAG}${ICL_TAG}"
     else
         echo "  FAILED: $DATA_PATH" >&2
         FAILED+=("$DATA_PATH")

@@ -1,0 +1,16 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "openai/gpt-5-mini",
+  "makespan_accuracy": 0.4,
+  "plan_accuracy": 0.32,
+  "num_correct": 20,
+  "num_plan_correct": 16,
+  "num_syntax_errors": 15,
+  "num_semantic_errors": 15,
+  "num_data_points": 50,
+  "plan_valid_rate": 0.8,
+  "num_plan_valid": 16,
+  "num_correct_and_valid": 16,
+  "num_correct_but_invalid": 4,
+  "num_incorrect_but_valid": 0
+}

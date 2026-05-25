@@ -1,0 +1,12 @@
+{
+  "benchmark": "asynchow",
+  "model_name": "deepseek/deepseek-v4-flash",
+  "icl_examples": 0,
+  "cot": true,
+  "structured_output": true,
+  "makespan_accuracy": 0.965625,
+  "plan_accuracy": 0.490625,
+  "num_correct": 309,
+  "num_plan_correct": 157,
+  "num_data_points": 320
+}

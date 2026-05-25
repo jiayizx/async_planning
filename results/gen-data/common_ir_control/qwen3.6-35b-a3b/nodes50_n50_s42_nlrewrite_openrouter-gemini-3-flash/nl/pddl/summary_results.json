@@ -1,0 +1,17 @@
+{
+  "benchmark": "AsyncPlan-XXL",
+  "data_path": "data/async_planning/nodes50_n50_s42_nlrewrite_openrouter-gemini-3-flash.json",
+  "method": "nl_ir_to_pddl",
+  "model_name": "qwen3.6-35b-a3b",
+  "ir_source": "nl",
+  "target": "pddl",
+  "makespan_accuracy": 0.9,
+  "plan_accuracy": 0.62,
+  "num_correct": 45,
+  "num_data_points": 50,
+  "num_ir_errors": 0,
+  "num_solver_errors": 4,
+  "num_semantic_errors": 1,
+  "num_plan_valid": 31,
+  "plan_valid_rate": 0.6739130435
+}

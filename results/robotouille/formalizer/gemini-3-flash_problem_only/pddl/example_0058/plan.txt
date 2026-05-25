@@ -1,3 +1,0 @@
-0.000: (pick-up robot_1 potato_1 fryer_1) [0.001]
-0.001: (move robot_1 fryer_1 table_1) [0.001]
-0.002: (place robot_1 potato_1 table_1) [0.001]

@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Configuration ────────────────────────────────────────────────────────
-MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 # MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
 TEMPERATURE="${TEMPERATURE:-0.0}"
 MAX_TOKENS="${MAX_TOKENS:-32768}"
@@ -31,6 +31,7 @@ SOUP_ONLY="${SOUP_ONLY:-false}"
 EFFECT_GOAL="${EFFECT_GOAL:-f}" # true = parameter-less constraints + effect goal; false = parameterized constraints + initial state goal
 NUM_SHOTS="${NUM_SHOTS:-0}"     # few-shot examples in system prompt (problem-only mode only)
 INPUT_MODE="${INPUT_MODE:-json}" # json = annotated JSON + domain PDDL; nl = natural language + domain PDDL; robo = io-cot prompt + annotated JSON (no domain PDDL)
+PDDL_REPAIRS="${PDDL_REPAIRS:-false}" # false = raw formalizer; true = Robotouille-specific repair ablation
 # Solver is determined automatically by GENERATE_DOMAIN
 if [ "${GENERATE_DOMAIN}" = "true" ]; then
     SOLVER="optic"
@@ -53,6 +54,11 @@ else
 fi
 # Append input mode suffix
 SAVE_PATH="${SAVE_PATH}_${INPUT_MODE}"
+if [ "${PDDL_REPAIRS}" = "true" ]; then
+    SAVE_PATH="${SAVE_PATH}_repair"
+else
+    SAVE_PATH="${SAVE_PATH}_raw"
+fi
 if [ "${BASE_LAYOUT}" = "true" ]; then
     SAVE_PATH="${SAVE_PATH}_base"
 fi
@@ -63,6 +69,9 @@ if [ "${GENERATE_DOMAIN}" = "true" ]; then
 fi
 if [ "${EFFECT_GOAL}" = "true" ]; then
     EXTRA_ARGS="${EXTRA_ARGS} --effect-goal"
+fi
+if [ "${PDDL_REPAIRS}" = "true" ]; then
+    EXTRA_ARGS="${EXTRA_ARGS} --pddl-repairs"
 fi
 if [ "${SOUP_ONLY}" = "true" ]; then
     EXTRA_ARGS="${EXTRA_ARGS} --exclude-envs 3.1_ 0_ 1_ 2_ 3_ 4_"

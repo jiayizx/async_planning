@@ -1,0 +1,82 @@
+Number of literals: 70
+Constructing lookup tables: [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+Post filtering unreachable actions:  [10%] [20%] [30%] [40%] [50%] [60%] [70%] [80%] [90%] [100%]
+[01;34mNo analytic limits found, not considering limit effects of goal-only operators[00m
+20% of the ground temporal actions in this problem are compression-safe
+Initial heuristic = 15.000, admissible cost estimate 0.000
+b (13.000 | 1.000)b (12.000 | 1.002)b (11.000 | 1.002)b (9.000 | 2.001)b (8.000 | 3.004)b (7.000 | 3.004)b (6.000 | 8.006)b (3.000 | 9.007)
+Resorting to best-first search
+Running WA* with W = 5.000, not restarting with goal states
+b (12.000 | 1.000)b (11.000 | 1.002)b (11.000 | 1.001)b (10.000 | 1.002)b (9.000 | 3.004)b (9.000 | 3.003)b (8.000 | 3.004)b (6.000 | 4.003)b (3.000 | 9.007)b (2.000 | 10.008)b (1.000 | 11.008)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 13.011
+; States evaluated so far: 2666
+; States pruned based on pre-heuristic cost lower bound: 0
+; Time 1.60
+0.000: (move robot_1 table_1 table_2)  [1.000]
+0.001: (pick-up robot_1 chicken_1 table_2)  [1.000]
+0.002: (move robot_1 table_2 table_3)  [1.000]
+0.003: (move robot_1 table_3 stove_1)  [1.000]
+1.002: (place robot_1 chicken_1 stove_1)  [1.000]
+2.003: (cook robot_1 chicken_1 stove_1)  [3.000]
+2.004: (move robot_1 stove_1 table_1)  [1.000]
+2.005: (unstack robot_1 bread_2 bread_1 table_1)  [1.000]
+2.006: (move robot_1 table_1 table_3)  [1.000]
+3.006: (stack robot_1 bread_2 cheese_1 table_3)  [1.000]
+3.007: (move robot_1 table_3 stove_1)  [1.000]
+5.004: (pick-up robot_1 chicken_1 stove_1)  [1.000]
+5.005: (move robot_1 stove_1 table_1)  [1.000]
+6.005: (stack robot_1 chicken_1 bread_1 table_1)  [1.000]
+6.006: (move robot_1 table_1 table_3)  [1.000]
+7.006: (unstack robot_1 bread_2 cheese_1 table_3)  [1.000]
+7.007: (move robot_1 table_3 stove_1)  [1.000]
+8.007: (place robot_1 bread_2 stove_1)  [1.000]
+8.008: (move robot_1 stove_1 table_3)  [1.000]
+9.008: (pick-up robot_1 cheese_1 table_3)  [1.000]
+9.009: (move robot_1 table_3 table_2)  [1.000]
+9.010: (move robot_1 table_2 table_1)  [1.000]
+10.009: (stack robot_1 cheese_1 chicken_1 table_1)  [1.000]
+10.010: (move robot_1 table_1 stove_1)  [1.000]
+11.010: (pick-up robot_1 bread_2 stove_1)  [1.000]
+11.011: (move robot_1 stove_1 table_1)  [1.000]
+12.011: (stack robot_1 bread_2 cheese_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 13.011
+b (0.000 | 13.011)(G)
+; No metric specified - using makespan
+
+; Plan found with metric 12.014
+; States evaluated so far: 4178
+; States pruned based on pre-heuristic cost lower bound: 16
+; Time 2.56
+0.000: (move robot_1 table_1 table_2)  [1.000]
+0.001: (pick-up robot_1 chicken_1 table_2)  [1.000]
+0.002: (move robot_1 table_2 table_3)  [1.000]
+0.003: (move robot_1 table_3 stove_1)  [1.000]
+1.002: (place robot_1 chicken_1 stove_1)  [1.000]
+2.003: (cook robot_1 chicken_1 stove_1)  [3.000]
+2.004: (move robot_1 stove_1 table_1)  [1.000]
+2.005: (unstack robot_1 bread_2 bread_1 table_1)  [1.000]
+2.006: (move robot_1 table_1 stove_1)  [1.000]
+3.006: (stack robot_1 bread_2 chicken_1 stove_1)  [1.000]
+3.007: (move robot_1 stove_1 table_3)  [1.000]
+4.007: (pick-up robot_1 cheese_1 table_3)  [1.000]
+4.008: (move robot_1 table_3 table_2)  [1.000]
+4.009: (move robot_1 table_2 table_1)  [1.000]
+5.008: (stack robot_1 cheese_1 bread_1 table_1)  [1.000]
+5.009: (move robot_1 table_1 stove_1)  [1.000]
+6.009: (unstack robot_1 bread_2 chicken_1 stove_1)  [1.000]
+6.010: (move robot_1 stove_1 table_2)  [1.000]
+7.010: (place robot_1 bread_2 table_2)  [1.000]
+7.011: (move robot_1 table_2 stove_1)  [1.000]
+8.011: (pick-up robot_1 chicken_1 stove_1)  [1.000]
+8.012: (move robot_1 stove_1 table_1)  [1.000]
+9.012: (stack robot_1 chicken_1 cheese_1 table_1)  [1.000]
+9.013: (move robot_1 table_1 table_2)  [1.000]
+10.013: (pick-up robot_1 bread_2 table_2)  [1.000]
+10.014: (move robot_1 table_2 table_1)  [1.000]
+11.014: (stack robot_1 bread_2 chicken_1 table_1)  [1.000]
+
+ * All goal deadlines now no later than 12.014
+b (0.000 | 12.014)

@@ -1,0 +1,17 @@
+{
+  "benchmark": "AsyncPlan-XXL",
+  "data_path": "data/async_planning/nodes30_n50_s42_nlrewrite_openrouter-gemini-3-flash.json",
+  "method": "gold_ir_to_cpsat",
+  "model_name": null,
+  "ir_source": "gold",
+  "target": "cpsat",
+  "makespan_accuracy": 1.0,
+  "plan_accuracy": 1.0,
+  "num_correct": 50,
+  "num_data_points": 50,
+  "num_ir_errors": 0,
+  "num_solver_errors": 0,
+  "num_semantic_errors": 0,
+  "num_plan_valid": 50,
+  "plan_valid_rate": 1.0
+}

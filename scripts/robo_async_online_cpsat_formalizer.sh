@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MODEL_NAME="${MODEL_NAME:-openai/gpt-5-mini}"
+MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 TASKS_DIR="${TASKS_DIR:-data/robo_async_online/episodes}"
 RESULTS_ROOT="${RESULTS_ROOT:-results/robo_async_online}"

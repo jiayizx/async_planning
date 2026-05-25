@@ -1,9 +1,0 @@
-{
-  "benchmark": "asynchow",
-  "model_name": "deepseek/deepseek-v4-flash",
-  "icl_examples": 0,
-  "cot": true,
-  "accuracy": 0.75625,
-  "num_correct": 242,
-  "num_data_points": 320
-}

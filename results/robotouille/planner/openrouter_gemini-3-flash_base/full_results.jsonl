@@ -1,0 +1,3409 @@
+{
+  "id": "0_cheese_chicken_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 5,
+    "height": 5,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 1
+      },
+      {
+        "name": "chicken",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "cheese",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 2,
+        "direction": [
+          0,
+          -1
+        ]
+      }
+    ],
+    "goal_description": "Prepare a cheese chicken sandwich on a table",
+    "goal": [
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          3,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "cheese",
+          "table"
+        ],
+        "ids": [
+          4,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          5,
+          2
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          5
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 table_2",
+    "pick-up robot_1 chicken_1 table_2",
+    "move robot_1 table_2 stove_1",
+    "place robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "pick-up robot_1 chicken_1 stove_1",
+    "move robot_1 stove_1 table_3",
+    "place robot_1 chicken_1 table_3",
+    "move robot_1 table_3 table_1",
+    "unstack robot_1 bread_2 bread_1 table_1",
+    "move robot_1 table_1 table_3",
+    "stack robot_1 bread_2 chicken_1 table_3",
+    "move robot_1 table_3 table_4",
+    "pick-up robot_1 cheese_1 table_4",
+    "move robot_1 table_4 table_3",
+    "stack robot_1 cheese_1 bread_2 table_3",
+    "move robot_1 table_3 table_1",
+    "pick-up robot_1 bread_1 table_1",
+    "move robot_1 table_1 table_3",
+    "stack robot_1 bread_1 cheese_1 table_3"
+  ],
+  "plan_length": 22,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 22,
+    "optimal_steps": 21,
+    "steps_ratio": 1.0476190476190477,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 table_2): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 5 (cook robot_1 chicken_1 stove_1): env action 'cook' with args ['robot1', 'chicken1', 'stove1']: preconditions not met: NOT (iscooking chicken1)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 6,
+    "pddl_goal_count": 36,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "table3",
+        "stove1"
+      ],
+      "item": [
+        "bread1",
+        "bread2",
+        "chicken1",
+        "cheese1"
+      ],
+      "player": [
+        "robot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 4,
+      "items": 4,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 9,
+      "pick-up": 4,
+      "place": 2,
+      "cook": 3,
+      "unstack": 1,
+      "stack": 3
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 table_2\",\n        \"pick-up robot_1 chicken_1 table_2\",\n        \"move robot_1 table_2 stove_1\",\n        \"place robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"move robot_1 stove_1 table_3\",\n        \"place robot_1 chicken_1 table_3\",\n        \"move robot_1 table_3 table_1\",\n        \"unstack robot_1 bread_2 bread_1 table_1\",\n        \"move robot_1 table_1 table_3\",\n        \"stack robot_1 bread_2 chicken_1 table_3\",\n        \"move robot_1 table_3 table_4\",\n        \"pick-up robot_1 cheese_1 table_4\",\n        \"move robot_1 table_4 table_3\",\n        \"stack robot_1 cheese_1 bread_2 table_3\",\n        \"move robot_1 table_3 table_1\",\n        \"pick-up robot_1 bread_1 table_1\",\n        \"move robot_1 table_1 table_3\",\n        \"stack robot_1 bread_1 cheese_1 table_3\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 5,\n  \"height\": 5,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"cheese\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 2,\n      \"direction\": [\n        0,\n        -1\n      ]\n    }\n  ],\n  \"goal_description\": \"Prepare a cheese chicken sandwich on a table\",\n  \"goal\": [\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        3,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"cheese\",\n        \"table\"\n      ],\n      \"ids\": [\n        4,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        5\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "1_lettuce_chicken_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 5,
+    "height": 5,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 1
+      },
+      {
+        "name": "chicken",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "lettuce",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 2,
+        "direction": [
+          0,
+          -1
+        ]
+      }
+    ],
+    "goal_description": "Prepare a lettuce chicken sandwich on a table",
+    "goal": [
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "lettuce"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "lettuce",
+          "table"
+        ],
+        "ids": [
+          3,
+          2
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          4,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          5,
+          2
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          5
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 table_2",
+    "pick-up robot_1 chicken_1 table_2",
+    "move robot_1 table_2 stove_1",
+    "place robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "move robot_1 stove_1 table_3",
+    "pick-up robot_1 lettuce_1 table_3",
+    "move robot_1 table_3 board_1",
+    "place robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_1",
+    "unstack robot_1 bread_2 bread_1 table_1",
+    "move robot_1 table_1 table_2",
+    "place robot_1 bread_2 table_2",
+    "move robot_1 table_2 stove_1",
+    "pick-up robot_1 chicken_1 stove_1",
+    "move robot_1 stove_1 table_2",
+    "stack robot_1 chicken_1 bread_2 table_2",
+    "move robot_1 table_2 board_1",
+    "pick-up robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_2",
+    "stack robot_1 lettuce_1 chicken_1 table_2",
+    "move robot_1 table_2 table_1",
+    "pick-up robot_1 bread_1 table_1",
+    "move robot_1 table_1 table_2",
+    "stack robot_1 bread_1 lettuce_1 table_2"
+  ],
+  "plan_length": 30,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 30,
+    "optimal_steps": 27,
+    "steps_ratio": 1.1111111111111112,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 table_2): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 5 (cook robot_1 chicken_1 stove_1): env action 'cook' with args ['robot1', 'chicken1', 'stove1']: preconditions not met: NOT (iscooking chicken1)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 7,
+    "pddl_goal_count": 42,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "board1",
+        "table3",
+        "stove1"
+      ],
+      "item": [
+        "bread1",
+        "bread2",
+        "chicken1",
+        "lettuce1"
+      ],
+      "player": [
+        "robot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 5,
+      "items": 4,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 12,
+      "pick-up": 5,
+      "place": 3,
+      "cook": 3,
+      "cut": 3,
+      "unstack": 1,
+      "stack": 3
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 table_2\",\n        \"pick-up robot_1 chicken_1 table_2\",\n        \"move robot_1 table_2 stove_1\",\n        \"place robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"move robot_1 stove_1 table_3\",\n        \"pick-up robot_1 lettuce_1 table_3\",\n        \"move robot_1 table_3 board_1\",\n        \"place robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_1\",\n        \"unstack robot_1 bread_2 bread_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"place robot_1 bread_2 table_2\",\n        \"move robot_1 table_2 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"move robot_1 stove_1 table_2\",\n        \"stack robot_1 chicken_1 bread_2 table_2\",\n        \"move robot_1 table_2 board_1\",\n        \"pick-up robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_2\",\n        \"stack robot_1 lettuce_1 chicken_1 table_2\",\n        \"move robot_1 table_2 table_1\",\n        \"pick-up robot_1 bread_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"stack robot_1 bread_1 lettuce_1 table_2\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 5,\n  \"height\": 5,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"lettuce\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 2,\n      \"direction\": [\n        0,\n        -1\n      ]\n    }\n  ],\n  \"goal_description\": \"Prepare a lettuce chicken sandwich on a table\",\n  \"goal\": [\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"lettuce\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"lettuce\",\n        \"table\"\n      ],\n      \"ids\": [\n        3,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        4,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        5\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "2_lettuce_tomato_fried_chicken_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 5,
+    "height": 5,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "fryer",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 1,
+        "stack-level": 1
+      },
+      {
+        "name": "chicken",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "isfryable"
+        ]
+      },
+      {
+        "name": "lettuce",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "tomato",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 2,
+        "direction": [
+          0,
+          -1
+        ]
+      }
+    ],
+    "goal_description": "Prepare a fried chicken sandwich with lettuce and tomato on a table",
+    "goal": [
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "lettuce"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "lettuce",
+          "table"
+        ],
+        "ids": [
+          3,
+          2
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "tomato"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "tomato",
+          "table"
+        ],
+        "ids": [
+          4,
+          2
+        ]
+      },
+      {
+        "predicate": "isfried",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          5
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          5,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          6,
+          2
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          6
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 table_2",
+    "pick-up robot_1 chicken_1 table_2",
+    "move robot_1 table_2 fryer_1",
+    "place robot_1 chicken_1 fryer_1",
+    "fry robot_1 chicken_1 fryer_1",
+    "fry robot_1 chicken_1 fryer_1",
+    "fry robot_1 chicken_1 fryer_1",
+    "move robot_1 fryer_1 table_3",
+    "pick-up robot_1 lettuce_1 table_3",
+    "move robot_1 table_3 board_1",
+    "place robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_4",
+    "pick-up robot_1 tomato_1 table_4",
+    "move robot_1 table_4 board_1",
+    "pick-up robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_2",
+    "place robot_1 lettuce_1 table_2",
+    "move robot_1 table_2 board_1",
+    "place robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "pick-up robot_1 tomato_1 board_1",
+    "move robot_1 board_1 table_2",
+    "stack robot_1 tomato_1 lettuce_1 table_2",
+    "move robot_1 table_2 fryer_1",
+    "pick-up robot_1 chicken_1 fryer_1",
+    "move robot_1 fryer_1 table_2",
+    "stack robot_1 chicken_1 tomato_1 table_2",
+    "move robot_1 table_2 table_1",
+    "unstack robot_1 bread_2 bread_1 table_1",
+    "move robot_1 table_1 table_2",
+    "stack robot_1 bread_2 chicken_1 table_2",
+    "move robot_1 table_2 table_1",
+    "pick-up robot_1 bread_1 table_1",
+    "move robot_1 table_1 table_2",
+    "stack robot_1 bread_1 bread_2 table_2"
+  ],
+  "plan_length": 40,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 40,
+    "optimal_steps": 37,
+    "steps_ratio": 1.0810810810810811,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 table_2): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 17 (pick-up robot_1 lettuce_1 board_1): env action 'pick-up-item' with args ['robot1', 'lettuce1', 'board1']: preconditions not met: (nothing robot1)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 9,
+    "pddl_goal_count": 72,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "board1",
+        "table3",
+        "fryer1",
+        "table4"
+      ],
+      "item": [
+        "bread1",
+        "bread2",
+        "chicken1",
+        "lettuce1",
+        "tomato1"
+      ],
+      "player": [
+        "robot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 6,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 15,
+      "pick-up": 7,
+      "place": 4,
+      "fry": 3,
+      "cut": 6,
+      "stack": 4,
+      "unstack": 1
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 table_2\",\n        \"pick-up robot_1 chicken_1 table_2\",\n        \"move robot_1 table_2 fryer_1\",\n        \"place robot_1 chicken_1 fryer_1\",\n        \"fry robot_1 chicken_1 fryer_1\",\n        \"fry robot_1 chicken_1 fryer_1\",\n        \"fry robot_1 chicken_1 fryer_1\",\n        \"move robot_1 fryer_1 table_3\",\n        \"pick-up robot_1 lettuce_1 table_3\",\n        \"move robot_1 table_3 board_1\",\n        \"place robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_4\",\n        \"pick-up robot_1 tomato_1 table_4\",\n        \"move robot_1 table_4 board_1\",\n        \"pick-up robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_2\",\n        \"place robot_1 lettuce_1 table_2\",\n        \"move robot_1 table_2 board_1\",\n        \"place robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"pick-up robot_1 tomato_1 board_1\",\n        \"move robot_1 board_1 table_2\",\n        \"stack robot_1 tomato_1 lettuce_1 table_2\",\n        \"move robot_1 table_2 fryer_1\",\n        \"pick-up robot_1 chicken_1 fryer_1\",\n        \"move robot_1 fryer_1 table_2\",\n        \"stack robot_1 chicken_1 tomato_1 table_2\",\n        \"move robot_1 table_2 table_1\",\n        \"unstack robot_1 bread_2 bread_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"stack robot_1 bread_2 chicken_1 table_2\",\n        \"move robot_1 table_2 table_1\",\n        \"pick-up robot_1 bread_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"stack robot_1 bread_1 bread_2 table_2\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 5,\n  \"height\": 5,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"fryer\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"isfryable\"\n      ]\n    },\n    {\n      \"name\": \"lettuce\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"tomato\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 2,\n      \"direction\": [\n        0,\n        -1\n      ]\n    }\n  ],\n  \"goal_description\": \"Prepare a fried chicken sandwich with lettuce and tomato on a table\",\n  \"goal\": [\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"lettuce\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"lettuce\",\n        \"table\"\n      ],\n      \"ids\": [\n        3,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"tomato\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"tomato\",\n        \"table\"\n      ],\n      \"ids\": [\n        4,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"isfried\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        5\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        6,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        6\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "3_tomato_burger_and_fries",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 5,
+    "height": 5,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      },
+      {
+        "name": "fryer",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 4,
+        "y": 1
+      }
+    ],
+    "items": [
+      {
+        "name": "bottombun",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0
+      },
+      {
+        "name": "topbun",
+        "x": 0,
+        "y": 1,
+        "stack-level": 1
+      },
+      {
+        "name": "potato",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "tomato",
+        "x": 4,
+        "y": 1,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "patty",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 2,
+        "direction": [
+          0,
+          -1
+        ]
+      }
+    ],
+    "goal_description": "Prepare a tomato burger and fries on separate tables",
+    "goal": [
+      {
+        "predicate": "item_on",
+        "args": [
+          "bottombun",
+          "table"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "patty"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "patty",
+          "table"
+        ],
+        "ids": [
+          3,
+          2
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "tomato"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "tomato",
+          "table"
+        ],
+        "ids": [
+          4,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "topbun",
+          "table"
+        ],
+        "ids": [
+          5,
+          2
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "topbun"
+        ],
+        "ids": [
+          5
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "potato"
+        ],
+        "ids": [
+          6
+        ]
+      },
+      {
+        "predicate": "isfried",
+        "args": [
+          "potato"
+        ],
+        "ids": [
+          6
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "potato",
+          "table"
+        ],
+        "ids": [
+          6,
+          7
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 board_1",
+    "move robot_1 board_1 table_4",
+    "pick-up robot_1 tomato_1 table_4",
+    "move robot_1 table_4 board_1",
+    "place robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "cut robot_1 tomato_1 board_1",
+    "move robot_1 board_1 table_3",
+    "pick-up robot_1 patty_1 table_3",
+    "move robot_1 table_3 stove_1",
+    "place robot_1 patty_1 stove_1",
+    "cook robot_1 patty_1 stove_1",
+    "cook robot_1 patty_1 stove_1",
+    "cook robot_1 patty_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "unstack robot_1 topbun_1 bottombun_1 table_1",
+    "move robot_1 table_1 table_2",
+    "place robot_1 topbun_1 table_2",
+    "move robot_1 table_2 table_1",
+    "pick-up robot_1 bottombun_1 table_1",
+    "move robot_1 table_1 table_2",
+    "place robot_1 bottombun_1 table_2",
+    "move robot_1 table_2 stove_1",
+    "pick-up robot_1 patty_1 stove_1",
+    "move robot_1 stove_1 table_2",
+    "stack robot_1 patty_1 bottombun_1 table_2",
+    "move robot_1 table_2 board_1",
+    "pick-up robot_1 tomato_1 board_1",
+    "move robot_1 board_1 table_2",
+    "stack robot_1 tomato_1 patty_1 table_2",
+    "noop",
+    "noop",
+    "pick-up robot_1 topbun_1 table_2",
+    "stack robot_1 topbun_1 tomato_1 table_2",
+    "noop",
+    "pick-up robot_1 potato_1 table_2",
+    "move robot_1 table_2 board_1",
+    "place robot_1 potato_1 board_1",
+    "cut robot_1 potato_1 board_1",
+    "cut robot_1 potato_1 board_1",
+    "cut robot_1 potato_1 board_1",
+    "pick-up robot_1 potato_1 board_1",
+    "move robot_1 board_1 fryer_1",
+    "place robot_1 potato_1 fryer_1",
+    "fry robot_1 potato_1 fryer_1",
+    "fry robot_1 potato_1 fryer_1",
+    "fry robot_1 potato_1 fryer_1",
+    "pick-up robot_1 potato_1 fryer_1",
+    "move robot_1 fryer_1 table_3",
+    "place robot_1 potato_1 table_3"
+  ],
+  "plan_length": 51,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 51,
+    "optimal_steps": 42,
+    "steps_ratio": 1.2142857142857142,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 board_1): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 13 (cook robot_1 patty_1 stove_1): env action 'cook' with args ['robot1', 'patty1', 'stove1']: preconditions not met: NOT (iscooking patty1)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 10,
+    "pddl_goal_count": 120,
+    "object_count": {
+      "station": [
+        "table1",
+        "stove1",
+        "board1",
+        "table2",
+        "fryer1",
+        "table3",
+        "table4"
+      ],
+      "item": [
+        "bottombun1",
+        "topbun1",
+        "potato1",
+        "patty1",
+        "tomato1"
+      ],
+      "player": [
+        "robot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 7,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 16,
+      "pick-up": 9,
+      "place": 7,
+      "cut": 6,
+      "cook": 3,
+      "unstack": 1,
+      "stack": 3,
+      "noop": 3,
+      "fry": 3
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 board_1\",\n        \"move robot_1 board_1 table_4\",\n        \"pick-up robot_1 tomato_1 table_4\",\n        \"move robot_1 table_4 board_1\",\n        \"place robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"cut robot_1 tomato_1 board_1\",\n        \"move robot_1 board_1 table_3\",\n        \"pick-up robot_1 patty_1 table_3\",\n        \"move robot_1 table_3 stove_1\",\n        \"place robot_1 patty_1 stove_1\",\n        \"cook robot_1 patty_1 stove_1\",\n        \"cook robot_1 patty_1 stove_1\",\n        \"cook robot_1 patty_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"unstack robot_1 topbun_1 bottombun_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"place robot_1 topbun_1 table_2\",\n        \"move robot_1 table_2 table_1\",\n        \"pick-up robot_1 bottombun_1 table_1\",\n        \"move robot_1 table_1 table_2\",\n        \"place robot_1 bottombun_1 table_2\",\n        \"move robot_1 table_2 stove_1\",\n        \"pick-up robot_1 patty_1 stove_1\",\n        \"move robot_1 stove_1 table_2\",\n        \"stack robot_1 patty_1 bottombun_1 table_2\",\n        \"move robot_1 table_2 board_1\",\n        \"pick-up robot_1 tomato_1 board_1\",\n        \"move robot_1 board_1 table_2\",\n        \"stack robot_1 tomato_1 patty_1 table_2\",\n        \"move robot_1 table_2 table_2\",\n        \"move robot_1 table_2 table_2\",\n        \"pick-up robot_1 topbun_1 table_2\",\n        \"stack robot_1 topbun_1 tomato_1 table_2\",\n        \"move robot_1 table_2 table_2\",\n        \"pick-up robot_1 potato_1 table_2\",\n        \"move robot_1 table_2 board_1\",\n        \"place robot_1 potato_1 board_1\",\n        \"cut robot_1 potato_1 board_1\",\n        \"cut robot_1 potato_1 board_1\",\n        \"cut robot_1 potato_1 board_1\",\n        \"pick-up robot_1 potato_1 board_1\",\n        \"move robot_1 board_1 fryer_1\",\n        \"place robot_1 potato_1 fryer_1\",\n        \"fry robot_1 potato_1 fryer_1\",\n        \"fry robot_1 potato_1 fryer_1\",\n        \"fry robot_1 potato_1 fryer_1\",\n        \"pick-up robot_1 potato_1 fryer_1\",\n        \"move robot_1 fryer_1 table_3\",\n        \"place robot_1 potato_1 table_3\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 5,\n  \"height\": 5,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    },\n    {\n      \"name\": \"fryer\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 4,\n      \"y\": 1\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"bottombun\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"topbun\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"potato\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"tomato\",\n      \"x\": 4,\n      \"y\": 1,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"patty\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 2,\n      \"direction\": [\n        0,\n        -1\n      ]\n    }\n  ],\n  \"goal_description\": \"Prepare a tomato burger and fries on separate tables\",\n  \"goal\": [\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bottombun\",\n        \"table\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"patty\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"patty\",\n        \"table\"\n      ],\n      \"ids\": [\n        3,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"tomato\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"tomato\",\n        \"table\"\n      ],\n      \"ids\": [\n        4,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"topbun\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"topbun\"\n      ],\n      \"ids\": [\n        5\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"potato\"\n      ],\n      \"ids\": [\n        6\n      ]\n    },\n    {\n      \"predicate\": \"isfried\",\n      \"args\": [\n        \"potato\"\n      ],\n      \"ids\": [\n        6\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"potato\",\n        \"table\"\n      ],\n      \"ids\": [\n        6,\n        7\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "4_onion_cheese_burger_and_fried_onion",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 5,
+    "height": 5,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      },
+      {
+        "name": "fryer",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 4,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "bottombun",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0
+      },
+      {
+        "name": "topbun",
+        "x": 0,
+        "y": 1,
+        "stack-level": 1
+      },
+      {
+        "name": "onion",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "onion",
+        "x": 4,
+        "y": 1,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "patty",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "cheese",
+        "x": 4,
+        "y": 3,
+        "stack-level": 0
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 2,
+        "direction": [
+          0,
+          -1
+        ]
+      }
+    ],
+    "goal_description": "Prepare an onion cheese burger and fried onion rings on separate tables",
+    "goal": [
+      {
+        "predicate": "item_on",
+        "args": [
+          "bottombun",
+          "table"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "patty"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "patty",
+          "table"
+        ],
+        "ids": [
+          3,
+          2
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "onion",
+          "table"
+        ],
+        "ids": [
+          4,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "cheese",
+          "table"
+        ],
+        "ids": [
+          5,
+          2
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "topbun",
+          "table"
+        ],
+        "ids": [
+          6,
+          2
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "topbun"
+        ],
+        "ids": [
+          6
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          7
+        ]
+      },
+      {
+        "predicate": "isfried",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          7
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "onion",
+          "table"
+        ],
+        "ids": [
+          7,
+          8
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot table_1 table_2",
+    "pick-up robot onion_1 table_2",
+    "move robot table_2 board_1",
+    "place robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "pick-up robot onion_1 board_1",
+    "move robot board_1 fryer_1",
+    "place robot onion_1 fryer_1",
+    "fry robot onion_1 fryer_1",
+    "fry robot onion_1 fryer_1",
+    "fry robot onion_1 fryer_1",
+    "pick-up robot onion_1 fryer_1",
+    "move robot fryer_1 table_8",
+    "place robot onion_1 table_8",
+    "move robot table_8 table_3",
+    "pick-up robot patty_1 table_3",
+    "move robot table_3 stove_1",
+    "place robot patty_1 stove_1",
+    "cook robot patty_1 stove_1",
+    "cook robot patty_1 stove_1",
+    "cook robot patty_1 stove_1",
+    "move robot stove_1 table_1",
+    "unstack robot topbun_1 bottombun_1 table_1",
+    "move robot table_1 table_2",
+    "place robot topbun_1 table_2",
+    "move robot table_2 table_1",
+    "pick-up robot bottombun_1 table_1",
+    "move robot table_1 table_2",
+    "place robot bottombun_1 table_2",
+    "move robot table_2 stove_1",
+    "pick-up robot patty_1 stove_1",
+    "move robot stove_1 table_2",
+    "stack robot patty_1 bottombun_1 table_2",
+    "move robot table_2 table_7",
+    "pick-up robot onion_2 table_7",
+    "move robot table_7 board_1",
+    "place robot onion_2 board_1",
+    "cut robot onion_2 board_1",
+    "cut robot onion_2 board_1",
+    "cut robot onion_2 board_1",
+    "pick-up robot onion_2 board_1",
+    "move robot board_1 table_2",
+    "stack robot onion_2 patty_1 table_2",
+    "move robot table_2 table_6",
+    "pick-up robot cheese_1 table_6",
+    "move robot table_6 table_2",
+    "stack robot cheese_1 onion_2 table_2",
+    "noop",
+    "unstack robot topbun_1 table_2 table_2",
+    "stack robot topbun_1 cheese_1 table_2"
+  ],
+  "plan_length": 52,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 52,
+    "optimal_steps": 46,
+    "steps_ratio": 1.1304347826086956,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot table_1 table_2): precondition ('loc', 'robot', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (move robot table_1 table_2): env action 'move' with args ['robot', 'table1', 'table2']: no matching object binding found",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 11,
+    "pddl_goal_count": 440,
+    "object_count": {
+      "station": [
+        "table1",
+        "stove1",
+        "board1",
+        "table2",
+        "fryer1",
+        "table3",
+        "table4",
+        "table5"
+      ],
+      "item": [
+        "bottombun1",
+        "topbun1",
+        "onion1",
+        "patty1",
+        "onion2",
+        "cheese1"
+      ],
+      "player": [
+        "robot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 8,
+      "items": 6,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 17,
+      "pick-up": 9,
+      "place": 7,
+      "cut": 6,
+      "fry": 3,
+      "cook": 3,
+      "unstack": 2,
+      "stack": 4,
+      "noop": 1
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot table_1 table_2\",\n        \"pick-up robot onion_1 table_2\",\n        \"move robot table_2 board_1\",\n        \"place robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"pick-up robot onion_1 board_1\",\n        \"move robot board_1 fryer_1\",\n        \"place robot onion_1 fryer_1\",\n        \"fry robot onion_1 fryer_1\",\n        \"fry robot onion_1 fryer_1\",\n        \"fry robot onion_1 fryer_1\",\n        \"pick-up robot onion_1 fryer_1\",\n        \"move robot fryer_1 table_8\",\n        \"place robot onion_1 table_8\",\n        \"move robot table_8 table_3\",\n        \"pick-up robot patty_1 table_3\",\n        \"move robot table_3 stove_1\",\n        \"place robot patty_1 stove_1\",\n        \"cook robot patty_1 stove_1\",\n        \"cook robot patty_1 stove_1\",\n        \"cook robot patty_1 stove_1\",\n        \"move robot stove_1 table_1\",\n        \"unstack robot topbun_1 bottombun_1 table_1\",\n        \"move robot table_1 table_2\",\n        \"place robot topbun_1 table_2\",\n        \"move robot table_2 table_1\",\n        \"pick-up robot bottombun_1 table_1\",\n        \"move robot table_1 table_2\",\n        \"place robot bottombun_1 table_2\",\n        \"move robot table_2 stove_1\",\n        \"pick-up robot patty_1 stove_1\",\n        \"move robot stove_1 table_2\",\n        \"stack robot patty_1 bottombun_1 table_2\",\n        \"move robot table_2 table_7\",\n        \"pick-up robot onion_2 table_7\",\n        \"move robot table_7 board_1\",\n        \"place robot onion_2 board_1\",\n        \"cut robot onion_2 board_1\",\n        \"cut robot onion_2 board_1\",\n        \"cut robot onion_2 board_1\",\n        \"pick-up robot onion_2 board_1\",\n        \"move robot board_1 table_2\",\n        \"stack robot onion_2 patty_1 table_2\",\n        \"move robot table_2 table_6\",\n        \"pick-up robot cheese_1 table_6\",\n        \"move robot table_6 table_2\",\n        \"stack robot cheese_1 onion_2 table_2\",\n        \"move robot table_2 table_2\",\n        \"unstack robot topbun_1 table_2 table_2\",\n        \"stack robot topbun_1 cheese_1 table_2\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 5,\n  \"height\": 5,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    },\n    {\n      \"name\": \"fryer\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 4,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"bottombun\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"topbun\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 4,\n      \"y\": 1,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"patty\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"cheese\",\n      \"x\": 4,\n      \"y\": 3,\n      \"stack-level\": 0\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 2,\n      \"direction\": [\n        0,\n        -1\n      ]\n    }\n  ],\n  \"goal_description\": \"Prepare an onion cheese burger and fried onion rings on separate tables\",\n  \"goal\": [\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bottombun\",\n        \"table\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"patty\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"patty\",\n        \"table\"\n      ],\n      \"ids\": [\n        3,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"onion\",\n        \"table\"\n      ],\n      \"ids\": [\n        4,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"cheese\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"topbun\",\n        \"table\"\n      ],\n      \"ids\": [\n        6,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"topbun\"\n      ],\n      \"ids\": [\n        6\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        7\n      ]\n    },\n    {\n      \"predicate\": \"isfried\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        7\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"onion\",\n        \"table\"\n      ],\n      \"ids\": [\n        7,\n        8\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "5_potato_soup",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 6,
+    "height": 6,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "sink",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "potato",
+        "x": 0,
+        "y": 1,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      }
+    ],
+    "meals": [],
+    "containers": [
+      {
+        "name": "pot",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "bowl",
+        "x": 0,
+        "y": 3
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 0,
+        "direction": [
+          0,
+          1
+        ]
+      }
+    ],
+    "goal_description": "Make potato soup with a whole potato and serve into a bowl on a table.",
+    "goal": [
+      {
+        "predicate": "in",
+        "args": [
+          "water",
+          "bowl"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "potato",
+          "water"
+        ],
+        "ids": [
+          3,
+          1
+        ]
+      },
+      {
+        "predicate": "isboiling",
+        "args": [
+          "water"
+        ],
+        "ids": [
+          1
+        ]
+      },
+      {
+        "predicate": "container_at",
+        "args": [
+          "bowl",
+          "table"
+        ],
+        "ids": [
+          2,
+          4
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "pick-up-container robot_1 pot_1 table_2",
+    "move robot_1 table_2 sink_1",
+    "fill-pot robot_1 pot_1 water_1 sink_1",
+    "move robot_1 sink_1 stove_1",
+    "place-container robot_1 pot_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "pick-up robot_1 potato_1 table_1",
+    "move robot_1 table_1 stove_1",
+    "add-to robot_1 potato_1 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_3",
+    "pick-up-container robot_1 bowl_1 table_3",
+    "move robot_1 table_3 stove_1",
+    "fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_3",
+    "place-container robot_1 bowl_1 table_3"
+  ],
+  "plan_length": 18,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 18,
+    "optimal_steps": 19,
+    "steps_ratio": 0.9473684210526315,
+    "simulation_success": false,
+    "simulation_error": "Step 0: unknown action 'pick-up-container'",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (pick-up-container robot_1 pot_1 table_2): env action 'pick-up-container' with args ['robot1', 'pot1', 'table2']: preconditions not met: (container_at pot1 table2), (loc robot1 table2)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 4,
+    "pddl_goal_count": 12,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "stove1",
+        "table3",
+        "board1",
+        "sink1"
+      ],
+      "item": [
+        "potato1"
+      ],
+      "player": [
+        "robot1"
+      ],
+      "container": [
+        "bowl1",
+        "pot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 6,
+      "items": 1,
+      "players": 1
+    },
+    "plan_action_types": {
+      "pick-up-container": 2,
+      "move": 7,
+      "fill-pot": 1,
+      "place-container": 2,
+      "boil-water": 3,
+      "pick-up": 1,
+      "add-to": 1,
+      "fill-bowl": 1
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"pick-up-container robot_1 pot_1 table_2\",\n        \"move robot_1 table_2 sink_1\",\n        \"fill-pot robot_1 pot_1 water_1 sink_1\",\n        \"move robot_1 sink_1 stove_1\",\n        \"place-container robot_1 pot_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"pick-up robot_1 potato_1 table_1\",\n        \"move robot_1 table_1 stove_1\",\n        \"add-to robot_1 potato_1 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_3\",\n        \"pick-up-container robot_1 bowl_1 table_3\",\n        \"move robot_1 table_3 stove_1\",\n        \"fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_3\",\n        \"place-container robot_1 bowl_1 table_3\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 6,\n  \"height\": 6,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"sink\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"potato\",\n      \"x\": 0,\n      \"y\": 1,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    }\n  ],\n  \"meals\": [],\n  \"containers\": [\n    {\n      \"name\": \"pot\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"bowl\",\n      \"x\": 0,\n      \"y\": 3\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 0,\n      \"direction\": [\n        0,\n        1\n      ]\n    }\n  ],\n  \"goal_description\": \"Make potato soup with a whole potato and serve into a bowl on a table.\",\n  \"goal\": [\n    {\n      \"predicate\": \"in\",\n      \"args\": [\n        \"water\",\n        \"bowl\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"potato\",\n        \"water\"\n      ],\n      \"ids\": [\n        3,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"isboiling\",\n      \"args\": [\n        \"water\"\n      ],\n      \"ids\": [\n        1\n      ]\n    },\n    {\n      \"predicate\": \"container_at\",\n      \"args\": [\n        \"bowl\",\n        \"table\"\n      ],\n      \"ids\": [\n        2,\n        4\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "6_onion_soup",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 6,
+    "height": 6,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "sink",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "onion",
+        "x": 0,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "onion",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "onion",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      }
+    ],
+    "meals": [],
+    "containers": [
+      {
+        "name": "pot",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "bowl",
+        "x": 0,
+        "y": 1
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 0,
+        "direction": [
+          0,
+          1
+        ]
+      }
+    ],
+    "goal_description": "Make onion soup with 3 cut onions and serve into a bowl on a table.",
+    "goal": [
+      {
+        "predicate": "in",
+        "args": [
+          "water",
+          "bowl"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "isboiling",
+        "args": [
+          "water"
+        ],
+        "ids": [
+          1
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "onion",
+          "water"
+        ],
+        "ids": [
+          3,
+          1
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "onion",
+          "water"
+        ],
+        "ids": [
+          4,
+          1
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          5
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "onion",
+          "water"
+        ],
+        "ids": [
+          5,
+          1
+        ]
+      },
+      {
+        "predicate": "container_at",
+        "args": [
+          "bowl",
+          "table"
+        ],
+        "ids": [
+          2,
+          6
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 sink_1",
+    "pick-up-container robot_1 pot_1 table_3",
+    "fill-pot robot_1 pot_1 water_1 sink_1",
+    "move robot_1 sink_1 stove_1",
+    "place-container robot_1 pot_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_4",
+    "pick-up robot_1 onion_1 table_4",
+    "move robot_1 table_4 board_1",
+    "place robot_1 onion_1 board_1",
+    "cut robot_1 onion_1 board_1",
+    "cut robot_1 onion_1 board_1",
+    "cut robot_1 onion_1 board_1",
+    "pick-up robot_1 onion_1 board_1",
+    "move robot_1 board_1 stove_1",
+    "add-to robot_1 onion_1 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_5",
+    "pick-up robot_1 onion_2 table_5",
+    "move robot_1 table_5 board_1",
+    "place robot_1 onion_2 board_1",
+    "cut robot_1 onion_2 board_1",
+    "cut robot_1 onion_2 board_1",
+    "cut robot_1 onion_2 board_1",
+    "pick-up robot_1 onion_2 board_1",
+    "move robot_1 board_1 stove_1",
+    "add-to robot_1 onion_2 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_6",
+    "pick-up robot_1 onion_3 table_6",
+    "move robot_1 table_6 board_1",
+    "place robot_1 onion_3 board_1",
+    "cut robot_1 onion_3 board_1",
+    "cut robot_1 onion_3 board_1",
+    "cut robot_1 onion_3 board_1",
+    "pick-up robot_1 onion_3 board_1",
+    "move robot_1 board_1 stove_1",
+    "add-to robot_1 onion_3 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "pick-up-container robot_1 bowl_1 table_1",
+    "move robot_1 table_1 stove_1",
+    "fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "place-container robot_1 bowl_1 table_1"
+  ],
+  "plan_length": 44,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 44,
+    "optimal_steps": 42,
+    "steps_ratio": 1.0476190476190477,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 sink_1): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 1 (pick-up-container robot_1 pot_1 table_3): env action 'pick-up-container' with args ['robot1', 'pot1', 'table3']: preconditions not met: (container_at pot1 table3), (loc robot1 table3)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 9,
+    "pddl_goal_count": 270,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "stove1",
+        "table3",
+        "table4",
+        "table5",
+        "board1",
+        "sink1"
+      ],
+      "item": [
+        "onion1",
+        "onion2",
+        "onion3"
+      ],
+      "player": [
+        "robot1"
+      ],
+      "container": [
+        "bowl1",
+        "pot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 8,
+      "items": 3,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 14,
+      "pick-up-container": 2,
+      "fill-pot": 1,
+      "place-container": 2,
+      "boil-water": 3,
+      "pick-up": 6,
+      "place": 3,
+      "cut": 9,
+      "add-to": 3,
+      "fill-bowl": 1
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 sink_1\",\n        \"pick-up-container robot_1 pot_1 table_3\",\n        \"fill-pot robot_1 pot_1 water_1 sink_1\",\n        \"move robot_1 sink_1 stove_1\",\n        \"place-container robot_1 pot_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_4\",\n        \"pick-up robot_1 onion_1 table_4\",\n        \"move robot_1 table_4 board_1\",\n        \"place robot_1 onion_1 board_1\",\n        \"cut robot_1 onion_1 board_1\",\n        \"cut robot_1 onion_1 board_1\",\n        \"cut robot_1 onion_1 board_1\",\n        \"pick-up robot_1 onion_1 board_1\",\n        \"move robot_1 board_1 stove_1\",\n        \"add-to robot_1 onion_1 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_5\",\n        \"pick-up robot_1 onion_2 table_5\",\n        \"move robot_1 table_5 board_1\",\n        \"place robot_1 onion_2 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"pick-up robot_1 onion_2 board_1\",\n        \"move robot_1 board_1 stove_1\",\n        \"add-to robot_1 onion_2 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_6\",\n        \"pick-up robot_1 onion_3 table_6\",\n        \"move robot_1 table_6 board_1\",\n        \"place robot_1 onion_3 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"pick-up robot_1 onion_3 board_1\",\n        \"move robot_1 board_1 stove_1\",\n        \"add-to robot_1 onion_3 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"pick-up-container robot_1 bowl_1 table_1\",\n        \"move robot_1 table_1 stove_1\",\n        \"fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"place-container robot_1 bowl_1 table_1\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 6,\n  \"height\": 6,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"sink\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"onion\",\n      \"x\": 0,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    }\n  ],\n  \"meals\": [],\n  \"containers\": [\n    {\n      \"name\": \"pot\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"bowl\",\n      \"x\": 0,\n      \"y\": 1\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 0,\n      \"direction\": [\n        0,\n        1\n      ]\n    }\n  ],\n  \"goal_description\": \"Make onion soup with 3 cut onions and serve into a bowl on a table.\",\n  \"goal\": [\n    {\n      \"predicate\": \"in\",\n      \"args\": [\n        \"water\",\n        \"bowl\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"isboiling\",\n      \"args\": [\n        \"water\"\n      ],\n      \"ids\": [\n        1\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"onion\",\n        \"water\"\n      ],\n      \"ids\": [\n        3,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"onion\",\n        \"water\"\n      ],\n      \"ids\": [\n        4,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        5\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"onion\",\n        \"water\"\n      ],\n      \"ids\": [\n        5,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"container_at\",\n      \"args\": [\n        \"bowl\",\n        \"table\"\n      ],\n      \"ids\": [\n        2,\n        6\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "7_tomato_soup_and_lettuce_chicken_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 6,
+    "height": 6,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "sink",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "tomato",
+        "x": 0,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "lettuce",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "chicken",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "bread",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 3,
+        "y": 3,
+        "stack-level": 1
+      }
+    ],
+    "meals": [],
+    "containers": [
+      {
+        "name": "pot",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "bowl",
+        "x": 0,
+        "y": 1
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 0,
+        "direction": [
+          0,
+          1
+        ]
+      }
+    ],
+    "goal_description": "Make tomato soup with a whole tomato served into a bowl on a table and a lettuce chicken sandwich on another table.",
+    "goal": [
+      {
+        "predicate": "in",
+        "args": [
+          "water",
+          "bowl"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "isboiling",
+        "args": [
+          "water"
+        ],
+        "ids": [
+          1
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "tomato",
+          "water"
+        ],
+        "ids": [
+          3,
+          1
+        ]
+      },
+      {
+        "predicate": "container_at",
+        "args": [
+          "bowl",
+          "table"
+        ],
+        "ids": [
+          2,
+          4
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          5,
+          6
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          7
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          7,
+          6
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "lettuce"
+        ],
+        "ids": [
+          8
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "lettuce",
+          "table"
+        ],
+        "ids": [
+          8,
+          6
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          9,
+          6
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          9
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 table_1 table_3",
+    "pick-up-container robot_1 pot_1 table_3",
+    "move robot_1 table_3 sink_1",
+    "fill-pot robot_1 pot_1 water_1 sink_1",
+    "move robot_1 sink_1 stove_1",
+    "place-container robot_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_4",
+    "pick-up robot_1 tomato_1 table_4",
+    "move robot_1 table_4 stove_1",
+    "add-to robot_1 tomato_1 water_1 pot_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "pick-up-container robot_1 bowl_1 table_1",
+    "move robot_1 table_1 stove_1",
+    "fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_1",
+    "place-container robot_1 bowl_1 table_1",
+    "move robot_1 table_1 table_6",
+    "pick-up robot_1 chicken_1 table_6",
+    "move robot_1 table_6 stove_1",
+    "place robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "pick-up robot_1 chicken_1 stove_1",
+    "move robot_1 stove_1 table_2",
+    "place robot_1 chicken_1 table_2",
+    "move robot_1 table_2 table_5",
+    "pick-up robot_1 lettuce_1 table_5",
+    "move robot_1 table_5 board_1",
+    "place robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "pick-up robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_7",
+    "unstack robot_1 bread_2 bread_1 table_7",
+    "move robot_1 table_7 table_2",
+    "place robot_1 bread_2 table_2",
+    "move robot_1 table_2 table_7",
+    "pick-up robot_1 bread_1 table_7",
+    "move robot_1 table_7 table_2",
+    "stack robot_1 chicken_1 bread_1 table_2",
+    "pick-up robot_1 lettuce_1 table_7",
+    "move robot_1 table_7 table_2",
+    "stack robot_1 lettuce_1 chicken_1 table_2",
+    "pick-up robot_1 bread_2 table_2",
+    "stack robot_1 bread_2 lettuce_1 table_2"
+  ],
+  "plan_length": 50,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 50,
+    "optimal_steps": 46,
+    "steps_ratio": 1.0869565217391304,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 table_1 table_3): precondition ('loc', 'robot_1', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 1 (pick-up-container robot_1 pot_1 table_3): env action 'pick-up-container' with args ['robot1', 'pot1', 'table3']: preconditions not met: (container_at pot1 table3)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 11,
+    "pddl_goal_count": 660,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "stove1",
+        "table3",
+        "table4",
+        "table5",
+        "board1",
+        "table6",
+        "sink1"
+      ],
+      "item": [
+        "tomato1",
+        "lettuce1",
+        "chicken1",
+        "bread1",
+        "bread2"
+      ],
+      "player": [
+        "robot1"
+      ],
+      "container": [
+        "bowl1",
+        "pot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 9,
+      "items": 5,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 18,
+      "pick-up-container": 2,
+      "fill-pot": 1,
+      "place-container": 2,
+      "pick-up": 8,
+      "add-to": 1,
+      "boil-water": 3,
+      "fill-bowl": 1,
+      "place": 4,
+      "cook": 3,
+      "cut": 3,
+      "unstack": 1,
+      "stack": 3
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 table_3\",\n        \"pick-up-container robot_1 pot_1 table_3\",\n        \"move robot_1 table_3 sink_1\",\n        \"fill-pot robot_1 pot_1 water_1 sink_1\",\n        \"move robot_1 sink_1 stove_1\",\n        \"place-container robot_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_4\",\n        \"pick-up robot_1 tomato_1 table_4\",\n        \"move robot_1 table_4 stove_1\",\n        \"add-to robot_1 tomato_1 water_1 pot_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"pick-up-container robot_1 bowl_1 table_1\",\n        \"move robot_1 table_1 stove_1\",\n        \"fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_1\",\n        \"place-container robot_1 bowl_1 table_1\",\n        \"move robot_1 table_1 table_6\",\n        \"pick-up robot_1 chicken_1 table_6\",\n        \"move robot_1 table_6 stove_1\",\n        \"place robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"move robot_1 stove_1 table_2\",\n        \"place robot_1 chicken_1 table_2\",\n        \"move robot_1 table_2 table_5\",\n        \"pick-up robot_1 lettuce_1 table_5\",\n        \"move robot_1 table_5 board_1\",\n        \"place robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"pick-up robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_7\",\n        \"unstack robot_1 bread_2 bread_1 table_7\",\n        \"move robot_1 table_7 table_2\",\n        \"place robot_1 bread_2 table_2\",\n        \"move robot_1 table_2 table_7\",\n        \"pick-up robot_1 bread_1 table_7\",\n        \"move robot_1 table_7 table_2\",\n        \"stack robot_1 chicken_1 bread_1 table_2\",\n        \"pick-up robot_1 lettuce_1 table_7\",\n        \"move robot_1 table_7 table_2\",\n        \"stack robot_1 lettuce_1 chicken_1 table_2\",\n        \"pick-up robot_1 bread_2 table_2\",\n        \"stack robot_1 bread_2 lettuce_1 table_2\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 6,\n  \"height\": 6,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"sink\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"tomato\",\n      \"x\": 0,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"lettuce\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 1\n    }\n  ],\n  \"meals\": [],\n  \"containers\": [\n    {\n      \"name\": \"pot\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"bowl\",\n      \"x\": 0,\n      \"y\": 1\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 0,\n      \"direction\": [\n        0,\n        1\n      ]\n    }\n  ],\n  \"goal_description\": \"Make tomato soup with a whole tomato served into a bowl on a table and a lettuce chicken sandwich on another table.\",\n  \"goal\": [\n    {\n      \"predicate\": \"in\",\n      \"args\": [\n        \"water\",\n        \"bowl\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"isboiling\",\n      \"args\": [\n        \"water\"\n      ],\n      \"ids\": [\n        1\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"tomato\",\n        \"water\"\n      ],\n      \"ids\": [\n        3,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"container_at\",\n      \"args\": [\n        \"bowl\",\n        \"table\"\n      ],\n      \"ids\": [\n        2,\n        4\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        5,\n        6\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        7\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        7,\n        6\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"lettuce\"\n      ],\n      \"ids\": [\n        8\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"lettuce\",\n        \"table\"\n      ],\n      \"ids\": [\n        8,\n        6\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        9,\n        6\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        9\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "8_onion_tomato_soup_and_two_chicken_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 6,
+    "height": 6,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "table",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "sink",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 4,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 5,
+        "y": 3
+      }
+    ],
+    "items": [
+      {
+        "name": "tomato",
+        "x": 0,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "onion",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "chicken",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "chicken",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      {
+        "name": "bread",
+        "x": 4,
+        "y": 3,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 4,
+        "y": 3,
+        "stack-level": 1
+      },
+      {
+        "name": "bread",
+        "x": 5,
+        "y": 3,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 5,
+        "y": 3,
+        "stack-level": 1
+      }
+    ],
+    "meals": [],
+    "containers": [
+      {
+        "name": "pot",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "bowl",
+        "x": 0,
+        "y": 1
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 0,
+        "direction": [
+          0,
+          1
+        ]
+      }
+    ],
+    "goal_description": "Make soup with a cut tomato and cut onion served into a bowl on a table and two chicken sandwiches on other tables.",
+    "goal": [
+      {
+        "predicate": "in",
+        "args": [
+          "water",
+          "bowl"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "isboiling",
+        "args": [
+          "water"
+        ],
+        "ids": [
+          1
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "tomato"
+        ],
+        "ids": [
+          3
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "tomato",
+          "water"
+        ],
+        "ids": [
+          3,
+          1
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          4
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "onion",
+          "water"
+        ],
+        "ids": [
+          4,
+          1
+        ]
+      },
+      {
+        "predicate": "container_at",
+        "args": [
+          "bowl",
+          "table"
+        ],
+        "ids": [
+          2,
+          5
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          6,
+          7
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          8
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          8,
+          7
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          9,
+          7
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          9
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          10,
+          11
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          12
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          12,
+          11
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          13,
+          11
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          13
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot table_1 table_3",
+    "pick-up-container robot pot_1 table_3",
+    "move robot table_3 sink_1",
+    "fill-pot robot pot_1 water_1 sink_1",
+    "move robot sink_1 stove_1",
+    "place-container robot pot_1 stove_1",
+    "boil-water robot pot_1 water_1 stove_1",
+    "move robot stove_1 table_6",
+    "pick-up robot tomato_1 table_6",
+    "move robot table_6 board_1",
+    "place robot tomato_1 board_1",
+    "cut robot tomato_1 board_1",
+    "cut robot tomato_1 board_1",
+    "cut robot tomato_1 board_1",
+    "pick-up robot tomato_1 board_1",
+    "move robot board_1 stove_1",
+    "add-to robot tomato_1 water_1 pot_1 stove_1",
+    "move robot stove_1 table_7",
+    "pick-up robot onion_1 table_7",
+    "move robot table_7 board_1",
+    "place robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "cut robot onion_1 board_1",
+    "pick-up robot onion_1 board_1",
+    "move robot board_1 stove_1",
+    "add-to robot onion_1 water_1 pot_1 stove_1",
+    "move robot stove_1 table_1",
+    "pick-up-container robot bowl_1 table_1",
+    "move robot table_1 stove_1",
+    "fill-bowl robot bowl_1 pot_1 water_1 stove_1",
+    "move robot stove_1 table_6",
+    "place-container robot bowl_1 table_6",
+    "move robot table_6 table_8",
+    "pick-up robot chicken_1 table_8",
+    "move robot table_8 stove_1",
+    "place robot chicken_1 stove_1",
+    "cook robot chicken_1 stove_1",
+    "cook robot chicken_1 stove_1",
+    "cook robot chicken_1 stove_1",
+    "pick-up robot chicken_1 stove_1",
+    "move robot stove_1 table_10",
+    "unstack robot bread_2 bread_1 table_10",
+    "move robot table_10 table_7",
+    "place robot bread_2 table_7",
+    "move robot table_7 table_10",
+    "pick-up robot bread_1 table_10",
+    "move robot table_10 table_7",
+    "stack robot chicken_1 bread_2 table_7",
+    "stack robot bread_1 chicken_1 table_7",
+    "move robot table_7 table_9",
+    "pick-up robot chicken_2 table_9",
+    "move robot table_9 stove_1",
+    "place robot chicken_2 stove_1",
+    "cook robot chicken_2 stove_1",
+    "cook robot chicken_2 stove_1",
+    "cook robot chicken_2 stove_1",
+    "pick-up robot chicken_2 stove_1",
+    "move robot stove_1 table_11",
+    "unstack robot bread_4 bread_3 table_11",
+    "move robot table_11 table_8",
+    "place robot bread_4 table_8",
+    "move robot table_8 table_11",
+    "pick-up robot bread_3 table_11",
+    "move robot table_11 table_8",
+    "stack robot chicken_2 bread_4 table_8",
+    "stack robot bread_3 chicken_2 table_8"
+  ],
+  "plan_length": 67,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 67,
+    "optimal_steps": 68,
+    "steps_ratio": 0.9852941176470589,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot table_1 table_3): precondition ('loc', 'robot', 'table_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 0 (move robot table_1 table_3): env action 'move' with args ['robot', 'table1', 'table3']: no matching object binding found",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 17,
+    "pddl_goal_count": 274176,
+    "object_count": {
+      "station": [
+        "table1",
+        "table2",
+        "stove1",
+        "table3",
+        "table4",
+        "table5",
+        "board1",
+        "table6",
+        "sink1",
+        "table7",
+        "table8"
+      ],
+      "item": [
+        "tomato1",
+        "onion1",
+        "chicken1",
+        "chicken2",
+        "bread1",
+        "bread2",
+        "bread3",
+        "bread4"
+      ],
+      "player": [
+        "robot1"
+      ],
+      "container": [
+        "bowl1",
+        "pot1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 11,
+      "items": 8,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 24,
+      "pick-up-container": 2,
+      "fill-pot": 1,
+      "place-container": 2,
+      "boil-water": 1,
+      "pick-up": 10,
+      "place": 6,
+      "cut": 6,
+      "add-to": 2,
+      "fill-bowl": 1,
+      "cook": 6,
+      "unstack": 2,
+      "stack": 4
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot table_1 table_3\",\n        \"pick-up-container robot pot_1 table_3\",\n        \"move robot table_3 sink_1\",\n        \"fill-pot robot pot_1 water_1 sink_1\",\n        \"move robot sink_1 stove_1\",\n        \"place-container robot pot_1 stove_1\",\n        \"boil-water robot pot_1 water_1 stove_1\",\n        \"move robot stove_1 table_6\",\n        \"pick-up robot tomato_1 table_6\",\n        \"move robot table_6 board_1\",\n        \"place robot tomato_1 board_1\",\n        \"cut robot tomato_1 board_1\",\n        \"cut robot tomato_1 board_1\",\n        \"cut robot tomato_1 board_1\",\n        \"pick-up robot tomato_1 board_1\",\n        \"move robot board_1 stove_1\",\n        \"add-to robot tomato_1 water_1 pot_1 stove_1\",\n        \"move robot stove_1 table_7\",\n        \"pick-up robot onion_1 table_7\",\n        \"move robot table_7 board_1\",\n        \"place robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"cut robot onion_1 board_1\",\n        \"pick-up robot onion_1 board_1\",\n        \"move robot board_1 stove_1\",\n        \"add-to robot onion_1 water_1 pot_1 stove_1\",\n        \"move robot stove_1 table_1\",\n        \"pick-up-container robot bowl_1 table_1\",\n        \"move robot table_1 stove_1\",\n        \"fill-bowl robot bowl_1 pot_1 water_1 stove_1\",\n        \"move robot stove_1 table_6\",\n        \"place-container robot bowl_1 table_6\",\n        \"move robot table_6 table_8\",\n        \"pick-up robot chicken_1 table_8\",\n        \"move robot table_8 stove_1\",\n        \"place robot chicken_1 stove_1\",\n        \"cook robot chicken_1 stove_1\",\n        \"cook robot chicken_1 stove_1\",\n        \"cook robot chicken_1 stove_1\",\n        \"pick-up robot chicken_1 stove_1\",\n        \"move robot stove_1 table_10\",\n        \"unstack robot bread_2 bread_1 table_10\",\n        \"move robot table_10 table_7\",\n        \"place robot bread_2 table_7\",\n        \"move robot table_7 table_10\",\n        \"pick-up robot bread_1 table_10\",\n        \"move robot table_10 table_7\",\n        \"stack robot chicken_1 bread_2 table_7\",\n        \"stack robot bread_1 chicken_1 table_7\",\n        \"move robot table_7 table_9\",\n        \"pick-up robot chicken_2 table_9\",\n        \"move robot table_9 stove_1\",\n        \"place robot chicken_2 stove_1\",\n        \"cook robot chicken_2 stove_1\",\n        \"cook robot chicken_2 stove_1\",\n        \"cook robot chicken_2 stove_1\",\n        \"pick-up robot chicken_2 stove_1\",\n        \"move robot stove_1 table_11\",\n        \"unstack robot bread_4 bread_3 table_11\",\n        \"move robot table_11 table_8\",\n        \"place robot bread_4 table_8\",\n        \"move robot table_8 table_11\",\n        \"pick-up robot bread_3 table_11\",\n        \"move robot table_11 table_8\",\n        \"stack robot chicken_2 bread_4 table_8\",\n        \"stack robot bread_3 chicken_2 table_8\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 6,\n  \"height\": 6,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"sink\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 4,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 5,\n      \"y\": 3\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"tomato\",\n      \"x\": 0,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 4,\n      \"y\": 3,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 4,\n      \"y\": 3,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 5,\n      \"y\": 3,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 5,\n      \"y\": 3,\n      \"stack-level\": 1\n    }\n  ],\n  \"meals\": [],\n  \"containers\": [\n    {\n      \"name\": \"pot\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"bowl\",\n      \"x\": 0,\n      \"y\": 1\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 0,\n      \"direction\": [\n        0,\n        1\n      ]\n    }\n  ],\n  \"goal_description\": \"Make soup with a cut tomato and cut onion served into a bowl on a table and two chicken sandwiches on other tables.\",\n  \"goal\": [\n    {\n      \"predicate\": \"in\",\n      \"args\": [\n        \"water\",\n        \"bowl\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"isboiling\",\n      \"args\": [\n        \"water\"\n      ],\n      \"ids\": [\n        1\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"tomato\"\n      ],\n      \"ids\": [\n        3\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"tomato\",\n        \"water\"\n      ],\n      \"ids\": [\n        3,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        4\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"onion\",\n        \"water\"\n      ],\n      \"ids\": [\n        4,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"container_at\",\n      \"args\": [\n        \"bowl\",\n        \"table\"\n      ],\n      \"ids\": [\n        2,\n        5\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        6,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        8\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        8,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        9,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        9\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        10,\n        11\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        12\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        12,\n        11\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        13,\n        11\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        13\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station table_1 at (0, 1). Use 'table_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}
+{
+  "id": "9_onion_potato_soup_and_fried_onion_ring_lettuce_burger_and_onion_cheese_sandwich",
+  "original_json": {
+    "version": "1.0.0",
+    "width": 6,
+    "height": 6,
+    "config": {
+      "num_cuts": {
+        "default": 3
+      },
+      "cook_time": {
+        "default": 3
+      }
+    },
+    "stations": [
+      {
+        "name": "fryer",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "name": "stove",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "board",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "name": "sink",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 4,
+        "y": 3
+      },
+      {
+        "name": "table",
+        "x": 0,
+        "y": 5
+      },
+      {
+        "name": "table",
+        "x": 1,
+        "y": 5
+      },
+      {
+        "name": "table",
+        "x": 2,
+        "y": 5
+      },
+      {
+        "name": "table",
+        "x": 3,
+        "y": 5
+      }
+    ],
+    "items": [
+      {
+        "name": "onion",
+        "x": 0,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "potato",
+        "x": 1,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "onion",
+        "x": 2,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "lettuce",
+        "x": 3,
+        "y": 3,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      {
+        "name": "bottombun",
+        "x": 4,
+        "y": 3,
+        "stack-level": 0
+      },
+      {
+        "name": "topbun",
+        "x": 4,
+        "y": 3,
+        "stack-level": 1
+      },
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 5,
+        "stack-level": 0
+      },
+      {
+        "name": "bread",
+        "x": 0,
+        "y": 5,
+        "stack-level": 1
+      },
+      {
+        "name": "onion",
+        "x": 1,
+        "y": 5,
+        "stack-level": 0,
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ]
+      },
+      {
+        "name": "chicken",
+        "x": 2,
+        "y": 5,
+        "stack-level": 0,
+        "predicates": [
+          "iscookable"
+        ]
+      }
+    ],
+    "meals": [],
+    "containers": [
+      {
+        "name": "pot",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "name": "bowl",
+        "x": 3,
+        "y": 5
+      }
+    ],
+    "players": [
+      {
+        "name": "robot",
+        "x": 0,
+        "y": 0,
+        "direction": [
+          0,
+          1
+        ]
+      }
+    ],
+    "goal_description": "Make soup with a whole onion and potato served into a bowl, a burger with lettuce and fried onion rings, and an onion chicken sandwich all on separate tables.",
+    "goal": [
+      {
+        "predicate": "in",
+        "args": [
+          "water",
+          "bowl"
+        ],
+        "ids": [
+          1,
+          2
+        ]
+      },
+      {
+        "predicate": "isboiling",
+        "args": [
+          "water"
+        ],
+        "ids": [
+          1
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "onion",
+          "water"
+        ],
+        "ids": [
+          3,
+          1
+        ]
+      },
+      {
+        "predicate": "addedto",
+        "args": [
+          "potato",
+          "water"
+        ],
+        "ids": [
+          4,
+          1
+        ]
+      },
+      {
+        "predicate": "container_at",
+        "args": [
+          "bowl",
+          "table"
+        ],
+        "ids": [
+          2,
+          5
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "bottombun",
+          "table"
+        ],
+        "ids": [
+          6,
+          7
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "lettuce"
+        ],
+        "ids": [
+          8
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "lettuce",
+          "table"
+        ],
+        "ids": [
+          8,
+          7
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          9
+        ]
+      },
+      {
+        "predicate": "isfried",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          9
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "onion",
+          "table"
+        ],
+        "ids": [
+          9,
+          7
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "topbun",
+          "table"
+        ],
+        "ids": [
+          10,
+          7
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "topbun"
+        ],
+        "ids": [
+          10
+        ]
+      },
+      {
+        "predicate": "item_on",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          11,
+          12
+        ]
+      },
+      {
+        "predicate": "iscooked",
+        "args": [
+          "chicken"
+        ],
+        "ids": [
+          13
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "chicken",
+          "table"
+        ],
+        "ids": [
+          13,
+          12
+        ]
+      },
+      {
+        "predicate": "iscut",
+        "args": [
+          "onion"
+        ],
+        "ids": [
+          14
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "onion",
+          "table"
+        ],
+        "ids": [
+          14,
+          12
+        ]
+      },
+      {
+        "predicate": "item_at",
+        "args": [
+          "bread",
+          "table"
+        ],
+        "ids": [
+          15,
+          12
+        ]
+      },
+      {
+        "predicate": "clear",
+        "args": [
+          "bread"
+        ],
+        "ids": [
+          15
+        ]
+      }
+    ]
+  },
+  "plan": [
+    "move robot_1 fryer_1 table_1",
+    "pick-up-container robot_1 pot_1 table_1",
+    "move robot_1 table_1 sink_1",
+    "fill-pot robot_1 pot_1 water_1 sink_1",
+    "move robot_1 sink_1 stove_1",
+    "place-container robot_1 pot_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "boil-water robot_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_2",
+    "pick-up robot_1 onion_1 table_2",
+    "move robot_1 table_2 stove_1",
+    "add-to robot_1 onion_1 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_3",
+    "pick-up robot_1 potato_1 table_3",
+    "move robot_1 table_3 stove_1",
+    "add-to robot_1 potato_1 water_1 pot_1 stove_1",
+    "move robot_1 stove_1 table_14",
+    "pick-up-container robot_1 bowl_1 table_14",
+    "move robot_1 table_14 stove_1",
+    "fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1",
+    "move robot_1 stove_1 table_6",
+    "place-container robot_1 bowl_1 table_6",
+    "move robot_1 table_6 table_5",
+    "unstack robot_1 topbun_1 bottombun_1 table_5",
+    "move robot_1 table_5 table_9",
+    "place robot_1 topbun_1 table_9",
+    "move robot_1 table_9 table_5",
+    "pick-up robot_1 bottombun_1 table_5",
+    "move robot_1 table_5 table_8",
+    "place robot_1 bottombun_1 table_8",
+    "move robot_1 table_8 table_5",
+    "pick-up robot_1 lettuce_1 table_5",
+    "move robot_1 table_5 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "cut robot_1 lettuce_1 board_1",
+    "pick-up robot_1 lettuce_1 board_1",
+    "move robot_1 board_1 table_8",
+    "stack robot_1 lettuce_1 bottombun_1 table_8",
+    "move robot_1 table_8 table_4",
+    "pick-up robot_1 onion_2 table_4",
+    "move robot_1 table_4 board_1",
+    "cut robot_1 onion_2 board_1",
+    "cut robot_1 onion_2 board_1",
+    "cut robot_1 onion_2 board_1",
+    "move robot_1 board_1 fryer_1",
+    "fry robot_1 onion_2 fryer_1",
+    "fry robot_1 onion_2 fryer_1",
+    "fry robot_1 onion_2 fryer_1",
+    "pick-up robot_1 onion_2 fryer_1",
+    "move robot_1 fryer_1 table_8",
+    "stack robot_1 onion_2 lettuce_1 table_8",
+    "move robot_1 table_8 table_9",
+    "pick-up robot_1 topbun_1 table_9",
+    "move robot_1 table_9 table_8",
+    "stack robot_1 topbun_1 onion_2 table_8",
+    "move robot_1 table_8 table_11",
+    "unstack robot_1 bread_2 bread_1 table_11",
+    "move robot_1 table_11 table_10",
+    "place robot_1 bread_2 table_10",
+    "move robot_1 table_10 table_11",
+    "pick-up robot_1 bread_1 table_11",
+    "move robot_1 table_11 table_13",
+    "place robot_1 bread_1 table_13",
+    "move robot_1 table_13 table_12",
+    "pick-up robot_1 chicken_1 table_12",
+    "move robot_1 table_12 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "cook robot_1 chicken_1 stove_1",
+    "pick-up robot_1 chicken_1 stove_1",
+    "move robot_1 stove_1 table_13",
+    "stack robot_1 chicken_1 bread_1 table_13",
+    "move robot_1 table_13 table_12",
+    "pick-up robot_1 onion_3 table_12",
+    "move robot_1 table_12 board_1",
+    "cut robot_1 onion_3 board_1",
+    "cut robot_1 onion_3 board_1",
+    "cut robot_1 onion_3 board_1",
+    "pick-up robot_1 onion_3 board_1",
+    "move robot_1 board_1 table_13",
+    "stack robot_1 onion_3 chicken_1 table_13",
+    "move robot_1 table_13 table_10",
+    "pick-up robot_1 bread_2 table_10",
+    "move robot_1 table_10 table_13",
+    "stack robot_1 bread_2 onion_3 table_13"
+  ],
+  "plan_length": 87,
+  "solved": true,
+  "eval": {
+    "done": true,
+    "steps": 87,
+    "optimal_steps": 82,
+    "steps_ratio": 1.0609756097560976,
+    "simulation_success": false,
+    "simulation_error": "Step 0 (move robot_1 fryer_1 table_1): precondition ('loc', 'robot_1', 'fryer_1') not satisfied",
+    "env_simulation_success": false,
+    "env_simulation_error": "Step 1 (pick-up-container robot_1 pot_1 table_1): env action 'pick-up-container' with args ['robot1', 'pot1', 'table1']: preconditions not met: (container_at pot1 table1)",
+    "goal_predicate_recall": 1.0,
+    "goal_count_match": false,
+    "gold_goal_count": 20,
+    "pddl_goal_count": 172800,
+    "object_count": {
+      "station": [
+        "fryer1",
+        "table1",
+        "table2",
+        "stove1",
+        "table3",
+        "table4",
+        "table5",
+        "table6",
+        "table7",
+        "board1",
+        "table8",
+        "table9",
+        "sink1",
+        "table10"
+      ],
+      "item": [
+        "onion1",
+        "bread1",
+        "bread2",
+        "potato1",
+        "onion2",
+        "onion3",
+        "chicken1",
+        "lettuce1",
+        "bottombun1",
+        "topbun1"
+      ],
+      "player": [
+        "robot1"
+      ],
+      "container": [
+        "pot1",
+        "bowl1"
+      ]
+    },
+    "gold_object_count": {
+      "stations": 14,
+      "items": 10,
+      "players": 1
+    },
+    "plan_action_types": {
+      "move": 35,
+      "pick-up-container": 2,
+      "fill-pot": 1,
+      "place-container": 2,
+      "boil-water": 3,
+      "pick-up": 14,
+      "add-to": 2,
+      "fill-bowl": 1,
+      "unstack": 2,
+      "place": 4,
+      "cut": 9,
+      "stack": 6,
+      "fry": 3,
+      "cook": 3
+    }
+  },
+  "llm_response": "```json\n{\n    \"plan\": [\n        \"move robot_1 fryer_1 table_1\",\n        \"pick-up-container robot_1 pot_1 table_1\",\n        \"move robot_1 table_1 sink_1\",\n        \"fill-pot robot_1 pot_1 water_1 sink_1\",\n        \"move robot_1 sink_1 stove_1\",\n        \"place-container robot_1 pot_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"boil-water robot_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_2\",\n        \"pick-up robot_1 onion_1 table_2\",\n        \"move robot_1 table_2 stove_1\",\n        \"add-to robot_1 onion_1 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_3\",\n        \"pick-up robot_1 potato_1 table_3\",\n        \"move robot_1 table_3 stove_1\",\n        \"add-to robot_1 potato_1 water_1 pot_1 stove_1\",\n        \"move robot_1 stove_1 table_14\",\n        \"pick-up-container robot_1 bowl_1 table_14\",\n        \"move robot_1 table_14 stove_1\",\n        \"fill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\",\n        \"move robot_1 stove_1 table_6\",\n        \"place-container robot_1 bowl_1 table_6\",\n        \"move robot_1 table_6 table_5\",\n        \"unstack robot_1 topbun_1 bottombun_1 table_5\",\n        \"move robot_1 table_5 table_9\",\n        \"place robot_1 topbun_1 table_9\",\n        \"move robot_1 table_9 table_5\",\n        \"pick-up robot_1 bottombun_1 table_5\",\n        \"move robot_1 table_5 table_8\",\n        \"place robot_1 bottombun_1 table_8\",\n        \"move robot_1 table_8 table_5\",\n        \"pick-up robot_1 lettuce_1 table_5\",\n        \"move robot_1 table_5 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"cut robot_1 lettuce_1 board_1\",\n        \"pick-up robot_1 lettuce_1 board_1\",\n        \"move robot_1 board_1 table_8\",\n        \"stack robot_1 lettuce_1 bottombun_1 table_8\",\n        \"move robot_1 table_8 table_4\",\n        \"pick-up robot_1 onion_2 table_4\",\n        \"move robot_1 table_4 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"cut robot_1 onion_2 board_1\",\n        \"move robot_1 board_1 fryer_1\",\n        \"fry robot_1 onion_2 fryer_1\",\n        \"fry robot_1 onion_2 fryer_1\",\n        \"fry robot_1 onion_2 fryer_1\",\n        \"pick-up robot_1 onion_2 fryer_1\",\n        \"move robot_1 fryer_1 table_8\",\n        \"stack robot_1 onion_2 lettuce_1 table_8\",\n        \"move robot_1 table_8 table_9\",\n        \"pick-up robot_1 topbun_1 table_9\",\n        \"move robot_1 table_9 table_8\",\n        \"stack robot_1 topbun_1 onion_2 table_8\",\n        \"move robot_1 table_8 table_11\",\n        \"unstack robot_1 bread_2 bread_1 table_11\",\n        \"move robot_1 table_11 table_10\",\n        \"place robot_1 bread_2 table_10\",\n        \"move robot_1 table_10 table_11\",\n        \"pick-up robot_1 bread_1 table_11\",\n        \"move robot_1 table_11 table_13\",\n        \"place robot_1 bread_1 table_13\",\n        \"move robot_1 table_13 table_12\",\n        \"pick-up robot_1 chicken_1 table_12\",\n        \"move robot_1 table_12 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"cook robot_1 chicken_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"move robot_1 stove_1 table_13\",\n        \"stack robot_1 chicken_1 bread_1 table_13\",\n        \"move robot_1 table_13 table_12\",\n        \"pick-up robot_1 onion_3 table_12\",\n        \"move robot_1 table_12 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"cut robot_1 onion_3 board_1\",\n        \"pick-up robot_1 onion_3 board_1\",\n        \"move robot_1 board_1 table_13\",\n        \"stack robot_1 onion_3 chicken_1 table_13\",\n        \"move robot_1 table_13 table_10\",\n        \"pick-up robot_1 bread_2 table_10\",\n        \"move robot_1 table_10 table_13\",\n        \"stack robot_1 bread_2 onion_3 table_13\"\n    ]\n}\n```",
+  "chat_history": [
+    {
+      "role": "system",
+      "content": "You are a helpful plan organizer.\n\nGiven a JSON description of a kitchen planning problem, you must produce a step-by-step plan using the available actions to reach the goal.\n\n## JSON Schema\n\n```\n{\n  \"width\": int, \"height\": int,\n  \"players\": [{\"name\": str, \"x\": int, \"y\": int, \"direction\": [dx, dy]}],\n  \"stations\": [{\"name\": str, \"x\": int, \"y\": int}],\n  \"items\": [\n    {\"name\": str, \"x\": int, \"y\": int,\n     \"predicates\": [\"iscookable\", \"iscuttable\", ...],\n     \"stack-level\": int}\n  ],\n  \"config\": {\"cook_time\": {\"default\": int}, \"num_cuts\": {\"default\": int}},\n  \"goal\": [{\"predicate\": str, \"args\": [str], \"ids\": [int]}],\n  \"goal_description\": str\n}\n```\n\n## Naming Convention\n\nAssign names by entity type and 1-based array order:\n- `stations[0]` of type \"table\" → `table_1`, `stations[1]` of same type → `table_2`, etc.\n- Same rule for items and players: `bread_1`, `chicken_1`, `robot_1`, etc.\n\n## Environment Rules\n\nThese are the action semantics used by the evaluator:\n- The robot can only act at its current station.\n- To move, use `move robot_1 station_from station_to`; `station_from` must be\n  the robot's current location.\n- The robot can hold at most one item or container at a time.\n- `pick-up` requires the item to be on the current station, clear, and not\n  under another item.\n- `place` requires the robot to hold the item and the target station to be empty.\n- `stack` requires the robot to hold the top item; the bottom item must be clear\n  and at the robot's current station.\n- `unstack` requires the top item to be clear, stacked on the bottom item, and\n  at the robot's current station.\n- `cook`, `cut`, and `fry` require the item to be placed at the correct station\n  type; the robot must not be holding anything.\n- Cook/cut/fry take multiple simulator steps according to the task config; repeat\n  the corresponding action the required number of times.\n- Containers use container-specific actions. Do not use `pick-up` or `place` for\n  containers.\n\nFollow this recipe guide:\nSandwich - A slice of bread, stacked on prepared ingredients, stacked on another slice of bread.\nHamburger - A bottom bun, stacked on prepared ingredients, stacked on a top bun.\nSoup - A pot of boiling water containing prepared ingredients served in a bowl.\n\n## CRITICAL: Action Format\n\nYou MUST format every action in PDDL style: `action_name arg1 arg2 ...`\n\nUse ONLY station/item/player NAMES (like table_1, stove_1) — NEVER coordinate tuples.\n\nThe available actions and their EXACT formats are:\n\n- `move player station_from station_to`\n- `pick-up player item station`\n- `place player item station`\n- `stack player item_top item_bottom station`\n- `cook player item station`\n- `cut player item station`\n- `fry player item station`\n- `pick-up-container player container station`\n- `place-container player container station`\n- `fill-pot player container water station`\n- `boil-water player container water station`\n- `add-to player item water container station`\n- `fill-bowl player bowl pot water station`\n- `unstack player item_top item_bottom station`\n\n### Examples:\n```\nmove robot_1 table_1 stove_1\npick-up robot_1 chicken_1 table_2\nplace robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\ncook robot_1 chicken_1 stove_1\npick-up robot_1 chicken_1 stove_1\nstack robot_1 chicken_1 bread_1 table_1\ncut robot_1 lettuce_1 board_1\npick-up-container robot_1 pot_1 table_2\nfill-pot robot_1 pot_1 water_1 sink_1\nboil-water robot_1 pot_1 water_1 stove_1\nadd-to robot_1 potato_1 water_1 pot_1 stove_1\nfill-bowl robot_1 bowl_1 pot_1 water_1 stove_1\n```\n\n### Common mistakes to avoid:\n- Do NOT use coordinates: `move robot_1 (0, 2) (1, 3)` is WRONG\n- The player argument always comes FIRST after the action name\n- For `stack`, the first item is placed ON TOP of the second item\n- Include the station argument for `stack` and `unstack`\n- Do not place an item onto an occupied station unless you are using `stack`\n- Do not move from a station where the robot is not currently located\n- Use the exact object names implied by the JSON arrays, such as `bread_1`,\n  `bread_2`, `table_1`, and `robot_1`\n\nAlways format your response as follows:\n```json\n{\n    \"plan\": [\n        \"move robot_1 table_1 stove_1\",\n        \"pick-up robot_1 chicken_1 stove_1\",\n        \"...\"\n    ]\n}\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is the environment JSON:\n```json\n{\n  \"version\": \"1.0.0\",\n  \"width\": 6,\n  \"height\": 6,\n  \"config\": {\n    \"num_cuts\": {\n      \"default\": 3\n    },\n    \"cook_time\": {\n      \"default\": 3\n    }\n  },\n  \"stations\": [\n    {\n      \"name\": \"fryer\",\n      \"x\": 0,\n      \"y\": 1\n    },\n    {\n      \"name\": \"stove\",\n      \"x\": 1,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"board\",\n      \"x\": 3,\n      \"y\": 1\n    },\n    {\n      \"name\": \"sink\",\n      \"x\": 4,\n      \"y\": 1\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 4,\n      \"y\": 3\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 0,\n      \"y\": 5\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 1,\n      \"y\": 5\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 2,\n      \"y\": 5\n    },\n    {\n      \"name\": \"table\",\n      \"x\": 3,\n      \"y\": 5\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"onion\",\n      \"x\": 0,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"potato\",\n      \"x\": 1,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 2,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"lettuce\",\n      \"x\": 3,\n      \"y\": 3,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\"\n      ]\n    },\n    {\n      \"name\": \"bottombun\",\n      \"x\": 4,\n      \"y\": 3,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"topbun\",\n      \"x\": 4,\n      \"y\": 3,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 5,\n      \"stack-level\": 0\n    },\n    {\n      \"name\": \"bread\",\n      \"x\": 0,\n      \"y\": 5,\n      \"stack-level\": 1\n    },\n    {\n      \"name\": \"onion\",\n      \"x\": 1,\n      \"y\": 5,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscuttable\",\n        \"isfryableifcut\"\n      ]\n    },\n    {\n      \"name\": \"chicken\",\n      \"x\": 2,\n      \"y\": 5,\n      \"stack-level\": 0,\n      \"predicates\": [\n        \"iscookable\"\n      ]\n    }\n  ],\n  \"meals\": [],\n  \"containers\": [\n    {\n      \"name\": \"pot\",\n      \"x\": 2,\n      \"y\": 1\n    },\n    {\n      \"name\": \"bowl\",\n      \"x\": 3,\n      \"y\": 5\n    }\n  ],\n  \"players\": [\n    {\n      \"name\": \"robot\",\n      \"x\": 0,\n      \"y\": 0,\n      \"direction\": [\n        0,\n        1\n      ]\n    }\n  ],\n  \"goal_description\": \"Make soup with a whole onion and potato served into a bowl, a burger with lettuce and fried onion rings, and an onion chicken sandwich all on separate tables.\",\n  \"goal\": [\n    {\n      \"predicate\": \"in\",\n      \"args\": [\n        \"water\",\n        \"bowl\"\n      ],\n      \"ids\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"predicate\": \"isboiling\",\n      \"args\": [\n        \"water\"\n      ],\n      \"ids\": [\n        1\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"onion\",\n        \"water\"\n      ],\n      \"ids\": [\n        3,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"addedto\",\n      \"args\": [\n        \"potato\",\n        \"water\"\n      ],\n      \"ids\": [\n        4,\n        1\n      ]\n    },\n    {\n      \"predicate\": \"container_at\",\n      \"args\": [\n        \"bowl\",\n        \"table\"\n      ],\n      \"ids\": [\n        2,\n        5\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bottombun\",\n        \"table\"\n      ],\n      \"ids\": [\n        6,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"lettuce\"\n      ],\n      \"ids\": [\n        8\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"lettuce\",\n        \"table\"\n      ],\n      \"ids\": [\n        8,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        9\n      ]\n    },\n    {\n      \"predicate\": \"isfried\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        9\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"onion\",\n        \"table\"\n      ],\n      \"ids\": [\n        9,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"topbun\",\n        \"table\"\n      ],\n      \"ids\": [\n        10,\n        7\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"topbun\"\n      ],\n      \"ids\": [\n        10\n      ]\n    },\n    {\n      \"predicate\": \"item_on\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        11,\n        12\n      ]\n    },\n    {\n      \"predicate\": \"iscooked\",\n      \"args\": [\n        \"chicken\"\n      ],\n      \"ids\": [\n        13\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"chicken\",\n        \"table\"\n      ],\n      \"ids\": [\n        13,\n        12\n      ]\n    },\n    {\n      \"predicate\": \"iscut\",\n      \"args\": [\n        \"onion\"\n      ],\n      \"ids\": [\n        14\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"onion\",\n        \"table\"\n      ],\n      \"ids\": [\n        14,\n        12\n      ]\n    },\n    {\n      \"predicate\": \"item_at\",\n      \"args\": [\n        \"bread\",\n        \"table\"\n      ],\n      \"ids\": [\n        15,\n        12\n      ]\n    },\n    {\n      \"predicate\": \"clear\",\n      \"args\": [\n        \"bread\"\n      ],\n      \"ids\": [\n        15\n      ]\n    }\n  ]\n}\n```\n\nIMPORTANT: The robot starts facing station fryer_1 at (0, 1). Use 'fryer_1' as station_from in your first move action.\n\nPlease think step by step and produce a step-by-step plan using the PDDL-style action format described above.\n"
+    }
+  ]
+}

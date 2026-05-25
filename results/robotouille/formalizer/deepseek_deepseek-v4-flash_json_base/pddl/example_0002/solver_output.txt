@@ -1,0 +1,467 @@
+Parsing...
+Contains quantified condition(s): False
+Instantiating...
+Trivial rules: Converted to facts.
+Starting instantiation [131 rules]...
+Finding invariants...
+Finding invariants... 31 initial candidates
+[0.010s CPU, 0.011s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups...
+Choosing groups...
+122 uncovered facts (before using the results from the invariant synthesis)
+27 uncovered facts
+Building translation key...
+Building STRIPS to SAS dictionary...
+Translating task...
+Processing axioms...
+Found 0 axioms that are always true and 0 that are always false
+constrained 393 conditions
+Writing output...
+Done!
+contains_quantified_conditions: 0
+Building causal graph...
+The causal graph is not acyclic.
+44 variables of 44 necessary
+393 of 393 operators necessary.
+0 of 0 Axiom_relational rules necessary.
+0 of 0 Axiom_functional rules necessary.
+Building domain transition graphs...
+solveable in poly time 0
+Building successor generator...
+all_operator_indices.size(): 393
+Writing output...
+printing SG 
+44
+done
+
+
+Planner Paramters:
+Anytime Search: Disabled
+Timeout if plan was found: 0 seconds (no timeout)
+Timeout while no plan was found: 0 seconds (no timeout)
+Greedy Search: Disabled
+Verbose: Enabled
+Lazy Heuristic Evaluation: Enabled
+Use caching in heuristic.
+Cyclic CG heuristic: Enabled 	Preferred Operators: Enabled
+Makespan heuristic: Disabled 	Preferred Operators: Disabled
+No Heuristic: Disabled
+Cg Heuristic Zero Cost Waiting Transitions: Enabled
+Cg Heuristic Fire Waiting Transitions Only If Local Problems Matches State: Disabled
+PrefOpsOrderedMode: Enabled with 1 goals
+PrefOpsCheapestMode: Enabled with 1 goals
+PrefOpsMostExpensiveMode: Disabled with 1000 goals
+PrefOpsRandMode: Disabled with 1000 goals
+PrefOpsConcurrentMode: Disabled
+Reset after solution was found: Enabled
+Reward only preferred operators queue: Disabled
+GValues by: Timestamp
+Queue management mode: Priority based
+Known by logical state only filtering: Disabled
+use_subgoals_to_break_makespan_ties: Disabled
+Reschedule plans: Enabled
+Epsilonize internally: Enabled
+Epsilonize externally: Disabled
+Keep original plans: Enabled
+Plan name: "./output_plan"
+Plan monitor file: "" (no monitoring)
+Monitoring verify timestamps: Disabled
+
+Contains universal conditions: 0
+Giving prior boost to open list 0
+INIT
+Open list sizes (priorities): 0 (-5000),  0 (0),  0 (0),  0 (0), 
+Initializing cyclic causal graph heuristic...done.
+Best heuristic values of queues: 33/-1/-1/-1 [expanded 1 state(s)]
+Best heuristic values of queues: 29.98/-1/-1/-1 [expanded 7 state(s)]
+Best heuristic values of queues: 26.98/-1/-1/-1 [expanded 15 state(s)]
+Best heuristic values of queues: 25.98/-1/-1/-1 [expanded 25 state(s)]
+Best heuristic values of queues: 25.98/-1/28.98/-1 [expanded 30 state(s)]
+Best heuristic values of queues: 25.98/-1/26.98/-1 [expanded 40 state(s)]
+Best heuristic values of queues: 24.98/-1/26.98/-1 [expanded 671 state(s)]
+Best heuristic values of queues: 24.98/-1/23.98/-1 [expanded 680 state(s)]
+Best heuristic values of queues: 24/-1/23.98/-1 [expanded 719 state(s)]
+Best heuristic values of queues: 20.98/-1/23.98/-1 [expanded 727 state(s)]
+Best heuristic values of queues: 18.98/-1/23.98/-1 [expanded 736 state(s)]
+Best heuristic values of queues: 18.98/-1/20.98/-1 [expanded 741 state(s)]
+Best heuristic values of queues: 16.98/-1/20.98/-1 [expanded 2001 state(s)]
+Best heuristic values of queues: 16.98/-1/18.98/-1 [expanded 2033 state(s)]
+Best heuristic values of queues: 15.98/-1/18.98/-1 [expanded 2224 state(s)]
+Best heuristic values of queues: 15.98/-1/16.98/-1 [expanded 2234 state(s)]
+Best heuristic values of queues: 15/-1/16.98/-1 [expanded 2276 state(s)]
+Best heuristic values of queues: 14.98/-1/16.98/-1 [expanded 2282 state(s)]
+Best heuristic values of queues: 11.98/-1/16.98/-1 [expanded 2284 state(s)]
+Best heuristic values of queues: 9.98/-1/16.98/-1 [expanded 2292 state(s)]
+Best heuristic values of queues: 9.98/-1/13.98/-1 [expanded 2297 state(s)]
+Best heuristic values of queues: 9.98/-1/12.98/-1 [expanded 2307 state(s)]
+Best heuristic values of queues: 9.98/-1/10.98/-1 [expanded 2311 state(s)]
+Best heuristic values of queues: 9/-1/10.98/-1 [expanded 2426 state(s)]
+Best heuristic values of queues: 8.98/-1/10.98/-1 [expanded 2435 state(s)]
+Best heuristic values of queues: 8.98/-1/9.98/-1 [expanded 2442 state(s)]
+Best heuristic values of queues: 7/-1/9.98/-1 [expanded 2444 state(s)]
+Best heuristic values of queues: 5.98/-1/9.98/-1 [expanded 2446 state(s)]
+Best heuristic values of queues: 5/-1/9.98/-1 [expanded 2447 state(s)]
+Best heuristic values of queues: 2.98/-1/9.98/-1 [expanded 2448 state(s)]
+Best heuristic values of queues: 2.98/-1/7.97/-1 [expanded 2453 state(s)]
+Best heuristic values of queues: 2.98/-1/5.98/-1 [expanded 2484 state(s)]
+Best heuristic values of queues: 2.95/-1/5.98/-1 [expanded 2811 state(s)]
+Best heuristic values of queues: 2.95/-1/5.01/-1 [expanded 2842 state(s)]
+No progress since 6768, now at 11768
+RESET!
+Giving prior boost to open list 1
+Open list sizes (priorities): 0 (0),  0 (-5000),  0 (0),  0 (0), 
+Best heuristic values of queues: -1/-1/33.98/-1 [expanded 1 state(s)]
+Best heuristic values of queues: -1/34.98/33.98/-1 [expanded 2 state(s)]
+Best heuristic values of queues: -1/29.98/33.98/-1 [expanded 7 state(s)]
+Best heuristic values of queues: -1/29.98/30.98/-1 [expanded 12 state(s)]
+Best heuristic values of queues: -1/29.98/28.98/-1 [expanded 18 state(s)]
+Best heuristic values of queues: -1/26.98/28.98/-1 [expanded 93 state(s)]
+Best heuristic values of queues: -1/25.98/28.98/-1 [expanded 103 state(s)]
+Best heuristic values of queues: -1/25.98/26.98/-1 [expanded 108 state(s)]
+Best heuristic values of queues: -1/25.98/25.98/-1 [expanded 617 state(s)]
+Best heuristic values of queues: -1/24.98/25.98/-1 [expanded 625 state(s)]
+Best heuristic values of queues: -1/23.98/25.98/-1 [expanded 629 state(s)]
+Best heuristic values of queues: -1/23.98/24.98/-1 [expanded 633 state(s)]
+Best heuristic values of queues: -1/23.98/22.98/-1 [expanded 638 state(s)]
+Best heuristic values of queues: -1/19.98/22.98/-1 [expanded 651 state(s)]
+Best heuristic values of queues: -1/19.98/20.98/-1 [expanded 656 state(s)]
+Best heuristic values of queues: -1/18.98/20.98/-1 [expanded 662 state(s)]
+Best heuristic values of queues: -1/18.98/18.98/-1 [expanded 1639 state(s)]
+Best heuristic values of queues: -1/15.98/18.98/-1 [expanded 1651 state(s)]
+Best heuristic values of queues: -1/15.98/14.98/-1 [expanded 1652 state(s)]
+Best heuristic values of queues: -1/11.98/14.98/-1 [expanded 1689 state(s)]
+Best heuristic values of queues: -1/11.98/13.98/-1 [expanded 1694 state(s)]
+Best heuristic values of queues: -1/11.98/12.98/-1 [expanded 1704 state(s)]
+Best heuristic values of queues: -1/9.98/12.98/-1 [expanded 1974 state(s)]
+Best heuristic values of queues: -1/9.98/10.98/-1 [expanded 1979 state(s)]
+Best heuristic values of queues: -1/9.98/9.98/-1 [expanded 2154 state(s)]
+Best heuristic values of queues: -1/7.98/9.98/-1 [expanded 2157 state(s)]
+Best heuristic values of queues: -1/6.98/9.98/-1 [expanded 2161 state(s)]
+Best heuristic values of queues: -1/6.98/7.98/-1 [expanded 2166 state(s)]
+Best heuristic values of queues: -1/4.98/7.98/-1 [expanded 2180 state(s)]
+Best heuristic values of queues: -1/4.98/5.98/-1 [expanded 2185 state(s)]
+Best heuristic values of queues: -1/2.98/5.98/-1 [expanded 2190 state(s)]
+Best heuristic values of queues: -1/2.98/4.98/-1 [expanded 2463 state(s)]
+No progress since 6337, now at 11337
+RESET!
+Giving prior boost to open list 2
+Open list sizes (priorities): 0 (0),  0 (0),  0 (-5000),  0 (0), 
+Best heuristic values of queues: -1/-1/33.98/-1 [expanded 1 state(s)]
+Best heuristic values of queues: -1/-1/32.98/-1 [expanded 6 state(s)]
+Best heuristic values of queues: -1/-1/29.98/-1 [expanded 44 state(s)]
+Best heuristic values of queues: -1/-1/28.98/-1 [expanded 47 state(s)]
+Best heuristic values of queues: -1/-1/27.98/-1 [expanded 108 state(s)]
+Best heuristic values of queues: -1/-1/26.98/-1 [expanded 114 state(s)]
+Best heuristic values of queues: -1/-1/24.98/-1 [expanded 124 state(s)]
+Best heuristic values of queues: -1/-1/23.98/-1 [expanded 153 state(s)]
+Best heuristic values of queues: -1/-1/22.98/-1 [expanded 154 state(s)]
+Best heuristic values of queues: -1/-1/19.98/-1 [expanded 168 state(s)]
+Best heuristic values of queues: -1/-1/19/-1 [expanded 411 state(s)]
+Best heuristic values of queues: -1/-1/16.98/-1 [expanded 413 state(s)]
+Best heuristic values of queues: -1/-1/16/-1 [expanded 416 state(s)]
+Best heuristic values of queues: -1/-1/11.98/-1 [expanded 443 state(s)]
+Best heuristic values of queues: -1/-1/11.96/-1 [expanded 699 state(s)]
+Best heuristic values of queues: -1/-1/11/-1 [expanded 703 state(s)]
+Best heuristic values of queues: -1/-1/9.98/-1 [expanded 707 state(s)]
+Best heuristic values of queues: -1/-1/9.02/-1 [expanded 708 state(s)]
+Best heuristic values of queues: -1/-1/9/-1 [expanded 709 state(s)]
+Best heuristic values of queues: -1/-1/6.98/-1 [expanded 711 state(s)]
+Best heuristic values of queues: -1/-1/4.98/-1 [expanded 769 state(s)]
+Best heuristic values of queues: -1/-1/2.98/-1 [expanded 811 state(s)]
+Best heuristic values of queues: -1/-1/2.96/-1 [expanded 944 state(s)]
+Best heuristic values of queues: -1/-1/2.01/-1 [expanded 972 state(s)]
+Best heuristic values of queues: -1/-1/2/-1 [expanded 2403 state(s)]
+No progress since 3848, now at 8848
+RESET!
+Giving prior boost to open list 3
+Open list sizes (priorities): 0 (0),  0 (0),  0 (0),  0 (-5000), 
+Best heuristic values of queues: -1/-1/33.01/-1 [expanded 1 state(s)]
+Best heuristic values of queues: -1/-1/33.01/43.98 [expanded 2 state(s)]
+Best heuristic values of queues: -1/-1/33.01/34.98 [expanded 3 state(s)]
+Best heuristic values of queues: -1/-1/33.01/33.98 [expanded 11 state(s)]
+Best heuristic values of queues: -1/-1/32.98/33.98 [expanded 66 state(s)]
+Best heuristic values of queues: -1/-1/29.98/33.98 [expanded 302 state(s)]
+Best heuristic values of queues: -1/-1/29.98/30.98 [expanded 303 state(s)]
+Best heuristic values of queues: -1/-1/28.98/30.98 [expanded 321 state(s)]
+Best heuristic values of queues: -1/-1/26.98/30.98 [expanded 394 state(s)]
+Best heuristic values of queues: -1/-1/26.98/29.98 [expanded 397 state(s)]
+Best heuristic values of queues: -1/-1/26.98/28.98 [expanded 398 state(s)]
+Best heuristic values of queues: -1/-1/26.98/26.98 [expanded 1842 state(s)]
+Best heuristic values of queues: -1/-1/26.98/26 [expanded 1848 state(s)]
+Best heuristic values of queues: -1/-1/26.98/24.98 [expanded 1851 state(s)]
+Best heuristic values of queues: -1/-1/24.98/24.98 [expanded 1898 state(s)]
+Best heuristic values of queues: -1/-1/19.98/24.98 [expanded 1999 state(s)]
+Best heuristic values of queues: -1/-1/19.98/22.98 [expanded 2000 state(s)]
+Best heuristic values of queues: -1/-1/18.98/22.98 [expanded 2324 state(s)]
+Best heuristic values of queues: -1/-1/18.98/21.98 [expanded 2327 state(s)]
+Best heuristic values of queues: -1/-1/18.98/21 [expanded 2698 state(s)]
+Best heuristic values of queues: -1/-1/18.98/20 [expanded 2820 state(s)]
+Best heuristic values of queues: -1/-1/18.98/18.98 [expanded 2828 state(s)]
+Best heuristic values of queues: -1/-1/18.98/18 [expanded 2829 state(s)]
+Best heuristic values of queues: -1/-1/18.98/17 [expanded 2910 state(s)]
+Best heuristic values of queues: -1/-1/18.98/15.96 [expanded 2915 state(s)]
+Best heuristic values of queues: -1/-1/18.98/14.96 [expanded 2916 state(s)]
+Best heuristic values of queues: -1/-1/18.98/14 [expanded 2919 state(s)]
+Best heuristic values of queues: -1/-1/17.98/14 [expanded 2991 state(s)]
+Best heuristic values of queues: -1/-1/16.98/14 [expanded 2993 state(s)]
+Best heuristic values of queues: -1/-1/14.98/14 [expanded 3101 state(s)]
+Best heuristic values of queues: -1/-1/11.98/14 [expanded 3154 state(s)]
+Best heuristic values of queues: -1/-1/11.98/13.01 [expanded 3316 state(s)]
+Best heuristic values of queues: -1/-1/11.98/13 [expanded 3398 state(s)]
+Best heuristic values of queues: -1/-1/11.98/11 [expanded 3583 state(s)]
+Best heuristic values of queues: -1/-1/11.98/9.98 [expanded 3590 state(s)]
+Best heuristic values of queues: -1/-1/11.98/9 [expanded 3591 state(s)]
+Best heuristic values of queues: -1/-1/9.98/9 [expanded 3714 state(s)]
+Best heuristic values of queues: -1/-1/6.98/9 [expanded 3888 state(s)]
+Best heuristic values of queues: -1/-1/6.98/8.98 [expanded 3889 state(s)]
+Best heuristic values of queues: -1/-1/6.98/7 [expanded 3891 state(s)]
+Best heuristic values of queues: -1/-1/4.98/7 [expanded 4584 state(s)]
+Best heuristic values of queues: -1/-1/4.98/6.98 [expanded 4585 state(s)]
+Best heuristic values of queues: -1/-1/4.98/5 [expanded 4587 state(s)]
+Best heuristic values of queues: -1/-1/2.98/5 [expanded 5040 state(s)]
+Best heuristic values of queues: -1/-1/2.98/4.98 [expanded 5041 state(s)]
+Best heuristic values of queues: -1/-1/2.98/3.98 [expanded 5043 state(s)]
+No progress since 10705, now at 15705
+RESET!
+Switching to round robin mode. 
+Open list sizes (priorities): 0 (0),  0 (0),  0 (0),  0 (0), 
+Best heuristic values of queues: -1/-1/-1/33.98 [expanded 1 state(s)]
+Best heuristic values of queues: 34.98/-1/-1/33.98 [expanded 2 state(s)]
+Best heuristic values of queues: 34.98/-1/34.98/33.98 [expanded 4 state(s)]
+Best heuristic values of queues: 34.98/-1/32.98/33.98 [expanded 12 state(s)]
+Best heuristic values of queues: 34.98/39.98/32.98/33.98 [expanded 14 state(s)]
+Best heuristic values of queues: 33.98/39.98/32.98/33.98 [expanded 15 state(s)]
+Best heuristic values of queues: 33.98/33.98/32.98/33.98 [expanded 26 state(s)]
+Best heuristic values of queues: 33.98/29.98/32.98/33.98 [expanded 34 state(s)]
+Best heuristic values of queues: 33.98/29.98/30.98/33.98 [expanded 35 state(s)]
+Best heuristic values of queues: 33.98/29.98/30.98/32.98 [expanded 36 state(s)]
+Best heuristic values of queues: 33.98/29.98/28.98/32.98 [expanded 40 state(s)]
+Best heuristic values of queues: 32.98/29.98/28.98/32.98 [expanded 45 state(s)]
+Best heuristic values of queues: 30.98/29.98/28.98/32.98 [expanded 58 state(s)]
+Best heuristic values of queues: 30.98/29.98/28.98/30.98 [expanded 77 state(s)]
+Best heuristic values of queues: 30.98/26.98/28.98/30.98 [expanded 114 state(s)]
+Best heuristic values of queues: 30.98/26.98/26.98/30.98 [expanded 118 state(s)]
+Best heuristic values of queues: 26.98/26.98/26.98/30.98 [expanded 146 state(s)]
+Best heuristic values of queues: 26.98/26.98/26.98/29.98 [expanded 533 state(s)]
+Best heuristic values of queues: 26.98/26.98/26.98/26.98 [expanded 608 state(s)]
+Best heuristic values of queues: 24.98/26.98/26.98/26.98 [expanded 610 state(s)]
+Best heuristic values of queues: 24.98/24.98/26.98/26.98 [expanded 611 state(s)]
+Best heuristic values of queues: 24.98/24.98/24.98/26.98 [expanded 615 state(s)]
+Best heuristic values of queues: 24.98/19.98/24.98/26.98 [expanded 656 state(s)]
+Best heuristic values of queues: 24.98/19.98/20.98/26.98 [expanded 657 state(s)]
+Best heuristic values of queues: 24.98/19.98/20.98/22.98 [expanded 658 state(s)]
+Best heuristic values of queues: 23.98/19.98/20.98/22.98 [expanded 697 state(s)]
+Best heuristic values of queues: 20.98/19.98/20.98/22.98 [expanded 765 state(s)]
+Best heuristic values of queues: 20.98/19.98/18.98/22.98 [expanded 885 state(s)]
+Best heuristic values of queues: 20.98/19.98/18.98/21.98 [expanded 886 state(s)]
+Best heuristic values of queues: 20.98/19.98/18.98/19 [expanded 1007 state(s)]
+Best heuristic values of queues: 17.98/19.98/18.98/19 [expanded 1009 state(s)]
+Best heuristic values of queues: 17.98/17/18.98/19 [expanded 1010 state(s)]
+Best heuristic values of queues: 17.98/17/17.98/19 [expanded 1026 state(s)]
+Best heuristic values of queues: 17.98/16.98/17.98/19 [expanded 1037 state(s)]
+Best heuristic values of queues: 17.98/16.98/17/19 [expanded 1038 state(s)]
+Best heuristic values of queues: 17.98/16.98/13.98/19 [expanded 1039 state(s)]
+Best heuristic values of queues: 17.98/16.98/13.98/15.98 [expanded 1040 state(s)]
+Best heuristic values of queues: 14/16.98/13.98/15.98 [expanded 1041 state(s)]
+Best heuristic values of queues: 14/14.98/13.98/15.98 [expanded 1058 state(s)]
+Best heuristic values of queues: 14/14/13.98/15.98 [expanded 1151 state(s)]
+Best heuristic values of queues: 13.98/14/13.98/15.98 [expanded 1186 state(s)]
+Best heuristic values of queues: 13.98/13/13.98/15.98 [expanded 1187 state(s)]
+Best heuristic values of queues: 13.98/13/13.98/13.97 [expanded 1211 state(s)]
+Best heuristic values of queues: 12.97/13/13.98/13.97 [expanded 1212 state(s)]
+Best heuristic values of queues: 12.96/13/13.98/13.97 [expanded 1213 state(s)]
+Best heuristic values of queues: 12.96/11.96/13.98/13.97 [expanded 1214 state(s)]
+Best heuristic values of queues: 12.96/11/13.98/13.97 [expanded 1215 state(s)]
+Best heuristic values of queues: 12.96/11/9.98/13.97 [expanded 1216 state(s)]
+Best heuristic values of queues: 12.96/11/9.98/9.01 [expanded 1217 state(s)]
+Best heuristic values of queues: 12.96/11/9.98/9 [expanded 1218 state(s)]
+Best heuristic values of queues: 11.98/11/9.98/9 [expanded 1220 state(s)]
+Best heuristic values of queues: 10.96/11/9.98/9 [expanded 1226 state(s)]
+Best heuristic values of queues: 10.96/9.96/9.98/9 [expanded 1227 state(s)]
+Best heuristic values of queues: 9.98/9.96/9.98/9 [expanded 1260 state(s)]
+Best heuristic values of queues: 9.98/9.01/9.98/9 [expanded 1261 state(s)]
+Best heuristic values of queues: 9.98/7.95/9.98/9 [expanded 1319 state(s)]
+Best heuristic values of queues: 9.98/7.95/8.95/9 [expanded 1320 state(s)]
+Best heuristic values of queues: 9.96/7.95/8.95/9 [expanded 1348 state(s)]
+Best heuristic values of queues: 9.96/7.95/7.98/9 [expanded 1366 state(s)]
+Best heuristic values of queues: 9.96/7.95/4.98/9 [expanded 1367 state(s)]
+Best heuristic values of queues: 9.96/7.95/4.98/6.98 [expanded 1368 state(s)]
+Best heuristic values of queues: 5.98/7.95/4.98/6.98 [expanded 1369 state(s)]
+Best heuristic values of queues: 5.98/5.98/4.98/6.98 [expanded 1393 state(s)]
+Best heuristic values of queues: 5.98/4.98/4.98/6.98 [expanded 1832 state(s)]
+Best heuristic values of queues: 5.98/4.98/2.98/6.98 [expanded 1858 state(s)]
+Best heuristic values of queues: 5.98/4.98/2.98/4.98 [expanded 1859 state(s)]
+Best heuristic values of queues: 3.98/4.98/2.98/4.98 [expanded 1860 state(s)]
+Best heuristic values of queues: 3.98/2.98/2.98/4.98 [expanded 1949 state(s)]
+
+Search Time: 10 sec.
+Expanded Nodes: 52814 state(s).
+Rate: 5281.4 Nodes/s (over 10.0s) 5281.4 Nodes/s (total average)
+Generated Nodes: 325997 state(s).
+Rate: 32599.7 Nodes/s (over 10.0s) 32599.7 Nodes/s (total average)
+Overall branching factor by list sizes: 6.17255
+Averaged overall branching factor: Mean 6.17 Std: 3.72 (Num: 52814)
+Branching factors by open list:
+Open List 0: Mean 1.36 Std: 0.72 (Num: 52814)
+Open List 1: Mean 1.23 Std: 0.48 (Num: 52814)
+Open List 2: Mean 1.71 Std: 1.30 (Num: 52814)
+Open List 3: Mean 1.87 Std: 1.50 (Num: 52814)
+OpenList sizes: 5672 1844 13842 18148
+Heuristic Computations (per heuristic): 155087 Total: 155087
+Number of cache hits in heuristic (per heuristic): 123652 Total: 123652
+Best heuristic values of queues: [0: 3.98] [1: 2.98] [2: 2.98] [3: 4.98]
+
+Best heuristic values of queues: 3.98/2.98/1.98/4.98 [expanded 65029 state(s)]
+Best heuristic values of queues: 3.98/2.98/1.98/2.98 [expanded 65030 state(s)]
+Best heuristic values of queues: 2/2.98/1.98/2.98 [expanded 65031 state(s)]
+Best heuristic values of queues: 2/2.98/1.98/1 [expanded 66465 state(s)]
+Best heuristic values of queues: 1.88/2.98/1.98/1 [expanded 66467 state(s)]
+Best heuristic values of queues: 1/2.98/1.98/1 [expanded 66470 state(s)]
+Best heuristic values of queues: 1/1.98/1.98/1 [expanded 66484 state(s)]
+Best heuristic values of queues: 1/0/1.98/1 [expanded 66869 state(s)]
+New solution has been found.
+
+Found new plan:
+0.00000000: (move robot_1 table_1 table_4) [1.00000000]
+1.01000000: (pick-up robot_1 tomato_1 table_4) [1.00000000]
+1.02000000: (move robot_1 table_4 table_1) [1.00000000]
+2.03000000: (stack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+2.04000000: (move robot_1 table_1 table_3) [1.00000000]
+3.05000000: (pick-up robot_1 lettuce_1 table_3) [1.00000000]
+3.06000000: (move robot_1 table_3 table_1) [1.00000000]
+4.07000000: (move robot_1 table_1 board_1) [1.00000000]
+5.08000000: (place robot_1 lettuce_1 board_1) [1.00000000]
+6.09000000: (cut robot_1 lettuce_1 board_1) [3.00000000]
+9.10000000: (pick-up robot_1 lettuce_1 board_1) [1.00000000]
+9.11000000: (move robot_1 board_1 table_2) [1.00000000]
+10.12000000: (move robot_1 table_2 table_4) [1.00000000]
+11.13000000: (place robot_1 lettuce_1 table_4) [1.00000000]
+11.14000000: (move robot_1 table_4 table_1) [1.00000000]
+12.15000000: (unstack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+12.16000000: (move robot_1 table_1 board_1) [1.00000000]
+13.17000000: (place robot_1 tomato_1 board_1) [1.00000000]
+13.18000000: (move robot_1 board_1 table_2) [1.00000000]
+14.19000000: (pick-up robot_1 chicken_1 table_2) [1.00000000]
+14.20000000: (move robot_1 table_2 fryer_1) [1.00000000]
+15.21000000: (place robot_1 chicken_1 fryer_1) [1.00000000]
+16.22000000: (fry robot_1 chicken_1 fryer_1) [3.00000000]
+16.23000000: (move robot_1 fryer_1 board_1) [1.00000000]
+17.24000000: (cut robot_1 tomato_1 board_1) [3.00000000]
+20.25000000: (move robot_1 board_1 table_1) [1.00000000]
+21.26000000: (unstack robot_1 bread_2 bread_1 table_1) [1.00000000]
+21.27000000: (move robot_1 table_1 table_2) [1.00000000]
+22.28000000: (place robot_1 bread_2 table_2) [1.00000000]
+22.29000000: (move robot_1 table_2 table_4) [1.00000000]
+23.30000000: (pick-up robot_1 lettuce_1 table_4) [1.00000000]
+23.31000000: (move robot_1 table_4 table_1) [1.00000000]
+24.32000000: (stack robot_1 lettuce_1 bread_1 table_1) [1.00000000]
+24.33000000: (move robot_1 table_1 board_1) [1.00000000]
+25.34000000: (pick-up robot_1 tomato_1 board_1) [1.00000000]
+25.35000000: (move robot_1 board_1 table_1) [1.00000000]
+26.36000000: (stack robot_1 tomato_1 lettuce_1 table_1) [1.00000000]
+26.37000000: (move robot_1 table_1 fryer_1) [1.00000000]
+27.38000000: (pick-up robot_1 chicken_1 fryer_1) [1.00000000]
+27.39000000: (move robot_1 fryer_1 table_1) [1.00000000]
+28.40000000: (stack robot_1 chicken_1 tomato_1 table_1) [1.00000000]
+28.41000000: (move robot_1 table_1 table_2) [1.00000000]
+29.42000000: (pick-up robot_1 bread_2 table_2) [1.00000000]
+29.43000000: (move robot_1 table_2 table_1) [1.00000000]
+30.44000000: (stack robot_1 bread_2 chicken_1 table_1) [1.00000000]
+Rescheduled Plan:
+0.00100000: (move robot_1 table_1 table_4) [1.00000000]
+1.01100000: (pick-up robot_1 tomato_1 table_4) [1.00000000]
+1.02100000: (move robot_1 table_4 table_1) [1.00000000]
+2.03100000: (stack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+2.04100000: (move robot_1 table_1 table_3) [1.00000000]
+3.05100000: (pick-up robot_1 lettuce_1 table_3) [1.00000000]
+3.06100000: (move robot_1 table_3 table_1) [1.00000000]
+4.07100000: (move robot_1 table_1 board_1) [1.00000000]
+5.08100000: (place robot_1 lettuce_1 board_1) [1.00000000]
+6.09100000: (cut robot_1 lettuce_1 board_1) [3.00000000]
+9.10100000: (pick-up robot_1 lettuce_1 board_1) [1.00000000]
+9.11100000: (move robot_1 board_1 table_2) [1.00000000]
+10.12100000: (move robot_1 table_2 table_4) [1.00000000]
+11.13100000: (place robot_1 lettuce_1 table_4) [1.00000000]
+11.14100000: (move robot_1 table_4 table_1) [1.00000000]
+12.15100000: (unstack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+12.16100000: (move robot_1 table_1 board_1) [1.00000000]
+13.17100000: (place robot_1 tomato_1 board_1) [1.00000000]
+13.18100000: (move robot_1 board_1 table_2) [1.00000000]
+14.19100000: (pick-up robot_1 chicken_1 table_2) [1.00000000]
+14.20100000: (move robot_1 table_2 fryer_1) [1.00000000]
+15.21100000: (place robot_1 chicken_1 fryer_1) [1.00000000]
+16.22100000: (fry robot_1 chicken_1 fryer_1) [3.00000000]
+16.23100000: (move robot_1 fryer_1 board_1) [1.00000000]
+17.24100000: (cut robot_1 tomato_1 board_1) [3.00000000]
+20.25100000: (move robot_1 board_1 table_1) [1.00000000]
+21.26100000: (unstack robot_1 bread_2 bread_1 table_1) [1.00000000]
+21.27100000: (move robot_1 table_1 table_2) [1.00000000]
+22.28100000: (place robot_1 bread_2 table_2) [1.00000000]
+22.29100000: (move robot_1 table_2 table_4) [1.00000000]
+23.30100000: (pick-up robot_1 lettuce_1 table_4) [1.00000000]
+23.31100000: (move robot_1 table_4 table_1) [1.00000000]
+24.32100000: (stack robot_1 lettuce_1 bread_1 table_1) [1.00000000]
+24.33100000: (move robot_1 table_1 board_1) [1.00000000]
+25.34100000: (pick-up robot_1 tomato_1 board_1) [1.00000000]
+25.35100000: (move robot_1 board_1 table_1) [1.00000000]
+26.36100000: (stack robot_1 tomato_1 lettuce_1 table_1) [1.00000000]
+26.37100000: (move robot_1 table_1 fryer_1) [1.00000000]
+27.38100000: (pick-up robot_1 chicken_1 fryer_1) [1.00000000]
+27.39100000: (move robot_1 fryer_1 table_1) [1.00000000]
+28.40100000: (stack robot_1 chicken_1 tomato_1 table_1) [1.00000000]
+28.41100000: (move robot_1 table_1 table_2) [1.00000000]
+29.42100000: (pick-up robot_1 bread_2 table_2) [1.00000000]
+29.43100000: (move robot_1 table_2 table_1) [1.00000000]
+30.44100000: (stack robot_1 bread_2 chicken_1 table_1) [1.00000000]
+Solution with original makespan 31.44 found (ignoring no-moving-targets-rule).
+Plan length: 45 step(s).
+Makespan   : 31.441
+Rescheduled Makespan   : 31.441
+Search time: 16.21 seconds - Walltime: 16.3938 seconds
+Total time: 16.22 seconds - Walltime: 16.4095 seconds
+0.00100000: (move robot_1 table_1 table_4) [1.00000000]
+1.01100000: (pick-up robot_1 tomato_1 table_4) [1.00000000]
+1.02100000: (move robot_1 table_4 table_1) [1.00000000]
+2.03100000: (stack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+2.04100000: (move robot_1 table_1 table_3) [1.00000000]
+3.05100000: (pick-up robot_1 lettuce_1 table_3) [1.00000000]
+3.06100000: (move robot_1 table_3 table_1) [1.00000000]
+4.07100000: (move robot_1 table_1 board_1) [1.00000000]
+5.08100000: (place robot_1 lettuce_1 board_1) [1.00000000]
+6.09100000: (cut robot_1 lettuce_1 board_1) [3.00000000]
+9.10100000: (pick-up robot_1 lettuce_1 board_1) [1.00000000]
+9.11100000: (move robot_1 board_1 table_2) [1.00000000]
+10.12100000: (move robot_1 table_2 table_4) [1.00000000]
+11.13100000: (place robot_1 lettuce_1 table_4) [1.00000000]
+11.14100000: (move robot_1 table_4 table_1) [1.00000000]
+12.15100000: (unstack robot_1 tomato_1 bread_2 table_1) [1.00000000]
+12.16100000: (move robot_1 table_1 board_1) [1.00000000]
+13.17100000: (place robot_1 tomato_1 board_1) [1.00000000]
+13.18100000: (move robot_1 board_1 table_2) [1.00000000]
+14.19100000: (pick-up robot_1 chicken_1 table_2) [1.00000000]
+14.20100000: (move robot_1 table_2 fryer_1) [1.00000000]
+15.21100000: (place robot_1 chicken_1 fryer_1) [1.00000000]
+16.22100000: (fry robot_1 chicken_1 fryer_1) [3.00000000]
+16.23100000: (move robot_1 fryer_1 board_1) [1.00000000]
+17.24100000: (cut robot_1 tomato_1 board_1) [3.00000000]
+20.25100000: (move robot_1 board_1 table_1) [1.00000000]
+21.26100000: (unstack robot_1 bread_2 bread_1 table_1) [1.00000000]
+21.27100000: (move robot_1 table_1 table_2) [1.00000000]
+22.28100000: (place robot_1 bread_2 table_2) [1.00000000]
+22.29100000: (move robot_1 table_2 table_4) [1.00000000]
+23.30100000: (pick-up robot_1 lettuce_1 table_4) [1.00000000]
+23.31100000: (move robot_1 table_4 table_1) [1.00000000]
+24.32100000: (stack robot_1 lettuce_1 bread_1 table_1) [1.00000000]
+24.33100000: (move robot_1 table_1 board_1) [1.00000000]
+25.34100000: (pick-up robot_1 tomato_1 board_1) [1.00000000]
+25.35100000: (move robot_1 board_1 table_1) [1.00000000]
+26.36100000: (stack robot_1 tomato_1 lettuce_1 table_1) [1.00000000]
+26.37100000: (move robot_1 table_1 fryer_1) [1.00000000]
+27.38100000: (pick-up robot_1 chicken_1 fryer_1) [1.00000000]
+27.39100000: (move robot_1 fryer_1 table_1) [1.00000000]
+28.40100000: (stack robot_1 chicken_1 tomato_1 table_1) [1.00000000]
+28.41100000: (move robot_1 table_1 table_2) [1.00000000]
+29.42100000: (pick-up robot_1 bread_2 table_2) [1.00000000]
+29.43100000: (move robot_1 table_2 table_1) [1.00000000]
+30.44100000: (stack robot_1 bread_2 chicken_1 table_1) [1.00000000]

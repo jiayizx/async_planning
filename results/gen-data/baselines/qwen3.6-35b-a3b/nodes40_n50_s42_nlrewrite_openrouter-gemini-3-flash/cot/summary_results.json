@@ -1,9 +1,0 @@
-{
-  "benchmark": "gen-data",
-  "model_name": "qwen3.6-35b-a3b",
-  "icl_examples": 0,
-  "cot": true,
-  "accuracy": 0.66,
-  "num_correct": 33,
-  "num_data_points": 50
-}

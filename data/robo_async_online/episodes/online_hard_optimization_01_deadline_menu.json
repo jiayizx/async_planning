@@ -1,0 +1,279 @@
+{
+  "id": "online_hard_optimization_01_deadline_menu",
+  "protocol": "robo_async_online_v2",
+  "source_dataset": "robo_async_challenge_v2",
+  "source_task_id": "hard_optimization_01_deadline_menu",
+  "source_split": "hard_optimization",
+  "difficulty": "online_hard_optimization",
+  "challenge_features": [
+    "online",
+    "dynamic_goal_injection",
+    "replanning",
+    "hard_optimization",
+    "deadline",
+    "limited_inventory",
+    "reward_maximization"
+  ],
+  "initial_task": {
+    "items": {
+      "patty01": {
+        "state": "raw",
+        "predicates": [
+          "iscookable"
+        ]
+      },
+      "chicken01": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "ismarinatable",
+          "iscookableifmarinated"
+        ],
+        "grill_requires_marinated": true
+      },
+      "fish01": {
+        "state": "raw",
+        "predicates": [
+          "isfryable"
+        ]
+      },
+      "potato01": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable",
+          "isfryableifcut"
+        ],
+        "fry_requires_cut": true
+      },
+      "yam01": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ],
+        "mash_requires_boiled": true
+      },
+      "lettuce01": {
+        "state": "raw",
+        "predicates": [
+          "iscuttable"
+        ]
+      },
+      "stock01": {
+        "state": "raw",
+        "predicates": [
+          "isboilable"
+        ]
+      }
+    },
+    "deliveries": [],
+    "candidate_goals": [
+      {
+        "id": "grilled_main",
+        "item": "patty01",
+        "state": "grilled",
+        "reward": 9,
+        "cost": {
+          "protein": 1
+        }
+      },
+      {
+        "id": "marinated_grill",
+        "item": "chicken01",
+        "state": "grilled",
+        "reward": 14,
+        "cost": {
+          "protein": 1,
+          "fresh": 1
+        }
+      },
+      {
+        "id": "fried_main",
+        "item": "fish01",
+        "state": "fried",
+        "reward": 8,
+        "cost": {
+          "protein": 1,
+          "fryer_oil": 1
+        }
+      },
+      {
+        "id": "fried_side",
+        "item": "potato01",
+        "state": "fried",
+        "reward": 7,
+        "cost": {
+          "fryer_oil": 1,
+          "fresh": 1
+        }
+      },
+      {
+        "id": "mashed_root",
+        "item": "yam01",
+        "state": "mashed",
+        "reward": 10,
+        "cost": {
+          "root": 1
+        }
+      },
+      {
+        "id": "fresh_side",
+        "item": "lettuce01",
+        "state": "cut",
+        "reward": 4,
+        "cost": {
+          "fresh": 1
+        }
+      },
+      {
+        "id": "soup_side",
+        "item": "stock01",
+        "state": "boiled",
+        "reward": 6,
+        "cost": {
+          "root": 1
+        }
+      }
+    ],
+    "deadline": null,
+    "inventory_limits": {
+      "protein": 2,
+      "fryer_oil": 2,
+      "root": 1,
+      "fresh": 2
+    },
+    "action_durations": {
+      "grill": 10.0,
+      "cut": 3.0,
+      "fry": 8.0,
+      "boil": 12.0,
+      "toast": 5.0,
+      "marinate": 6.0,
+      "mash": 4.0,
+      "stack": 1.0
+    },
+    "stations": {
+      "grill": 1,
+      "cutting_board": 2,
+      "fryer": 1,
+      "boiler": 1,
+      "toaster": 1,
+      "marinator": 1
+    },
+    "temporal_constraints": [],
+    "robots": [
+      "robot1",
+      "robot2"
+    ]
+  },
+  "events": [
+    {
+      "id": "event_1",
+      "trigger_time": 3.97,
+      "type": "add_candidate_goal",
+      "description": "A new high-reward candidate goal becomes available during execution.",
+      "delta": {
+        "add_items": {
+          "online_grill_01_1": {
+            "state": "raw",
+            "predicates": [
+              "iscookable"
+            ]
+          }
+        },
+        "add_candidate_goals": [
+          {
+            "id": "dynamic_grilled_bonus_01_1",
+            "item": "online_grill_01_1",
+            "state": "grilled",
+            "reward": 16,
+            "cost": {
+              "protein": 1
+            }
+          }
+        ],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_2",
+      "trigger_time": 8.77,
+      "type": "add_candidate_goal",
+      "description": "A new high-reward candidate goal becomes available during execution.",
+      "delta": {
+        "add_items": {
+          "online_fry_01_2": {
+            "state": "raw",
+            "predicates": [
+              "iscuttable",
+              "isfryableifcut"
+            ],
+            "fry_requires_cut": true
+          }
+        },
+        "add_candidate_goals": [
+          {
+            "id": "dynamic_fried_bonus_01_2",
+            "item": "online_fry_01_2",
+            "state": "fried",
+            "reward": 13,
+            "cost": {
+              "fryer_oil": 1,
+              "fresh": 1
+            }
+          }
+        ],
+        "set_deadline": null
+      }
+    },
+    {
+      "id": "event_3",
+      "trigger_time": 14.53,
+      "type": "add_candidate_goal",
+      "description": "A new high-reward candidate goal becomes available during execution.",
+      "delta": {
+        "add_items": {
+          "online_mash_01_3": {
+            "state": "raw",
+            "predicates": [
+              "isboilable"
+            ],
+            "mash_requires_boiled": true
+          }
+        },
+        "add_candidate_goals": [
+          {
+            "id": "dynamic_mashed_bonus_01_3",
+            "item": "online_mash_01_3",
+            "state": "mashed",
+            "reward": 15,
+            "cost": {
+              "root": 1
+            }
+          }
+        ],
+        "set_deadline": null
+      }
+    }
+  ],
+  "oracle": {
+    "replan_points": [
+      3.97,
+      8.77,
+      14.53
+    ],
+    "source_task_id": "hard_optimization_01_deadline_menu",
+    "source_optimal_makespan": 24.0,
+    "oracle_final_makespan": null,
+    "source_sequential_makespan": 48,
+    "source_speedup_ratio": 2.0,
+    "notes": "Initial task is the full matching Robo-Async Challenge v2 task; online events add extra dynamic perturbations. Use continuation oracle fields computed during evaluation for final online optima.",
+    "source_optimal_reward": 38,
+    "source_selected_goal_ids": [
+      "grilled_main",
+      "fried_main",
+      "fried_side",
+      "mashed_root",
+      "fresh_side"
+    ]
+  }
+}
