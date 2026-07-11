@@ -13,6 +13,8 @@
 #   --num-workers N      Parallel workers                            [8]
 #   --temperature F      Sampling temperature                        [0.0]
 #   --max-tokens N       Max output tokens                           [4096]
+#   --two-phase 0|1      Phase-1 dep-analysis injected into prompt   [0]
+#   --effect-goal 0|1    Formalizer+ (all at-end effects in :goal)   [0]
 #   --pattern GLOB       Filename glob within data-dir               [*_nlrewrite_*.json]
 #
 # Usage examples:
@@ -35,12 +37,12 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-DATA_DIR="data/async_planning"
-# DATA_DIR="data/async_planning/nodes5_n50_s42_nlrewrite_gemini-3-flash.json"
+# DATA_DIR="data/async_planning_ds"
+# DATA_DIR="data/async_planning/nodes30_n50_s42_nlrewrite_openrouter-gemini-3-flash.json"
 # MODEL="openai/gpt-4.1"
-# MODEL="gemini-3-pro"
-MODEL="claude-haiku-4-5"
-SAVE_DIR="results/gen-data-modified/formalizer_origin"
+DATA_DIR="data/async_planning/"
+MODEL="deepseek/deepseek-v4-flash"
+SAVE_DIR="results/gen-data/formalizer-rerun"
 MAX_EXAMPLES=400
 NUM_SHOTS=0
 LLM_RETRIES=3
@@ -51,7 +53,7 @@ TEMPERATURE=0.0
 MAX_TOKENS=8192
 # MAX_TOKENS=65536
 TWO_PHASE=0      # 1 = enable two-phase (dep analysis → PDDL); 0 = one-phase
-EFFECT_GOAL=1    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
+EFFECT_GOAL=0    # 1 = Formalizer+ (all at-end effects in :goal); 0 = Formalizer
 # PATTERN="*_nlrewrite_*.json"
 PATTERN="*nlrewrite_openrouter*.json"
 
