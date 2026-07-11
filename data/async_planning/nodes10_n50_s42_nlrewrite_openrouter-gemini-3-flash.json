@@ -1,0 +1,4116 @@
+[
+  {
+    "id": 1,
+    "question": "To know if you have a hiatal hernia, here are the steps needed.\nStep 1. Schedule an initial consultation with a general practitioner (10 minutes)\nStep 2. Attend the physical examination and discuss symptoms (30 minutes)\nStep 3. Research local diagnostic imaging centers (1 hour)\nStep 4. Call to verify insurance coverage for a barium swallow test (20 minutes)\nStep 5. Fast for eight hours prior to the procedure (8 hours)\nStep 6. Undergo the upper GI X-ray series (45 minutes)\nStep 7. Receive a referral for a specialist gastroenterologist (5 minutes)\nStep 8. Travel to the outpatient surgical center (1 hour)\nStep 9. Pick up prescription for acid-reducing medication (15 minutes)\nStep 10. Consult with the gastroenterologist to authorize the endoscopy (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to know if you have a hiatal hernia?",
+    "answer": 31500,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "know if you have a hiatal hernia",
+    "par_ratio": 1.4667,
+    "path_count": 4,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.2,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "7": 1,
+        "2": 2,
+        "5": 3,
+        "3": 4,
+        "10": 5,
+        "9": 6,
+        "1": 7,
+        "6": 8,
+        "4": 9
+      },
+      "durations": [
+        3600,
+        300,
+        1800,
+        28800,
+        3600,
+        2700,
+        900,
+        600,
+        2700,
+        1200
+      ]
+    },
+    "question_abstract": "To know if you have a hiatal hernia, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to know if you have a hiatal hernia?"
+  },
+  {
+    "id": 2,
+    "question": "To add a new product, here are the steps needed.\nStep 1. Launch the marketing campaign (1 week)\nStep 2. Create the high-fidelity prototype (5 days)\nStep 3. Conduct user testing on the prototype (3 days)\nStep 4. Finalize the product design specifications (2 days)\nStep 5. Perform initial market research and feasibility study (4 days)\nStep 6. Film a promotional product demonstration video (8 hours)\nStep 7. Secure initial funding and budget approval (2 weeks)\nStep 8. File for trademark and patent protection (3 months)\nStep 9. Stock the initial inventory in the warehouse (10 days)\nStep 10. Place orders with the raw material suppliers (1 week)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 5 must precede Step 7.\nStep 5 must precede Step 9.\nStep 5 must precede Step 10.\nStep 6 must precede Step 1.\nStep 7 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to add a new product?",
+    "answer": 9763200,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "add a new product",
+    "par_ratio": 1.2596,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "6": 1,
+        "1": 2,
+        "8": 3,
+        "2": 4,
+        "5": 5,
+        "3": 6,
+        "10": 7,
+        "7": 8,
+        "4": 9
+      },
+      "durations": [
+        864000,
+        28800,
+        604800,
+        7776000,
+        432000,
+        345600,
+        259200,
+        604800,
+        1209600,
+        172800
+      ]
+    },
+    "question_abstract": "To add a new product, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 5 must precede Step 7.\nStep 5 must precede Step 9.\nStep 5 must precede Step 10.\nStep 6 must precede Step 1.\nStep 7 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to add a new product?"
+  },
+  {
+    "id": 3,
+    "question": "To remember the five great lakes, here are the steps needed.\nStep 1. Research the geographic location of each lake (45 minutes)\nStep 2. Recite the names aloud from memory (5 minutes)\nStep 3. Read a brief history of the shipping industry on the lakes (1 hour)\nStep 4. Draw a color-coded map of the Great Lakes region (30 minutes)\nStep 5. Take a self-administered practice quiz on the lake names (10 minutes)\nStep 6. Watch a documentary about the Great Lakes ecosystem (90 minutes)\nStep 7. Review the quiz results and correct any mistakes (15 minutes)\nStep 8. Create a mnemonic device using the first letter of each lake (20 minutes)\nStep 9. Purchase a reference book about North American geography (15 minutes)\nStep 10. Explain the \"HOMES\" acronym to a friend to solidify memory (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 8.\nStep 8 must precede Step 2.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to remember the five great lakes?",
+    "answer": 12900,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "remember the five great lakes",
+    "par_ratio": 1.3953,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "10": 1,
+        "4": 2,
+        "5": 3,
+        "6": 4,
+        "3": 5,
+        "8": 6,
+        "2": 7,
+        "7": 8,
+        "1": 9
+      },
+      "durations": [
+        900,
+        600,
+        1800,
+        600,
+        5400,
+        3600,
+        1200,
+        300,
+        900,
+        2700
+      ]
+    },
+    "question_abstract": "To remember the five great lakes, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 8.\nStep 8 must precede Step 2.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to remember the five great lakes?"
+  },
+  {
+    "id": 4,
+    "question": "To eat roast beef for dinner, here are the steps needed.\nStep 1. Set the dining table (5 minutes)\nStep 2. Let the cooked roast rest on a cutting board (15 minutes)\nStep 3. Preheat the oven to 325 degrees (10 minutes)\nStep 4. Drive to the local butcher shop (20 minutes)\nStep 5. Polish the silver cutlery (30 minutes)\nStep 6. Roast the beef in the oven (2 hours)\nStep 7. Carve the beef into thin slices (5 minutes)\nStep 8. Transfer the rested meat to a serving platter (2 minutes)\nStep 9. Season the beef with salt and herbs (10 minutes)\nStep 10. Remove the roast from the oven (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 1.\nStep 6 must precede Step 10.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to eat roast beef for dinner?",
+    "answer": 9180,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "eat roast beef for dinner",
+    "par_ratio": 1.4248,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "9": 1,
+        "3": 2,
+        "5": 3,
+        "10": 4,
+        "8": 5,
+        "1": 6,
+        "6": 7,
+        "7": 8,
+        "4": 9
+      },
+      "durations": [
+        900,
+        600,
+        600,
+        1800,
+        60,
+        120,
+        300,
+        7200,
+        300,
+        1200
+      ]
+    },
+    "question_abstract": "To eat roast beef for dinner, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 1.\nStep 6 must precede Step 10.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to eat roast beef for dinner?"
+  },
+  {
+    "id": 5,
+    "question": "To go into nature, here are the steps needed.\nStep 1. Pack the camping gear into the car (30 minutes)\nStep 2. Research national park trail maps (1 hour)\nStep 3. Check the mountain weather forecast (5 minutes)\nStep 4. Buy a week's worth of groceries and supplies (2 hours)\nStep 5. Reserve a specific campsite online (15 minutes)\nStep 6. Pack a day bag with rain gear and snacks (20 minutes)\nStep 7. Drive from the city to the mountain trailhead (4 hours)\nStep 8. Fill the car's gas tank for the trip (10 minutes)\nStep 9. Begin the hike into the wilderness (3 hours)\nStep 10. Charge the portable GPS and power banks (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 5.\nStep 3 must precede Step 6.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go into nature?",
+    "answer": 32400,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "go into nature",
+    "par_ratio": 1.9259,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "7": 1,
+        "2": 2,
+        "1": 3,
+        "3": 4,
+        "4": 5,
+        "6": 6,
+        "9": 7,
+        "10": 8,
+        "8": 9
+      },
+      "durations": [
+        900,
+        14400,
+        3600,
+        1800,
+        300,
+        7200,
+        1200,
+        10800,
+        21600,
+        600
+      ]
+    },
+    "question_abstract": "To go into nature, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 5.\nStep 3 must precede Step 6.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go into nature?"
+  },
+  {
+    "id": 6,
+    "question": "To wear gloves to bed, here are the steps needed.\nStep 1. Apply a thick layer of moisturizing hand cream (2 minutes)\nStep 2. Locate the pair of cotton moisturizing gloves in the linen closet (5 minutes)\nStep 3. Check the gloves for any holes or loose threads (1 minute)\nStep 4. Turn down the bed sheets and fluff the pillows (3 minutes)\nStep 5. Set the bedroom thermostat to a comfortable sleeping temperature (30 seconds)\nStep 6. Place a glass of water on the nightstand (1 minute)\nStep 7. Wash and thoroughly dry your hands (4 minutes)\nStep 8. Pull the gloves onto both hands (45 seconds)\nStep 9. Navigate to the smart home panel to adjust the climate (15 seconds)\nStep 10. Retrieve the gloves from the closet shelf (10 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 10.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 9 must precede Step 5.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to wear gloves to bed?",
+    "answer": 475,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "wear gloves to bed",
+    "par_ratio": 2.2316,
+    "path_count": 5,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "5": 1,
+        "2": 2,
+        "10": 3,
+        "6": 4,
+        "4": 5,
+        "8": 6,
+        "3": 7,
+        "9": 8,
+        "1": 9
+      },
+      "durations": [
+        240,
+        30,
+        300,
+        10,
+        60,
+        180,
+        45,
+        60,
+        15,
+        120
+      ]
+    },
+    "question_abstract": "To wear gloves to bed, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 10.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 9 must precede Step 5.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to wear gloves to bed?"
+  },
+  {
+    "id": 7,
+    "question": "To treat cervical cancer, here are the steps needed.\nStep 1. Initial biopsy and pathology review (3 days)\nStep 2. Pre-operative blood work and cardiac clearance (4 hours)\nStep 3. Mapping of lymph nodes for surgical planning (1 day)\nStep 4. Radical hysterectomy surgery (5 hours)\nStep 5. Anesthesia administration and patient prep (1 hour)\nStep 6. Post-operative hospital recovery and monitoring (4 days)\nStep 7. Pelvic MRI and CT staging scans (2 hours)\nStep 8. External beam radiation therapy sessions (5 weeks)\nStep 9. Brachytherapy internal radiation treatment (2 days)\nStep 10. Consultation with the oncology surgical team (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat cervical cancer?",
+    "answer": 3196800,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "treat cervical cancer",
+    "par_ratio": 1.2306,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.2,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "5": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "6": 5,
+        "8": 6,
+        "1": 7,
+        "9": 8,
+        "2": 9
+      },
+      "durations": [
+        18000,
+        3600,
+        86400,
+        2700,
+        7200,
+        345600,
+        3024000,
+        259200,
+        172800,
+        14400
+      ]
+    },
+    "question_abstract": "To treat cervical cancer, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 6.\nStep 7 must precede Step 3.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to treat cervical cancer?"
+  },
+  {
+    "id": 8,
+    "question": "To buy or rent a piano or keyboard, here are the steps needed.\nStep 1. Measure the available floor space in your home (15 minutes)\nStep 2. Research local piano movers and delivery services (1 hour)\nStep 3. Visit a music showroom to test different models (3 hours)\nStep 4. Decide on the maximum budget for the instrument (30 minutes)\nStep 5. Sign the rental agreement or sales contract (45 minutes)\nStep 6. Purchase a comfortable adjustable piano bench (20 minutes)\nStep 7. Compare rental prices versus long-term financing (2 hours)\nStep 8. Schedule the delivery date with the movers (10 minutes)\nStep 9. Arrange for the first professional tuning session (5 minutes)\nStep 10. Select the specific brand and model of the instrument (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 5.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy or rent a piano or keyboard?",
+    "answer": 18300,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "buy or rent a piano or keyboard",
+    "par_ratio": 1.7869,
+    "path_count": 3,
+    "dag_depth_actual": 4,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "9": 1,
+        "1": 2,
+        "2": 3,
+        "10": 4,
+        "4": 5,
+        "8": 6,
+        "3": 7,
+        "6": 8,
+        "5": 9
+      },
+      "durations": [
+        7200,
+        300,
+        900,
+        3600,
+        3600,
+        1800,
+        600,
+        10800,
+        1200,
+        2700
+      ]
+    },
+    "question_abstract": "To buy or rent a piano or keyboard, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 5.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to buy or rent a piano or keyboard?"
+  },
+  {
+    "id": 9,
+    "question": "To roast turnips, here are the steps needed.\nStep 1. Garnish with fresh parsley (1 minute)\nStep 2. Peel the tough outer skins (4 minutes)\nStep 3. Serve the turnips on a warm platter (2 minutes)\nStep 4. Toss the turnips in olive oil and salt (3 minutes)\nStep 5. Scrub the turnips under cold water (2 minutes)\nStep 6. Slice the turnips into uniform cubes (5 minutes)\nStep 7. Roast the turnips in the oven (35 minutes)\nStep 8. Remove the turnips from the oven to cool (10 minutes)\nStep 9. Purchase fresh turnips from the market (20 minutes)\nStep 10. Preheat the oven to 400 degrees (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 7 must precede Step 3.\nStep 8 must precede Step 1.\nStep 9 must precede Step 2.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?",
+    "answer": 3420,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "roast turnips",
+    "par_ratio": 1.7018,
+    "path_count": 3,
+    "dag_depth_actual": 4,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "7": 1,
+        "2": 2,
+        "1": 3,
+        "10": 4,
+        "4": 5,
+        "5": 6,
+        "9": 7,
+        "3": 8,
+        "6": 9
+      },
+      "durations": [
+        600,
+        2100,
+        240,
+        60,
+        900,
+        180,
+        120,
+        1200,
+        120,
+        300
+      ]
+    },
+    "question_abstract": "To roast turnips, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 7 must precede Step 3.\nStep 8 must precede Step 1.\nStep 9 must precede Step 2.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?"
+  },
+  {
+    "id": 10,
+    "question": "To host a party, here are the steps needed.\nStep 1. Design and send out digital invitations (1 hour)\nStep 2. Research and book a professional DJ (3 hours)\nStep 3. Place an order for custom catering (2 days)\nStep 4. Finalize the guest count based on RSVPs (2 days)\nStep 5. Create a shared online poll for song requests (30 minutes)\nStep 6. Wait for the caterer to prepare the menu (4 days)\nStep 7. Confirm the party venue reservation (45 minutes)\nStep 8. Check the venue availability calendar (15 minutes)\nStep 9. Pick up the food from the caterer (1 hour)\nStep 10. Purchase decorations and party favors (3 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 10.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 5 must precede Step 4.\nStep 6 must precede Step 9.\nStep 8 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to host a party?",
+    "answer": 522000,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "host a party",
+    "par_ratio": 1.3897,
+    "path_count": 6,
+    "dag_depth_actual": 2,
+    "and_join_count": 2,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "6": 1,
+        "4": 2,
+        "8": 3,
+        "9": 4,
+        "10": 5,
+        "7": 6,
+        "2": 7,
+        "3": 8,
+        "1": 9
+      },
+      "durations": [
+        1800,
+        345600,
+        172800,
+        900,
+        3600,
+        10800,
+        2700,
+        10800,
+        172800,
+        3600
+      ]
+    },
+    "question_abstract": "To host a party, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 10.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 5 must precede Step 4.\nStep 6 must precede Step 9.\nStep 8 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to host a party?"
+  },
+  {
+    "id": 11,
+    "question": "To get tickets to wimbledon, here are the steps needed.\nStep 1. Book a hotel room in Wimbledon Village (45 minutes)\nStep 2. Download the official Wimbledon mobile app (5 minutes)\nStep 3. Create a \"MyWimbledon\" online account (10 minutes)\nStep 4. Enter the public ballot for tickets (20 minutes)\nStep 5. Join the LTA Advantage membership for additional access (15 minutes)\nStep 6. Print the physical tickets and confirmation (10 minutes)\nStep 7. Wait for the ballot results announcement (4 months)\nStep 8. Pay for the allocated tickets online (15 minutes)\nStep 9. Verify your identity and address details (2 days)\nStep 10. Opt-in to the marketing and ticketing communications (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 7 must precede Step 9.\nStep 8 must precede Step 1.\nStep 8 must precede Step 6.\nStep 9 must precede Step 4.\nStep 9 must precede Step 5.\nStep 10 must precede Step 2.\nStep 10 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get tickets to wimbledon?",
+    "answer": 10546320,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "get tickets to wimbledon",
+    "par_ratio": 1.0002,
+    "path_count": 5,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "5": 1,
+        "7": 2,
+        "4": 3,
+        "3": 4,
+        "10": 5,
+        "1": 6,
+        "2": 7,
+        "8": 8,
+        "9": 9
+      },
+      "durations": [
+        600,
+        900,
+        10368000,
+        1200,
+        600,
+        120,
+        2700,
+        300,
+        900,
+        172800
+      ]
+    },
+    "question_abstract": "To get tickets to wimbledon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 7 must precede Step 9.\nStep 8 must precede Step 1.\nStep 8 must precede Step 6.\nStep 9 must precede Step 4.\nStep 9 must precede Step 5.\nStep 10 must precede Step 2.\nStep 10 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get tickets to wimbledon?"
+  },
+  {
+    "id": 12,
+    "question": "To put some color in our house, here are the steps needed.\nStep 1. Purchase the selected paint and primer (1 hour)\nStep 2. Apply painter's tape to the baseboards and ceiling edges (2 hours)\nStep 3. Hang the newly framed colorful artwork (30 minutes)\nStep 4. Move furniture to the center of the room and cover with plastic (45 minutes)\nStep 5. Apply the first coat of paint to the walls (4 hours)\nStep 6. Research and select a color palette (3 days)\nStep 7. Paint the final accent trim (3 hours)\nStep 8. Clean and sand the wall surfaces (2 hours)\nStep 9. Lay down heavy-duty drop cloths (20 minutes)\nStep 10. Unpack the decorative wall decor (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 4 must precede Step 2.\nStep 6 must precede Step 1.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to put some color in our house?",
+    "answer": 291900,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "put some color in our house",
+    "par_ratio": 1.0586,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "1": 1,
+        "9": 2,
+        "5": 3,
+        "8": 4,
+        "10": 5,
+        "6": 6,
+        "4": 7,
+        "7": 8,
+        "3": 9
+      },
+      "durations": [
+        7200,
+        3600,
+        1200,
+        14400,
+        7200,
+        900,
+        259200,
+        2700,
+        10800,
+        1800
+      ]
+    },
+    "question_abstract": "To put some color in our house, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 4 must precede Step 2.\nStep 6 must precede Step 1.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to put some color in our house?"
+  },
+  {
+    "id": 13,
+    "question": "To use cocoa as a chocolate substitute, here are the steps needed.\nStep 1. Whisk the mixture into the dry ingredients (2 minutes)\nStep 2. Measure out three tablespoons of cocoa powder (1 minute)\nStep 3. Melt the shortening in a small saucepan (5 minutes)\nStep 4. Retrieve the vegetable oil from the pantry (30 seconds)\nStep 5. Measure one tablespoon of the chosen fat (45 seconds)\nStep 6. Combine the cocoa powder with the melted shortening (3 minutes)\nStep 7. Soften a block of butter as an alternative fat source (30 minutes)\nStep 8. Store the remaining butter back in the refrigerator (1 minute)\nStep 9. Allow the cocoa paste to cool slightly (10 minutes)\nStep 10. Check the recipe for the required fat-to-cocoa ratio (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 9.\nStep 4 must precede Step 10.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 3.\nStep 7 must precede Step 8.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use cocoa as a chocolate substitute?",
+    "answer": 2055,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "use cocoa as a chocolate substitute",
+    "par_ratio": 1.6131,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 0,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "10": 1,
+        "2": 2,
+        "5": 3,
+        "4": 4,
+        "7": 5,
+        "3": 6,
+        "6": 7,
+        "9": 8,
+        "1": 9
+      },
+      "durations": [
+        60,
+        120,
+        60,
+        45,
+        30,
+        1800,
+        300,
+        180,
+        600,
+        120
+      ]
+    },
+    "question_abstract": "To use cocoa as a chocolate substitute, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 9.\nStep 4 must precede Step 10.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 6 must precede Step 3.\nStep 7 must precede Step 8.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use cocoa as a chocolate substitute?"
+  },
+  {
+    "id": 14,
+    "question": "To join marching band, here are the steps needed.\nStep 1. Attend the mandatory orientation meeting (1 hour)\nStep 2. Rent a high-quality instrument from the music shop (45 minutes)\nStep 3. Submit the medical clearance and physical forms (3 days)\nStep 4. Attend the week-long intensive summer band camp (1 week)\nStep 5. Perform in the first halftime show of the season (20 minutes)\nStep 6. Take private lessons to learn the basic scales (2 weeks)\nStep 7. Practice the complex field movements and choreography (4 days)\nStep 8. Pass the basic musical proficiency audition (30 minutes)\nStep 9. Order the custom-fitted marching uniform (1 month)\nStep 10. Fill out the initial interest and registration form (15 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 9.\nStep 2 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 7.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 4.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to join marching band?",
+    "answer": 2596500,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "join marching band",
+    "par_ratio": 1.9339,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "4": 1,
+        "8": 2,
+        "1": 3,
+        "10": 4,
+        "3": 5,
+        "7": 6,
+        "5": 7,
+        "9": 8,
+        "2": 9
+      },
+      "durations": [
+        1209600,
+        604800,
+        1800,
+        3600,
+        900,
+        259200,
+        345600,
+        1200,
+        2592000,
+        2700
+      ]
+    },
+    "question_abstract": "To join marching band, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 9.\nStep 2 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 7.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 4.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to join marching band?"
+  },
+  {
+    "id": 15,
+    "question": "To make chickpea and red bean salad, here are the steps needed.\nStep 1. Soak the dried chickpeas in a bowl of water (12 hours)\nStep 2. Finely dice the red onions and bell peppers (10 minutes)\nStep 3. Whisk together the olive oil, lemon juice, and spices for the dressing (5 minutes)\nStep 4. Chill the dressing in the refrigerator to let flavors meld (1 hour)\nStep 5. Combine the cooked chickpeas and beans in a large mixing bowl (2 minutes)\nStep 6. Garnish the final dish with fresh parsley (1 minute)\nStep 7. Mince fresh garlic and add it to the chilled dressing (3 minutes)\nStep 8. Boil the chickpeas until tender (45 minutes)\nStep 9. Pour the dressing over the vegetables and legumes and toss (4 minutes)\nStep 10. Wash and dry the fresh parsley (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 3 must precede Step 9.\nStep 4 must precede Step 7.\nStep 7 must precede Step 9.\nStep 8 must precede Step 5.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chickpea and red bean salad?",
+    "answer": 46020,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make chickpea and red bean salad",
+    "par_ratio": 1.1147,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "4": 1,
+        "8": 2,
+        "10": 3,
+        "5": 4,
+        "9": 5,
+        "6": 6,
+        "3": 7,
+        "2": 8,
+        "1": 9
+      },
+      "durations": [
+        180,
+        3600,
+        2700,
+        300,
+        120,
+        240,
+        60,
+        300,
+        600,
+        43200
+      ]
+    },
+    "question_abstract": "To make chickpea and red bean salad, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 3.\nStep 2 must precede Step 9.\nStep 3 must precede Step 4.\nStep 3 must precede Step 9.\nStep 4 must precede Step 7.\nStep 7 must precede Step 9.\nStep 8 must precede Step 5.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make chickpea and red bean salad?"
+  },
+  {
+    "id": 16,
+    "question": "To keep animals out of your vegetable garden, here are the steps needed.\nStep 1. Attach the wire mesh to the wooden posts (2 hours)\nStep 2. Dig a trench around the garden perimeter (3 hours)\nStep 3. Research local wildlife behavior and deterrents (1 hour)\nStep 4. Install a solar-powered motion-activated light (30 minutes)\nStep 5. Purchase heavy-duty fencing materials (45 minutes)\nStep 6. Drive the support posts into the ground (90 minutes)\nStep 7. Map out the fence line and gate placement (20 minutes)\nStep 8. Measure the dimensions of the garden (15 minutes)\nStep 9. Mix organic peppermint oil spray (10 minutes)\nStep 10. Apply the repellent spray to the foliage (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 6.\nStep 6 must precede Step 1.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep animals out of your vegetable garden?",
+    "answer": 20100,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "keep animals out of your vegetable garden",
+    "par_ratio": 1.7164,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "9": 1,
+        "4": 2,
+        "3": 3,
+        "6": 4,
+        "2": 5,
+        "10": 6,
+        "8": 7,
+        "7": 8,
+        "1": 9
+      },
+      "durations": [
+        2700,
+        600,
+        1800,
+        3600,
+        5400,
+        10800,
+        300,
+        900,
+        1200,
+        7200
+      ]
+    },
+    "question_abstract": "To keep animals out of your vegetable garden, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 6.\nStep 6 must precede Step 1.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep animals out of your vegetable garden?"
+  },
+  {
+    "id": 17,
+    "question": "To keep guppies healthy, here are the steps needed.\nStep 1. Treat the tap water with a dechlorinating solution (15 minutes)\nStep 2. Acclimate the guppies to the new water temperature (30 minutes)\nStep 3. Purchase a high-quality aquarium and filtration system (2 hours)\nStep 4. Observe the fish for signs of stress or illness (3 days)\nStep 5. Cycle the tank to establish beneficial bacteria (2 weeks)\nStep 6. Test the water parameters for ammonia and nitrites (10 minutes)\nStep 7. Introduce the guppies into the cycled aquarium (5 minutes)\nStep 8. Perform the first partial water change (45 minutes)\nStep 9. Set up the tank and install the heater (1 hour)\nStep 10. Research specific guppy breed requirements (4 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 3 must precede Step 9.\nStep 5 must precede Step 6.\nStep 6 must precede Step 2.\nStep 7 must precede Step 1.\nStep 9 must precede Step 5.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep guppies healthy?",
+    "answer": 1226700,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "keep guppies healthy",
+    "par_ratio": 1.223,
+    "path_count": 2,
+    "dag_depth_actual": 7,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "1": 1,
+        "8": 2,
+        "10": 3,
+        "4": 4,
+        "6": 5,
+        "2": 6,
+        "3": 7,
+        "7": 8,
+        "5": 9
+      },
+      "durations": [
+        3600,
+        900,
+        2700,
+        14400,
+        259200,
+        600,
+        1800,
+        7200,
+        300,
+        1209600
+      ]
+    },
+    "question_abstract": "To keep guppies healthy, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 3 must precede Step 9.\nStep 5 must precede Step 6.\nStep 6 must precede Step 2.\nStep 7 must precede Step 1.\nStep 9 must precede Step 5.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to keep guppies healthy?"
+  },
+  {
+    "id": 18,
+    "question": "To firm your breasts, here are the steps needed.\nStep 1. Research specific chest-strengthening exercises (20 minutes)\nStep 2. Complete a high-intensity pectoral workout session (45 minutes)\nStep 3. Apply a firming topical cream or moisturizer (5 minutes)\nStep 4. Purchase a set of adjustable dumbbells (1 hour)\nStep 5. Install a full-length mirror to monitor form (30 minutes)\nStep 6. Consult with a fitness trainer for a personalized plan (1 hour)\nStep 7. Schedule a physical assessment at the gym (30 minutes)\nStep 8. Buy supportive high-impact sports bras (2 hours)\nStep 9. Watch instructional videos on proper lifting techniques (40 minutes)\nStep 10. Perform a series of warm-up stretches (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 6 must precede Step 7.\nStep 7 must precede Step 4.\nStep 7 must precede Step 9.\nStep 8 must precede Step 3.\nStep 8 must precede Step 6.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to firm your breasts?",
+    "answer": 20100,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "firm your breasts",
+    "par_ratio": 1.2537,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "9": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "5": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "6": 9
+      },
+      "durations": [
+        2700,
+        2400,
+        300,
+        600,
+        1800,
+        1800,
+        7200,
+        3600,
+        1200,
+        3600
+      ]
+    },
+    "question_abstract": "To firm your breasts, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 4 must precede Step 2.\nStep 4 must precede Step 5.\nStep 6 must precede Step 7.\nStep 7 must precede Step 4.\nStep 7 must precede Step 9.\nStep 8 must precede Step 3.\nStep 8 must precede Step 6.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to firm your breasts?"
+  },
+  {
+    "id": 19,
+    "question": "To professionally clean a house, here are the steps needed.\nStep 1. Sanitize all high-touch surfaces and countertops (45 minutes)\nStep 2. Dust all ceiling fans and light fixtures (30 minutes)\nStep 3. Steam clean the carpets in the bedrooms (2 hours)\nStep 4. Mop the hardwood floors (20 minutes)\nStep 5. Clear all clutter and personal items from rooms (1 hour)\nStep 6. Apply protective wax to the wooden furniture (40 minutes)\nStep 7. Vacuum all floors and rugs (15 minutes)\nStep 8. Conduct a final walkthrough and inspection (10 minutes)\nStep 9. Degrease the oven and stovetop (1 hour)\nStep 10. Polish all stainless steel appliances (25 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 5 must precede Step 2.\nStep 6 must precede Step 8.\nStep 7 must precede Step 3.\nStep 9 must precede Step 10.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to professionally clean a house?",
+    "answer": 9300,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "professionally clean a house",
+    "par_ratio": 2.7419,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          8
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "8": 1,
+        "5": 2,
+        "10": 3,
+        "4": 4,
+        "2": 5,
+        "9": 6,
+        "1": 7,
+        "3": 8,
+        "7": 9
+      },
+      "durations": [
+        2400,
+        600,
+        3600,
+        1500,
+        1200,
+        1800,
+        3600,
+        2700,
+        7200,
+        900
+      ]
+    },
+    "question_abstract": "To professionally clean a house, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 1.\nStep 5 must precede Step 2.\nStep 6 must precede Step 8.\nStep 7 must precede Step 3.\nStep 9 must precede Step 10.\nStep 10 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to professionally clean a house?"
+  },
+  {
+    "id": 20,
+    "question": "To start the new year fresh, here are the steps needed.\nStep 1. Declutter the home office (4 hours)\nStep 2. Research local charity donation centers (30 minutes)\nStep 3. Purchase a new physical planner (15 minutes)\nStep 4. Shred old sensitive documents (1 hour)\nStep 5. Sort through clothes to give away (2 hours)\nStep 6. Deep clean the empty desk and shelves (2 hours)\nStep 7. Load the car with donation bags (20 minutes)\nStep 8. Drive to the donation center and drop off items (45 minutes)\nStep 9. Organize remaining files into new folders (3 hours)\nStep 10. Write down goals and schedule for January (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 9.\nStep 2 must precede Step 10.\nStep 3 must precede Step 10.\nStep 4 must precede Step 6.\nStep 5 must precede Step 2.\nStep 7 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 7.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to start the new year fresh?",
+    "answer": 27300,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "start the new year fresh",
+    "par_ratio": 1.956,
+    "path_count": 6,
+    "dag_depth_actual": 5,
+    "and_join_count": 3,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "1": 1,
+        "8": 2,
+        "3": 3,
+        "9": 4,
+        "7": 5,
+        "10": 6,
+        "4": 7,
+        "6": 8,
+        "5": 9
+      },
+      "durations": [
+        1800,
+        14400,
+        2700,
+        900,
+        10800,
+        1200,
+        3600,
+        3600,
+        7200,
+        7200
+      ]
+    },
+    "question_abstract": "To start the new year fresh, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 1 must precede Step 9.\nStep 2 must precede Step 10.\nStep 3 must precede Step 10.\nStep 4 must precede Step 6.\nStep 5 must precede Step 2.\nStep 7 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 7.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to start the new year fresh?"
+  },
+  {
+    "id": 21,
+    "question": "To play a nintendo ds, here are the steps needed.\nStep 1. Insert the game cartridge into the slot (5 seconds)\nStep 2. Calibrate the touch screen settings (2 minutes)\nStep 3. Locate the handheld console in the drawer (1 minute)\nStep 4. Toggle the power switch to the 'on' position (2 seconds)\nStep 5. Charge the battery to at least 10% capacity (15 minutes)\nStep 6. Select the user profile from the main menu (10 seconds)\nStep 7. Press 'Start' on the game's title screen (3 seconds)\nStep 8. Clean the dust off the exterior casing (45 seconds)\nStep 9. Adjust the volume and brightness levels (30 seconds)\nStep 10. Open the clamshell lid (2 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\nStep 6 must precede Step 4.\nStep 8 must precede Step 2.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to play a nintendo ds?",
+    "answer": 1132,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "play a nintendo ds",
+    "par_ratio": 1.0398,
+    "path_count": 2,
+    "dag_depth_actual": 8,
+    "and_join_count": 1,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "7": 1,
+        "9": 2,
+        "6": 3,
+        "1": 4,
+        "8": 5,
+        "3": 6,
+        "10": 7,
+        "4": 8,
+        "5": 9
+      },
+      "durations": [
+        120,
+        3,
+        30,
+        10,
+        5,
+        45,
+        60,
+        2,
+        2,
+        900
+      ]
+    },
+    "question_abstract": "To play a nintendo ds, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 5 must precede Step 1.\nStep 6 must precede Step 4.\nStep 8 must precede Step 2.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to play a nintendo ds?"
+  },
+  {
+    "id": 22,
+    "question": "To do something crazy, here are the steps needed.\nStep 1. Launch the experimental weather balloon (30 minutes)\nStep 2. Research local laws regarding high-altitude flight (2 days)\nStep 3. Purchase a professional-grade helium tank (4 hours)\nStep 4. Fill the massive latex balloon with gas (1 hour)\nStep 5. Attach the high-resolution camera rig (45 minutes)\nStep 6. Design a custom parachute recovery system (5 hours)\nStep 7. Rig the emergency descent cord (2 hours)\nStep 8. Program the GPS tracking module (3 hours)\nStep 9. Order a specialized waterproof housing (5 days)\nStep 10. Secure the FAA flight waiver (1 week)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 10.\nStep 6 must precede Step 7.\nStep 8 must precede Step 5.\nStep 9 must precede Step 7.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to do something crazy?",
+    "answer": 797400,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "do something crazy",
+    "par_ratio": 1.5903,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 1,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "6": 2,
+        "8": 3,
+        "1": 4,
+        "2": 5,
+        "10": 6,
+        "7": 7,
+        "3": 8,
+        "4": 9
+      },
+      "durations": [
+        432000,
+        2700,
+        18000,
+        10800,
+        1800,
+        172800,
+        604800,
+        7200,
+        14400,
+        3600
+      ]
+    },
+    "question_abstract": "To do something crazy, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 8.\nStep 3 must precede Step 4.\nStep 4 must precede Step 10.\nStep 6 must precede Step 7.\nStep 8 must precede Step 5.\nStep 9 must precede Step 7.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to do something crazy?"
+  },
+  {
+    "id": 23,
+    "question": "To decorate a car for halloween, here are the steps needed.\nStep 1. Attach the giant spider legs to the roof (45 minutes)\nStep 2. Drape the car in fake cobwebs (20 minutes)\nStep 3. Program the internal light show (1 hour)\nStep 4. Apply window decals (15 minutes)\nStep 5. Buy a portable power inverter (30 minutes)\nStep 6. Clean the exterior surface of the car (40 minutes)\nStep 7. Synchronize the fog machine with the lights (10 minutes)\nStep 8. Peel off the adhesive backing for stickers (5 minutes)\nStep 9. Mount the glowing pumpkins on the hood (25 minutes)\nStep 10. Sketch out the design on paper (1 hour)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 3.\nStep 5 must precede Step 9.\nStep 6 must precede Step 9.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to decorate a car for halloween?",
+    "answer": 7500,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "decorate a car for halloween",
+    "par_ratio": 2.48,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "8": 1,
+        "5": 2,
+        "4": 3,
+        "2": 4,
+        "1": 5,
+        "3": 6,
+        "9": 7,
+        "6": 8,
+        "7": 9
+      },
+      "durations": [
+        3600,
+        300,
+        1800,
+        900,
+        1200,
+        2700,
+        3600,
+        1500,
+        2400,
+        600
+      ]
+    },
+    "question_abstract": "To decorate a car for halloween, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 5 must precede Step 3.\nStep 5 must precede Step 9.\nStep 6 must precede Step 9.\nStep 8 must precede Step 4.\nStep 9 must precede Step 8.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to decorate a car for halloween?"
+  },
+  {
+    "id": 24,
+    "question": "To make an educational word slider, here are the steps needed.\nStep 1. Design the cardboard base layout (20 minutes)\nStep 2. Print out the vocabulary word lists (5 minutes)\nStep 3. Assemble the final slider mechanism (15 minutes)\nStep 4. Cut the horizontal viewing slits into the base (10 minutes)\nStep 5. Laminate the completed slider for durability (10 minutes)\nStep 6. Measure and mark the cutting lines (5 minutes)\nStep 7. Cut the paper strips for the words (8 minutes)\nStep 8. Select the target vocabulary words (30 minutes)\nStep 9. Write the words clearly onto the strips (12 minutes)\nStep 10. Thread the word strips through the base slits (4 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 6.\nStep 2 must precede Step 10.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make an educational word slider?",
+    "answer": 4140,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "make an educational word slider",
+    "par_ratio": 1.7246,
+    "path_count": 4,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "10": 1,
+        "3": 2,
+        "6": 3,
+        "4": 4,
+        "5": 5,
+        "1": 6,
+        "2": 7,
+        "7": 8,
+        "9": 9
+      },
+      "durations": [
+        1800,
+        240,
+        900,
+        300,
+        600,
+        600,
+        1200,
+        300,
+        480,
+        720
+      ]
+    },
+    "question_abstract": "To make an educational word slider, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 6.\nStep 2 must precede Step 10.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 9.\nStep 8 must precede Step 7.\nStep 9 must precede Step 2.\nStep 10 must precede Step 5.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make an educational word slider?"
+  },
+  {
+    "id": 25,
+    "question": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1. Present the final speech to the community group (20 minutes)\nStep 2. Research the historical origins of the holiday (3 hours)\nStep 3. Gather traditional symbols like the Kinara and Mazao (2 hours)\nStep 4. Write a detailed script for each of the seven days (5 hours)\nStep 5. Create educational handouts for the audience (1 hour)\nStep 6. Draft an outline of the Nguzo Saba principles (45 minutes)\nStep 7. Consult with a cultural historian (90 minutes)\nStep 8. Rehearse the oral presentation (2 hours)\nStep 9. Finalize the visual presentation slides (3 hours)\nStep 10. Write a summary of the holiday's Pan-African significance (4 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 6.\nStep 9 must precede Step 1.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?",
+    "answer": 37200,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "explain the meaning of kwanzaa",
+    "par_ratio": 2.1855,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "8": 1,
+        "7": 2,
+        "1": 3,
+        "9": 4,
+        "6": 5,
+        "4": 6,
+        "3": 7,
+        "10": 8,
+        "5": 9
+      },
+      "durations": [
+        10800,
+        7200,
+        5400,
+        1200,
+        10800,
+        2700,
+        18000,
+        7200,
+        14400,
+        3600
+      ]
+    },
+    "question_abstract": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 4.\nStep 7 must precede Step 3.\nStep 7 must precede Step 6.\nStep 9 must precede Step 1.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?"
+  },
+  {
+    "id": 26,
+    "question": "To try some new tea, here are the steps needed.\nStep 1. Steep the tea leaves in the hot water (5 minutes)\nStep 2. Compost the used tea leaves (2 minutes)\nStep 3. Research different tea varieties online (30 minutes)\nStep 4. Order a high-quality tea kettle (10 minutes)\nStep 5. Pour the brewed tea into a cup (30 seconds)\nStep 6. Select a favorite ceramic mug (1 minute)\nStep 7. Visit a local specialty tea shop (1 hour)\nStep 8. Wait for the kettle delivery (3 days)\nStep 9. Boil the filtered water (4 minutes)\nStep 10. Sip the tea to evaluate the flavor (10 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 5.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to try some new tea?",
+    "answer": 259920,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "try some new tea",
+    "par_ratio": 1.0255,
+    "path_count": 6,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "2": 1,
+        "5": 2,
+        "1": 3,
+        "6": 4,
+        "3": 5,
+        "4": 6,
+        "7": 7,
+        "10": 8,
+        "9": 9
+      },
+      "durations": [
+        259200,
+        120,
+        30,
+        300,
+        60,
+        1800,
+        600,
+        3600,
+        600,
+        240
+      ]
+    },
+    "question_abstract": "To try some new tea, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 5.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 3 must precede Step 10.\nStep 4 must precede Step 8.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to try some new tea?"
+  },
+  {
+    "id": 27,
+    "question": "To improve your posture with rowing exercises, here are the steps needed.\nStep 1. Perform three sets of seated cable rows (15 minutes)\nStep 2. Research proper scapular retraction techniques (20 minutes)\nStep 3. Purchase a set of resistance bands (1 hour)\nStep 4. Complete a series of doorway chest stretches (5 minutes)\nStep 5. Consult with a physical therapist for a baseline assessment (1 hour)\nStep 6. Watch an instructional video on rowing form (10 minutes)\nStep 7. Record a video of your workout for form review (2 minutes)\nStep 8. Practice the rowing motion with no weight to build muscle memory (30 minutes)\nStep 9. Perform a warm-up of face pulls with light resistance (10 minutes)\nStep 10. Adjust the gym equipment to your height and reach (3 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 2.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 5 must precede Step 3.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 9 must precede Step 10.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to improve your posture with rowing exercises?",
+    "answer": 12300,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "improve your posture with rowing exercises",
+    "par_ratio": 1.0488,
+    "path_count": 3,
+    "dag_depth_actual": 8,
+    "and_join_count": 2,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "8": 0,
+        "5": 1,
+        "4": 2,
+        "1": 3,
+        "7": 4,
+        "3": 5,
+        "9": 6,
+        "6": 7,
+        "2": 8,
+        "10": 9
+      },
+      "durations": [
+        1800,
+        3600,
+        300,
+        900,
+        120,
+        3600,
+        600,
+        600,
+        1200,
+        180
+      ]
+    },
+    "question_abstract": "To improve your posture with rowing exercises, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 2.\nStep 4 must precede Step 7.\nStep 5 must precede Step 1.\nStep 5 must precede Step 3.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 9 must precede Step 10.\nStep 10 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to improve your posture with rowing exercises?"
+  },
+  {
+    "id": 28,
+    "question": "To make peruvian fish ceviche, here are the steps needed.\nStep 1. Sharpen the chef's knife (5 minutes)\nStep 2. Garnish the plate with sweet potato and corn (2 minutes)\nStep 3. Toss the fish in the citrus marinade (1 minute)\nStep 4. Let the fish cure in the refrigerator (15 minutes)\nStep 5. Wash the fresh cilantro and chilies (3 minutes)\nStep 6. Mince the aromatics and peppers (10 minutes)\nStep 7. Source fresh sea bass from the market (1 hour)\nStep 8. Finely slice the red onions (5 minutes)\nStep 9. Plate the finished ceviche (3 minutes)\nStep 10. Clean and dice the fish into cubes (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 10.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 7 must precede Step 2.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make peruvian fish ceviche?",
+    "answer": 5100,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make peruvian fish ceviche",
+    "par_ratio": 1.4588,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "3": 1,
+        "10": 2,
+        "7": 3,
+        "2": 4,
+        "6": 5,
+        "8": 6,
+        "5": 7,
+        "4": 8,
+        "1": 9
+      },
+      "durations": [
+        180,
+        60,
+        1200,
+        3600,
+        120,
+        600,
+        300,
+        180,
+        900,
+        300
+      ]
+    },
+    "question_abstract": "To make peruvian fish ceviche, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 10.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 7 must precede Step 2.\nStep 7 must precede Step 10.\nStep 8 must precede Step 6.\nStep 9 must precede Step 2.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make peruvian fish ceviche?"
+  },
+  {
+    "id": 29,
+    "question": "To fingerboard, here are the steps needed.\nStep 1. Apply custom grip tape to the deck (10 minutes)\nStep 2. Unbox the professional fingerboard components (2 minutes)\nStep 3. Sand down the edges of the wooden deck (5 minutes)\nStep 4. Organize the tiny mounting screws and nuts (3 minutes)\nStep 5. Attach the metal trucks to the deck (8 minutes)\nStep 6. Install the high-speed bearing wheels (4 minutes)\nStep 7. Tune the bushings for better steering (6 minutes)\nStep 8. Set up a miniature skate park ramp (15 minutes)\nStep 9. Clean the workspace of any debris (2 minutes)\nStep 10. Record a slow-motion kickflip video (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 4 must precede Step 9.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to fingerboard?",
+    "answer": 1320,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "fingerboard",
+    "par_ratio": 3.4091,
+    "path_count": 7,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.2,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "6": 2,
+        "7": 3,
+        "10": 4,
+        "2": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "3": 9
+      },
+      "durations": [
+        120,
+        480,
+        240,
+        360,
+        1200,
+        120,
+        900,
+        180,
+        600,
+        300
+      ]
+    },
+    "question_abstract": "To fingerboard, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 3.\nStep 2 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 4 must precede Step 9.\nStep 5 must precede Step 6.\nStep 5 must precede Step 7.\nStep 9 must precede Step 1.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to fingerboard?"
+  },
+  {
+    "id": 30,
+    "question": "To make brownies in the microwave, here are the steps needed.\nStep 1. Whisk the dry ingredients together in a bowl (2 minutes)\nStep 2. Grease the microwave-safe glass dish (30 seconds)\nStep 3. Melt the butter in a separate container (45 seconds)\nStep 4. Pour the finished batter into the prepared dish (1 minute)\nStep 5. Microwave on high power (5 minutes)\nStep 6. Stir the melted butter into the sugar and cocoa powder (1 minute)\nStep 7. Gather the measuring cups and spoons (1 minute)\nStep 8. Locate the cooking spray in the pantry (20 seconds)\nStep 9. Take the eggs and butter out of the refrigerator (30 seconds)\nStep 10. Crack the eggs into a small prep bowl (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 6.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\nStep 10 must precede Step 4.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make brownies in the microwave?",
+    "answer": 675,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "make brownies in the microwave",
+    "par_ratio": 1.163,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 0,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          3
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "1": 1,
+        "3": 2,
+        "2": 3,
+        "5": 4,
+        "4": 5,
+        "9": 6,
+        "6": 7,
+        "7": 8,
+        "8": 9
+      },
+      "durations": [
+        60,
+        120,
+        45,
+        30,
+        300,
+        60,
+        30,
+        60,
+        60,
+        20
+      ]
+    },
+    "question_abstract": "To make brownies in the microwave, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 6.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 9 must precede Step 10.\nStep 10 must precede Step 4.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make brownies in the microwave?"
+  },
+  {
+    "id": 31,
+    "question": "To be safe while pregnant, here are the steps needed.\nStep 1. Schedule a comprehensive prenatal screening (30 minutes)\nStep 2. Attend a specialized workshop on newborn safety (3 hours)\nStep 3. Consult with an obstetrician about a birth plan (45 minutes)\nStep 4. Install a high-quality carbon monoxide detector in the nursery (20 minutes)\nStep 5. Conduct a final home safety inspection (2 hours)\nStep 6. Research local hospitals and birthing centers (4 hours)\nStep 7. Purchase a prenatal health insurance plan (2 days)\nStep 8. Complete a series of blood tests and ultrasounds (1 hour)\nStep 9. Consult with a primary care doctor for a referral (30 minutes)\nStep 10. Verify insurance coverage for maternity services (1 day)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\nStep 6 must precede Step 3.\nStep 7 must precede Step 1.\nStep 7 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 6.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to be safe while pregnant?",
+    "answer": 181200,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "be safe while pregnant",
+    "par_ratio": 1.6705,
+    "path_count": 5,
+    "dag_depth_actual": 5,
+    "and_join_count": 2,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          9
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "10": 1,
+        "2": 2,
+        "9": 3,
+        "4": 4,
+        "6": 5,
+        "7": 6,
+        "1": 7,
+        "5": 8,
+        "8": 9
+      },
+      "durations": [
+        2700,
+        86400,
+        10800,
+        1800,
+        1200,
+        14400,
+        172800,
+        1800,
+        7200,
+        3600
+      ]
+    },
+    "question_abstract": "To be safe while pregnant, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 3 must precede Step 2.\nStep 3 must precede Step 4.\nStep 4 must precede Step 5.\nStep 6 must precede Step 3.\nStep 7 must precede Step 1.\nStep 7 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 6.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to be safe while pregnant?"
+  },
+  {
+    "id": 32,
+    "question": "To photograph rugs, here are the steps needed.\nStep 1. Vacuum the rugs to remove debris (15 minutes)\nStep 2. Set up the camera and tripod (10 minutes)\nStep 3. Select the best lighting equipment (20 minutes)\nStep 4. Transport the rugs to the studio space (1 hour)\nStep 5. Test the light intensity on the fabric (5 minutes)\nStep 6. Position the rugs flat on the floor (15 minutes)\nStep 7. Steam the rugs to remove creases (30 minutes)\nStep 8. Tag each rug with an inventory number (20 minutes)\nStep 9. Take high-resolution photographs (2 hours)\nStep 10. Clear the studio floor for the shoot (45 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 6 must precede Step 2.\nStep 7 must precede Step 6.\nStep 8 must precede Step 1.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to photograph rugs?",
+    "answer": 18900,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "photograph rugs",
+    "par_ratio": 1.0794,
+    "path_count": 2,
+    "dag_depth_actual": 7,
+    "and_join_count": 0,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "2": 1,
+        "3": 2,
+        "10": 3,
+        "7": 4,
+        "8": 5,
+        "1": 6,
+        "9": 7,
+        "6": 8,
+        "4": 9
+      },
+      "durations": [
+        300,
+        600,
+        1200,
+        2700,
+        1800,
+        1200,
+        900,
+        7200,
+        900,
+        3600
+      ]
+    },
+    "question_abstract": "To photograph rugs, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 9.\nStep 3 must precede Step 5.\nStep 4 must precede Step 8.\nStep 6 must precede Step 2.\nStep 7 must precede Step 6.\nStep 8 must precede Step 1.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to photograph rugs?"
+  },
+  {
+    "id": 33,
+    "question": "To get a new camera, here are the steps needed.\nStep 1. Research different camera models and read professional reviews (3 hours)\nStep 2. Transfer funds from a high-yield savings account to checking (2 days)\nStep 3. Visit a local photography shop to handle the floor models (1 hour)\nStep 4. Order the camera body and a versatile prime lens online (15 minutes)\nStep 5. Wait for the bank transfer to clear and reflect in the balance (3 days)\nStep 6. Purchase a high-speed memory card and a protective carrying case (20 minutes)\nStep 7. Comparison shop across different retailers for the best price (45 minutes)\nStep 8. Wait for the shipping carrier to deliver the package to your door (5 days)\nStep 9. Unbox the equipment and take the first test shots (30 minutes)\nStep 10. Charge the new lithium-ion battery to full capacity (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 7.\nStep 4 must precede Step 8.\nStep 6 must precede Step 9.\nStep 7 must precede Step 4.\nStep 8 must precede Step 9.\nStep 8 must precede Step 10.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new camera?",
+    "answer": 459000,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "get a new camera",
+    "par_ratio": 1.9438,
+    "path_count": 4,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "9": 1,
+        "8": 2,
+        "7": 3,
+        "3": 4,
+        "4": 5,
+        "5": 6,
+        "6": 7,
+        "2": 8,
+        "1": 9
+      },
+      "durations": [
+        7200,
+        1800,
+        432000,
+        2700,
+        3600,
+        900,
+        259200,
+        1200,
+        172800,
+        10800
+      ]
+    },
+    "question_abstract": "To get a new camera, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 5.\nStep 3 must precede Step 2.\nStep 3 must precede Step 7.\nStep 4 must precede Step 8.\nStep 6 must precede Step 9.\nStep 7 must precede Step 4.\nStep 8 must precede Step 9.\nStep 8 must precede Step 10.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to get a new camera?"
+  },
+  {
+    "id": 34,
+    "question": "To go on a traditional honeymoon, here are the steps needed.\nStep 1. Choose a destination and book flights (3 hours)\nStep 2. Research romantic travel locations (2 days)\nStep 3. Finalize hotel reservations and itinerary (4 hours)\nStep 4. Pack suitcases and travel gear (2 hours)\nStep 5. Check into the honeymoon suite (15 minutes)\nStep 6. Take the long-haul flight to the destination (12 hours)\nStep 7. Travel from the airport to the resort (1 hour)\nStep 8. Apply for and receive updated passports (6 weeks)\nStep 9. Request time off from work (10 minutes)\nStep 10. Enjoy a sunset dinner on the beach (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 5.\nStep 8 must precede Step 7.\nStep 8 must precede Step 9.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on a traditional honeymoon?",
+    "answer": 3654600,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "go on a traditional honeymoon",
+    "par_ratio": 1.0643,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "4": 1,
+        "8": 2,
+        "9": 3,
+        "1": 4,
+        "6": 5,
+        "10": 6,
+        "5": 7,
+        "2": 8,
+        "3": 9
+      },
+      "durations": [
+        3600,
+        7200,
+        3628800,
+        600,
+        10800,
+        43200,
+        7200,
+        900,
+        172800,
+        14400
+      ]
+    },
+    "question_abstract": "To go on a traditional honeymoon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 5.\nStep 8 must precede Step 7.\nStep 8 must precede Step 9.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on a traditional honeymoon?"
+  },
+  {
+    "id": 35,
+    "question": "To make tuna fish patties, here are the steps needed.\nStep 1. Drain the liquid from the canned tuna (2 minutes)\nStep 2. Finely dice the celery and onions (10 minutes)\nStep 3. Flake the tuna into a large mixing bowl (3 minutes)\nStep 4. Whisk eggs and lemon juice in a small bowl (2 minutes)\nStep 5. Mix the egg wash with breadcrumbs and spices (4 minutes)\nStep 6. Combine the tuna and diced vegetables (5 minutes)\nStep 7. Form the mixture into small round patties (8 minutes)\nStep 8. Let the breadcrumb mixture hydrate (10 minutes)\nStep 9. Pan-fry the patties until golden brown (12 minutes)\nStep 10. Prepare the dipping sauce (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 2 must precede Step 6.\nStep 3 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 8.\nStep 6 must precede Step 7.\nStep 7 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources available. What is the shortest possible time to make tuna fish patties?",
+    "answer": 2100,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make tuna fish patties",
+    "par_ratio": 1.7429,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "7": 2,
+        "8": 3,
+        "9": 4,
+        "6": 5,
+        "1": 6,
+        "2": 7,
+        "10": 8,
+        "3": 9
+      },
+      "durations": [
+        240,
+        120,
+        480,
+        600,
+        720,
+        300,
+        120,
+        600,
+        300,
+        180
+      ]
+    },
+    "question_abstract": "To make tuna fish patties, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 1 must precede Step 4.\nStep 2 must precede Step 6.\nStep 3 must precede Step 6.\nStep 3 must precede Step 10.\nStep 4 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 8.\nStep 6 must precede Step 7.\nStep 7 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make tuna fish patties?"
+  },
+  {
+    "id": 36,
+    "question": "To knit a blanket, here are the steps needed.\nStep 1. Choose a pattern and calculate yarn requirements (45 minutes)\nStep 2. Purchase circular knitting needles (30 minutes)\nStep 3. Knit the main body of the blanket (40 hours)\nStep 4. Cast on the initial row of stitches (20 minutes)\nStep 5. Weave in the loose ends with a tapestry needle (1 hour)\nStep 6. Buy the required wool yarn from the craft store (1 hour)\nStep 7. Wind the hanks of yarn into center-pull balls (2 hours)\nStep 8. Research blocking techniques for different fibers (15 minutes)\nStep 9. Wash the finished sample swatch to check for shrinkage (24 hours)\nStep 10. Steam block the finished blanket to set the shape (6 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 2 must precede Step 7.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 10.\nStep 9 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to knit a blanket?",
+    "answer": 151500,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "knit a blanket",
+    "par_ratio": 1.802,
+    "path_count": 4,
+    "dag_depth_actual": 3,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "4": 1,
+        "8": 2,
+        "6": 3,
+        "1": 4,
+        "7": 5,
+        "3": 6,
+        "9": 7,
+        "10": 8,
+        "2": 9
+      },
+      "durations": [
+        3600,
+        1200,
+        900,
+        3600,
+        2700,
+        7200,
+        144000,
+        86400,
+        21600,
+        1800
+      ]
+    },
+    "question_abstract": "To knit a blanket, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 2 must precede Step 7.\nStep 4 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 5.\nStep 8 must precede Step 10.\nStep 9 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to knit a blanket?"
+  },
+  {
+    "id": 37,
+    "question": "To roast fall vegetables, here are the steps needed.\nStep 1. Toss the chopped vegetables with olive oil and salt (3 minutes)\nStep 2. Purchase fresh squash and carrots from the market (45 minutes)\nStep 3. Spread the seasoned vegetables evenly across a baking sheet (2 minutes)\nStep 4. Roast the vegetables in the oven until tender (40 minutes)\nStep 5. Preheat the oven to 425 degrees Fahrenheit (15 minutes)\nStep 6. Wash and peel the root vegetables (10 minutes)\nStep 7. Chop the vegetables into bite-sized cubes (20 minutes)\nStep 8. Line the baking tray with parchment paper (1 minute)\nStep 9. Place the tray into the center rack of the oven (30 seconds)\nStep 10. Deglaze the roasting pan for a balsamic reduction (5 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast fall vegetables?",
+    "answer": 4170,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "roast fall vegetables",
+    "par_ratio": 2.036,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 3,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          6
+        ]
+      ],
+      "step_to_node": {
+        "1": 0,
+        "2": 1,
+        "6": 2,
+        "4": 3,
+        "3": 4,
+        "5": 5,
+        "9": 6,
+        "10": 7,
+        "7": 8,
+        "8": 9
+      },
+      "durations": [
+        180,
+        2700,
+        600,
+        2400,
+        120,
+        900,
+        30,
+        300,
+        1200,
+        60
+      ]
+    },
+    "question_abstract": "To roast fall vegetables, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 1 must precede Step 9.\nStep 2 must precede Step 7.\nStep 3 must precede Step 4.\nStep 5 must precede Step 6.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast fall vegetables?"
+  },
+  {
+    "id": 38,
+    "question": "To hold a pick, here are the steps needed.\nStep 1. Align the pick against the side of the index finger (5 seconds)\nStep 2. Relax the hand into a natural curved position (3 seconds)\nStep 3. Adjust the angle of the pick tip (4 seconds)\nStep 4. Apply firm pressure with the thumb pad (2 seconds)\nStep 5. Pick up the plectrum from the table (1 second)\nStep 6. Test the grip by strumming a string (2 seconds)\nStep 7. Position the index finger behind the pick (3 seconds)\nStep 8. Place the thumb over the top of the pick (2 seconds)\nStep 9. Check for proper tension in the wrist (10 seconds)\nStep 10. Clean any dust off the pick surface (15 seconds)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 2.\nStep 5 must precede Step 7.\nStep 7 must precede Step 3.\nStep 8 must precede Step 4.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hold a pick?",
+    "answer": 29,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "hold a pick",
+    "par_ratio": 1.6207,
+    "path_count": 3,
+    "dag_depth_actual": 5,
+    "and_join_count": 1,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          5
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "3": 0,
+        "4": 1,
+        "9": 2,
+        "6": 3,
+        "10": 4,
+        "7": 5,
+        "8": 6,
+        "2": 7,
+        "1": 8,
+        "5": 9
+      },
+      "durations": [
+        4,
+        2,
+        10,
+        2,
+        15,
+        3,
+        2,
+        3,
+        5,
+        1
+      ]
+    },
+    "question_abstract": "To hold a pick, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 9.\nStep 5 must precede Step 2.\nStep 5 must precede Step 7.\nStep 7 must precede Step 3.\nStep 8 must precede Step 4.\nStep 10 must precede Step 8.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to hold a pick?"
+  },
+  {
+    "id": 39,
+    "question": "To make a giant pancake for breakfast, here are the steps needed.\nStep 1. Pour the batter onto the oversized griddle (1 minute)\nStep 2. Gather the heavy-duty mixing bowl and whisk (2 minutes)\nStep 3. Flip the pancake using two large spatulas (3 minutes)\nStep 4. Mix the dry ingredients with the wet ingredients (5 minutes)\nStep 5. Prepare the fruit compote topping (15 minutes)\nStep 6. Set the dining table for guests (10 minutes)\nStep 7. Melt a large block of butter in the microwave (45 seconds)\nStep 8. Whisk the eggs and buttermilk together (4 minutes)\nStep 9. Preheat the industrial-sized griddle (10 minutes)\nStep 10. Sift the flour and baking powder into a pile (6 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 7.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 6.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 8 must precede Step 9.\nStep 9 must precede Step 1.\nStep 10 must precede Step 1.\nStep 10 must precede Step 5.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a giant pancake for breakfast?",
+    "answer": 2805,
+    "n_steps": 10,
+    "n_edges": 12,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 9,
+    "task_title": "make a giant pancake for breakfast",
+    "par_ratio": 1.2139,
+    "path_count": 5,
+    "dag_depth_actual": 8,
+    "and_join_count": 2,
+    "cp_node_frac": 0.9,
+    "edge_density": 0.2667,
+    "graph": {
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "9": 1,
+        "2": 2,
+        "8": 3,
+        "6": 4,
+        "5": 5,
+        "1": 6,
+        "4": 7,
+        "7": 8,
+        "3": 9
+      },
+      "durations": [
+        360,
+        600,
+        120,
+        240,
+        600,
+        900,
+        60,
+        300,
+        45,
+        180
+      ]
+    },
+    "question_abstract": "To make a giant pancake for breakfast, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 7.\nStep 4 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 6.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 8 must precede Step 9.\nStep 9 must precede Step 1.\nStep 10 must precede Step 1.\nStep 10 must precede Step 5.\nStep 10 must precede Step 9.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a giant pancake for breakfast?"
+  },
+  {
+    "id": 40,
+    "question": "To go on an adventure, here are the steps needed.\nStep 1. Choose a remote destination (2 hours)\nStep 2. Book international flight tickets (30 minutes)\nStep 3. Purchase a high-quality camera (1 hour)\nStep 4. Pack the rugged hiking backpack (45 minutes)\nStep 5. Drive to the airport (1 hour)\nStep 6. Learn how to use the manual camera settings (3 hours)\nStep 7. Apply for a travel visa (1 week)\nStep 8. Research local landmarks to photograph (4 hours)\nStep 9. Create a detailed daily itinerary (2 hours)\nStep 10. Wash and dry all travel clothes (5 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 4 must precede Step 5.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on an adventure?",
+    "answer": 613800,
+    "n_steps": 10,
+    "n_edges": 7,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "go on an adventure",
+    "par_ratio": 1.0982,
+    "path_count": 3,
+    "dag_depth_actual": 3,
+    "and_join_count": 0,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1556,
+    "graph": {
+      "edges": [
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "10": 2,
+        "4": 3,
+        "2": 4,
+        "8": 5,
+        "6": 6,
+        "1": 7,
+        "7": 8,
+        "9": 9
+      },
+      "durations": [
+        3600,
+        3600,
+        18000,
+        2700,
+        1800,
+        14400,
+        10800,
+        7200,
+        604800,
+        7200
+      ]
+    },
+    "question_abstract": "To go on an adventure, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 2.\nStep 2 must precede Step 7.\nStep 3 must precede Step 6.\nStep 4 must precede Step 5.\nStep 6 must precede Step 8.\nStep 8 must precede Step 9.\nStep 10 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to go on an adventure?"
+  },
+  {
+    "id": 41,
+    "question": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1. Research the history of the Nguzo Saba principles (2 hours)\nStep 2. Draft a script for the presentation (3 hours)\nStep 3. Collect traditional symbols like the Kinara and Mazao (4 hours)\nStep 4. Create visual slides to accompany the talk (5 hours)\nStep 5. Rent a community hall for the event (1 day)\nStep 6. Read a comprehensive book on African American heritage (2 days)\nStep 7. Design a handout summarizing the holiday's origins (90 minutes)\nStep 8. Deliver the final presentation to the audience (1 hour)\nStep 9. Outline the key themes of the presentation (30 minutes)\nStep 10. Consult with a cultural historian for accuracy (1 day)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 4.\nStep 3 must precede Step 2.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 1.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?",
+    "answer": 216000,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "explain the meaning of kwanzaa",
+    "par_ratio": 1.8833,
+    "path_count": 5,
+    "dag_depth_actual": 3,
+    "and_join_count": 3,
+    "cp_node_frac": 0.4,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "6": 1,
+        "4": 2,
+        "10": 3,
+        "1": 4,
+        "5": 5,
+        "8": 6,
+        "9": 7,
+        "7": 8,
+        "3": 9
+      },
+      "durations": [
+        10800,
+        172800,
+        18000,
+        86400,
+        7200,
+        86400,
+        3600,
+        1800,
+        5400,
+        14400
+      ]
+    },
+    "question_abstract": "To explain the meaning of kwanzaa, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 2 must precede Step 4.\nStep 3 must precede Step 2.\nStep 5 must precede Step 8.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 9 must precede Step 1.\nStep 9 must precede Step 10.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to explain the meaning of kwanzaa?"
+  },
+  {
+    "id": 42,
+    "question": "To use deductive reasoning, here are the steps needed.\nStep 1. Draw a final logical conclusion (5 minutes)\nStep 2. Evaluate the validity of the syllogism (15 minutes)\nStep 3. Identify the major and minor terms (10 minutes)\nStep 4. Gather initial observations (2 hours)\nStep 5. Define the scope of the inquiry (30 minutes)\nStep 6. Structure the formal argument (45 minutes)\nStep 7. Draft the categorical premises (20 minutes)\nStep 8. Filter out irrelevant data points (1 hour)\nStep 9. Verify the truth of the premises (1 day)\nStep 10. Establish a general principle (4 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 4 must precede Step 8.\nStep 5 must precede Step 10.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 6.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use deductive reasoning?",
+    "answer": 108300,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 8,
+    "task_title": "use deductive reasoning",
+    "par_ratio": 1.0997,
+    "path_count": 3,
+    "dag_depth_actual": 7,
+    "and_join_count": 2,
+    "cp_node_frac": 0.8,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "6": 0,
+        "9": 1,
+        "10": 2,
+        "2": 3,
+        "5": 4,
+        "3": 5,
+        "8": 6,
+        "4": 7,
+        "1": 8,
+        "7": 9
+      },
+      "durations": [
+        2700,
+        86400,
+        14400,
+        900,
+        1800,
+        600,
+        3600,
+        7200,
+        300,
+        1200
+      ]
+    },
+    "question_abstract": "To use deductive reasoning, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 1.\nStep 3 must precede Step 7.\nStep 3 must precede Step 9.\nStep 4 must precede Step 8.\nStep 5 must precede Step 10.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 2.\nStep 9 must precede Step 6.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to use deductive reasoning?"
+  },
+  {
+    "id": 43,
+    "question": "To raise $1000 for the new playground balls, here are the steps needed.\nStep 1. Host the charity bake sale and collect donations (6 hours)\nStep 2. Design and print promotional flyers (2 hours)\nStep 3. Post photos of the new equipment on the school website (45 minutes)\nStep 4. Buy bulk ingredients and baking supplies (3 hours)\nStep 5. Draft a formal fundraising proposal for the PTA (1 hour)\nStep 6. Bake 500 cookies and brownies (5 hours)\nStep 7. Take high-quality photos of the final fundraiser results (30 minutes)\nStep 8. Present the proposal to the school board for approval (2 days)\nStep 9. Research the cost of different playground ball sets (1 hour)\nStep 10. Order the new playground balls from the supplier (20 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 1.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 8 must precede Step 10.\nStep 9 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to raise $1000 for the new playground balls?",
+    "answer": 223200,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "raise $1000 for the new playground balls",
+    "par_ratio": 1.0901,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "7": 0,
+        "8": 1,
+        "5": 2,
+        "3": 3,
+        "4": 4,
+        "10": 5,
+        "9": 6,
+        "1": 7,
+        "2": 8,
+        "6": 9
+      },
+      "durations": [
+        1800,
+        172800,
+        3600,
+        2700,
+        10800,
+        1200,
+        3600,
+        21600,
+        7200,
+        18000
+      ]
+    },
+    "question_abstract": "To raise $1000 for the new playground balls, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 2 must precede Step 6.\nStep 4 must precede Step 1.\nStep 5 must precede Step 6.\nStep 5 must precede Step 8.\nStep 6 must precede Step 1.\nStep 7 must precede Step 3.\nStep 8 must precede Step 2.\nStep 8 must precede Step 10.\nStep 9 must precede Step 4.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to raise $1000 for the new playground balls?"
+  },
+  {
+    "id": 44,
+    "question": "To obtain book name, here are the steps needed.\nStep 1. Search the library's digital archives (10 minutes)\nStep 2. Print the official bibliography entry (2 minutes)\nStep 3. Cross-reference the plot summary with known authors (1 hour)\nStep 4. Post a description of the plot on a book identification forum (15 minutes)\nStep 5. Wait for community members to suggest potential titles (6 hours)\nStep 6. Request a physical copy of the catalog from the stacks (30 minutes)\nStep 7. Locate the correct genre section in the database (5 minutes)\nStep 8. Verify the ISBN against the publisher's historical list (45 minutes)\nStep 9. Confirm the final title and author name (5 minutes)\nStep 10. Check the printer's ink and paper levels (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 3.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\nStep 6 must precede Step 9.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to obtain book name?",
+    "answer": 29100,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "obtain book name",
+    "par_ratio": 1.099,
+    "path_count": 4,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "6": 1,
+        "8": 2,
+        "2": 3,
+        "7": 4,
+        "4": 5,
+        "3": 6,
+        "9": 7,
+        "10": 8,
+        "1": 9
+      },
+      "durations": [
+        21600,
+        1800,
+        2700,
+        120,
+        300,
+        900,
+        3600,
+        300,
+        60,
+        600
+      ]
+    },
+    "question_abstract": "To obtain book name, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 6.\nStep 3 must precede Step 8.\nStep 4 must precede Step 3.\nStep 4 must precede Step 5.\nStep 5 must precede Step 3.\nStep 6 must precede Step 9.\nStep 7 must precede Step 1.\nStep 8 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to obtain book name?"
+  },
+  {
+    "id": 45,
+    "question": "To make pico de gallo, here are the steps needed.\nStep 1. Finely dice the Roma tomatoes (8 minutes)\nStep 2. Wash all fresh produce under cold water (2 minutes)\nStep 3. Mince the white onion (5 minutes)\nStep 4. Chill the mixture in the refrigerator to let flavors marry (30 minutes)\nStep 5. Juice a fresh lime (1 minute)\nStep 6. Season with sea salt and black pepper (30 seconds)\nStep 7. Finely chop a bunch of fresh cilantro (4 minutes)\nStep 8. Seed and mince a large jalapeño (3 minutes)\nStep 9. Combine the lime juice with the chopped vegetables in a bowl (2 minutes)\nStep 10. Toss the tomatoes and onions together (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 2 must precede Step 3.\nStep 3 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 9 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make pico de gallo?",
+    "answer": 3180,
+    "n_steps": 10,
+    "n_edges": 9,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "make pico de gallo",
+    "par_ratio": 1.066,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.2,
+    "graph": {
+      "edges": [
+        [
+          2,
+          9
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          7
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "6": 1,
+        "2": 2,
+        "7": 3,
+        "5": 4,
+        "1": 5,
+        "9": 6,
+        "10": 7,
+        "8": 8,
+        "3": 9
+      },
+      "durations": [
+        1800,
+        30,
+        120,
+        240,
+        60,
+        480,
+        120,
+        60,
+        180,
+        300
+      ]
+    },
+    "question_abstract": "To make pico de gallo, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 3.\nStep 2 must precede Step 1.\nStep 2 must precede Step 3.\nStep 3 must precede Step 10.\nStep 5 must precede Step 9.\nStep 7 must precede Step 8.\nStep 8 must precede Step 4.\nStep 9 must precede Step 6.\nStep 10 must precede Step 7.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make pico de gallo?"
+  },
+  {
+    "id": 46,
+    "question": "To roast turnips, here are the steps needed.\nStep 1. Purchase fresh turnips from the farmer's market (45 minutes)\nStep 2. Preheat the oven to 400 degrees Fahrenheit (15 minutes)\nStep 3. Garnish the finished dish with fresh parsley (2 minutes)\nStep 4. Toss the turnips in the oil and spice mixture (3 minutes)\nStep 5. Whisk together olive oil, salt, and rosemary in a bowl (5 minutes)\nStep 6. Wash and scrub the turnips to remove dirt (10 minutes)\nStep 7. Lightly grease a large rimmed baking sheet (1 minute)\nStep 8. Peel and dice the turnips into uniform cubes (20 minutes)\nStep 9. Roast the turnips in the oven until golden brown (35 minutes)\nStep 10. Pat the turnips dry with a clean kitchen towel (2 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 5 must precede Step 4.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?",
+    "answer": 6000,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 3,
+    "task_title": "roast turnips",
+    "par_ratio": 1.38,
+    "path_count": 5,
+    "dag_depth_actual": 2,
+    "and_join_count": 1,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          9,
+          4
+        ]
+      ],
+      "step_to_node": {
+        "9": 0,
+        "5": 1,
+        "8": 2,
+        "1": 3,
+        "7": 4,
+        "3": 5,
+        "10": 6,
+        "4": 7,
+        "6": 8,
+        "2": 9
+      },
+      "durations": [
+        2100,
+        300,
+        1200,
+        2700,
+        60,
+        120,
+        120,
+        180,
+        600,
+        900
+      ]
+    },
+    "question_abstract": "To roast turnips, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 8.\nStep 2 must precede Step 7.\nStep 2 must precede Step 9.\nStep 5 must precede Step 4.\nStep 6 must precede Step 10.\nStep 7 must precede Step 9.\nStep 8 must precede Step 9.\nStep 10 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to roast turnips?"
+  },
+  {
+    "id": 47,
+    "question": "To participate in a marathon, here are the steps needed.\nStep 1. Purchase a high-quality pair of running shoes (45 minutes)\nStep 2. Complete a 10-week base endurance training program (10 weeks)\nStep 3. Perform a 20-mile long distance practice run (4 hours)\nStep 4. Rest and taper physical activity to recover muscles (1 week)\nStep 5. Carbo-load with specialized pasta meals (2 days)\nStep 6. Consult with a sports physician for a health clearance (1 hour)\nStep 7. Register for the specific marathon event online (20 minutes)\nStep 8. Research local marathon dates and entry requirements (2 hours)\nStep 9. Pick up the race bib and timing chip from the expo (90 minutes)\nStep 10. Run the marathon race (5 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 9.\nStep 2 must precede Step 3.\nStep 3 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to participate in a marathon?",
+    "answer": 6868800,
+    "n_steps": 10,
+    "n_edges": 8,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 7,
+    "task_title": "participate in a marathon",
+    "par_ratio": 1.0014,
+    "path_count": 3,
+    "dag_depth_actual": 6,
+    "and_join_count": 1,
+    "cp_node_frac": 0.7,
+    "edge_density": 0.1778,
+    "graph": {
+      "edges": [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      "step_to_node": {
+        "4": 0,
+        "1": 1,
+        "9": 2,
+        "3": 3,
+        "7": 4,
+        "10": 5,
+        "8": 6,
+        "6": 7,
+        "2": 8,
+        "5": 9
+      },
+      "durations": [
+        604800,
+        2700,
+        5400,
+        14400,
+        1200,
+        18000,
+        7200,
+        3600,
+        6048000,
+        172800
+      ]
+    },
+    "question_abstract": "To participate in a marathon, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 9.\nStep 2 must precede Step 3.\nStep 3 must precede Step 5.\nStep 4 must precede Step 10.\nStep 5 must precede Step 4.\nStep 6 must precede Step 2.\nStep 7 must precede Step 9.\nStep 8 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to participate in a marathon?"
+  },
+  {
+    "id": 48,
+    "question": "To convert kilograms to pounds, here are the steps needed.\nStep 1. Locate the digital scale (2 minutes)\nStep 2. Record the final weight in the fitness log (30 seconds)\nStep 3. Open the calculator app on your phone (5 seconds)\nStep 4. Type the conversion factor 2.20462 into the calculator (10 seconds)\nStep 5. Place the object on the scale and read the kilogram value (15 seconds)\nStep 6. Search for the standard conversion formula online (1 minute)\nStep 7. Multiply the kilogram reading by the conversion factor (20 seconds)\nStep 8. Double-check the scale's calibration setting (45 seconds)\nStep 9. Clear the calculation history for the next use (5 seconds)\nStep 10. Find a pen and the fitness logbook (1 minute)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 7.\nStep 5 must precede Step 8.\nStep 5 must precede Step 9.\nStep 6 must precede Step 3.\nStep 6 must precede Step 7.\nStep 6 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to convert kilograms to pounds?",
+    "answer": 180,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 4,
+    "task_title": "convert kilograms to pounds",
+    "par_ratio": 2.0556,
+    "path_count": 7,
+    "dag_depth_actual": 3,
+    "and_join_count": 2,
+    "cp_node_frac": 0.3,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "10": 0,
+        "4": 1,
+        "7": 2,
+        "8": 3,
+        "6": 4,
+        "9": 5,
+        "1": 6,
+        "5": 7,
+        "2": 8,
+        "3": 9
+      },
+      "durations": [
+        60,
+        10,
+        20,
+        45,
+        60,
+        5,
+        120,
+        15,
+        30,
+        5
+      ]
+    },
+    "question_abstract": "To convert kilograms to pounds, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 3 must precede Step 4.\nStep 4 must precede Step 7.\nStep 5 must precede Step 7.\nStep 5 must precede Step 8.\nStep 5 must precede Step 9.\nStep 6 must precede Step 3.\nStep 6 must precede Step 7.\nStep 6 must precede Step 9.\nStep 10 must precede Step 2.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to convert kilograms to pounds?"
+  },
+  {
+    "id": 49,
+    "question": "To cook sunchokes, here are the steps needed.\nStep 1. Slice the sunchokes into thin rounds (10 minutes)\nStep 2. Toss the sunchokes in olive oil and herbs (2 minutes)\nStep 3. Thoroughly dry the sunchokes with a paper towel (5 minutes)\nStep 4. Scrub the sunchokes under cold running water (8 minutes)\nStep 5. Arrange the slices on a parchment-lined baking sheet (4 minutes)\nStep 6. Soak the sunchokes in a bowl of lemon water (30 minutes)\nStep 7. Buy fresh sunchokes from the farmer's market (1 hour)\nStep 8. Transport the sunchokes home and unpack them (20 minutes)\nStep 9. Prepare a seasoning blend of salt, pepper, and rosemary (3 minutes)\nStep 10. Roast the sunchokes in a high-heat oven until golden (25 minutes)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 2.\nStep 3 must precede Step 10.\nStep 4 must precede Step 1.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 8 must precede Step 6.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook sunchokes?",
+    "answer": 8520,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 6,
+    "task_title": "cook sunchokes",
+    "par_ratio": 1.1761,
+    "path_count": 5,
+    "dag_depth_actual": 5,
+    "and_join_count": 2,
+    "cp_node_frac": 0.6,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "step_to_node": {
+        "5": 0,
+        "3": 1,
+        "1": 2,
+        "2": 3,
+        "10": 4,
+        "8": 5,
+        "4": 6,
+        "6": 7,
+        "7": 8,
+        "9": 9
+      },
+      "durations": [
+        240,
+        300,
+        600,
+        120,
+        1500,
+        1200,
+        480,
+        1800,
+        3600,
+        180
+      ]
+    },
+    "question_abstract": "To cook sunchokes, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 5.\nStep 2 must precede Step 10.\nStep 3 must precede Step 2.\nStep 3 must precede Step 10.\nStep 4 must precede Step 1.\nStep 6 must precede Step 3.\nStep 6 must precede Step 4.\nStep 7 must precede Step 8.\nStep 8 must precede Step 6.\nStep 9 must precede Step 3.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to cook sunchokes?"
+  },
+  {
+    "id": 50,
+    "question": "To make a herbarium, here are the steps needed.\nStep 1. Collect plant specimens from the field (4 hours)\nStep 2. Purchase acid-free mounting paper and archival glue (1 hour)\nStep 3. Research local flora and identification keys (2 hours)\nStep 4. Prepare the mounting adhesive and tools (15 minutes)\nStep 5. Store the finished sheets in a climate-controlled cabinet (30 minutes)\nStep 6. Press and dry the collected plants in a heavy press (1 week)\nStep 7. Label the specimens with date and location data (20 minutes)\nStep 8. Arrange the layout of the plants on the paper (45 minutes)\nStep 9. Clean and trim the specimens for display (30 minutes)\nStep 10. Secure the plants to the mounting paper (2 hours)\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 1 must precede Step 9.\nStep 2 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 7.\nStep 9 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a herbarium?",
+    "answer": 630000,
+    "n_steps": 10,
+    "n_edges": 10,
+    "edge_probability": 0.2,
+    "min_width": 2,
+    "long_range_prob": 0.05,
+    "critical_path_length": 5,
+    "task_title": "make a herbarium",
+    "par_ratio": 1.0248,
+    "path_count": 5,
+    "dag_depth_actual": 4,
+    "and_join_count": 2,
+    "cp_node_frac": 0.5,
+    "edge_density": 0.2222,
+    "graph": {
+      "edges": [
+        [
+          0,
+          9
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          2
+        ]
+      ],
+      "step_to_node": {
+        "2": 0,
+        "6": 1,
+        "10": 2,
+        "7": 3,
+        "5": 4,
+        "8": 5,
+        "1": 6,
+        "3": 7,
+        "9": 8,
+        "4": 9
+      },
+      "durations": [
+        3600,
+        604800,
+        7200,
+        1200,
+        1800,
+        2700,
+        14400,
+        7200,
+        1800,
+        900
+      ]
+    },
+    "question_abstract": "To make a herbarium, here are the steps needed.\nStep 1.\nStep 2.\nStep 3.\nStep 4.\nStep 5.\nStep 6.\nStep 7.\nStep 8.\nStep 9.\nStep 10.\n\nThese ordering constraints need to be obeyed when executing above steps:\nStep 1 must precede Step 7.\nStep 1 must precede Step 9.\nStep 2 must precede Step 4.\nStep 2 must precede Step 8.\nStep 3 must precede Step 1.\nStep 3 must precede Step 6.\nStep 4 must precede Step 10.\nStep 6 must precede Step 5.\nStep 8 must precede Step 7.\nStep 9 must precede Step 6.\n\nQuestion: Assume that you need to execute all the steps to complete the task and that infinite resources are available. What is the shortest possible time to make a herbarium?"
+  }
+]

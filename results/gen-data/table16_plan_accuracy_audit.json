@@ -1,0 +1,1522 @@
+{
+  "Direct (0-retry) -> cpsat": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.9,
+        "existing_plan_accuracy": 0.9,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.88,
+        "existing_plan_accuracy": 0.88,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.36,
+        "existing_plan_accuracy": 0.36,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.82,
+        "existing_makespan_accuracy": 0.82,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.4,
+        "existing_plan_accuracy": 0.4,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.4,
+        "existing_makespan_accuracy": 0.4,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.9,
+        "existing_plan_accuracy": 0.9,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      }
+    }
+  },
+  "Direct (0-retry) -> pddl": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.78,
+        "existing_makespan_accuracy": 0.78,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.2,
+        "existing_makespan_accuracy": 0.2,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.08,
+        "existing_makespan_accuracy": 0.08,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.02,
+        "existing_plan_accuracy": 0.02,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.02,
+        "existing_makespan_accuracy": 0.02,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.02,
+        "existing_makespan_accuracy": 0.02,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.04,
+        "existing_makespan_accuracy": 0.04,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "Direct (3-retry) -> cpsat": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.82,
+        "existing_plan_accuracy": 0.82,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.4,
+        "existing_plan_accuracy": 0.4,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "Direct (3-retry) -> pddl": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.82,
+        "existing_makespan_accuracy": 0.82,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.64,
+        "existing_makespan_accuracy": 0.64,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.26,
+        "existing_makespan_accuracy": 0.26,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.26,
+        "existing_makespan_accuracy": 0.26,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.48,
+        "existing_plan_accuracy": 0.48,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.66,
+        "existing_makespan_accuracy": 0.66,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.18,
+        "existing_plan_accuracy": 0.18,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.32,
+        "existing_makespan_accuracy": 0.32,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.24,
+        "existing_plan_accuracy": 0.24,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.52,
+        "existing_makespan_accuracy": 0.52,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.04,
+        "existing_plan_accuracy": 0.04,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.2,
+        "existing_makespan_accuracy": 0.2,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.8,
+        "existing_makespan_accuracy": 0.8,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.54,
+        "existing_makespan_accuracy": 0.54,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.64,
+        "existing_makespan_accuracy": 0.64,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.48,
+        "existing_makespan_accuracy": 0.48,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.42,
+        "existing_makespan_accuracy": 0.42,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.44,
+        "existing_makespan_accuracy": 0.44,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.38,
+        "existing_makespan_accuracy": 0.38,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.02,
+        "existing_makespan_accuracy": 0.02,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "NL IR -> cpsat": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.88,
+        "existing_plan_accuracy": 0.88,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.86,
+        "existing_plan_accuracy": 0.86,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.88,
+        "existing_plan_accuracy": 0.88,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.3,
+        "existing_plan_accuracy": 0.3,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.8,
+        "existing_makespan_accuracy": 0.8,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.22,
+        "existing_plan_accuracy": 0.22,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.22,
+        "existing_makespan_accuracy": 0.22,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.34,
+        "existing_plan_accuracy": 0.34,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.74,
+        "existing_plan_accuracy": 0.74,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.8,
+        "existing_plan_accuracy": 0.8,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.68,
+        "existing_plan_accuracy": 0.68,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.86,
+        "existing_plan_accuracy": 0.86,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "NL IR -> pddl": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.86,
+        "existing_plan_accuracy": 0.86,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.8,
+        "existing_plan_accuracy": 0.8,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.58,
+        "existing_plan_accuracy": 0.58,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.74,
+        "existing_makespan_accuracy": 0.74,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.42,
+        "existing_plan_accuracy": 0.42,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.48,
+        "existing_makespan_accuracy": 0.48,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.54,
+        "existing_plan_accuracy": 0.54,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.62,
+        "existing_makespan_accuracy": 0.62,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.84,
+        "existing_plan_accuracy": 0.84,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.64,
+        "existing_plan_accuracy": 0.64,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.74,
+        "existing_makespan_accuracy": 0.74,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.7,
+        "existing_plan_accuracy": 0.7,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.28,
+        "existing_plan_accuracy": 0.28,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.74,
+        "existing_makespan_accuracy": 0.74,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.84,
+        "existing_makespan_accuracy": 0.84,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.62,
+        "existing_plan_accuracy": 0.62,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.68,
+        "existing_makespan_accuracy": 0.68,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.72,
+        "existing_plan_accuracy": 0.72,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.78,
+        "existing_plan_accuracy": 0.78,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.2,
+        "existing_plan_accuracy": 0.2,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.22,
+        "existing_makespan_accuracy": 0.22,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.26,
+        "existing_plan_accuracy": 0.26,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.84,
+        "existing_makespan_accuracy": 0.84,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.56,
+        "existing_plan_accuracy": 0.56,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.62,
+        "existing_plan_accuracy": 0.62,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.6,
+        "existing_plan_accuracy": 0.6,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.7,
+        "existing_plan_accuracy": 0.7,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      }
+    }
+  },
+  "Gold IR -> cpsat": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "Gold IR -> pddl": {
+    "Gemini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.88,
+        "existing_plan_accuracy": 0.88,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.56,
+        "existing_plan_accuracy": 0.56,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.68,
+        "existing_makespan_accuracy": 0.68,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.7,
+        "existing_plan_accuracy": 0.7,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.58,
+        "existing_plan_accuracy": 0.58,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.62,
+        "existing_makespan_accuracy": 0.62,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.88,
+        "existing_plan_accuracy": 0.88,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.56,
+        "existing_plan_accuracy": 0.56,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.7,
+        "existing_makespan_accuracy": 0.7,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.8,
+        "existing_plan_accuracy": 0.8,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.78,
+        "existing_plan_accuracy": 0.78,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.84,
+        "existing_plan_accuracy": 0.84,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.48,
+        "existing_plan_accuracy": 0.48,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.58,
+        "existing_makespan_accuracy": 0.58,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.4,
+        "existing_plan_accuracy": 0.4,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.54,
+        "existing_makespan_accuracy": 0.54,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.68,
+        "existing_plan_accuracy": 0.68,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.78,
+        "existing_makespan_accuracy": 0.78,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.82,
+        "existing_plan_accuracy": 0.82,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.82,
+        "existing_plan_accuracy": 0.82,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_makespan_accuracy": 0.94,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.74,
+        "existing_plan_accuracy": 0.74,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.78,
+        "existing_plan_accuracy": 0.78,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.78,
+        "existing_plan_accuracy": 0.78,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.9,
+        "existing_makespan_accuracy": 0.9,
+        "makespan_match": true
+      }
+    }
+  }
+}

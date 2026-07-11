@@ -1,0 +1,886 @@
+{
+  "Table 7: CP-SAT Formalizer -> cpsat": {
+    "Gemini": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.82,
+        "existing_plan_accuracy": 0.82,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.76,
+        "existing_plan_accuracy": 0.76,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.44,
+        "existing_plan_accuracy": 0.44,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.88,
+        "existing_makespan_accuracy": 0.88,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.4,
+        "existing_plan_accuracy": 0.4,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.84,
+        "existing_plan_accuracy": 0.84,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "existing_plan_accuracy": 0.98,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.92,
+        "existing_plan_accuracy": 0.92,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_makespan_accuracy": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "existing_plan_accuracy": 0.94,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "existing_plan_accuracy": 0.96,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "existing_plan_accuracy": 1.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_makespan_accuracy": 1.0,
+        "makespan_match": true
+      }
+    }
+  },
+  "Table 7: PDDL2.1 Formalizer -> pddl": {
+    "Gemini": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.14,
+        "existing_plan_accuracy": 0.14,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.76,
+        "existing_makespan_accuracy": 0.76,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_makespan_accuracy": 0.96,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.86,
+        "existing_makespan_accuracy": 0.86,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.92,
+        "existing_makespan_accuracy": 0.92,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.82,
+        "existing_makespan_accuracy": 0.82,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.76,
+        "existing_makespan_accuracy": 0.76,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.64,
+        "existing_makespan_accuracy": 0.64,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.54,
+        "existing_makespan_accuracy": 0.54,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.26,
+        "existing_makespan_accuracy": 0.26,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.46,
+        "existing_makespan_accuracy": 0.46,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.22,
+        "existing_makespan_accuracy": 0.22,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.26,
+        "existing_makespan_accuracy": 0.26,
+        "makespan_match": true
+      }
+    },
+    "GPT-5-mini": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.38,
+        "existing_plan_accuracy": 0.38,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.7,
+        "existing_makespan_accuracy": 0.7,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.48,
+        "existing_plan_accuracy": 0.48,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.66,
+        "existing_makespan_accuracy": 0.66,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.4,
+        "existing_plan_accuracy": 0.4,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.56,
+        "existing_makespan_accuracy": 0.56,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.32,
+        "existing_plan_accuracy": 0.32,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.4,
+        "existing_makespan_accuracy": 0.4,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.18,
+        "existing_plan_accuracy": 0.18,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.32,
+        "existing_makespan_accuracy": 0.32,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.2,
+        "existing_plan_accuracy": 0.2,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.32,
+        "existing_makespan_accuracy": 0.32,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.24,
+        "existing_plan_accuracy": 0.24,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.52,
+        "existing_makespan_accuracy": 0.52,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.1,
+        "existing_plan_accuracy": 0.1,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.38,
+        "existing_makespan_accuracy": 0.38,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.04,
+        "existing_plan_accuracy": 0.04,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.2,
+        "existing_makespan_accuracy": 0.2,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.22,
+        "existing_makespan_accuracy": 0.22,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      }
+    },
+    "DeepSeek": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.82,
+        "existing_makespan_accuracy": 0.82,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.8,
+        "existing_makespan_accuracy": 0.8,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.66,
+        "existing_makespan_accuracy": 0.66,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.56,
+        "existing_makespan_accuracy": 0.56,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.54,
+        "existing_makespan_accuracy": 0.54,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.58,
+        "existing_makespan_accuracy": 0.58,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.64,
+        "existing_makespan_accuracy": 0.64,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.48,
+        "existing_makespan_accuracy": 0.48,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.48,
+        "existing_makespan_accuracy": 0.48,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.42,
+        "existing_makespan_accuracy": 0.42,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.42,
+        "existing_makespan_accuracy": 0.42,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.42,
+        "existing_makespan_accuracy": 0.42,
+        "makespan_match": true
+      }
+    },
+    "Qwen": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.54,
+        "existing_makespan_accuracy": 0.54,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.44,
+        "existing_makespan_accuracy": 0.44,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.42,
+        "existing_makespan_accuracy": 0.42,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.4,
+        "existing_makespan_accuracy": 0.4,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.38,
+        "existing_makespan_accuracy": 0.38,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.28,
+        "existing_makespan_accuracy": 0.28,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.02,
+        "existing_makespan_accuracy": 0.02,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.1,
+        "existing_makespan_accuracy": 0.1,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.08,
+        "existing_makespan_accuracy": 0.08,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.0,
+        "existing_plan_accuracy": 0.0,
+        "plan_match": true,
+        "recomputed_makespan_accuracy": 0.0,
+        "existing_makespan_accuracy": 0.0,
+        "makespan_match": true
+      }
+    }
+  }
+}
