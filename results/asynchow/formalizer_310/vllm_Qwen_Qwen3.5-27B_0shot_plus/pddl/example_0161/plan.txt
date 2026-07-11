@@ -1,0 +1,4 @@
+0.000: (try_shaker) [120.000]
+0.000: (roll_bottle) [60.000]
+120.001: (add_thinner) [60.000]
+180.002: (check_results) [60.000]

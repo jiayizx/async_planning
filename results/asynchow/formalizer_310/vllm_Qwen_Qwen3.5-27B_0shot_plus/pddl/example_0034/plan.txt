@@ -1,0 +1,7 @@
+0.000: (do_lookup_pickup_lines) [900.000]
+0.000: (do_look_wardrobe) [900.000]
+900.001: (do_put_outfit) [900.000]
+900.001: (do_memorize_pickup_lines) [900.000]
+1800.002: (do_look_mirror) [300.000]
+2100.003: (do_walk_school) [1500.000]
+3600.004: (do_talk_girl) [900.000]

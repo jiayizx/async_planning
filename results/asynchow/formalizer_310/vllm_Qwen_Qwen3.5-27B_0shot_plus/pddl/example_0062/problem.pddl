@@ -1,0 +1,23 @@
+(define (problem travel_to_warm_climate)
+  (:domain travel_planning)
+  
+  (:init
+    (go_on_internet_pending)
+    (research_locations_pending)
+    (look_for_tickets_pending)
+    (make_hotel_reservations_pending)
+    (purchase_tickets_pending)
+    (pack_suitcase_pending)
+    (drive_to_airport_pending)
+  )
+
+  (:goal (and
+    (go_on_internet_done)
+    (research_locations_done)
+    (look_for_tickets_done)
+    (make_hotel_reservations_done)
+    (purchase_tickets_done)
+    (pack_suitcase_done)
+    (drive_to_airport_done)
+  ))
+)

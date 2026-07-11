@@ -1,0 +1,4 @@
+0.000: (do_wear_clothing) [600.000]
+0.000: (do_wear_hat) [300.000]
+0.000: (do_wear_sunglasses) [60.000]
+600.001: (do_test_clothing) [900.000]

@@ -1,0 +1,17 @@
+(define (problem make_sky_lanterns)
+  (:domain sky_lanterns)
+  (:init
+    (step_1_pending) (step_2_pending) (step_3_pending) (step_4_pending)
+    (step_5_pending) (step_6_pending) (step_7_pending) (step_8_pending)
+    (step_9_pending) (step_10_pending) (step_11_pending) (step_12_pending)
+    (step_13_pending) (step_14_pending) (step_15_pending) (step_16_pending)
+    (step_17_pending)
+  )
+  (:goal (and
+    (step_1_done) (step_2_done) (step_3_done) (step_4_done)
+    (step_5_done) (step_6_done) (step_7_done) (step_8_done)
+    (step_9_done) (step_10_done) (step_11_done) (step_12_done)
+    (step_13_done) (step_14_done) (step_15_done) (step_16_done)
+    (step_17_done)
+  ))
+)

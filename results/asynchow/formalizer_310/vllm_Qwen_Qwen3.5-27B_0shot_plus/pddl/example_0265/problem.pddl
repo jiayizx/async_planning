@@ -1,0 +1,17 @@
+(define (problem sort_out_life_problem)
+  (:domain sort_out_life)
+  
+  (:init
+    (learn_skill_pending)
+    (write_resume_pending)
+    (make_change_pending)
+    (go_back_to_school_pending)
+  )
+
+  (:goal (and
+    (learn_skill_done)
+    (write_resume_done)
+    (make_change_done)
+    (go_back_to_school_done)
+  ))
+)

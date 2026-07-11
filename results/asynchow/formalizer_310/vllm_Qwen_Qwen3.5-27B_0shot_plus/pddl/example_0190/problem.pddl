@@ -1,0 +1,15 @@
+(define (problem evolve_munchlax)
+    (:domain pokemon_evolution)
+    (:init
+        (catch_cinccino_pending)
+        (trade_for_munchlax_pending)
+        (raise_friendship_pending)
+        (use_rare_candy_pending)
+    )
+    (:goal (and
+        (catch_cinccino_done)
+        (trade_for_munchlax_done)
+        (raise_friendship_done)
+        (use_rare_candy_done)
+    ))
+)

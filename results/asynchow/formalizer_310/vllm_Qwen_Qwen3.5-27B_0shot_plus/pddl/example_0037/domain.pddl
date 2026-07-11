@@ -1,0 +1,76 @@
+(define (domain rabbit-pet)
+  (:requirements :durative-actions)
+  
+  (:predicates
+    (drive_to_pet_shop_pending)
+    (drive_to_pet_shop_done)
+    (look_at_rabbits_pending)
+    (look_at_rabbits_done)
+    (pick_out_rabbit_pending)
+    (pick_out_rabbit_done)
+    (shop_for_pet_food_pending)
+    (shop_for_pet_food_done)
+    (shop_for_pet_supplies_pending)
+    (shop_for_pet_supplies_done)
+    (wait_in_line_pending)
+    (wait_in_line_done)
+    (make_purchase_pending)
+    (make_purchase_done)
+  )
+
+  (:durative-action drive_to_pet_shop
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (drive_to_pet_shop_pending)))
+    :effect (and (at start (not (drive_to_pet_shop_pending)))
+                 (at end (drive_to_pet_shop_done))))
+
+  (:durative-action look_at_rabbits
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (look_at_rabbits_pending))
+                    (at start (drive_to_pet_shop_done)))
+    :effect (and (at start (not (look_at_rabbits_pending)))
+                 (at end (look_at_rabbits_done))))
+
+  (:durative-action pick_out_rabbit
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (pick_out_rabbit_pending))
+                    (at start (look_at_rabbits_done)))
+    :effect (and (at start (not (pick_out_rabbit_pending)))
+                 (at end (pick_out_rabbit_done))))
+
+  (:durative-action shop_for_pet_food
+    :parameters ()
+    :duration (= ?duration 420)
+    :condition (and (at start (shop_for_pet_food_pending))
+                    (at start (pick_out_rabbit_done)))
+    :effect (and (at start (not (shop_for_pet_food_pending)))
+                 (at end (shop_for_pet_food_done))))
+
+  (:durative-action shop_for_pet_supplies
+    :parameters ()
+    :duration (= ?duration 420)
+    :condition (and (at start (shop_for_pet_supplies_pending))
+                    (at start (pick_out_rabbit_done)))
+    :effect (and (at start (not (shop_for_pet_supplies_pending)))
+                 (at end (shop_for_pet_supplies_done))))
+
+  (:durative-action wait_in_line
+    :parameters ()
+    :duration (= ?duration 900)
+    :condition (and (at start (wait_in_line_pending))
+                    (at start (shop_for_pet_food_done))
+                    (at start (shop_for_pet_supplies_done)))
+    :effect (and (at start (not (wait_in_line_pending)))
+                 (at end (wait_in_line_done))))
+
+  (:durative-action make_purchase
+    :parameters ()
+    :duration (= ?duration 180)
+    :condition (and (at start (make_purchase_pending))
+                    (at start (wait_in_line_done)))
+    :effect (and (at start (not (make_purchase_pending)))
+                 (at end (make_purchase_done))))
+)

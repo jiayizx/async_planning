@@ -1,0 +1,7 @@
+0.000: (purchase_sumac) [1800.000]
+1800.001: (sprinkle_vegetables) [180.000]
+1800.001: (add_to_frittata) [480.000]
+1800.001: (add_to_zaatar) [180.000]
+1800.001: (use_as_marinade) [600.000]
+1800.001: (add_to_dips) [180.000]
+1800.001: (use_in_dish) [300.000]

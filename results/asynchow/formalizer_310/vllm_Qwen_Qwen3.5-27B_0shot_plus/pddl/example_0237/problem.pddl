@@ -1,0 +1,17 @@
+(define (problem cook_sea_urchin_instance)
+    (:domain cook_sea_urchin)
+    (:init
+        (locate_pending)
+        (cut_pending)
+        (scoop_pending)
+        (preheat_pending)
+        (serve_pending)
+    )
+    (:goal (and
+        (locate_done)
+        (cut_done)
+        (scoop_done)
+        (preheat_done)
+        (serve_done)
+    ))
+)

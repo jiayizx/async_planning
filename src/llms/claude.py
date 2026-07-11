@@ -4,7 +4,8 @@ import time
 from typing import Any, Dict, List
 
 import anthropic
-from anthropic import Anthropic
+import httpx
+from anthropic import Anthropic, AnthropicBedrock
 from pydantic import BaseModel
 
 from .base import BaseLLM
@@ -13,6 +14,35 @@ CLAUDE_MODELS_MAPPING = {
     "claude-4.5-haiku": "claude-haiku-4-5",
     "claude-4.5-sonnet": "claude-sonnet-4-5",
 }
+
+# Anthropic API model id → Bedrock model / inference profile id (after CLAUDE_MODELS_MAPPING).
+#
+# Use ``global.anthropic.…`` inference routing (recommended in Bedrock docs). Bare
+# ``anthropic.…`` foundation IDs often fail with on-demand throughput unless you use
+# an inference profile; ``global.`` / ``us.`` / etc. satisfy that.
+#
+# Override with env ``BEDROCK_MODEL_ID`` (e.g. ``us.anthropic.…`` for US CRIS only).
+# See: https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock
+CLAUDE_API_TO_BEDROCK_MODEL = {
+    "claude-haiku-4-5": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "claude-sonnet-4-5": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+}
+
+
+class _AnthropicBedrockBearer(AnthropicBedrock):
+    """Bedrock Runtime with ``Authorization: Bearer`` (Bedrock API keys / team tokens).
+
+    Official docs: bearer auth is wired in C#/Go/Java SDKs via ``AWS_BEARER_TOKEN_BEDROCK``;
+    the Python Anthropic SDK only SigV4-signs Bedrock requests. This subclass sends the bearer
+    header so Python can use the same env var as other SDKs.
+    """
+
+    def __init__(self, *args: Any, bearer_token: str, **kwargs: Any) -> None:
+        self._bedrock_bearer_token = bearer_token
+        super().__init__(*args, **kwargs)
+
+    def _prepare_request(self, request: httpx.Request) -> None:
+        request.headers["Authorization"] = f"Bearer {self._bedrock_bearer_token}"
 
 
 class ClaudeLLM(BaseLLM):
@@ -28,7 +58,23 @@ class ClaudeLLM(BaseLLM):
         if model_name in CLAUDE_MODELS_MAPPING:
             self.model_name = CLAUDE_MODELS_MAPPING[model_name]
 
-        self.client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        bedrock_bearer = os.environ.get("AWS_BEARER_TOKEN_BEDROCK")
+        if bedrock_bearer:
+            aws_region = (
+                os.environ.get("AWS_REGION")
+                or os.environ.get("AWS_DEFAULT_REGION")
+                or "us-west-2"
+            )
+            bedrock_model = CLAUDE_API_TO_BEDROCK_MODEL.get(
+                self.model_name, self.model_name
+            )
+            self.model_name = bedrock_model
+            self.client = _AnthropicBedrockBearer(
+                bearer_token=bedrock_bearer,
+                aws_region=aws_region,
+            )
+        else:
+            self.client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 
     def _chat(self, messages: List[Dict[str, str]]) -> str:

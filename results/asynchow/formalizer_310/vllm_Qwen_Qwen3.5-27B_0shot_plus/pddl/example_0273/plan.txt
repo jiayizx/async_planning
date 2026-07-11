@@ -1,0 +1,5 @@
+0.000: (determine_lights_out) [1800.000]
+0.000: (discuss_phone_policy) [900.000]
+0.000: (develop_visitor_plan) [3600.000]
+0.000: (discuss_cleaning) [1800.000]
+3600.001: (sign_agreement) [3600.000]

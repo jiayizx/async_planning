@@ -1,0 +1,51 @@
+(define (domain get_into_car)
+  (:requirements :durative-actions)
+  
+  (:predicates
+    (put_on_clothes_pending)
+    (put_on_clothes_done)
+    (put_on_left_shoe_pending)
+    (put_on_left_shoe_done)
+    (put_on_right_shoe_pending)
+    (put_on_right_shoe_done)
+    (grab_car_keys_pending)
+    (grab_car_keys_done)
+    (exit_the_house_pending)
+    (exit_the_house_done)
+  )
+
+  (:durative-action put_on_clothes
+    :parameters ()
+    :duration (= ?duration 120)
+    :condition (at start (put_on_clothes_pending))
+    :effect (and (at start (not (put_on_clothes_pending))) (at end (put_on_clothes_done)))
+  )
+
+  (:durative-action put_on_left_shoe
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (put_on_left_shoe_pending)) (at start (put_on_clothes_done)))
+    :effect (and (at start (not (put_on_left_shoe_pending))) (at end (put_on_left_shoe_done)))
+  )
+
+  (:durative-action put_on_right_shoe
+    :parameters ()
+    :duration (= ?duration 60)
+    :condition (and (at start (put_on_right_shoe_pending)) (at start (put_on_clothes_done)))
+    :effect (and (at start (not (put_on_right_shoe_pending))) (at end (put_on_right_shoe_done)))
+  )
+
+  (:durative-action grab_car_keys
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (and (at start (grab_car_keys_pending)) (at start (put_on_left_shoe_done)) (at start (put_on_right_shoe_done)))
+    :effect (and (at start (not (grab_car_keys_pending))) (at end (grab_car_keys_done)))
+  )
+
+  (:durative-action exit_the_house
+    :parameters ()
+    :duration (= ?duration 30)
+    :condition (and (at start (exit_the_house_pending)) (at start (grab_car_keys_done)))
+    :effect (and (at start (not (exit_the_house_pending))) (at end (exit_the_house_done)))
+  )
+)

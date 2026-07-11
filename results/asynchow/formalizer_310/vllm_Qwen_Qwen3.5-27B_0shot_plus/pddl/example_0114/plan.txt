@@ -1,0 +1,5 @@
+0.000: (search_for_rink) [120.000]
+120.001: (drive_to_rink) [1200.000]
+1320.002: (rent_skates) [300.000]
+1620.003: (put_right_skate) [30.000]
+1620.003: (put_left_skate) [30.000]
