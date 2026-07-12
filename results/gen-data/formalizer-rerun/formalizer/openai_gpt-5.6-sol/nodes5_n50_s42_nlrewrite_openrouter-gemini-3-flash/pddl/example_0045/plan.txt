@@ -1,0 +1,5 @@
+0.000: (blend_liquid_foundation step4) [300.000]
+0.000: (apply_hydrating_moisturizer step1) [120.000]
+120.001: (let_primer_set step2) [180.000]
+300.001: (buff_setting_powder step3) [240.000]
+540.002: (spray_finishing_mist step5) [30.000]

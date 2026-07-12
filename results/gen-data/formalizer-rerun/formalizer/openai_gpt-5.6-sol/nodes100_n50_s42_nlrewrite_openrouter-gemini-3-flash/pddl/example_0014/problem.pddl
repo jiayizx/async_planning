@@ -1,0 +1,6 @@
+(define (problem product-photography-shortest-time)
+  (:domain product-photography-critical-path)
+  (:objects schedule - step)
+  (:init (step_pending schedule))
+  (:goal (and (step_done schedule) (photography_complete)))
+)

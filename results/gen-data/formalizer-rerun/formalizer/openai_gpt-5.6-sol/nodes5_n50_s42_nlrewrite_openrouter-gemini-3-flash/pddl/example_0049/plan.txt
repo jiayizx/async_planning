@@ -1,0 +1,5 @@
+0.000: (purchase_reflection_notebook step3) [900.000]
+900.001: (schedule_life_coach_followup step5) [600.000]
+900.001: (create_core_values_list step2) [2700.000]
+3600.002: (review_past_journals step1) [7200.000]
+10800.003: (write_strengths_weaknesses_report step4) [3600.000]

@@ -1,0 +1,5 @@
+0.000: (install_dialup_modem_drivers step4) [600.000]
+0.000: (purchase_usb_ethernet_adapter step1) [259200.000]
+600.001: (configure_internet_connection_sharing step2) [900.000]
+259200.001: (connect_adapter_and_crossover_cable step5) [300.000]
+259500.002: (perform_wii_connection_test step3) [120.000]

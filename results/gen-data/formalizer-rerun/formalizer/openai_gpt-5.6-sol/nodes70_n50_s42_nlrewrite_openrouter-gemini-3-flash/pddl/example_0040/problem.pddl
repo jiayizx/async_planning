@@ -1,0 +1,1 @@
+The previously supplied problem PDDL forces all 70 steps to complete. Adding `(:metric minimize (total-time))` requests makespan minimization explicitly, but it does not change the optimum, which is 179100 seconds.

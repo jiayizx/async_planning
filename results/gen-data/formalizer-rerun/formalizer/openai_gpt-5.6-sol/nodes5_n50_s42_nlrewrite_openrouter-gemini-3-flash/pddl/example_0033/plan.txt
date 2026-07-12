@@ -1,0 +1,5 @@
+0.000: (retrieve_harness step3) [30.000]
+0.000: (calm_dog_with_treat step2) [60.000]
+30.001: (guide_paws_into_harness_loops step5) [45.000]
+60.001: (clip_leash_onto_collar step1) [10.000]
+75.002: (fasten_safety_buckle step4) [5.000]

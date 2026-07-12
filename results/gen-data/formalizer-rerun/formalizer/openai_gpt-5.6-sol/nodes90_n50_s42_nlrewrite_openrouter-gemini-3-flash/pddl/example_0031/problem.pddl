@@ -1,0 +1,1 @@
+The problem PDDL is identical to the previously supplied problem file. Its goal contains every (step_done stepN) predicate and (d90), and its metric is (:metric minimize (total-time)). With the corrected Step 15 duration, the critical path reaches Step 15 at 620400 seconds and finishes at 3248400 seconds.

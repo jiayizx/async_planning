@@ -1,0 +1,5 @@
+0.000: (purchase_primary_paints) [2700.000]
+0.000: (locate_stirring_stick) [30.000]
+30.001: (prepare_workspace) [300.000]
+2700.001: (pour_yellow_paint) [120.000]
+2820.002: (add_red_pigment) [60.000]

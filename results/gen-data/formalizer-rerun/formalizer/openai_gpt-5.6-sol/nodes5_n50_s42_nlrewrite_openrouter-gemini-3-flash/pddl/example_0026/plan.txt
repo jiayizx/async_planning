@@ -1,0 +1,5 @@
+0.000: (strip_hardware_and_clean_shells step1) [7200.000]
+0.000: (research_and_order_drum_heads step5) [1200.000]
+1200.001: (wait_for_drum_heads step2) [432000.000]
+433200.002: (apply_custom_vinyl_wraps step3) [10800.000]
+444000.003: (install_heads_and_tune_kit step4) [2700.000]

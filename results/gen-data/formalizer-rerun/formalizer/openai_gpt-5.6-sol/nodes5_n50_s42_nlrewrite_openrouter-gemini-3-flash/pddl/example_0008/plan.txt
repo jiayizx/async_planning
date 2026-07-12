@@ -1,0 +1,5 @@
+0.000: (wait_for_inflammation_step5 step5) [172800.000]
+0.000: (clean_skin_step2 step2) [300.000]
+300.001: (apply_cold_compress_step1 step1) [1200.000]
+1500.002: (massage_arnica_gel_step4 step4) [120.000]
+172800.001: (apply_warm_compress_step3 step3) [900.000]

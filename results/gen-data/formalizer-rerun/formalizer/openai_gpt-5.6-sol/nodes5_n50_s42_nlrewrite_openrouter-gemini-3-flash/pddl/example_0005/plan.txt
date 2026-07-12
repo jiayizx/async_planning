@@ -1,0 +1,5 @@
+0.000: (remove_packaging step3) [30.000]
+30.001: (pat_steak_dry step4) [60.000]
+90.002: (rest_steak step2) [2700.000]
+90.002: (season_steak step1) [120.000]
+210.003: (sear_steak step5) [480.000]

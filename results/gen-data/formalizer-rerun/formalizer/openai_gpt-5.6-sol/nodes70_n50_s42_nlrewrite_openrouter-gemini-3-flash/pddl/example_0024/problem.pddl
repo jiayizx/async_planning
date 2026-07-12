@@ -1,0 +1,43 @@
+(define (problem calculate-trapezoid-area)
+(:domain trapezoid-area)
+(:objects
+step1 - t1 step2 - t2 step3 - t3 step4 - t4 step5 - t5 step6 - t6 step7 - t7 step8 - t8 step9 - t9 step10 - t10
+step11 - t11 step12 - t12 step13 - t13 step14 - t14 step15 - t15 step16 - t16 step17 - t17 step18 - t18 step19 - t19 step20 - t20
+step21 - t21 step22 - t22 step23 - t23 step24 - t24 step25 - t25 step26 - t26 step27 - t27 step28 - t28 step29 - t29 step30 - t30
+step31 - t31 step32 - t32 step33 - t33 step34 - t34 step35 - t35 step36 - t36 step37 - t37 step38 - t38 step39 - t39 step40 - t40
+step41 - t41 step42 - t42 step43 - t43 step44 - t44 step45 - t45 step46 - t46 step47 - t47 step48 - t48 step49 - t49 step50 - t50
+step51 - t51 step52 - t52 step53 - t53 step54 - t54 step55 - t55 step56 - t56 step57 - t57 step58 - t58 step59 - t59 step60 - t60
+step61 - t61 step62 - t62 step63 - t63 step64 - t64 step65 - t65 step66 - t66 step67 - t67 step68 - t68 step69 - t69 step70 - t70)
+(:init
+(step-pending step1) (step-pending step2) (step-pending step3) (step-pending step4) (step-pending step5)
+(step-pending step6) (step-pending step7) (step-pending step8) (step-pending step9) (step-pending step10)
+(step-pending step11) (step-pending step12) (step-pending step13) (step-pending step14) (step-pending step15)
+(step-pending step16) (step-pending step17) (step-pending step18) (step-pending step19) (step-pending step20)
+(step-pending step21) (step-pending step22) (step-pending step23) (step-pending step24) (step-pending step25)
+(step-pending step26) (step-pending step27) (step-pending step28) (step-pending step29) (step-pending step30)
+(step-pending step31) (step-pending step32) (step-pending step33) (step-pending step34) (step-pending step35)
+(step-pending step36) (step-pending step37) (step-pending step38) (step-pending step39) (step-pending step40)
+(step-pending step41) (step-pending step42) (step-pending step43) (step-pending step44) (step-pending step45)
+(step-pending step46) (step-pending step47) (step-pending step48) (step-pending step49) (step-pending step50)
+(step-pending step51) (step-pending step52) (step-pending step53) (step-pending step54) (step-pending step55)
+(step-pending step56) (step-pending step57) (step-pending step58) (step-pending step59) (step-pending step60)
+(step-pending step61) (step-pending step62) (step-pending step63) (step-pending step64) (step-pending step65)
+(step-pending step66) (step-pending step67) (step-pending step68) (step-pending step69) (step-pending step70))
+(:goal (and
+(step-done step1) (step-done step2) (step-done step3) (step-done step4) (step-done step5)
+(step-done step6) (step-done step7) (step-done step8) (step-done step9) (step-done step10)
+(step-done step11) (step-done step12) (step-done step13) (step-done step14) (step-done step15)
+(step-done step16) (step-done step17) (step-done step18) (step-done step19) (step-done step20)
+(step-done step21) (step-done step22) (step-done step23) (step-done step24) (step-done step25)
+(step-done step26) (step-done step27) (step-done step28) (step-done step29) (step-done step30)
+(step-done step31) (step-done step32) (step-done step33) (step-done step34) (step-done step35)
+(step-done step36) (step-done step37) (step-done step38) (step-done step39) (step-done step40)
+(step-done step41) (step-done step42) (step-done step43) (step-done step44) (step-done step45)
+(step-done step46) (step-done step47) (step-done step48) (step-done step49) (step-done step50)
+(step-done step51) (step-done step52) (step-done step53) (step-done step54) (step-done step55)
+(step-done step56) (step-done step57) (step-done step58) (step-done step59) (step-done step60)
+(step-done step61) (step-done step62) (step-done step63) (step-done step64) (step-done step65)
+(step-done step66) (step-done step67) (step-done step68) (step-done step69) (step-done step70)
+(d8)))
+(:metric minimize (total-time))
+)

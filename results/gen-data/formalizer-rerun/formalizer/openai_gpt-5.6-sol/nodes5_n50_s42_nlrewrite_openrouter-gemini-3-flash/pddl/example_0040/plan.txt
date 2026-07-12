@@ -1,0 +1,5 @@
+0.000: (bring_eggs_to_room_temperature step5) [3600.000]
+0.000: (buy_fresh_ginger step4) [1800.000]
+1800.001: (peel_and_grate_ginger step1) [600.000]
+2400.002: (combine_and_pour_into_molds step3) [480.000]
+3600.001: (whisk_eggs_and_sugar step2) [300.000]

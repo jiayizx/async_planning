@@ -1,0 +1,5 @@
+0.000: (pack_healthy_lunch step4) [720.000]
+0.000: (wake_up_and_turn_off_alarm step3) [60.000]
+60.001: (take_morning_shower step1) [600.000]
+660.002: (get_dressed step2) [300.000]
+960.003: (walk_to_bus_stop step5) [480.000]

@@ -1,0 +1,5 @@
+0.000: (submit_assignment step3) [1200.000]
+0.000: (power_down_classroom step2) [60.000]
+60.001: (lock_classroom step5) [30.000]
+1200.001: (pack_belongings step1) [300.000]
+1500.002: (walk_to_parking_lot step4) [600.000]

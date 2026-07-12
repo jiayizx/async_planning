@@ -1,0 +1,46 @@
+(define (problem deductive-reasoning-problem)
+  (:domain deductive-reasoning)
+
+  (:objects
+    step1 step2 step3 step4 step5 step6 step7 step8 step9 step10 - step
+  )
+
+  (:init
+    (step_pending step1)
+    (step_pending step2)
+    (step_pending step3)
+    (step_pending step4)
+    (step_pending step5)
+    (step_pending step6)
+    (step_pending step7)
+    (step_pending step8)
+    (step_pending step9)
+    (step_pending step10)
+    (assigned_step1 step1)
+    (assigned_step2 step2)
+    (assigned_step3 step3)
+    (assigned_step4 step4)
+    (assigned_step5 step5)
+    (assigned_step6 step6)
+    (assigned_step7 step7)
+    (assigned_step8 step8)
+    (assigned_step9 step9)
+    (assigned_step10 step10)
+  )
+
+  (:goal (and
+    (step_done step1)
+    (step_done step2)
+    (step_done step3)
+    (step_done step4)
+    (step_done step5)
+    (step_done step6)
+    (step_done step7)
+    (step_done step8)
+    (step_done step9)
+    (step_done step10)
+    (conclusion_drawn)
+  ))
+
+  (:metric minimize (total-time))
+)

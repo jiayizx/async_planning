@@ -1,0 +1,5 @@
+0.000: (source_and_select_cedar_planks step2) [10800.000]
+10800.001: (assemble_hull_and_gunwales step3) [432000.000]
+442800.002: (sand_exterior_surface step5) [21600.000]
+442800.002: (install_woven_cane_seats step4) [14400.000]
+442800.002: (apply_waterproof_marine_varnish step1) [172800.000]

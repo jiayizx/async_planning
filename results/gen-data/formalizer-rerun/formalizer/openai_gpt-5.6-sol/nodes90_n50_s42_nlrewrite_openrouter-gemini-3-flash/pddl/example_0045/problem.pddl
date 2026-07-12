@@ -1,0 +1,61 @@
+(define (problem wedding-problem)
+ (:domain wedding)
+ (:objects
+  step1 - step01_t step2 - step02_t step3 - step03_t step4 - step04_t step5 - step05_t
+  step6 - step06_t step7 - step07_t step8 - step08_t step9 - step09_t step10 - step10_t
+  step11 - step11_t step12 - step12_t step13 - step13_t step14 - step14_t step15 - step15_t
+  step16 - step16_t step17 - step17_t step18 - step18_t step19 - step19_t step20 - step20_t
+  step21 - step21_t step22 - step22_t step23 - step23_t step24 - step24_t step25 - step25_t
+  step26 - step26_t step27 - step27_t step28 - step28_t step29 - step29_t step30 - step30_t
+  step31 - step31_t step32 - step32_t step33 - step33_t step34 - step34_t step35 - step35_t
+  step36 - step36_t step37 - step37_t step38 - step38_t step39 - step39_t step40 - step40_t
+  step41 - step41_t step42 - step42_t step43 - step43_t step44 - step44_t step45 - step45_t
+  step46 - step46_t step47 - step47_t step48 - step48_t step49 - step49_t step50 - step50_t
+  step51 - step51_t step52 - step52_t step53 - step53_t step54 - step54_t step55 - step55_t
+  step56 - step56_t step57 - step57_t step58 - step58_t step59 - step59_t step60 - step60_t
+  step61 - step61_t step62 - step62_t step63 - step63_t step64 - step64_t step65 - step65_t
+  step66 - step66_t step67 - step67_t step68 - step68_t step69 - step69_t step70 - step70_t
+  step71 - step71_t step72 - step72_t step73 - step73_t step74 - step74_t step75 - step75_t
+  step76 - step76_t step77 - step77_t step78 - step78_t step79 - step79_t step80 - step80_t
+  step81 - step81_t step82 - step82_t step83 - step83_t step84 - step84_t step85 - step85_t
+  step86 - step86_t step87 - step87_t step88 - step88_t step89 - step89_t step90 - step90_t)
+ (:init
+  (step_pending step1) (step_pending step2) (step_pending step3) (step_pending step4) (step_pending step5)
+  (step_pending step6) (step_pending step7) (step_pending step8) (step_pending step9) (step_pending step10)
+  (step_pending step11) (step_pending step12) (step_pending step13) (step_pending step14) (step_pending step15)
+  (step_pending step16) (step_pending step17) (step_pending step18) (step_pending step19) (step_pending step20)
+  (step_pending step21) (step_pending step22) (step_pending step23) (step_pending step24) (step_pending step25)
+  (step_pending step26) (step_pending step27) (step_pending step28) (step_pending step29) (step_pending step30)
+  (step_pending step31) (step_pending step32) (step_pending step33) (step_pending step34) (step_pending step35)
+  (step_pending step36) (step_pending step37) (step_pending step38) (step_pending step39) (step_pending step40)
+  (step_pending step41) (step_pending step42) (step_pending step43) (step_pending step44) (step_pending step45)
+  (step_pending step46) (step_pending step47) (step_pending step48) (step_pending step49) (step_pending step50)
+  (step_pending step51) (step_pending step52) (step_pending step53) (step_pending step54) (step_pending step55)
+  (step_pending step56) (step_pending step57) (step_pending step58) (step_pending step59) (step_pending step60)
+  (step_pending step61) (step_pending step62) (step_pending step63) (step_pending step64) (step_pending step65)
+  (step_pending step66) (step_pending step67) (step_pending step68) (step_pending step69) (step_pending step70)
+  (step_pending step71) (step_pending step72) (step_pending step73) (step_pending step74) (step_pending step75)
+  (step_pending step76) (step_pending step77) (step_pending step78) (step_pending step79) (step_pending step80)
+  (step_pending step81) (step_pending step82) (step_pending step83) (step_pending step84) (step_pending step85)
+  (step_pending step86) (step_pending step87) (step_pending step88) (step_pending step89) (step_pending step90))
+ (:goal (and
+  (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+  (step_done step6) (step_done step7) (step_done step8) (step_done step9) (step_done step10)
+  (step_done step11) (step_done step12) (step_done step13) (step_done step14) (step_done step15)
+  (step_done step16) (step_done step17) (step_done step18) (step_done step19) (step_done step20)
+  (step_done step21) (step_done step22) (step_done step23) (step_done step24) (step_done step25)
+  (step_done step26) (step_done step27) (step_done step28) (step_done step29) (step_done step30)
+  (step_done step31) (step_done step32) (step_done step33) (step_done step34) (step_done step35)
+  (step_done step36) (step_done step37) (step_done step38) (step_done step39) (step_done step40)
+  (step_done step41) (step_done step42) (step_done step43) (step_done step44) (step_done step45)
+  (step_done step46) (step_done step47) (step_done step48) (step_done step49) (step_done step50)
+  (step_done step51) (step_done step52) (step_done step53) (step_done step54) (step_done step55)
+  (step_done step56) (step_done step57) (step_done step58) (step_done step59) (step_done step60)
+  (step_done step61) (step_done step62) (step_done step63) (step_done step64) (step_done step65)
+  (step_done step66) (step_done step67) (step_done step68) (step_done step69) (step_done step70)
+  (step_done step71) (step_done step72) (step_done step73) (step_done step74) (step_done step75)
+  (step_done step76) (step_done step77) (step_done step78) (step_done step79) (step_done step80)
+  (step_done step81) (step_done step82) (step_done step83) (step_done step84) (step_done step85)
+  (step_done step86) (step_done step87) (step_done step88) (step_done step89) (step_done step90)
+  (p55)))
+)

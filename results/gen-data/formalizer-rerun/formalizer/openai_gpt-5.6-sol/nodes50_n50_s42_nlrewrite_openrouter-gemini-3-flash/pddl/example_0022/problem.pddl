@@ -1,0 +1,43 @@
+(define (problem lot-of-money-problem)
+ (:domain lot-of-money)
+ (:objects
+  step1 step2 step3 step4 step5 step6 step7 step8 step9 step10
+  step11 step12 step13 step14 step15 step16 step17 step18 step19 step20
+  step21 step22 step23 step24 step25 step26 step27 step28 step29 step30
+  step31 step32 step33 step34 step35 step36 step37 step38 step39 step40
+  step41 step42 step43 step44 step45 step46 step47 step48 step49 step50 - step)
+ (:init
+  (pending step1) (pending step2) (pending step3) (pending step4) (pending step5)
+  (pending step6) (pending step7) (pending step8) (pending step9) (pending step10)
+  (pending step11) (pending step12) (pending step13) (pending step14) (pending step15)
+  (pending step16) (pending step17) (pending step18) (pending step19) (pending step20)
+  (pending step21) (pending step22) (pending step23) (pending step24) (pending step25)
+  (pending step26) (pending step27) (pending step28) (pending step29) (pending step30)
+  (pending step31) (pending step32) (pending step33) (pending step34) (pending step35)
+  (pending step36) (pending step37) (pending step38) (pending step39) (pending step40)
+  (pending step41) (pending step42) (pending step43) (pending step44) (pending step45)
+  (pending step46) (pending step47) (pending step48) (pending step49) (pending step50)
+  (id1 step1) (id2 step2) (id3 step3) (id4 step4) (id5 step5)
+  (id6 step6) (id7 step7) (id8 step8) (id9 step9) (id10 step10)
+  (id11 step11) (id12 step12) (id13 step13) (id14 step14) (id15 step15)
+  (id16 step16) (id17 step17) (id18 step18) (id19 step19) (id20 step20)
+  (id21 step21) (id22 step22) (id23 step23) (id24 step24) (id25 step25)
+  (id26 step26) (id27 step27) (id28 step28) (id29 step29) (id30 step30)
+  (id31 step31) (id32 step32) (id33 step33) (id34 step34) (id35 step35)
+  (id36 step36) (id37 step37) (id38 step38) (id39 step39) (id40 step40)
+  (id41 step41) (id42 step42) (id43 step43) (id44 step44) (id45 step45)
+  (id46 step46) (id47 step47) (id48 step48) (id49 step49) (id50 step50))
+ (:goal (and
+  (step_done step1) (step_done step2) (step_done step3) (step_done step4) (step_done step5)
+  (step_done step6) (step_done step7) (step_done step8) (step_done step9) (step_done step10)
+  (step_done step11) (step_done step12) (step_done step13) (step_done step14) (step_done step15)
+  (step_done step16) (step_done step17) (step_done step18) (step_done step19) (step_done step20)
+  (step_done step21) (step_done step22) (step_done step23) (step_done step24) (step_done step25)
+  (step_done step26) (step_done step27) (step_done step28) (step_done step29) (step_done step30)
+  (step_done step31) (step_done step32) (step_done step33) (step_done step34) (step_done step35)
+  (step_done step36) (step_done step37) (step_done step38) (step_done step39) (step_done step40)
+  (step_done step41) (step_done step42) (step_done step43) (step_done step44) (step_done step45)
+  (step_done step46) (step_done step47) (step_done step48) (step_done step49) (step_done step50)
+  (wealth_achieved)))
+ (:metric minimize (total-time))
+)

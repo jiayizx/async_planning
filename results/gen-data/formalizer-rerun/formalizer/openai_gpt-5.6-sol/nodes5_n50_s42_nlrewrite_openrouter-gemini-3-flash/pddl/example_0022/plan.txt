@@ -1,0 +1,5 @@
+0.000: (complete_bls_cpr_course step3) [21600.000]
+0.000: (enroll_certificate_program step2) [86400.000]
+21600.001: (pass_jurisprudence_exam step5) [7200.000]
+86400.001: (pass_radiography_course step4) [259200.000]
+345600.002: (submit_registration_application step1) [1209600.000]

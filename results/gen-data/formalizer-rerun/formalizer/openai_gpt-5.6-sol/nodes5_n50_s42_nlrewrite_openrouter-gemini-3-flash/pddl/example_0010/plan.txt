@@ -1,0 +1,5 @@
+0.000: (withdraw_cash step5) [300.000]
+0.000: (research_models step1) [10800.000]
+300.001: (drive_to_store step3) [1200.000]
+1500.002: (purchase_television step4) [1800.000]
+10800.001: (measure_wall_space step2) [600.000]

@@ -1,0 +1,5 @@
+0.000: (thaw-chicken step1) [7200.000]
+0.000: (grind-spices step5) [300.000]
+7200.001: (marinate-chicken step2) [3600.000]
+10800.002: (saute-aromatics step3) [600.000]
+11400.003: (simmer-chicken step4) [1500.000]

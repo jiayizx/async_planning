@@ -1,0 +1,5 @@
+0.000: (prep_and_chop_vegetables) [600.000]
+0.000: (shuck_and_silk_fresh_corn) [240.000]
+240.001: (blend_soup_portion) [120.000]
+600.001: (saute_onions_and_garlic) [300.000]
+900.002: (simmer_corn_and_broth) [1200.000]

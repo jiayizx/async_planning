@@ -1,0 +1,5 @@
+0.000: (clear_windowsill_space step5) [1800.000]
+1800.001: (research_and_purchase_organic_seeds step2) [259200.000]
+1800.001: (install_led_grow_lights step1) [7200.000]
+261000.002: (sow_seeds_and_wait_for_germination step3) [1209600.000]
+1470600.003: (transplant_seedlings step4) [2700.000]
