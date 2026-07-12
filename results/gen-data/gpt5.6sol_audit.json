@@ -1,0 +1,304 @@
+{
+  "cpsat": {
+    "per_size": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.98,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.94,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_accuracy_field": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.96,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_accuracy_field": 0.96,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 1.0,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      }
+    },
+    "n_mismatch": 0
+  },
+  "pddl": {
+    "per_size": {
+      "5": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.06,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "10": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.14,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "15": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.12,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "20": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.18,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "30": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.48,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "40": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.64,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "50": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.58,
+        "recomputed_makespan_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "makespan_match": true
+      },
+      "60": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.74,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "70": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.64,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_accuracy_field": 0.96,
+        "makespan_match": true
+      },
+      "80": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.7,
+        "recomputed_makespan_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "makespan_match": true
+      },
+      "90": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.58,
+        "recomputed_makespan_accuracy": 0.94,
+        "existing_accuracy_field": 0.94,
+        "makespan_match": true
+      },
+      "100": {
+        "n_total": 50,
+        "recomputed_plan_accuracy": 0.58,
+        "recomputed_makespan_accuracy": 0.96,
+        "existing_accuracy_field": 0.96,
+        "makespan_match": true
+      }
+    },
+    "n_mismatch": 0
+  },
+  "planner_code_exec": {
+    "per_size": {
+      "5": {
+        "n_total": 50,
+        "correct": 0.98,
+        "format_fail": 0.0,
+        "extraction_fail": 0.02,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "llm_acc_matches_stored": true
+      },
+      "10": {
+        "n_total": 50,
+        "correct": 1.0,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "llm_acc_matches_stored": true
+      },
+      "15": {
+        "n_total": 50,
+        "correct": 1.0,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "llm_acc_matches_stored": true
+      },
+      "20": {
+        "n_total": 50,
+        "correct": 1.0,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "llm_acc_matches_stored": true
+      },
+      "30": {
+        "n_total": 50,
+        "correct": 1.0,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 1.0,
+        "llm_acc_matches_stored": true
+      },
+      "40": {
+        "n_total": 50,
+        "correct": 0.98,
+        "format_fail": 0.0,
+        "extraction_fail": 0.02,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "llm_acc_matches_stored": true
+      },
+      "50": {
+        "n_total": 50,
+        "correct": 0.98,
+        "format_fail": 0.0,
+        "extraction_fail": 0.02,
+        "arithmetic_fail": 0.0,
+        "code_execution_accuracy": 0.98,
+        "existing_accuracy_field": 0.98,
+        "llm_acc_matches_stored": true
+      },
+      "60": {
+        "n_total": 50,
+        "correct": 0.94,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.06,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 0.94,
+        "llm_acc_matches_stored": true
+      },
+      "70": {
+        "n_total": 50,
+        "correct": 0.84,
+        "format_fail": 0.0,
+        "extraction_fail": 0.04,
+        "arithmetic_fail": 0.12,
+        "code_execution_accuracy": 0.96,
+        "existing_accuracy_field": 0.84,
+        "llm_acc_matches_stored": true
+      },
+      "80": {
+        "n_total": 50,
+        "correct": 0.86,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.14,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 0.86,
+        "llm_acc_matches_stored": true
+      },
+      "90": {
+        "n_total": 50,
+        "correct": 0.8,
+        "format_fail": 0.0,
+        "extraction_fail": 0.04,
+        "arithmetic_fail": 0.16,
+        "code_execution_accuracy": 0.96,
+        "existing_accuracy_field": 0.8,
+        "llm_acc_matches_stored": true
+      },
+      "100": {
+        "n_total": 50,
+        "correct": 0.6,
+        "format_fail": 0.0,
+        "extraction_fail": 0.0,
+        "arithmetic_fail": 0.4,
+        "code_execution_accuracy": 1.0,
+        "existing_accuracy_field": 0.6,
+        "llm_acc_matches_stored": true
+      }
+    }
+  }
+}

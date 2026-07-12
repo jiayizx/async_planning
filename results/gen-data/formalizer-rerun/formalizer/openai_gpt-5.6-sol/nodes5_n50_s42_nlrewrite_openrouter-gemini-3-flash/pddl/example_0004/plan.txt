@@ -1,0 +1,5 @@
+0.000: (boil_salted_water step2) [480.000]
+480.001: (prepare_table_and_toppings step4) [300.000]
+480.001: (whisk_grains_into_water step3) [120.000]
+600.002: (measure_dry_farina step1) [30.000]
+630.003: (simmer_until_thickened step5) [180.000]

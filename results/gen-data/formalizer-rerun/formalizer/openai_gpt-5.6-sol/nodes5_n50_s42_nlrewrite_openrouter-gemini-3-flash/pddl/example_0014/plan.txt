@@ -1,0 +1,5 @@
+0.000: (eat-neutralizing-meal step5) [1200.000]
+0.000: (drink-water step2) [120.000]
+120.001: (brush-teeth-and-tongue step3) [240.000]
+360.002: (rinse-with-mouthwash step1) [60.000]
+1200.001: (chew-menthol-gum step4) [900.000]

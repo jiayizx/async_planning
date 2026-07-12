@@ -1,0 +1,10 @@
+{
+  "benchmark": "gen-data",
+  "model_name": "openai/gpt-5.6-sol",
+  "icl_examples": 0,
+  "cot": true,
+  "structured_output": true,
+  "accuracy": 0.8,
+  "num_correct": 40,
+  "num_data_points": 50
+}

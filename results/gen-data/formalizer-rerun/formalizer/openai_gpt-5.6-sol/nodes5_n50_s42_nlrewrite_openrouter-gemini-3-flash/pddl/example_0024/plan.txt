@@ -1,0 +1,5 @@
+0.000: (prepare_workstation step4) [600.000]
+600.001: (scrub_crevices step5) [480.000]
+600.001: (soak_pieces step1) [900.000]
+1080.002: (buff_metal step2) [300.000]
+1500.002: (rinse_jewelry step3) [120.000]

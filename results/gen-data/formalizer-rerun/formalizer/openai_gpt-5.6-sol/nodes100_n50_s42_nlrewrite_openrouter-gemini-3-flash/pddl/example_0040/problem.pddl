@@ -1,0 +1,71 @@
+(define (problem replace-battery-instance)
+ (:domain battery-replacement)
+ (:objects
+  step1 step2 step3 step4 step5 step6 step7 step8 step9 step10
+  step11 step12 step13 step14 step15 step16 step17 step18 step19 step20
+  step21 step22 step23 step24 step25 step26 step27 step28 step29 step30
+  step31 step32 step33 step34 step35 step36 step37 step38 step39 step40
+  step41 step42 step43 step44 step45 step46 step47 step48 step49 step50
+  step51 step52 step53 step54 step55 step56 step57 step58 step59 step60
+  step61 step62 step63 step64 step65 step66 step67 step68 step69 step70
+  step71 step72 step73 step74 step75 step76 step77 step78 step79 step80
+  step81 step82 step83 step84 step85 step86 step87 step88 step89 step90
+  step91 step92 step93 step94 step95 step96 step97 step98 step99 step100 - step
+ )
+ (:init
+  (step-pending step1) (step-pending step2) (step-pending step3) (step-pending step4) (step-pending step5)
+  (step-pending step6) (step-pending step7) (step-pending step8) (step-pending step9) (step-pending step10)
+  (step-pending step11) (step-pending step12) (step-pending step13) (step-pending step14) (step-pending step15)
+  (step-pending step16) (step-pending step17) (step-pending step18) (step-pending step19) (step-pending step20)
+  (step-pending step21) (step-pending step22) (step-pending step23) (step-pending step24) (step-pending step25)
+  (step-pending step26) (step-pending step27) (step-pending step28) (step-pending step29) (step-pending step30)
+  (step-pending step31) (step-pending step32) (step-pending step33) (step-pending step34) (step-pending step35)
+  (step-pending step36) (step-pending step37) (step-pending step38) (step-pending step39) (step-pending step40)
+  (step-pending step41) (step-pending step42) (step-pending step43) (step-pending step44) (step-pending step45)
+  (step-pending step46) (step-pending step47) (step-pending step48) (step-pending step49) (step-pending step50)
+  (step-pending step51) (step-pending step52) (step-pending step53) (step-pending step54) (step-pending step55)
+  (step-pending step56) (step-pending step57) (step-pending step58) (step-pending step59) (step-pending step60)
+  (step-pending step61) (step-pending step62) (step-pending step63) (step-pending step64) (step-pending step65)
+  (step-pending step66) (step-pending step67) (step-pending step68) (step-pending step69) (step-pending step70)
+  (step-pending step71) (step-pending step72) (step-pending step73) (step-pending step74) (step-pending step75)
+  (step-pending step76) (step-pending step77) (step-pending step78) (step-pending step79) (step-pending step80)
+  (step-pending step81) (step-pending step82) (step-pending step83) (step-pending step84) (step-pending step85)
+  (step-pending step86) (step-pending step87) (step-pending step88) (step-pending step89) (step-pending step90)
+  (step-pending step91) (step-pending step92) (step-pending step93) (step-pending step94) (step-pending step95)
+  (step-pending step96) (step-pending step97) (step-pending step98) (step-pending step99) (step-pending step100)
+  (is1 step1) (is2 step2) (is3 step3) (is4 step4) (is5 step5) (is6 step6) (is7 step7) (is8 step8) (is9 step9) (is10 step10)
+  (is11 step11) (is12 step12) (is13 step13) (is14 step14) (is15 step15) (is16 step16) (is17 step17) (is18 step18) (is19 step19) (is20 step20)
+  (is21 step21) (is22 step22) (is23 step23) (is24 step24) (is25 step25) (is26 step26) (is27 step27) (is28 step28) (is29 step29) (is30 step30)
+  (is31 step31) (is32 step32) (is33 step33) (is34 step34) (is35 step35) (is36 step36) (is37 step37) (is38 step38) (is39 step39) (is40 step40)
+  (is41 step41) (is42 step42) (is43 step43) (is44 step44) (is45 step45) (is46 step46) (is47 step47) (is48 step48) (is49 step49) (is50 step50)
+  (is51 step51) (is52 step52) (is53 step53) (is54 step54) (is55 step55) (is56 step56) (is57 step57) (is58 step58) (is59 step59) (is60 step60)
+  (is61 step61) (is62 step62) (is63 step63) (is64 step64) (is65 step65) (is66 step66) (is67 step67) (is68 step68) (is69 step69) (is70 step70)
+  (is71 step71) (is72 step72) (is73 step73) (is74 step74) (is75 step75) (is76 step76) (is77 step77) (is78 step78) (is79 step79) (is80 step80)
+  (is81 step81) (is82 step82) (is83 step83) (is84 step84) (is85 step85) (is86 step86) (is87 step87) (is88 step88) (is89 step89) (is90 step90)
+  (is91 step91) (is92 step92) (is93 step93) (is94 step94) (is95 step95) (is96 step96) (is97 step97) (is98 step98) (is99 step99) (is100 step100)
+ )
+ (:goal (and
+  (step-done step1) (step-done step2) (step-done step3) (step-done step4) (step-done step5)
+  (step-done step6) (step-done step7) (step-done step8) (step-done step9) (step-done step10)
+  (step-done step11) (step-done step12) (step-done step13) (step-done step14) (step-done step15)
+  (step-done step16) (step-done step17) (step-done step18) (step-done step19) (step-done step20)
+  (step-done step21) (step-done step22) (step-done step23) (step-done step24) (step-done step25)
+  (step-done step26) (step-done step27) (step-done step28) (step-done step29) (step-done step30)
+  (step-done step31) (step-done step32) (step-done step33) (step-done step34) (step-done step35)
+  (step-done step36) (step-done step37) (step-done step38) (step-done step39) (step-done step40)
+  (step-done step41) (step-done step42) (step-done step43) (step-done step44) (step-done step45)
+  (step-done step46) (step-done step47) (step-done step48) (step-done step49) (step-done step50)
+  (step-done step51) (step-done step52) (step-done step53) (step-done step54) (step-done step55)
+  (step-done step56) (step-done step57) (step-done step58) (step-done step59) (step-done step60)
+  (step-done step61) (step-done step62) (step-done step63) (step-done step64) (step-done step65)
+  (step-done step66) (step-done step67) (step-done step68) (step-done step69) (step-done step70)
+  (step-done step71) (step-done step72) (step-done step73) (step-done step74) (step-done step75)
+  (step-done step76) (step-done step77) (step-done step78) (step-done step79) (step-done step80)
+  (step-done step81) (step-done step82) (step-done step83) (step-done step84) (step-done step85)
+  (step-done step86) (step-done step87) (step-done step88) (step-done step89) (step-done step90)
+  (step-done step91) (step-done step92) (step-done step93) (step-done step94) (step-done step95)
+  (step-done step96) (step-done step97) (step-done step98) (step-done step99) (step-done step100)
+  (d100) (battery-replaced)
+ ))
+ (:metric minimize (total-time))
+)

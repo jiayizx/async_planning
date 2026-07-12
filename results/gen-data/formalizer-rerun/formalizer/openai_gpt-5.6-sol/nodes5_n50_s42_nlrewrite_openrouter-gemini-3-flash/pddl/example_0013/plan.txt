@@ -1,0 +1,5 @@
+0.000: (tape_watercolor_paper step1) [120.000]
+120.001: (sharpen_graphite_pencils step4) [180.000]
+120.001: (sketch_perspective_guides step3) [300.000]
+420.002: (layer_watercolor_washes step5) [7200.000]
+7620.003: (apply_protective_varnish step2) [600.000]

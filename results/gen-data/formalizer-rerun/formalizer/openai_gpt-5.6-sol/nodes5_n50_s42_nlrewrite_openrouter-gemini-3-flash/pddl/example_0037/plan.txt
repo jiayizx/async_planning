@@ -1,0 +1,5 @@
+0.000: (harvest_rosebuds step3) [1200.000]
+0.000: (sterilize_shears step1) [300.000]
+300.001: (select_cut_lavender step5) [600.000]
+900.002: (arrange_petals step4) [600.000]
+1200.001: (strip_petals step2) [900.000]

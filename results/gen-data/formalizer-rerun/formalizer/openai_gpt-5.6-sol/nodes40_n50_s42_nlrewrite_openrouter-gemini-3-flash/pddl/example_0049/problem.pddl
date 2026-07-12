@@ -1,0 +1,36 @@
+(define (problem make-chipmunk-puppet)
+ (:domain chipmunk-puppet)
+ (:objects
+  step1 step2 step3 step4 step5 step6 step7 step8 step9 step10
+  step11 step12 step13 step14 step15 step16 step17 step18 step19 step20
+  step21 step22 step23 step24 step25 step26 step27 step28 step29 step30
+  step31 step32 step33 step34 step35 step36 step37 step38 step39 step40 - step)
+ (:init
+  (pending step1) (pending step2) (pending step3) (pending step4) (pending step5)
+  (pending step6) (pending step7) (pending step8) (pending step9) (pending step10)
+  (pending step11) (pending step12) (pending step13) (pending step14) (pending step15)
+  (pending step16) (pending step17) (pending step18) (pending step19) (pending step20)
+  (pending step21) (pending step22) (pending step23) (pending step24) (pending step25)
+  (pending step26) (pending step27) (pending step28) (pending step29) (pending step30)
+  (pending step31) (pending step32) (pending step33) (pending step34) (pending step35)
+  (pending step36) (pending step37) (pending step38) (pending step39) (pending step40)
+  (id1 step1) (id2 step2) (id3 step3) (id4 step4) (id5 step5)
+  (id6 step6) (id7 step7) (id8 step8) (id9 step9) (id10 step10)
+  (id11 step11) (id12 step12) (id13 step13) (id14 step14) (id15 step15)
+  (id16 step16) (id17 step17) (id18 step18) (id19 step19) (id20 step20)
+  (id21 step21) (id22 step22) (id23 step23) (id24 step24) (id25 step25)
+  (id26 step26) (id27 step27) (id28 step28) (id29 step29) (id30 step30)
+  (id31 step31) (id32 step32) (id33 step33) (id34 step34) (id35 step35)
+  (id36 step36) (id37 step37) (id38 step38) (id39 step39) (id40 step40))
+ (:goal (and
+  (done step1) (done step2) (done step3) (done step4) (done step5)
+  (done step6) (done step7) (done step8) (done step9) (done step10)
+  (done step11) (done step12) (done step13) (done step14) (done step15)
+  (done step16) (done step17) (done step18) (done step19) (done step20)
+  (done step21) (done step22) (done step23) (done step24) (done step25)
+  (done step26) (done step27) (done step28) (done step29) (done step30)
+  (done step31) (done step32) (done step33) (done step34) (done step35)
+  (done step36) (done step37) (done step38) (done step39) (done step40)
+  (puppet-dry)))
+ (:metric minimize (total-time))
+)

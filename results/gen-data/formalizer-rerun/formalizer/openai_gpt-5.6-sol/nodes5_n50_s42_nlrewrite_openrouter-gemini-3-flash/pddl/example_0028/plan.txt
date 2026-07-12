@@ -1,0 +1,4 @@
+0.000: (schedule_initial_consultation step2) [1800.000]
+1800.001: (undergo_diagnostic_endoscopy step4) [7200.000]
+9000.002: (complete_antibiotic_course step1) [1209600.000]
+647.000: (attend_followup_breath_test step5) [900.000]

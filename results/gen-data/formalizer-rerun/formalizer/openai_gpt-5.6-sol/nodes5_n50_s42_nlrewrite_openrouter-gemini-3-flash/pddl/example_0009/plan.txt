@@ -1,0 +1,5 @@
+0.000: (ask_parents_permission step5) [60.000]
+0.000: (text_neighbors_parents step2) [300.000]
+60.001: (put_on_shoes_and_jacket step1) [120.000]
+180.002: (walk_to_front_door step4) [180.000]
+300.001: (pack_bag step3) [600.000]

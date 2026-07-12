@@ -1,0 +1,5 @@
+0.000: (buy_ribbons_and_wire step5) [1200.000]
+0.000: (gather_wildflowers step2) [3600.000]
+1200.001: (weave_flower_crowns step3) [2700.000]
+3600.001: (dance_around_maypole step1) [1800.000]
+3900.002: (deliver_flower_baskets step4) [7200.000]

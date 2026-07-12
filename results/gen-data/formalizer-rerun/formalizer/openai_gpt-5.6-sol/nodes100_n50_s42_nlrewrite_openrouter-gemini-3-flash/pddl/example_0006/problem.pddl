@@ -1,0 +1,15 @@
+(define (problem slow-cooker-inconsistency-certificate-problem)
+  (:domain slow-cooker-inconsistency-certificate)
+  (:objects step12 step38 step45 - step)
+  (:init
+    (step_pending step12)
+    (step_pending step38)
+    (step_pending step45)
+  )
+  (:goal (and
+    (step_done step12)
+    (step_done step38)
+    (step_done step45)
+    (step45_completed)
+  ))
+)

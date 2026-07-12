@@ -1,0 +1,5 @@
+0.000: (look_up_numbers step1) [300.000]
+300.001: (memorize_one_to_five step5) [3600.000]
+300.001: (write_flashcards step4) [1200.000]
+1500.002: (record_pronunciation step2) [600.000]
+2100.003: (listen_and_correct step3) [900.000]

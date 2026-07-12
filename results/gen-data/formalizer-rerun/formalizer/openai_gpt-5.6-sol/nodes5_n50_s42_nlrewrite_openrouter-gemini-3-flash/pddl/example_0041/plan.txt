@@ -1,0 +1,5 @@
+0.000: (remove_travel_cap step5) [5.000]
+0.000: (retrieve_clean_cup step1) [20.000]
+5.001: (tilt_cup_and_drink step4) [30.000]
+20.001: (fill_cup_with_apple_juice step3) [15.000]
+35.002: (screw_lid_onto_cup step2) [10.000]

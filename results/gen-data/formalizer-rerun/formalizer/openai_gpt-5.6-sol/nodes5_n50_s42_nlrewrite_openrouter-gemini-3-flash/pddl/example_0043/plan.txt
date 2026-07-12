@@ -1,0 +1,5 @@
+0.000: (research_safety_guidelines step3) [2700.000]
+2700.001: (download_symptoms_checklist step4) [600.000]
+2700.001: (attend_professional_seminar step1) [14400.000]
+3300.002: (cross_reference_observed_changes step5) [1800.000]
+17100.002: (review_grooming_case_studies step2) [7200.000]
